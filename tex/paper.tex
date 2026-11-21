@@ -29,8 +29,9 @@ theories whose laws imply consequences that no single law implies. Laws are enum
 (71{,}369 laws up to renaming and side swap, 61{,}983 of them mixing both operations). A satisfaction
 matrix against 12{,}509 finite structures gives a cheap surrogate for implication; a quality-diversity
 search proposes theories; each candidate is then verified by finite-model search, the SMT solver Z3 and
-the saturation prover E. The verifier is an exact filter: every reported implication carries a proof,
-every reported non-implication carries a finite countermodel or a checked convergent rewrite system.
+the saturation prover E. Every implication reported here carries a prover proof, and every
+non-implication a finite countermodel, a checked convergent rewrite system or a model on $\mathbb{Z}$
+proved by Z3; claims the verifier cannot settle are reported as open with their budget.
 The scored search rediscovers fragments of lattice theory and two laws of McKenzie's 1970 lattice
 basis. It also refutes four implications that finite-model search up to size~8 left open: their
 countermodels are necessarily infinite. Whether the search finds theories that are interesting and not
@@ -114,13 +115,15 @@ in three stages.
   shortest corpus-emergent laws, a countermodel search up to size~6. Finite models are found by grounding
   the axioms over the domain and solving with Z3.
 \item[b.] E~\cite{eprover2019} with a budget of 20{,}000 processed clauses. If E saturates without a
-  proof the claim is false; otherwise Z3~\cite{z3} attempts a proof with a fixed resource limit, and its
-  resource count gives the difficulty.
-\item[c.] Only for claims still open: E with $2\cdot 10^6$ processed clauses, countermodels on 7 and 8
-  elements, a long Z3 run. Each claim ends as proved, refuted, or open with its budget stated.
+  proof the claim is false, and the saturation is checked independently (below); otherwise Z3~\cite{z3}
+  attempts a proof with a fixed resource limit.
+\item[c.] Only for claims still open: E with $2\cdot 10^6$ processed clauses, Mace4~\cite{mace4} from the
+  smallest size stage~a could not finish up to 10 elements, a long Z3 run. Each claim ends as proved,
+  refuted, or open with its budget stated.
 \end{enumerate}
 A supervisor moves processes between search and verification by the number of competitive queued
-theories. All budgets are deterministic (processed clauses, Z3 resource units), not wall time.
+theories. Z3 and E budgets are counted in resource units and processed clauses; E's CPU limit and Mace4's
+time limit are the only budgets that depend on machine speed.
 
 \subsection{Refutation without a finite countermodel}
 When E saturates, we do not take its word. From E's saturated clause set we check in a few hundred
