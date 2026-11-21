@@ -10,7 +10,6 @@ work/corpus/
 work/queue/
 work/results/
 work/logs/
-work/journal/
 work/runs/
 work/check/
 *.log
