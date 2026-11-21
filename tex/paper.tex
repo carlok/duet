@@ -177,7 +177,10 @@ truth.
 \subsection{Survivor claims}
 After the streaming runs, 59 emergent claims were neither proved nor refuted. A sweep with E ($2\cdot10^6$
 processed clauses) and Vampire proved 25 and refuted 2 by certified saturation, leaving 32 claims in 12
-theories. Every one of them is a small law such as $x\op x=x$, $x\cop x=x$ or $x\op x=x\cop x$. We gave these
+theories. Every one of them is a small law such as $x\op x=x$, $x\cop x=x$ or $x\op x=x\cop x$. They come
+from three short test runs (about 25 minutes of streaming, 354 verified theories), and only from theories the
+queue ranked highest, so they are a small, selected sample: the proportions below describe these claims, not
+the search in general. We gave these
 32 claims, as a self-contained prompt, to a language model outside the pipeline, and checked what came back
 with our own code. Axioms and claims were taken from our records; only the proposed models and lemmas came
 from the model's output, and none of it entered the search, the corpus or the scores.

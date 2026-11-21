@@ -34,8 +34,9 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
 - **Implications that finite search cannot settle.** Four pilot implications (A–D) are false, and their
   countermodels are necessarily infinite. E, Vampire and Prover9 all saturate, and our own check of the
   saturations (`soup/confluence.py`) certifies convergent rewrite systems.
-- **Survivor claims.** 32 claims resisted E and Vampire. An external LLM worked on them outside the pipeline,
-  and we machine-checked its answers (`soup/check_offline.py`):
+- **Survivor claims.** 32 claims resisted E and Vampire. They are a small, selected sample: three short test
+  runs (about 25 minutes, 354 verified theories), queue-top theories only. An external LLM worked on them
+  outside the pipeline, and we machine-checked its answers (`soup/check_offline.py`):
   - 25 are refuted: 16 by finite models of size 5, 7 or 13, and 9 by models on ℤ proved over ℤ by z3;
   - 1 more (S7) rests on a hand proof that has been sampled but not certified;
   - 6 remain open, in two theories (S10, S12). A second round with our own tools is running.

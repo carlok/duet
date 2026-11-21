@@ -24,7 +24,9 @@ tables, the hand-transcribed ℤ formulas and the lemma statements come from the
 
 So 25 of the 32 survivor claims are refuted with a machine check (16 by finite models, 9 by models on ℤ
 proved over ℤ). One more (S7) is refuted by a hand proof that has been sampled but not certified. Six remain
-open. The finite-model share says something about our pipeline: 16 survivors had countermodels of size 5, 7
+open. Caveat: the 32 come from the three short test runs above (`test10`, `fix5`, `e10`: about 25 minutes of
+streaming, 354 verified theories) and only from queue-top theories, a small, selected sample. The share of
+false claims describes this sample, not the search. The finite-model share says something about our pipeline: 16 survivors had countermodels of size 5, 7
 or 13 that our search never reached (see the corrections below).
 
 ## Corrections and fixes (21 Nov 2026, evening)

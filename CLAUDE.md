@@ -118,7 +118,8 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - **Since then (21 Nov, Mac session; details in REPORT.md):**
   - A–D are false: E, Vampire and Prover9 saturate; `confluence` certifies convergent systems (infinite
     countermodels).
-  - Open-claim sweep: 59 open claims became 25 proved, 2 refuted and 32 survivors in 12 theories. Of the 32,
+  - Open-claim sweep: 59 open claims became 25 proved, 2 refuted and 32 survivors in 12 theories (a small,
+    selected sample: three short test runs, 354 verified theories, queue-top only). Of the 32,
     the offline LLM bundle refutes 26, and we machine-checked 25 of them (16 finite models of size 5, 7 or 13;
     9 models on ℤ proved over ℤ by z3). S7 rests on a sampled hand proof. Open: 6 claims in S10 `f096b282`
     and S12 `f5e53602`. With x·y = x∘y, S12 becomes ETP Equations 437 and 3115; ETP says neither implies
