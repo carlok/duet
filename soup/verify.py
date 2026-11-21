@@ -174,13 +174,12 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
               f"(z3 rlimit {cfg['c_model_rlimit']:.0e}), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
     for c in out['claims']:
         if c['status'] != 'unknown': continue
+        if cfg['use_e'] and _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu']) == 'countersatisfiable':
+            continue                    # E first: a saturation settles it in seconds
         n, unk = _countermodel(C, G, T, c['idx'], cfg['c_sizes'], cfg['c_model_rlimit'], f'cm{tag}')
         if n:
             c['status'] = f'false (size {n})'; continue
         if unk: c['cm_unknown_sizes'] = c.get('cm_unknown_sizes', []) + unk
-        if cfg['use_e']:
-            st = _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu'])
-            if st == 'countersatisfiable': continue
         st, used = prove(T, c['idx'], cfg['c_prove_rlimit'])
         if st != 'proved' and c.get('e_status') == 'proved':      # E proved it, z3 did not: still proved
             c['status'] = 'proved'; c['effort'] = used; c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
