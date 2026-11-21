@@ -85,6 +85,32 @@ def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount')):
     return {'status': status, 'szs': szs, 'secs': round(time.time() - t0, 2)}
 
 
+T_BIN = os.environ.get('SOUP_TWEE', 'twee')
+
+
+def prove_twee(T, goal, seconds=60):
+    """Twee 2.7.1 (unit equality, completion). Wall-time limit; heap capped through the GHC RTS (the binary
+    is linked with -rtsopts). proof_steps: rewrite steps ("by ...") in Twee's human-readable proof."""
+    with tempfile.NamedTemporaryFile('w', suffix='.p', delete=False) as fh:
+        fh.write(problem(T, goal) if isinstance(goal, int) else goal); path = fh.name
+    t0 = time.time()
+    try:
+        r = subprocess.run([T_BIN, path, '+RTS', f'-M{PROVER_MB}m', '-RTS'], capture_output=True, text=True,
+                           timeout=seconds)
+        out = r.stdout
+    except subprocess.TimeoutExpired:
+        return {'status': 'unknown', 'reason': 'wall timeout', 'secs': round(time.time() - t0, 2)}
+    finally:
+        os.unlink(path)
+    m = re.search(r'SZS status (\w+)', out) or re.search(r'RESULT: (\w+)', out)
+    szs = m.group(1) if m else 'None'
+    status = {'Theorem': 'proved', 'Unsatisfiable': 'proved', 'CounterSatisfiable': 'countersatisfiable',
+              'Satisfiable': 'countersatisfiable'}.get(szs, 'unknown')
+    steps = len(re.findall(r'\{ by ', out)) if status == 'proved' else None
+    return {'status': status, 'szs': szs, 'proof_steps': steps, 'secs': round(time.time() - t0, 2), 'rc': r.returncode,
+            'proof': out[out.find('Proof:'):] if status == 'proved' and 'Proof:' in out else None}
+
+
 # ---- Prover9 / Mace4 (LADR). Laws as f(x,y), g(x,y); u..z are variables in LADR syntax.
 from .data import TREES as _TREES
 
@@ -92,15 +118,18 @@ from .data import TREES as _TREES
 def _ladr(t): return 'xyzwuv'[t[1]] if t[0] == 'v' else f"{'f' if t[0] == 'f' else 'g'}({_ladr(t[1])},{_ladr(t[2])})"
 
 
-def ladr_input(T, goal=None, extra=''):
-    ax = '\n'.join(f'{_ladr(_TREES[t][0])} = {_ladr(_TREES[t][1])}.' for t in T)
+def ladr_input(T, goal=None, extra='', extra_axioms=()):
+    """T: law indices; extra_axioms: further equations as (lhs, rhs) trees (e.g. lemmas beyond order 4)."""
+    ax = '\n'.join([f'{_ladr(_TREES[t][0])} = {_ladr(_TREES[t][1])}.' for t in T] +
+                   [f'{_ladr(l)} = {_ladr(r)}.' for l, r in extra_axioms])
     g = f'{_ladr(_TREES[goal][0])} = {_ladr(_TREES[goal][1])}.' if goal is not None else ''
     return f'{extra}\nformulas(assumptions).\n{ax}\nend_of_list.\nformulas(goals).\n{g}\nend_of_list.\n'
 
 
-def prove_prover9(T, goal, seconds=60):
+def prove_prover9(T, goal, seconds=60, extra_axioms=()):
     t0 = time.time()
-    r = subprocess.run(['prover9'], input=ladr_input(T, goal, f'assign(max_seconds, {seconds}).'),
+    r = subprocess.run(['prover9'], input=ladr_input(T, goal, f'assign(max_seconds, {seconds}).\nassign(max_megs, {PROVER_MB}).',
+                                                     extra_axioms),
                        capture_output=True, text=True, timeout=seconds + 30)
     m = re.search(r'Length of proof: (\d+)', r.stdout)
     st = 'proved' if 'THEOREM PROVED' in r.stdout else ('countersatisfiable' if 'SEARCH FAILED' in r.stdout and 'sos_empty' in r.stdout else 'unknown')
@@ -110,7 +139,7 @@ def prove_prover9(T, goal, seconds=60):
 def mace4(T, goal=None, start=2, end=10, seconds=600):
     """Smallest model of T (violating goal if given) with start <= size <= end. Returns size or None, and secs."""
     t0 = time.time()
-    r = subprocess.run(['mace4', '-n', str(start), '-N', str(end), '-t', str(seconds)],
+    r = subprocess.run(['mace4', '-n', str(start), '-N', str(end), '-t', str(seconds), '-b', str(PROVER_MB)],
                        input=ladr_input(T, goal), capture_output=True, text=True, timeout=seconds + 60)
     m = re.search(r'interpretation\( (\d+),', r.stdout)
     sizes = [int(x) for x in re.findall(r'DOMAIN SIZE (\d+)', r.stdout)]

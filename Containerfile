@@ -32,7 +32,18 @@ RUN git clone -q https://github.com/AlgorithmicTruth/Prover9 /src && cd /src && 
  && make -j"$(nproc)" all \
  && ls bin && cp bin/prover9 bin/mace4 /usr/local/bin/ && (prover9 --version 2>&1 | head -3 || true)
 
+# ---- Twee (BSD-3), unit-equality prover, from Hackage at a pinned index state; GHC 9.6.6
+FROM docker.io/library/haskell:9.6.6-slim-bullseye AS twee
+ARG TWEE_VERSION=2.7.1
+ARG HACKAGE_INDEX=2026-10-01T00:00:00Z
+RUN cabal update "hackage.haskell.org,${HACKAGE_INDEX}" \
+ && cabal install --index-state="${HACKAGE_INDEX}" --install-method=copy --installdir=/out --ghc-options=-rtsopts \
+      "twee-${TWEE_VERSION}" \
+ && /out/twee --version 2>&1 | head -2; ldd /out/twee
+
 FROM docker.io/library/python:3.13.18-slim
+RUN apt-get update && apt-get install -y --no-install-recommends libgmp10 libffi8 && rm -rf /var/lib/apt/lists/*
+COPY --from=twee /out/twee /usr/local/bin/twee
 COPY --from=vampire /usr/local/bin/vampire /usr/local/bin/vampire
 COPY --from=ladr /usr/local/bin/prover9 /usr/local/bin/mace4 /usr/local/bin/
 COPY --from=eprover /src/PROVER/eprover /usr/local/bin/eprover

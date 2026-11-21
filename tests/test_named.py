@@ -64,3 +64,11 @@ def test_mace4_model_is_parsed_correctly():
     F, G = (np.array(x) for x in r['tables'])
     lv = law_vector(F, G, 2)
     assert lv[ABS[0]] and not lv[IDEM_F]
+
+
+def test_twee_proves_reference_cases():
+    from soup.provers import prove_twee
+    r = prove_twee(ABS, IDEM_F, seconds=60)
+    assert r['status'] == 'proved' and r['proof_steps'] > 0
+    mck = [law_index(s) for s in ['x·(y∘(x∘z)) = x', 'x∘(y·(x·z)) = x', '((y∘x)·(x∘z))·x = x', '((y·x)∘(x·z))∘x = x']]
+    assert prove_twee(mck, law_index('x·y = y·x'), seconds=120)['status'] == 'proved'
