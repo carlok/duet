@@ -4,12 +4,12 @@ Given E's saturated clause set S (--print-saturated), check in plain Python:
   1. every equation of S orients as a rewrite rule l -> r with |l| > |r| and vars(r) <= vars(l)
      (size-decreasing, hence terminating; a saturation with unorientable equations is not handled),
   2. every critical pair of the rule set is joinable (so R is confluent, Knuth-Bendix),
-  3. every input axiom is joinable in R (so R and the axioms have the same equational theory, since every
-     clause of S is derived by E from the axioms; that part is E's word, steps 1-3 are not),
+  3. every input axiom is joinable in R,
   4. the two sides of the goal, with its variables as fresh constants, have different normal forms.
 Then the term algebra modulo R (normal forms, goal variables as free constants) is a model of the axioms
 (3, joinability is closed under substitution) in which the goal fails (4): the goal is not a consequence
-of the axioms. This needs nothing from E beyond the candidate rule set: E is only the search heuristic.
+of the axioms. Whether E derived R soundly does not matter: the argument only needs 1-4, all checked here,
+so E is only the search heuristic that proposes R.
 """
 from collections import Counter
 import itertools
@@ -17,7 +17,7 @@ import re
 import subprocess
 import sys
 
-from .provers import problem, E_BIN
+from .provers import problem, E_BIN, PROVER_MB
 
 # terms: ('v', name) | (fname, (args...))
 
@@ -117,8 +117,12 @@ def critical_pairs(R):
 
 def check(T, goal, cpu=60):
     src = problem(T, goal)
-    out = subprocess.run([E_BIN, '--auto', '-s', '--print-saturated', f'--cpu-limit={cpu}'], input=src,
-                         capture_output=True, text=True).stdout
+    try:
+        out = subprocess.run([E_BIN, '--auto', '-s', '--print-saturated', f'--cpu-limit={cpu}',
+                              f'--memory-limit={PROVER_MB}'], input=src, capture_output=True, text=True,
+                             timeout=cpu + 30).stdout
+    except subprocess.TimeoutExpired:
+        return {'ok': False, 'why': 'E wall timeout'}
     if 'CounterSatisfiable' not in out: return {'ok': False, 'why': 'E did not saturate'}
     R = []
     for line in out.splitlines():

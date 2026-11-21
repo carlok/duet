@@ -33,13 +33,19 @@ def _proof_steps(out):
     return steps
 
 
-def prove_e(T, goal, processed_limit=200_000, cpu_limit=300, extra=()):
-    src = problem(T, goal)
+# Memory cap (MB) for every external prover: a prover that needs more stops with "resource out" (unknown)
+# instead of being OOM-killed by the kernel and taking neighbours with it (21 Nov 2026: Vampire at 2-4.4 GB).
+PROVER_MB = int(os.environ.get('SOUP_PROVER_MEMORY_MB', 2000))
+
+
+def prove_e(T, goal, processed_limit=200_000, cpu_limit=300, extra=(), auto='--auto'):
+    """auto: '--auto' (one strategy, deterministic; the pipeline default) or '--auto-schedule' (portfolio)."""
+    src = problem(T, goal) if isinstance(goal, int) else goal
     with tempfile.NamedTemporaryFile('w', suffix='.p', delete=False) as fh:
         fh.write(src); path = fh.name
     t0 = time.time()
     try:
-        r = subprocess.run([E_BIN, '--auto', '--proof-object', '--print-statistics', '-s',
+        r = subprocess.run([E_BIN, auto, '--proof-object', '--print-statistics', '-s', f'--memory-limit={PROVER_MB}',
                             f'--processed-clauses-limit={processed_limit}', f'--cpu-limit={cpu_limit}', *extra, path],
                            capture_output=True, text=True, timeout=cpu_limit + 30)
         out = r.stdout
@@ -60,12 +66,13 @@ V_BIN = os.environ.get('SOUP_VAMPIRE', 'vampire')
 
 
 def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount')):
-    """Vampire with one fixed saturation algorithm (not the time-sliced portfolio), for cross-checks."""
+    """Vampire with one fixed saturation algorithm (not the time-sliced portfolio), for cross-checks.
+    extra=('--mode', 'casc') or ('--mode', 'casc_sat') selects a portfolio. goal: law index or a TPTP string."""
     with tempfile.NamedTemporaryFile('w', suffix='.p', delete=False) as fh:
-        fh.write(problem(T, goal)); path = fh.name
+        fh.write(problem(T, goal) if isinstance(goal, int) else goal); path = fh.name
     t0 = time.time()
     try:
-        r = subprocess.run([V_BIN, *extra, '-t', str(cpu_limit), path], capture_output=True, text=True,
+        r = subprocess.run([V_BIN, *extra, '-m', str(PROVER_MB), '-t', str(cpu_limit), path], capture_output=True, text=True,
                            timeout=cpu_limit + 30)
         out = r.stdout
     except subprocess.TimeoutExpired:
