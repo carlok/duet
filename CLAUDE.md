@@ -125,6 +125,17 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - `ProcessPoolExecutor.map` returns in order: one slow job blocks all output. Use `as_completed`.
 - z3 calls are not interrupted by Python signal handlers; the stop watcher (wakeup fd + `ctx.interrupt()`)
   is what makes SIGTERM work. z3 grounding at size ≥ 6 with 5–6 variables can take > 2 GB: capped.
+- One OOM-killed worker breaks a whole `ProcessPoolExecutor` (T3 died at 69/130). Long batch runs: one child
+  process per item, every prover under `SOUP_PROVER_MEMORY_MB`, z3 under `set_memory_limit`. The VM kernel
+  log (`podman machine ssh journalctl -k`) shows OOM kills; start long containers without `--rm` to keep logs.
+- Prover9's empty sos is not a saturation if `max_weight` deleted clauses (default 100; S12 lost 8,216 of
+  8,561). Count `Deleted_by_rule`. Prover9 `max_megs` (200) and Mace4 `-b` (500) defaults silently cap runs.
+- "No countermodel up to size n" must list the sizes where the search ran out of budget (`cm_unknown_sizes`);
+  9 of 12 survivor theories had size 6 unsearched, and S4 had a 5-element countermodel.
+- A claim only E proved got z3's budget cap as difficulty: the top of the V1 leaderboard is that artifact.
+- Vampire 5.1.0 has no `--mode casc_sat`; use `--mode portfolio --schedule casc_sat`.
+- Offline LLM bundles live in `~/tmp/duet-offline/<name>/`, are read by `soup.check_offline` from a tar on
+  stdin (no container mounts them), and are ignored by git and the build context.
 
 ## Tasks, in order
 
