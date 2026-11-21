@@ -27,3 +27,25 @@ def test_corpus_store_shared_between_processes(tmp_path):
     assert b.sat(lat)[1].tolist() == [True]
     assert (b.XP[0] == a.XP[0]).all() and b.nd.tolist() == [True]
     assert b.implied(lat) is not None
+
+
+def test_sigterm_interrupts_a_long_z3_call():
+    """McKenzie's lattice basis => commutativity takes z3 ~328 s; SIGTERM must stop it within seconds."""
+    import signal, subprocess, sys, time
+    code = '''
+from soup.core import prove, interrupt_all
+from soup.named import law_index
+from soup.stream.common import StopWatcher
+StopWatcher(interrupt_all)
+B = [law_index(s) for s in ['x·(y∘(x∘z)) = x', 'x∘(y·(x·z)) = x', '((y∘x)·(x∘z))·x = x', '((y·x)∘(x·z))∘x = x']]
+print('start', flush=True)
+try:
+    prove(B, law_index('x·y = y·x'), 10**12); print('finished', flush=True)
+except KeyboardInterrupt:
+    print('interrupted', flush=True)
+'''
+    p = subprocess.Popen([sys.executable, '-c', code], stdout=subprocess.PIPE, text=True)
+    assert p.stdout.readline().strip() == 'start'
+    time.sleep(3); t0 = time.time(); p.send_signal(signal.SIGTERM)
+    out = p.communicate(timeout=20)[0]
+    assert 'interrupted' in out and time.time() - t0 < 10

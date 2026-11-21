@@ -9,7 +9,9 @@ sum cheap over verified theories of the arm) at least the score
 of the 20th best theory verified so far in this arm (0 until there are 20).
   competitive > HIGH (= 4 x verifiers) and searchers > 1   -> retire a searcher, start a verifier
   competitive < LOW  (= verifiers)     and verifiers > 2   -> retire a verifier, start a searcher
-The pending lane is trimmed to --qmax tasks (lowest priority moved to queue/dropped/).
+The pending lane is trimmed to --qmax tasks (lowest priority moved to queue/dropped/). Searchers push only
+theories with k x priority >= --gate x (20th best score); the supervisor publishes k and that bar in
+queue/gate.json every tick. Workers get SIGTERM at the budget; verifiers interrupt z3 at once.
 """
 import argparse
 import json
@@ -106,7 +108,7 @@ class Supervisor:
         if comp > high and len(s) > 1:
             victim = min(s, key=lambda p: p.t0); self.retire(victim); new = self.start_verifier()
             return f'{comp} competitive pending (priority >= {th:.3f}) > {high}: retired searcher {victim.name}, started verifier {new}'
-        if comp < low and q['stage2c'] <= 1 and len(v) > 2:
+        if comp < low and len(v) > 2:
             idle = [p for p in v if (read_json(data('logs', 'workers', f'{p.name}.json')) or {}).get('state') == 'idle']
             victim = [p for p in (idle or v) if getattr(p, 'prefer', '') != 'c'][-1]
             self.retire(victim); new = self.start_searcher()
@@ -146,12 +148,13 @@ class Supervisor:
             self.event(f"**new #1**: `{rs[0]['key'][:8]}` score {rs[0]['score']:.3f}: {' & '.join(rs[0]['laws'])}")
         trimmed = self.Q.trim(self.a.qmax)
         q = self.Q.counts(); comp, th = self.competitive()
+        write_json(data('queue', 'gate.json'), {'arm': self.a.arm, 'k': self.k(), 'threshold': th * self.a.gate})
         workers = []
         for name, p in sorted(self.procs.items()):
             hb = read_json(data('logs', 'workers', f'{name}.json')) or {}
             w = {'name': name, 'role': p.role, 'pid': p.p.pid, 'alive': p.p.poll() is None, 'retiring': p.retiring,
                  'state': hb.get('state'), 'mem': memory(p.p.pid)}
-            for k in ('evals', 'evals_per_s', 'archive', 'pushed', 'wins', 'k', 'done', 'busy_frac', 'key', 'corpus', 'prefer'):
+            for k in ('evals', 'evals_per_s', 'archive', 'pushed', 'held', 'wins', 'k', 'done', 'busy_frac', 'key', 'corpus', 'prefer'):
                 if k in hb: w[k] = hb[k]
             workers.append(w)
         mems = [w['mem'] for w in workers if w['mem']]
@@ -185,7 +188,7 @@ class Supervisor:
         a = self.a
         self.initial = True; self.scan_results(); self.initial = False
         cfg = {'run': self.run, 'budget_s': a.budget, 'searchers': a.searchers, 'verifiers': a.verifiers, 'arm': a.arm,
-               'seed0': a.seed0, 'tick_s': a.tick, 'rebalance_s': a.rebalance, 'z3': z3.get_version_string(),
+               'seed0': a.seed0, 'gate': a.gate, 'qmax': a.qmax, 'tick_s': a.tick, 'rebalance_s': a.rebalance, 'z3': z3.get_version_string(),
                'data': str(DATA), 'cores': os.cpu_count(), 'results_before': len(self.results),
                'corpus_before': sum(1 for e in os.listdir(data('corpus')) if e.endswith('.npz')),
                'queue_before': self.Q.counts(), 'started': ymd_hm()}
@@ -215,7 +218,7 @@ class Supervisor:
         for p in self.procs.values():
             if p.p.poll() is None: p.retiring = True; p.p.send_signal(signal.SIGTERM)
         t0 = time.time()
-        while any(p.p.poll() is None for p in self.procs.values()) and time.time() - t0 < 60: time.sleep(1)
+        while any(p.p.poll() is None for p in self.procs.values()) and time.time() - t0 < 30: time.sleep(1)
         for p in self.procs.values():
             if p.p.poll() is None: p.p.kill(); p.p.wait()
         for name in list(self.procs): self.Q.recover(name)
@@ -239,6 +242,7 @@ def main():
     ap.add_argument('--tick', type=float, default=15.0)
     ap.add_argument('--rebalance', type=float, default=120.0)
     ap.add_argument('--qmax', type=int, default=1500)
+    ap.add_argument('--gate', type=float, default=0.5, help='push only if k*priority >= gate * 20th best score')
     ap.add_argument('--run', default=os.environ.get('RUN_ID'))
     Supervisor(ap.parse_args()).main()
 

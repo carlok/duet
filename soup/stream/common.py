@@ -2,6 +2,7 @@
 import json
 import os
 import signal
+import threading
 import time
 from pathlib import Path
 
@@ -79,3 +80,21 @@ class StopFlag:
         first = not self.set
         self.set = True
         if self.raise_ and first: raise Stop()
+
+
+class StopWatcher:
+    """For processes that spend minutes inside z3 (C code), where a Python signal handler would not run
+    until the call returns. Python's C-level handler writes the signal number to a wakeup pipe whichever
+    thread receives it; a watcher thread reads the pipe, interrupts every live z3 context (the running
+    check returns at once) and the Python-level handler then raises KeyboardInterrupt in the main thread."""
+    def __init__(self, on_stop):
+        self.set = False
+        r, w = os.pipe(); os.set_blocking(w, False)
+        signal.set_wakeup_fd(w)
+        def handler(*_):
+            if not self.set:
+                self.set = True; raise KeyboardInterrupt
+        signal.signal(signal.SIGTERM, handler); signal.signal(signal.SIGINT, handler)
+        def watch():
+            os.read(r, 1); self.set_by_watch = True; on_stop()
+        threading.Thread(target=watch, daemon=True).start()

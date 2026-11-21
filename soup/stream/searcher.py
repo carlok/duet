@@ -57,7 +57,8 @@ class Searcher:
         self.seen_results = {}      # result file -> mtime when last read
         self.pushed_laws = set()
         self.single = {}
-        self.evals = self.pushed = self.wins = 0
+        self.evals = self.pushed = self.wins = self.held = 0
+        self.gate = {'k': 1.0, 'threshold': 0.0}   # from the supervisor (queue/gate.json)
 
     # ---- cheap surrogate
     def imp1(self, t):
@@ -100,9 +101,14 @@ class Searcher:
         old = self.where.get(key)
         if old is not None and old != s['desc']: self.archive.pop(old, None)
         self.archive[s['desc']] = s; self.where[key] = s['desc']; self.wins += 1
-        if push and any(BRIDGE[t] for t in s['T']) and key not in self.verified and self.Q.mark_seen(key):
+        if push and any(BRIDGE[t] for t in s['T']) and key not in self.verified:
             novelty = sum(t not in self.pushed_laws for t in s['T']) / len(s['T'])
             prio = s['cheap'] * (1 + novelty)      # raw (cheap scale); the supervisor rescales with k
+            # gate: only theories whose calibrated priority could reach the current top 20 enter the queue;
+            # the others stay in the archive (not marked seen) and are pushed if they improve later
+            if self.gate['k'] * prio < self.gate['threshold']:
+                self.held += 1; return True
+            if not self.Q.mark_seen(key): return True
             self.Q.push(key, {'T': list(canonical(s['T'])), 'cheap': s['cheap'], 'desc': list(s['desc']),
                               'novelty': novelty, 'arm': self.arm, 'run': self.run, 'searcher': self.name,
                               't_pushed': time.time()}, prio)
@@ -161,12 +167,14 @@ class Searcher:
         return list({rng.choice(a), rng.choice(b)} | ({rng.choice(b)} if rng.random() < 0.5 else set()))
 
     def maintenance(self, t_start):
+        g = read_json(data('queue', 'gate.json'))
+        if g and g.get('arm') == self.arm: self.gate = g
         new = self.C.refresh()
         if new: self.rescore()
         self.ingest_results()
         heartbeat(self.name, role='search', arm=self.arm, run=self.run, state='searching',
                   evals=self.evals, evals_per_s=round(self.evals / max(1e-9, time.time() - t_start), 1),
-                  archive=len(self.archive), wins=self.wins, pushed=self.pushed, corpus=len(self.C),
+                  archive=len(self.archive), wins=self.wins, pushed=self.pushed, held=self.held, gate=self.gate.get('threshold'), corpus=len(self.C),
                   verified_seen=len(self.verified), k=round(self.k(), 4), mem=memory(os.getpid()))
 
     def snapshot(self):

@@ -6,13 +6,14 @@ A verifier started with --prefer c takes stage-c work first (so long runs always
 """
 import argparse
 import os
+import random
 import time
 
-from ..core import Corpus
+from ..core import Corpus, interrupt_all, set_memory_limit
 from ..duality import dualities
 from ..paths import data, ensure
 from ..verify import stage_a, stage_b, stage_c
-from .common import Stop, StopFlag, heartbeat, read_json, write_json, memory
+from .common import StopWatcher, heartbeat, read_json, write_json, memory
 from .fqueue import FileQueue
 
 
@@ -21,18 +22,23 @@ def main():
     ap.add_argument('--name', required=True); ap.add_argument('--run', required=True)
     ap.add_argument('--prefer', default='ab', choices=['ab', 'c'])
     a = ap.parse_args()
-    stop = StopFlag(raise_=True)
+    stop = StopWatcher(interrupt_all)
+    set_memory_limit(int(os.environ.get('SOUP_Z3_MEMORY_MB', 1500)))
     C = Corpus(store=ensure('corpus')); Q = FileQueue(data('queue')); R = ensure('results')
-    lanes = ('stage2c', 'pending') if a.prefer == 'c' else ('pending', 'stage2c')
+    c_first, ab_first = ('stage2c', 'pending'), ('pending', 'stage2c')
     done = {'ab': 0, 'c': 0}; busy = 0.0; t_start = time.time()
     hb = lambda state, **kw: heartbeat(a.name, role='verify', run=a.run, prefer=a.prefer, state=state, done=done,
                                        busy_frac=round(busy / max(1e-9, time.time() - t_start), 3),
                                        corpus=len(C), mem=memory(os.getpid()), **kw)
-    print(f'{a.name}: lanes {lanes}, corpus {len(C)} found structures', flush=True)
+    print(f'{a.name}: prefers {a.prefer}, corpus {len(C)} found structures', flush=True)
     claimed = None
     try:
         while not stop.set:
             C.refresh()
+            # stage c first for the c verifier, and for the others with a probability that grows with the
+            # stage-c backlog (10% per 10 waiting, at most 50%), so long runs never starve
+            backlog = Q.counts()['stage2c'] if a.prefer != 'c' else 0
+            lanes = c_first if a.prefer == 'c' or random.random() < min(0.5, backlog / 100) else ab_first
             got = Q.claim(a.name, lanes)
             if got is None:
                 hb('idle'); time.sleep(2); continue
@@ -60,7 +66,7 @@ def main():
                 Q.push(key, dict(task, t_pushed=time.time()), task.get('prio', 0), lane='stage2c')
             Q.done(claimed); claimed = None; busy += time.time() - t0
             hb('wrote', key=key)
-    except Stop:
+    except KeyboardInterrupt:
         pass
     finally:
         if claimed is not None: Q.release(claimed)     # unfinished: back to its lane for someone else

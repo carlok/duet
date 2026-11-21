@@ -7,6 +7,7 @@ directory of files `<n>_<hash>.npz`; each process calls `refresh()` to pick up w
 import hashlib
 import itertools
 import os
+import weakref
 from pathlib import Path
 
 import numpy as np
@@ -154,6 +155,28 @@ class Corpus:
         return np.flatnonzero(imp & ~union)
 
 
+# ---- z3 bookkeeping: every context is registered so a stop request can interrupt a running check
+_LIVE = weakref.WeakSet()
+# Grounding size cap: more ground equations than this and the size is reported 'unknown' (not searched).
+MAX_GROUND = int(os.environ.get('SOUP_MAX_GROUND', 60_000))
+
+
+def new_context():
+    ctx = z3.Context(); _LIVE.add(ctx); return ctx
+
+
+def interrupt_all():
+    """Called from a watcher thread on SIGTERM: running z3 checks return 'unknown' at once."""
+    for ctx in list(_LIVE):
+        try: ctx.interrupt()
+        except Exception: pass
+
+
+def set_memory_limit(mb):
+    """Process-wide z3 memory cap; a check that exceeds it fails instead of growing without bound."""
+    z3.set_param('memory_max_size', int(mb))
+
+
 # ---- z3 proof effort: fresh context per proof, so rlimit count is this proof only
 def _zt(t, env, f, g): return env[t[1]] if t[0] == 'v' else (f if t[0] == 'f' else g)(_zt(t[1], env, f, g), _zt(t[2], env, f, g))
 
@@ -166,15 +189,22 @@ def _axiom(i, S, f, g):
 
 def prove(T, goal, rlimit=20_000_000):
     """Returns (status, effort). Each call gets a fresh z3 context, so effort counts this proof only."""
-    ctx = z3.Context()
+    ctx = new_context()
     S = z3.DeclareSort('S', ctx); f = z3.Function('f', S, S, S); g = z3.Function('g', S, S, S)
     s = z3.Solver(ctx=ctx); s.set('rlimit', rlimit)
     for t in T: s.add(_axiom(t, S, f, g))
     L, R = TREES[goal]; k = max(nvars_tree(L), nvars_tree(R)); cs = [z3.Const(f'c{j}', S) for j in range(k)]
     s.add(_zt(L, cs, f, g) != _zt(R, cs, f, g))
-    r = s.check(); st = s.statistics()
+    try:
+        r = s.check(); st = s.statistics()
+    except z3.Z3Exception:            # memory cap hit
+        return 'unknown', int(rlimit)
     used = st.get_key_value('rlimit count') if 'rlimit count' in st.keys() else rlimit
     return ('proved' if r == z3.unsat else 'unknown'), int(used)
+
+
+def _nvars(i):
+    L, R = TREES[i]; return max(nvars_tree(L), nvars_tree(R))
 
 
 # ---- finite models: axioms grounded over all tuples (Mace4-style, no quantifiers)
@@ -184,12 +214,14 @@ class Grounding:
 
     def __init__(self, T, n):
         self.n = n; self.T = list(T)
-        self.ctx = z3.Context()
+        self.too_big = sum(n ** _nvars(t) for t in self.T) > MAX_GROUND
+        self.ctx = new_context()
         self.S, self.el = z3.EnumSort(f'D{n}', [f'd{i}' for i in range(n)], ctx=self.ctx)
         self.f = z3.Function('f', self.S, self.S, self.S); self.g = z3.Function('g', self.S, self.S, self.S)
         self.pos = {str(e): i for i, e in enumerate(self.el)}
         self.ax = []
-        for t in self.T: self.ax += self.ground(t)
+        if not self.too_big:
+            for t in self.T: self.ax += self.ground(t)
 
     def ground(self, i):
         L, R = TREES[i]; k = max(nvars_tree(L), nvars_tree(R)); f, g = self.f, self.g
@@ -199,6 +231,7 @@ class Grounding:
         """A model of T, optionally violating law `goal`, optionally non-degenerate, different from
         every table pair in `avoid`. Returns (F, G), None (no such model) or 'unknown' (budget)."""
         el, f, g, n = self.el, self.f, self.g, self.n
+        if self.too_big or (goal is not None and n ** _nvars(goal) > MAX_GROUND): return 'unknown'
         s = z3.Solver(ctx=self.ctx); s.set('rlimit', rlimit)
         s.add(self.ax)
         if goal is not None:
@@ -211,7 +244,8 @@ class Grounding:
         for F0, G0 in avoid:
             s.add(z3.Or([f(el[x], el[y]) != el[int(F0[x, y])] for x in range(n) for y in range(n)] +
                         [g(el[x], el[y]) != el[int(G0[x, y])] for x in range(n) for y in range(n)]))
-        r = s.check()
+        try: r = s.check()
+        except z3.Z3Exception: return 'unknown'      # memory cap hit
         if r == z3.unknown: return 'unknown'
         if r == z3.unsat: return None
         m = s.model(); pos = self.pos
