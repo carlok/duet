@@ -24,6 +24,8 @@ by the whole theory but by no single law of it.
 5. Preregister before any scaled run: hypotheses, arms, budgets, seeds, stop rules go in
    `PREREGISTRATION.md` and get committed *before* the run starts.
 6. No LLM anywhere in the scoring loop. The search must stay contamination-free.
+   Offline LLM work on results (e.g. `prompts/survivors.md`) writes outside the repo and outside `work/`;
+   its output counts only after a machine check and never feeds back into the search (`prompts/README.md`).
 
 ## Environment
 

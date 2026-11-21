@@ -18,3 +18,5 @@ tex/*.bbl
 tex/*.blg
 tex/*.log
 tex/*.out
+# offline LLM outputs never live in the repo (see prompts/README.md)
+offline/
