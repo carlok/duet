@@ -32,3 +32,18 @@ Each section is committed before its run starts. Changes after the start are lis
    different weighting; the 6-law comparisons (lattice, skew lattice, bisemilattice) are reported as against
    this null. k = 2, 3, 5 stay uniform. Fisher's test is reported on all random theories and on the uniform
    ones only.
+2. **T3, crashed run resumed (21 Nov 2026, evening, after 69 of 130 results existed).** The run stopped
+   at 69 results: the kernel of the Podman VM OOM-killed one worker (python, 5.9 GB resident, 12:56 VM time),
+   and the broken process pool ended the whole run. Which theories were in flight is not known; none of them
+   has a result. The 69 results were looked at before this deviation was written (duality counts: named 8/10,
+   random 0/59); nothing below depends on them.
+   - Fix: every theory runs in its own child process. z3 is capped at 1.5 GB (as in the stream verifier);
+     E and Vampire are capped at 2 GB. A child that dies, or runs longer than 1 h, is recorded as `crashed`.
+     6 theories at a time instead of 10.
+   - The 61 theories without a result (1 at k = 2, 5 at k = 3, 25 at k = 5, 30 at k = 6) are verified once
+     with the same verifier settings (`verify.V1`). The 69 results are kept and not rerun.
+   - A theory that crashes is reported as crashed. It counts for H1, since having a duality is syntactic,
+     and is left out of the H2 percentiles.
+   - Caveats: the 69 ran without memory caps, which can only turn a run that would have used more memory
+     into an unknown; the shared corpus has grown since the start (stream runs), so later theories see more
+     structures. Both are reported with the results.
