@@ -27,15 +27,23 @@ def e_steps_max(r):
 
 def main():
     R = json.load(open(sys.argv[1] if len(sys.argv) > 1 else data('calib_t3.json')))
-    named = [r for r in R if r['kind'] == 'named']; null = [r for r in R if r['kind'] == 'null']
+    named = [r for r in R if r['kind'] == 'named']; null_all = [r for r in R if r['kind'] == 'null']
+    crashed = [r for r in R if r.get('status') == 'crashed']
+    print(f'named {len(named)}, random {len(null_all)}, crashed {len(crashed)} '
+          f"({', '.join(r['name'] for r in crashed) or 'none'})")
     a = sum(bool(r['dualities']) for r in named); b = len(named) - a
-    c = sum(bool(r['dualities']) for r in null); d = len(null) - c
-    print(f'named {len(named)}, random {len(null)}')
-    print(f'has a duality: named {a}/{len(named)}, random {c}/{len(null)}; Fisher one-sided p = {fisher_greater(a, b, c, d):.3g}')
-    for k in sorted({len(r['T']) for r in null}):
-        nk = [r for r in null if len(r['T']) == k]
-        print(f'  random k={k}: n={len(nk)}, with a duality {sum(bool(r["dualities"]) for r in nk)}, '
-              f'positive score {sum(r.get("score", 0) > 0 for r in nk)}')
+    # H1: having a duality is syntactic, so crashed theories count too
+    for label, nl in (('all random', null_all), ('uniform random only', [r for r in null_all if r.get('sampler') == 'uniform'])):
+        c = sum(bool(r['dualities']) for r in nl); d = len(nl) - c
+        print(f'has a duality ({label}): named {a}/{len(named)}, random {c}/{len(nl)}; '
+              f'Fisher one-sided p = {fisher_greater(a, b, c, d):.3g}')
+    null = [r for r in null_all if r.get('status') != 'crashed']     # H2 measures need a finished verification
+    for k in sorted({len(r['T']) for r in null_all}):
+        nk = [r for r in null_all if len(r['T']) == k]
+        print(f'  random k={k}: n={len(nk)} ({sum(r.get("status") == "crashed" for r in nk)} crashed), '
+              f'with a duality {sum(bool(r["dualities"]) for r in nk)}, '
+              f'positive score {sum((r.get("score") or 0) > 0 for r in nk)}')
+    named = [r for r in named if r.get('status') != 'crashed']
     cols = [('gain', lambda r: r.get('gain', 0)), ('max_difficulty', lambda r: r.get('max_difficulty', 0)),
             ('E steps (max)', e_steps_max), ('richness', lambda r: r.get('richness', 0)), ('score', lambda r: r.get('score', 0))]
     print('\n| theory | k | ' + ' | '.join(f'{n} (pct)' for n, _ in cols) + ' | dualities |')
