@@ -1,5 +1,9 @@
 # duet: search for synergy between two binary operations (Python package `soup`)
 
+> **Work in progress.** This is a research log, not a finished result: no theory found so far is claimed to be
+> new, the paper in `tex/` is a draft, and `REPORT.md` states the caveats next to every number. Open problems
+> that anyone can attack are listed [below](#open-problems).
+
 An open-ended search over small equational theories in two binary operations, `x · y` and `x ∘ y`. Laws go up to
 order 4: 71,369 laws up to renaming and side swap, 61,983 of them *bridges* that mix both operations. The search
 looks for theories whose laws together imply laws that no single law implies (*synergy*; the reference case is the
@@ -40,8 +44,33 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
   - 25 are refuted: 16 by finite models of size 5, 7 or 13, and 9 by models on ℤ proved over ℤ by z3;
   - 1 more (S7) rests on a hand proof that has been sampled but not certified;
   - 6 remain open, in two theories (S10, S12). A second round with our own tools is running.
+- **Synergy inside one operation.** Setting `x·y = x∘y` in the theory T2 gives ETP Equations 55,
+  `x = x◇(y◇(y◇x))`, and 100, `x = x◇((x◇x)◇y)`. By the ETP data neither implies `x = x◇x`, but together
+  they do (E: 10 steps, Twee: 3). ETP does not test conjunctions of laws, and we found no source for this pair;
+  it is recorded as an observation (`REPORT.md`, literature check).
 - **Not yet:** no theory found so far is new. The old score saturates on idempotence, and its top two
   theories were an artifact of z3's budget cap. T4 tests a corrected score (preregistered).
+
+## Open problems
+
+Each of these defeated E, Vampire, Twee (where run), Prover9 and finite-model search in our budgets. A proof, a
+finite countermodel, or an infinite one with a checkable construction settles it. The budgets are in `REPORT.md`.
+
+- **S12.** Do the four laws
+  `x·(y∘(y∘(x∘y))) = x`, `x∘(y·(y·(x·y))) = x`, `(((x∘y)∘x)∘x)·y = y`, `(((x·y)·x)·x)∘y = y`
+  imply `x·x = x`? (By the swap symmetry the same question covers `x∘x = x`; `x·x = x∘x` is open too.)
+  No countermodel on 2–5 elements (complete search), and none in several model families. With `x·y = x∘y` the
+  laws become ETP Equations 437 and 3115. Each alone has non-idempotent models, but no 2- or 3-element
+  non-idempotent magma satisfies both.
+- **S10.** S12 plus `x·x = x∘x`: does it imply `x·x = x` (equivalently `x∘x = x`) or `x·(x·x) = x`?
+  A proof for S12 settles S10. A countermodel for S10 refutes S12's first two claims.
+- **The infinite-only non-implications** (A–D in the paper, and S1, S9, S11 in `REPORT.md`) are candidates
+  for the TPTP library's non-theorem problems. Their countermodels are certified but necessarily infinite.
+
+## License
+
+Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`, `tex/`): CC BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
 
 ## Status (21 Nov 2026, evening)
 

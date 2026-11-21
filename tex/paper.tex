@@ -167,6 +167,13 @@ four-law lattice basis~\cite{mckenzie1970}, $x\op(y\cop(x\cop z))=x$ and $x\cop(
 proves commutativity from McKenzie's basis in 21 inference steps; Z3 needs $8.5\cdot 10^6$ resource
 units (328\,s).
 
+Among the top non-fragment theories of the pilot, $\text{T2}=\{x\cop(y\op(y\cop x))=x,\ x\op((x\cop x)\op y)=x\}$
+forces $x\op x=x$. Identifying the two operations maps T2 onto Equations 55, $x=x\diamond(y\diamond(y\diamond x))$,
+and 100, $x=x\diamond((x\diamond x)\diamond y)$, of~\cite{etp}. By the ETP data neither implies
+$x=x\diamond x$; since every magma satisfying both is a model of T2 with equal operations, together they do
+(E finds a 10-step proof, Twee a 3-step one). The ETP settled implications between single laws only, so
+pairs with this kind of one-operation synergy are outside its scope; we found no source for this one.
+
 \subsection{Four open implications are false}
 The pilot left four implications with goal $x\op x=x$ unproved by Z3 and without countermodels up to
 size~8 (for A) or~7 (for C):

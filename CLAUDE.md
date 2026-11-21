@@ -2,7 +2,7 @@
 
 Project memory for Claude Code. Read all of it before the first command, then the Status section of
 `README.md` (what is running, what is next), `REPORT.md` (newest first) and `PREREGISTRATION.md`.
-Background note (literature, design, earlier results): https://claude.ai/artifact/3YweiTzEurAomActQxPUQB
+Background (literature, design, earlier results): `tex/paper.tex` and the literature table in `REPORT.md`.
 
 ## The question
 
