@@ -2,6 +2,84 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Stage-c sweep and second survivor round, clean track (21 Nov 2026, night)
+
+Neither run uses any LLM input. The sweep was still going when this was written (interim numbers, replaced before
+T4 starts). Round 2 was stopped once its remaining jobs were moot.
+
+**Stage-c sweep.**
+- Run: `podman run -d --name soup-sweepc -v "$PWD/work:/data" soup python -m soup.sweep_c --jobs 5`.
+- Table: `podman run --rm -v "$PWD/work:/data:ro" soup python -m soup.sweep_c --summary` (raw data in
+  `work/check/sweep_c.json`).
+- What it does: `verify.stage_c` with `DEFAULTS` on every result that has an `unknown` or `open` claim (32
+  results). E gets 2M processed clauses, and saturations are certified. Mace4 starts at the smallest size that stage
+  a left unsearched and goes up to size 10. z3 gets a long run.
+- Process: each result runs in its own child process. The first attempt used a shared process pool, and one dying
+  worker took the pool down after 8 results (see Corrections).
+- Progress: 27 of 32 results done (20 s to 3,495 s each, median 504 s). Not done yet: S9, S10, S11, S12 and
+  `ef29638a`.
+
+Survivor theories, compared with the offline LLM's refutations (table "Found offline with an LLM, machine-checked"
+below):
+
+| Theory | Claims | Our stage c | LLM's refutation | Reproduced? |
+|---|---|---|---|---|
+| S2 `45b1f0fb` | 1 | refuted, 7-element model | 7-element model | yes |
+| S3 `4ec6760a` | 3 | refuted, 7 | 7 | yes |
+| S4 `513de1ad` | 3 | refuted, 5 | 7 and 5 | yes |
+| S8 `d25065b6` | 3 | refuted, 7 | 7 | yes |
+| S5 `5e0dc923`, S6 `bbdd0d1c` | 3 + 3 | open; Mace4 complete to size 7 (S5 x∘x = x: 8), budget out | model on ℤ/13 | no: size 13 is beyond Mace4's 10 |
+| S1 `00f017a6` | 3 | open; Mace4 complete to 9 | piecewise-linear model on ℤ | no, as expected: no finite model is known |
+| S7 `cdf702b5` | 1 | open; Mace4 did not finish size 7 | infinite term model (hand proof) | no, as expected |
+
+Our pipeline alone reproduces 10 of the LLM's 16 finite refutations. The other 6 (S5, S6) need 13 elements. The
+models on ℤ and S7's term model are out of reach of finite search, which is what we expected. Every model found
+here went into the shared corpus.
+
+The other 19 results that the sweep has finished are not among the 12 survivor theories. Stage b's budget had left
+their claims undecided. Of their 26 claims, E proves 24, each in 9–23 steps. The other 2, in
+`8fae253a`, are refuted by certified E saturations.
+
+**Second survivor round, clean track.**
+- Run: `podman run -d --name soup-round2 -v "$PWD/work:/data" soup python -m soup.round2 clean --jobs 5 --secs
+  1800`.
+- Table: `podman run --rm -v "$PWD/work:/data:ro" soup python -m soup.round2 summary` (raw data in
+  `work/check/round2_clean.json`).
+- Budgets: 1,800 s per prover run; the first claim (S12 x·x = x) gets 3,600 s.
+- Stopped after 22 of 32 jobs (`podman stop soup-round2`, 21 Nov, 19:58 UTC). The 10 unfinished jobs were all
+  on S10 claims, which the model below settles.
+
+| Claim | Provers (Twee, E `--auto-schedule`, Vampire casc, Vampire casc_sat) | Prover9, no weight limit | Mace4 | ℤ/n translation-invariant | Piecewise-linear on ℤ, window 3 |
+|---|---|---|---|---|---|
+| S12 x·x = x | nothing in 3,600 s each | stopped at 189 s: no proof, no saturation, 0 deletions | sizes 6–9: **size 6 complete, no model**; size 7 not finished in 7,200 s | none for n ≤ 8; n = 9–38 undecided (120 s per n) | none in 3,600 s |
+| S12 x·x = x∘x | nothing in 1,800 s each | stopped at 134 s, same | size 6 complete, no model; size 7 not finished in 3,600 s | none for n ≤ 8; 9–23 undecided | none in 1,800 s |
+| S10 x·x = x | Twee, E, Vampire casc: nothing; **Vampire casc_sat: CounterSatisfiable after 602 s (a finite model)** | stopped at 104 s, same | not run (stopped) | none for n ≤ 8; 9–23 undecided | not run (stopped) |
+| S10 x·(x·x) = x | not run (stopped) | | | | |
+
+**S10 and two S12 claims are refuted by a 10-element model.**
+- Search: Vampire's casc_sat schedule (strategy `fmb+10_1_…`, finite model building at size 10). The round-2
+  driver kept only the status line. A rerun with the full output (`work/check/s10_vampire_casc_sat.out`, 113 s in
+  the successful strategy) printed the model.
+- Check: `podman run --rm -v "$PWD/work:/data" soup python -m soup.round2 model --out
+  /data/check/s10_vampire_casc_sat.out --key f096b282 --name s10`. It checks the tables with both of our evaluators
+  (`core.law_vector` and the direct evaluation in `check_offline.check_finite`). Result: all five S10 axioms hold,
+  x·x = x, x∘x = x and x·(x·x) = x fail, and the model is non-degenerate. The model is now in the corpus;
+  tables in `work/check/s10_model.json` and in `tests/test_round2.py`.
+- x·x = x fails at exactly one element: 0·0 = 0∘0 = 1.
+- A model of S10 is a model of S12, so S12 ⇒ x·x = x and S12 ⇒ x∘x = x are refuted too. In this model x·x = x∘x
+  holds by construction, so it says nothing about S12's third claim.
+- **5 of the 6 claims the offline LLM left open are now refuted, by our own tools and without LLM input.** One
+  claim is left: S12 ⇒ x·x = x∘x.
+- Mace4 would not have found the model. It did not finish size 7 in 2 h, and round 2 gave it sizes 6–9 only. The
+  ℤ/n family timed out at n = 9 and above. Vampire's FMB, which encodes each size as SAT, is the tool that worked.
+  Stage c has no Vampire FMB; it is added after T4 as a new verifier config (V2 is preregistered).
+
+Caveats:
+- Why Prover9 stopped early is not known, because its output was not kept. The likeliest cause is the 2,000 MB
+  `max_megs` cap. None of those runs is a saturation.
+- New since the LLM's round: S12 has no countermodel on 6 elements. Before, the complete search covered only sizes
+  2–5. The smallest countermodel therefore has 7–10 elements; a Vampire FMB run from size 7 is going.
+
 ## T3: calibration, named vs random theories (21 Nov 2026)
 
 Preregistered (PREREGISTRATION.md, T3, deviations 1 and 2). Run: `podman run -d --name soup-calib -v
@@ -64,6 +142,7 @@ Web and arXiv search for 2024–2026 work, done by a subagent. Each arXiv entry 
 | Kondylidou, Blanchette, Heule, *Tao's Equational Proof Challenge Accepted*, arXiv:2605.21200 (May 2026) | Proof minimisation (Krympa) cuts ETP proofs from 62 to 20 and 151 to 10 steps. Raw proof length (V2 difficulty) is an upper bound; noted in the T4 preregistration before the run. |
 | Zhao, Wu, Yang, Miao, *Trace-Tree Magmas*, arXiv:2609.05690 (Sep 2026) | 28 order-5 Austin laws with Lean-certified infinite models; relevant to T7 (order 5). |
 | Berlioz, Melliès, *The Latent Space of Equational Theories*, arXiv:2601.20759 (Jan 2026) | Laws represented by their behaviour on finite magmas, as in our law × structure matrix. |
+| Lean Zulip, ETP stream, topic "Search space for (EqX ∧ EqY) → EqZ" (Oct 2024 – Sep 2025; archive at https://leanprover-community.github.io/archive/stream/458659-Equational/, read 21 Nov 2026, night) | **Conjunctions of two ETP laws, the question of our census.** Tsyrklevich estimates about 785M (X, Y, Z) cases left after transitivity. In Sep 2025 Le Floch lists all conjunctions of low-order laws: 59 classes, closed under conjunction (his pairs use Equations 2–43; Equations 1–46 have order ≤ 2). Tao asks for the data in the ETP repository. No order-3 pair appears, so E55 + E100 (order 3) is not covered there. A forum thread, not a publication. |
 | SAIR EQT2 solvers (arXiv:2609.00706, 2610.26467), ALPS (arXiv:2608.15979), *Learning to Disprove* (arXiv:2603.19514) | LLM-assisted work on equational implication; all keep the LLM out of verification, as our rule 6 does. |
 | Leech, *Noncommutative Lattices* (2020), Thm 1.3.4, citing Laslo–Cozac 1998 *[not verified]* | Which order-2 absorption pairs force idempotence is classified; our absorption calibration is a special case: reproduced, not found. |
 | CASC-J13 (2026) rules and TPTP v10.0.0 *[not verified]* | Unit-equality division takes provable problems only; infinite-only non-implications (A–D, S1, S9, S11) fit the FNT division, which accepts saturations. Submission is by contacting the TPTP developers. |
@@ -107,7 +186,9 @@ tables, the hand-transcribed ℤ formulas and the lemma statements come from the
 
 So 25 of the 32 survivor claims are refuted with a machine check (16 by finite models, 9 by models on ℤ
 proved over ℤ). One more (S7) is refuted by a hand proof that has been sampled but not certified. Six remain
-open. Caveat: the 32 come from the three short test runs above (`test10`, `fix5`, `e10`: about 25 minutes of
+open. *Update (21 Nov, night):* our own round 2, with no LLM input, refutes five of the six with a 10-element
+model of S10 found by Vampire's finite model builder (section above). The only claim still open is S12 ⇒ x·x = x∘x.
+Counting both sources: 30 of 32 refuted with a machine check, S7 by a sampled hand proof, 1 open. Caveat: the 32 come from the three short test runs above (`test10`, `fix5`, `e10`: about 25 minutes of
 streaming, 354 verified theories) and only from queue-top theories, a small, selected sample. The share of
 false claims describes this sample, not the search. The finite-model share says something about our pipeline: 16 survivors had countermodels of size 5, 7
 or 13 that our search never reached (see the corrections below).
@@ -134,6 +215,10 @@ Found while reviewing the code and the offline results; each fix has a test (`te
   proved claims; the top two leaderboard theories (`d5584040`, `17b2a537`) score entirely from it. T4 uses
   the preregistered V2 (difficulty = E proof steps / 10). Post-hoc comparison: `python -m soup.rescore`
   (641 older proved claims have no E steps and get the floor, so it is only indicative).
+- **The first stage-c sweep repeated a pitfall already on record.** It used one `ProcessPoolExecutor`. One
+  worker died (the kernel log shows no OOM kill), and the broken pool turned the other 24 jobs into errors after 8
+  results. `sweep_c` now runs one child process per result, records a crash without touching the result file, and
+  skips results already swept on a rerun (commit `6372256`). The 8 finished records are kept.
 - **Mutation bug.** The remove-a-law mutation removed a random number of laws, not one.
 - **Fragment check was biased toward "not a fragment"** (z3 giving up counted as invalid). It is now
   three-valued (valid / invalid / undecided) over all 10 named theories of T3.

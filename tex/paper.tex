@@ -34,7 +34,9 @@ non-implication a finite countermodel, a checked convergent rewrite system or a 
 proved by Z3; claims the verifier cannot settle are reported as open with their budget.
 The scored search rediscovers fragments of lattice theory and two laws of McKenzie's 1970 lattice
 basis. It also refutes four implications that finite-model search up to size~8 left open: their
-countermodels are necessarily infinite. Whether the search finds theories that are interesting and not
+countermodels are necessarily infinite. Of 32 claims that resisted the verifier in short pilot runs, 31 are now
+refuted (one by a hand proof that is not certified). The last of them fell to a 10-element model that Mace4 did not
+reach and Vampire's finite model builder found. Whether the search finds theories that are interesting and not
 already named is the open question; a preregistered comparison is planned.
 \end{abstract}
 
@@ -179,8 +181,10 @@ Among the top non-fragment theories of the pilot, $\text{T2}=\{x\cop(y\op(y\cop 
 forces $x\op x=x$. Identifying the two operations maps T2 onto Equations 55, $x=x\diamond(y\diamond(y\diamond x))$,
 and 100, $x=x\diamond((x\diamond x)\diamond y)$, of~\cite{etp}. By the ETP data neither implies
 $x=x\diamond x$; since every magma satisfying both is a model of T2 with equal operations, together they do
-(E finds a 10-step proof, Twee a 3-step one). The ETP settled implications between single laws only, so
-pairs with this kind of one-operation synergy are outside its scope; we found no source for this one.
+(E finds a 10-step proof, Twee a 3-step one). The ETP settled implications between single laws only. Conjunctions
+were discussed on the project's forum, where all conjunctions of the laws of order at most~2 were classified (59
+classes)~\cite{zulipconj}. Equations 55 and 100 have order~3, so this pair lies outside both, and we found no
+source for it.
 
 \subsection{Four open implications are false}
 The pilot left four implications with goal $x\op x=x$ unproved by Z3 and without countermodels up to
@@ -216,7 +220,7 @@ from the model's output, and none of it entered the search, the corpus or the sc
   with $x\op x=x+1$, $x\cop x=x-1$. Z3 proves every axiom for all integers (linear integer arithmetic).
 \item 1 claim fails in an infinite term model; the proof was read and the model sampled, not certified.
 \end{itemize}
-Six claims remain open, in two theories:
+The language model left six claims open, in two theories:
 \begin{align*}
 \text{S12}&: x\op(y\cop(y\cop(x\cop y)))=x,\quad x\cop(y\op(y\op(x\op y)))=x,\\
 &\phantom{:}\ (((x\cop y)\cop x)\cop x)\op y=y,\quad (((x\op y)\op x)\op x)\cop y=y;\\
@@ -225,8 +229,17 @@ Six claims remain open, in two theories:
 With $x\op y=x\cop y$ the axioms of S12 become Equations 437 and 3115 of the Equational Theories
 Project~\cite{etp}; neither implies $x=x\diamond x$ there, but the pair is not covered. The survivors also
 exposed a gap in our pipeline: for 9 of the 12 theories the finite search had run out of budget at size 5 or 6,
-and the claims never reached the stage that searches larger models. \pending{Second round on S10 and S12:
-Twee~\cite{twee}, Vampire's portfolios~\cite{vampire}, long Mace4 runs, model families.}
+and the claims never reached the stage that searches larger models. With that fixed, our own stage~c, with no
+input from the language model, finds 10 of the 16 finite refutations: models of 5 and 7 elements for four of the
+theories. The other six need 13 elements, beyond its Mace4 bound of~10. In a second round on S10 and S12, Twee
+\cite{twee}, E's auto-schedule, Vampire's portfolios~\cite{vampire} and Prover9 found nothing on S12 in 30--60
+minutes each. Mace4 completed size~6 without a countermodel, and translation-invariant models on
+$\mathbb{Z}/n$ were excluded for $n\le 8$. Vampire's satisfiability schedule then found a model of S10 on 10
+elements by finite model building. Both of our evaluators confirm all axioms of S10 in it, and in it $x\op x=x$,
+$x\cop x=x$ and $x\op(x\op x)=x$ fail, at a single element $a$ with $a\op a=a\cop a\neq a$. Every model of S10 is a
+model of S12, so five of the six open claims are refuted, by our own tools alone. Mace4 had not finished
+size~7 in two hours. One claim is left: does S12 imply $x\op x=x\cop x$? No model of S12 with $x\op x\neq x$ has
+fewer than 7 elements. \pending{final sweep numbers; the smallest such model.}
 
 \subsection{Streaming system}
 In a 10-minute test (3 search and 8 verifier processes) the system verified 231 theories and added 1{,}897

@@ -44,11 +44,17 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
   outside the pipeline, and we machine-checked its answers (`soup/check_offline.py`):
   - 25 are refuted: 16 by finite models of size 5, 7 or 13, and 9 by models on ℤ proved over ℤ by z3;
   - 1 more (S7) rests on a hand proof that has been sampled but not certified;
-  - 6 remain open, in two theories (S10, S12). A second round with our own tools is running.
+  - 6 were left open, in two theories (S10, S12).
+  - Our own second round, with no LLM input, refutes 5 of those 6. Vampire's finite model builder found a
+    10-element model of S10 in which `x·x = x` fails at one element. Both of our evaluators check it, and it is
+    also a model of S12. **One claim is still open: S12 ⇒ `x·x = x∘x`.**
+  - Our own stage c, with no LLM input, independently finds 10 of the 16 finite refutations (S2, S3, S4, S8; sizes
+    5 and 7). The other 6 need 13 elements, more than Mace4's 10 (interim: 27 of 32 results swept).
 - **Synergy inside one operation.** Setting `x·y = x∘y` in the theory T2 gives ETP Equations 55,
   `x = x◇(y◇(y◇x))`, and 100, `x = x◇((x◇x)◇y)`. By the ETP data neither implies `x = x◇x`, but together
-  they do (E: 10 steps, Twee: 3). ETP does not test conjunctions of laws, and we found no source for this pair;
-  it is recorded as an observation (`REPORT.md`, literature check).
+  they do (E: 10 steps, Twee: 3). ETP's implication graph does not cover conjunctions. A Lean Zulip thread has
+  all conjunctions of the order ≤ 2 laws, but this pair is order 3, and we found no source for it. It is recorded
+  as an observation (`REPORT.md`, literature check). A separate session is building the census of such pairs.
 - **Not yet:** no theory found so far is new. The old score saturates on idempotence, and its top two
   theories were an artifact of z3's budget cap. T4 tests a corrected score (preregistered).
 
@@ -59,12 +65,11 @@ finite countermodel, or an infinite one with a checkable construction settles it
 
 - **S12.** Do the four laws
   `x·(y∘(y∘(x∘y))) = x`, `x∘(y·(y·(x·y))) = x`, `(((x∘y)∘x)∘x)·y = y`, `(((x·y)·x)·x)∘y = y`
-  imply `x·x = x`? (By the swap symmetry the same question covers `x∘x = x`; `x·x = x∘x` is open too.)
-  No countermodel on 2–5 elements (complete search), and none in several model families. With `x·y = x∘y` the
-  laws become ETP Equations 437 and 3115. Each alone has non-idempotent models, but no 2- or 3-element
-  non-idempotent magma satisfies both.
-- **S10.** S12 plus `x·x = x∘x`: does it imply `x·x = x` (equivalently `x∘x = x`) or `x·(x·x) = x`?
-  A proof for S12 settles S10. A countermodel for S10 refutes S12's first two claims.
+  imply `x·x = x∘x`? They do not imply `x·x = x`: a 10-element model refutes that (`tests/test_round2.py`). That
+  model satisfies `x·x = x∘x`, so it does not answer this question. No model on 2–6 elements has `x·x ≠ x`
+  (complete search), so the smallest one has 7–10 elements. With `x·y = x∘y` the laws become ETP Equations 437 and
+  3115. Each alone has non-idempotent models, but no 2- or 3-element non-idempotent magma satisfies both. Whether
+  the two together imply `x = x◇x` is open; a run is going.
 - **The infinite-only non-implications** (A–D in the paper, and S1, S9, S11 in `REPORT.md`) are candidates
   for the TPTP library's non-theorem problems. Their countermodels are certified but necessarily infinite.
 
@@ -73,17 +78,21 @@ finite countermodel, or an infinite one with a checkable construction settles it
 Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`, `tex/`): CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/).
 
-## Status (21 Nov 2026, evening)
+## Status (21 Nov 2026, night)
 
 Running (detached containers; `podman ps`; logs with `podman logs <name>`):
 - `soup-sweepc`: stage c over every open claim (32 results), `python -m soup.sweep_c --jobs 5`. Output
-  `work/check/sweep_c.json`; rewrites `work/results/`.
-- `soup-round2`: the second survivor round on S10/S12, clean track (no LLM input; Twee, Vampire portfolios, E
-  auto-schedule, Prover9 with no weight limit, Mace4, ℤ/n and piecewise-ℤ model families). Output
-  `work/check/round2_clean.json`.
+  `work/check/sweep_c.json`; rewrites `work/results/`. 27 of 32 done; table with `python -m soup.sweep_c --summary`.
+- `soup-b1`, `soup-b1fmb`: one-hour jobs. Do ETP Equations 437 and 3115 together imply `x = x◇x` (Vampire casc_sat,
+  Vampire FMB, E, Twee)? What is the smallest S10 / S12 model with `x·x ≠ x` (Vampire FMB from size 7)? Output in
+  `work/check/b1/`.
+- The census session's `census-g3b` (2 CPUs, on its own branch).
+
+Finished tonight: round 2's clean track (stopped after 22 of 32 jobs, once the S10 model made the rest moot; table
+with `python -m soup.round2 summary`). The S10 model is checked with `python -m soup.round2 model`.
 
 Next, in order:
-1. Write up the stage-c sweep and round 2 in REPORT.md.
+1. Final sweep and round-2 numbers in REPORT.md (interim numbers are there now), README and paper.
 2. T4 (approved): `python -m soup.t4_setup`, then two supervisors at once with
    `SOUP_DATA=/data/t4-prior` / `t4-noprior`, `SOUP_VERIFIER=V2`, `--arm prior|noprior`, `--searchers 2
    --verifiers 3`, `--seed0 201|301`, `--budget 14400`. Start it once the round-2 container has finished, so the
@@ -93,7 +102,8 @@ Next, in order:
    ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E proves each one.
 4. T5 (look hard at the top non-fragment theories), T6 (remaining open claims), T7 (Lean certificates,
    order-5 laws). A separate session is building a census of one-operation synergy pairs on ETP data
-   (`work/census/`).
+   (`work/census/`). Its next measure: which pairs that force idempotence keep a non-trivial model, and which
+   collapse to x = y.
 
 Task state: T0 (repo hygiene), T1 (streaming system), T2 (provers) and T3 (calibration) are done. T4 is
 preregistered; T5–T7 have not started.

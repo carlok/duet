@@ -129,8 +129,24 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - T3 done: named theories 8/10 with a duality (the idempotent quasigroups have none), random 0/120,
     Fisher p = 2.8e-11. On gain, difficulty and score every named theory is at or below the random median:
     the synergy score does not prefer named theories. 2 random theories hit the 1-h limit (crashed).
+  - Stage-c sweep (night, interim 27/32): with no LLM input, our Mace4 finds 10 of the LLM's 16 finite refutations
+    (S2, S3, S4, S8). S5 and S6 need 13 elements; S1 and S7 are infinite-only.
+  - Round 2 (night): Vampire FMB found a 10-element model of S10 (x·x = x fails at one element; checked by
+    law_vector and direct evaluation; `tests/test_round2.py`). It refutes S10's three claims and S12's x·x = x and
+    x∘x = x. Only S12 ⇒ x·x = x∘x is still open. S12 has no model with x·x ≠ x on 2–6 elements.
+  - Conjunctions of ETP laws: a Lean Zulip thread (Le Floch, Sep 2025) covers order ≤ 2 only (59 classes). The
+    E55 + E100 pair (order 3) is not covered there. The census session (own branch) is counting these pairs.
 
 ## Pitfalls already paid for
+
+- Keep the full prover output of every outcome you might report. Round 2 kept only Vampire's status line on
+  S10, so its CounterSatisfiable answer had to be rerun before it could be checked. `prove_vampire` now returns
+  the parsed model (`parse_vampire_model`) and, with `keep_output=True`, the output.
+- Mace4 is not the strongest finite-model finder here. On S12/S10 it did not finish size 7 in 2 h. Vampire's FMB
+  (`-sa fmb`, or the casc_sat schedule) found a 10-element model in under 2 min. Use both. Stage c (V2) has no FMB
+  yet.
+- A Bash heredoc that `cd`s inside the container leaves `/app`, and then `import soup` fails. Write the files
+  from `/app` first.
 
 - z3's `rlimit count` is cumulative per context: one fresh `z3.Context()` per proof.
 - z3 with quantifiers over a finite sort hangs or runs out of memory: ground the axioms instead.

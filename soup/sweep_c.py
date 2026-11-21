@@ -1,6 +1,7 @@
 """Stage c over every claim still open in SOUP_DATA/results (our pipeline only; no offline input).
 
     python -m soup.sweep_c [--jobs 5] [--timeout 5400]
+    python -m soup.sweep_c --summary          # table for REPORT.md from SOUP_DATA/check/sweep_c.json
 
 For each result with a claim in status 'unknown' or 'open' that has not been swept yet: verify.stage_c with
 DEFAULTS (E 2M processed clauses, certified saturations; Mace4 from the smallest size stage a left unsearched
@@ -69,22 +70,51 @@ def todo():
     return out
 
 
+SURVIVORS = {'00f017a6': 'S1', '45b1f0fb': 'S2', '4ec6760a': 'S3', '513de1ad': 'S4', '5e0dc923': 'S5',
+             'bbdd0d1c': 'S6', 'cdf702b5': 'S7', 'd25065b6': 'S8', 'e6403d7a': 'S9', 'f096b282': 'S10',
+             'f5321de4': 'S11', 'f5e53602': 'S12'}          # work/journal/survivors.md
+
+
+def summary():
+    """One line per swept result (survivor label, outcome per claim), totals, and the results not swept yet."""
+    import collections
+    s = json.load(open(data('check', 'sweep_c.json')))
+    tot, surv, secs = collections.Counter(), collections.Counter(), []
+    for r in s:
+        if r.get('status') == 'crashed':
+            print('crashed', r['key'][:8], r.get('why')); continue
+        lab = SURVIVORS.get(r['key'][:8], '-'); secs.append(r['secs']); parts = []
+        for c in r['claims']:
+            o = c['after']; tot[o] += 1
+            if lab != '-': surv[o] += 1
+            x = f"{c['law']}: {o}"
+            if o == 'proved' and c.get('e_steps'): x += f" (E {c['e_steps']} steps)"
+            if o == 'open': x += f" (Mace4 sizes {c.get('mace4_sizes')}, complete to {c.get('mace4_searched_to')})"
+            parts.append(x)
+        print(lab, r['key'][:8], f"{len(r['laws'])} laws, {r['secs']} s |", '; '.join(parts))
+    print(len(secs), 'results swept; claims', dict(tot), '; survivor claims', dict(surv))
+    if secs: print('seconds per result: min', min(secs), 'median', sorted(secs)[len(secs) // 2], 'max', max(secs))
+    print('not swept yet:', [SURVIVORS.get(p.split('/')[-1][:8], '-') + ' ' + p.split('/')[-1][:8] for p in todo()])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--jobs', type=int, default=5); ap.add_argument('--timeout', type=float, default=5400)
-    ap.add_argument('--one')
+    ap.add_argument('--one'); ap.add_argument('--summary', action='store_true')
     a = ap.parse_args()
+    if a.summary:
+        summary(); return
     if a.one:
         print(MARK + json.dumps(one(a.one), ensure_ascii=False), flush=True); return
     paths = todo()
-    summary = ensure('check') / 'sweep_c.json'
-    res = json.load(open(summary)) if summary.exists() else []
+    out_path = ensure('check') / 'sweep_c.json'
+    res = json.load(open(out_path)) if out_path.exists() else []
     res = [x for x in res if 'error' not in x]                 # drop the broken-pool records of the first run
     print(f'{len(paths)} results with open claims not yet swept; {len(res)} earlier records kept', flush=True)
     with ThreadPoolExecutor(a.jobs) as ex:
         for f in as_completed([ex.submit(run_child, p, a.timeout) for p in paths]):
             x = f.result(); res.append(x)
-            json.dump(res, open(summary, 'w'), ensure_ascii=False, indent=1)
+            json.dump(res, open(out_path, 'w'), ensure_ascii=False, indent=1)
             print(json.dumps(x, ensure_ascii=False), flush=True)
     print('done', len(res), flush=True)
 

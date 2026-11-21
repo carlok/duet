@@ -2,6 +2,7 @@
 
     python -m soup.round2 clean [--jobs 5] [--secs 3600]          > results in SOUP_DATA/check/round2_clean.json
     tar -C <bundle> -cf - S10.md S12.md | python -m soup.round2 assisted [--jobs N]   > JSON lines on stdout
+    python -m soup.round2 summary                                 # clean-track table for REPORT.md
 
 Claims (dual claims are skipped: S12 is closed under swapping the operations, so x o x = x is the dual of
 x.x = x; in S10, x.x = x and x o x = x are equivalent through the axiom x.x = x o x):
@@ -145,11 +146,65 @@ def assisted_jobs(secs, tar_bytes):
     return js, info
 
 
+def summary():
+    """One line per finished clean-track job (theory, claim, tool, budget, outcome); jobs not finished yet."""
+    res = json.load(open(data('check', 'round2_clean.json')))
+    lab = {S12: 'S12', S10: 'S10'}; done = set()
+    for x in res:
+        if 'error' in x:
+            print('error', x['error']); continue
+        a = x.get('arg', {}); t = x['tool']; done.add((x['theory'], x['claim'], t))
+        if t == 'mace4':
+            out = (f"model of size {x['size']}" if x.get('size') else
+                   f"no model; sizes {a['lo']}-{a['hi']}, complete to {x.get('searched_to')} ({x.get('reason')})")
+        elif t == 'cyclic':
+            un = x.get('unknown_n') or []
+            out = f"{x.get('status')}; n <= {x.get('searched_to')}, undecided n: {un[0]}-{un[-1]}" if un else f"{x.get('status')}"
+        elif t == 'prover9':
+            out = f"{x.get('status')} after {x.get('secs')} s, deleted {x.get('deleted')}"
+        else:
+            out = f"{x.get('status')} ({x.get('szs') or x.get('reason') or ''}, {x.get('secs', x.get('wall'))} s)"
+        print(lab[x['theory']], '|', x['claim'], '|', t, '|', a.get('secs'), 's |', out)
+    left = [(lab[k], c, t) for _, k, c, t, _ in clean_jobs(1) if (k, c, t) not in done]
+    print(len(res), 'jobs finished;', len(left), 'not finished:', left)
+
+
+def store_model(out_file, key, name):
+    """Read a Vampire FiniteModel from out_file, check it against every claim of results/<key> with both of our
+    evaluators (check_offline.check_finite), add it to the shared corpus, and write check/<name>_model.json."""
+    from .check_offline import check_finite
+    from .core import Corpus
+    from .provers import parse_vampire_model
+    import glob
+    import numpy as np
+    m = parse_vampire_model(open(out_file).read())
+    if m is None or m['g'] is None: sys.exit('no complete two-operation model in ' + out_file)
+    r = json.load(open(glob.glob(str(data('results', f'{key}*.json')))[0]))
+    per_claim = {}
+    for c in r['claims']:
+        chk = check_finite(r['T'], [goal_idx(c['law'])], m['f'], m['g'])
+        per_claim[c['law']] = {'refuted': chk['ok'], 'axioms_hold': all(chk['axioms_hold'].values()),
+                               'law_vector_agrees': chk['law_vector_agrees'], 'nondeg': chk['nondeg']}
+    if not all(v['axioms_hold'] and v['law_vector_agrees'] for v in per_claim.values()):
+        sys.exit(f'model fails the axioms of {key} or the two evaluators disagree: {per_claim}')
+    C = Corpus(store=data('corpus'))
+    added = C.add(f'round2-vampire-fmb:{key}', m['n'], np.array(m['f']), np.array(m['g']))
+    rec = {'key': r['key'], 'laws': r['laws'], 'n': m['n'], 'F': m['f'], 'G': m['g'], 'source': out_file,
+           'claims': per_claim, 'added_to_corpus': bool(added), 'checked': time.strftime('%Y-%m-%d %H:%M:%S')}
+    json.dump(rec, open(ensure('check') / f'{name}_model.json', 'w'), ensure_ascii=False, indent=1)
+    print(json.dumps({k: v for k, v in rec.items() if k not in ('F', 'G')}, ensure_ascii=False, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('track', choices=['clean', 'assisted']); ap.add_argument('--jobs', type=int, default=5)
+    ap.add_argument('track', choices=['clean', 'assisted', 'summary', 'model']); ap.add_argument('--jobs', type=int, default=5)
     ap.add_argument('--secs', type=int, default=3600)
+    ap.add_argument('--out'); ap.add_argument('--key'); ap.add_argument('--name')
     a = ap.parse_args()
+    if a.track == 'summary':
+        summary(); return
+    if a.track == 'model':
+        store_model(a.out, a.key, a.name); return
     if a.track == 'clean':
         js, info = clean_jobs(a.secs), {}
         out_path = ensure('check') / 'round2_clean.json'

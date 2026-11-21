@@ -65,9 +65,26 @@ def prove_e(T, goal, processed_limit=200_000, cpu_limit=300, extra=(), auto='--a
 V_BIN = os.environ.get('SOUP_VAMPIRE', 'vampire')
 
 
-def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount')):
+def parse_vampire_model(out):
+    """The finite model of a Vampire run (finite model building), as tables {'n', 'f', 'g'} over 0..n-1
+    ('g' is None for one-operation problems); None if the output has no complete FiniteModel block."""
+    m = re.search(r'SZS output start FiniteModel(.*?)SZS output end FiniteModel', out, re.S)
+    if not m: return None
+    blk = m.group(1)
+    n = len(set(re.findall(r"'fmb_\$i_(\d+)'", blk)))
+    if n == 0: return None
+    tabs = {}
+    for op, a, b, c in re.findall(r"\b([fg])\('fmb_\$i_(\d+)','fmb_\$i_(\d+)'\) = 'fmb_\$i_(\d+)'", blk):
+        tabs.setdefault(op, [[None] * n for _ in range(n)])[int(a) - 1][int(b) - 1] = int(c) - 1
+    if not tabs or any(v is None for t in tabs.values() for r in t for v in r): return None
+    return {'n': n, 'f': tabs.get('f'), 'g': tabs.get('g')}
+
+
+def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount'), keep_output=False):
     """Vampire with one fixed saturation algorithm (not the time-sliced portfolio), for cross-checks.
-    extra=('--mode', 'casc') or ('--mode', 'casc_sat') selects a portfolio. goal: law index or a TPTP string."""
+    extra=('--mode', 'casc') or ('--mode', 'portfolio', '--schedule', 'casc_sat') selects a portfolio (this build has
+    no '--mode casc_sat'). goal: law index or a TPTP string. A finite model, if Vampire prints one, is returned
+    parsed ('model'); keep_output=True also returns the full output whenever the status is not 'unknown'."""
     with tempfile.NamedTemporaryFile('w', suffix='.p', delete=False) as fh:
         fh.write(problem(T, goal) if isinstance(goal, int) else goal); path = fh.name
     t0 = time.time()
@@ -82,7 +99,11 @@ def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount')):
     m = re.search(r'SZS status (\w+)', out)
     szs = m.group(1) if m else ('Theorem' if 'Refutation found' in out else 'None')
     status = {'Theorem': 'proved', 'CounterSatisfiable': 'countersatisfiable', 'Satisfiable': 'countersatisfiable'}.get(szs, 'unknown')
-    return {'status': status, 'szs': szs, 'secs': round(time.time() - t0, 2)}
+    res = {'status': status, 'szs': szs, 'secs': round(time.time() - t0, 2)}
+    model = parse_vampire_model(out) if status == 'countersatisfiable' else None
+    if model: res['model'] = model
+    if keep_output and status != 'unknown': res['output'] = out
+    return res
 
 
 T_BIN = os.environ.get('SOUP_TWEE', 'twee')
