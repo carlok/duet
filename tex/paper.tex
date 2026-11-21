@@ -145,7 +145,9 @@ On Z3 5.4.1 the absorption pair implies $x\op x=x$ with effort 494, reproduced o
 census gives 1, 1, 2 lattices on 2, 3, 4 elements. All six named theories have a duality; none of 35
 random theories of matching size does. On synergy, difficulty and model counts the named theories sit
 between the 9th and 91st percentile of the random ones: difficulty does not separate named from random
-theories, symmetry does. \pending{T3: 30 random theories per size, Fisher's exact test for duality.}
+theories, symmetry does. In the preregistered T3 run (still running, 2 of 3 null theories done), 8 of
+the 10 named theories have a duality (the two idempotent one-sided quasigroups have none) and 0 of 59
+random ones. \pending{T3: complete table, Fisher's exact test for duality, percentiles.}
 
 \subsection{Pilot search}
 A first batch-mode search with the duality prior (9 rounds, 2 cores) verified 99 theories. Of the 97 with
@@ -172,19 +174,48 @@ Every countermodel is infinite, which explains the failure of finite-model searc
 for the pipeline: an emergent claim that survives countermodel search to size 8 is not evidence of
 truth.
 
+\subsection{Survivor claims}
+After the streaming runs, 59 emergent claims were neither proved nor refuted. A sweep with E ($2\cdot10^6$
+processed clauses) and Vampire proved 25 and refuted 2 by certified saturation, leaving 32 claims in 12
+theories. Every one of them is a small law such as $x\op x=x$, $x\cop x=x$ or $x\op x=x\cop x$. We gave these
+32 claims, as a self-contained prompt, to a language model outside the pipeline, and checked what came back
+with our own code. Axioms and claims were taken from our records; only the proposed models and lemmas came
+from the model's output, and none of it entered the search, the corpus or the scores.
+\begin{itemize}
+\item 16 claims fail in finite models of 5, 7 or 13 elements; the 13-element model is translation-invariant
+  on $\mathbb{Z}/13$ with both operations commutative. Each table was checked against all axioms and claims.
+\item 9 claims fail in models on $\mathbb{Z}$, e.g.\ $x\op y=\max(x,y)$, $x\cop y=\min(x,y)$ off the diagonal
+  with $x\op x=x+1$, $x\cop x=x-1$. Z3 proves every axiom for all integers (linear integer arithmetic).
+\item 1 claim fails in an infinite term model; the proof was read and the model sampled, not certified.
+\end{itemize}
+Six claims remain open, in two theories:
+\begin{align*}
+\text{S12}&: x\op(y\cop(y\cop(x\cop y)))=x,\quad x\cop(y\op(y\op(x\op y)))=x,\\
+&\phantom{:}\ (((x\cop y)\cop x)\cop x)\op y=y,\quad (((x\op y)\op x)\op x)\cop y=y;\\
+\text{S10}&: \text{S12}\ \text{and}\ x\op x=x\cop x.
+\end{align*}
+With $x\op y=x\cop y$ the axioms of S12 become Equations 437 and 3115 of the Equational Theories
+Project~\cite{etp}; neither implies $x=x\diamond x$ there, but the pair is not covered. The survivors also
+exposed a gap in our pipeline: for 9 of the 12 theories the finite search had run out of budget at size 5 or 6,
+and the claims never reached the stage that searches larger models. \pending{Second round on S10 and S12:
+Twee~\cite{twee}, Vampire's portfolios~\cite{vampire}, long Mace4 runs, model families.}
+
 \subsection{Streaming system}
 In a 10-minute test (3 search and 8 verifier processes) the system verified 231 theories and added 1{,}897
 structures to the corpus. The surrogate proposes theories about 30 times faster than they can be
 verified. The highest-scoring theories so far all have the same three emergent laws, $x\op x=x$,
-$x\cop x=x$ and $x\op x=x\cop x$; the score saturates on idempotence. \pending{T5: which of the top
+$x\cop x=x$ and $x\op x=x\cop x$; the score saturates on idempotence. The two highest scores were
+artifacts: their claims were proved by E but not by Z3, and the difficulty was then read off Z3's budget
+cap. For T4 the difficulty is E's proof length instead (preregistered). \pending{T5: which of the top
 theories are equivalent to a known variety.}
 
 \section{Planned experiments}
-\pending{T4, preregistered before it runs: duality-prior arm against a matched arm without the prior, ten
-processes, several hours. Primary outcome: share of verified theories that are fragments of a named
-theory, per arm. Secondary: top non-fragment theories, deduplicated up to duality and logical
-equivalence.} \pending{T6: the 21 open claims of the pilot.} \pending{T7: Lean~4 certificates for finite
-countermodels and for the main implications.}
+\pending{T4, preregistered: duality-prior arm against a matched arm without the prior, each in its own
+data directory, five processes per arm for four hours. Primary outcome: share of verified theories with a
+positive score that are fragments of one of ten named theories, per arm (one-sided Fisher test).
+Secondary: top non-fragment theories, deduplicated up to duality and logical equivalence.}
+\pending{T6: the six open claims of S10 and S12.} \pending{T7: Lean~4 certificates for finite
+countermodels, the models on $\mathbb{Z}$, the term model, and the main implications.}
 
 \section{Limitations}
 \begin{itemize}
@@ -192,15 +223,18 @@ countermodels and for the main implications.}
   E's proof length correlates with Z3 effort only weakly (Spearman 0.37 over 640 claims both proved).
 \item The queue keeps the theories with the highest surrogate priority; theories the surrogate ranks low
   are never verified. Any comparison between arms inherits this selection.
-\item Corpus consequences depend on the corpus. Arms share one growing corpus.
+\item Corpus consequences depend on the corpus. Up to T3 all runs share one growing corpus; in T4 each arm
+  grows its own from a common snapshot.
+\item 26 of the survivor refutations were found by a language model outside the pipeline. They are
+  reported only after our own check; one of them (the term model) is not certified.
 \item ``Not named'' needs a literature search and an equivalence check against known varieties; none of
   the theories found so far has been claimed as new.
 \end{itemize}
 
 \section*{Reproducibility}
-All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1, E 3.2.5 and Vampire 5.1.0
-built from source). The matrix rebuild is byte-identical across runs (SHA-256 checked). Every number above is in
-\texttt{REPORT.md} with the command that produced it.
+All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1; E 3.2.5, Vampire 5.1.0,
+Prover9/Mace4 LADR-2026-8A and Twee 2.7.1 built from pinned sources). The matrix rebuild is byte-identical
+across runs (SHA-256 checked). Every number above is in \texttt{REPORT.md} with the command that produced it.
 
 \bibliographystyle{plain}
 \bibliography{refs}

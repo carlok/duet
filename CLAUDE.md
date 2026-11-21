@@ -1,6 +1,7 @@
 # soup — genetic search over two-operation equational theories
 
-Project memory for Claude Code. Read all of it before the first command, then `HANDOFF.md`.
+Project memory for Claude Code. Read all of it before the first command, then the Status section of
+`README.md` (what is running, what is next), `REPORT.md` (newest first) and `PREREGISTRATION.md`.
 Background note (literature, design, earlier results): https://claude.ai/artifact/3YweiTzEurAomActQxPUQB
 
 ## The question
@@ -35,6 +36,10 @@ by the whole theory but by no single law of it.
   z3-solver 5.4.1.0 has an aarch64 wheel; the Mac reproduces absorption = 494, so effort numbers in
   `results-cloud/` are comparable (checked by `tests/test_named.py`).
 - Code is copied into the image at `/app`; data lives in `work/`, mounted at `/data` (`SOUP_DATA`).
+  Rebuild the image after every code change (`podman build -t soup .`): the code is not mounted.
+- Provers in the image, all built from pinned source: E 3.2.5, Vampire 5.1.0 (commit 7b2f410e), Prover9/Mace4
+  LADR-2026-8A, Twee 2.7.1 (Hackage index 2026-10-01, GHC 9.6.6). Each runs under `SOUP_PROVER_MEMORY_MB` (2000).
+- Journal times are UTC (container clock); the Mac is CET. `work/journal/*.md` are tracked: commit them after runs.
 - Build and test: `podman build -t soup . && podman run --rm -v "$PWD/work:/data" soup bash run.sh test`
 - Matrix (2.5 min on 11 cores): `podman run --rm -v "$PWD/work:/data" soup bash run.sh matrix`;
   `cd work && shasum -a 256 -c ../tests/matrix.sha256` must say OK for all three files.
@@ -54,9 +59,15 @@ by the whole theory but by no single law of it.
 | `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
 | `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
-| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (bounded z3 proofs, score), c (sizes 7–8, long z3); `verify` = a+b; `LEGACY` = first-session settings |
+| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `LEGACY` (first session) |
+| `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
 | `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
-| `calib.py`, `fragments.py`, `report.py` | Calibration, fragment check, summary (ported, outputs in `SOUP_DATA`) |
+| `calib.py`, `calib_report.py` | T3: one child process per theory, resumable; Fisher test and percentiles |
+| `fragments.py`, `report.py`, `rescore.py` | Three-valued fragment check against the 10 named theories; summary of `results/`; V1 vs V2 score, post hoc |
+| `sweep_open.py`, `sweep_c.py`, `t2_smoke.py` | Re-check open claims (E + Vampire + certificates); stage c over every open claim; T2 smoke test |
+| `families.py`, `round2.py` | Countermodel families (translation-invariant on ℤ/n; piecewise-linear on ℤ by CEGAR); second survivor round on S10/S12 |
+| `check_offline.py` | Machine check of an offline LLM bundle read as a tar from stdin |
+| `t4_setup.py`, `t4_report.py` | T4: one data directory per arm; preregistered analysis |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
 | `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones |
@@ -104,6 +115,17 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - **Facts confirmed:**
   - Lattice associativity is independent of the other five lattice axioms; the smallest countermodel found has 5 elements.
   - The two one-sided quasigroup laws are independent, but only infinite models show it.
+- **Since then (21 Nov, Mac session; details in REPORT.md):**
+  - A–D are false: E, Vampire and Prover9 saturate; `confluence` certifies convergent systems (infinite
+    countermodels).
+  - Open-claim sweep: 59 open claims became 25 proved, 2 refuted and 32 survivors in 12 theories. Of the 32,
+    the offline LLM bundle refutes 26, and we machine-checked 25 of them (16 finite models of size 5, 7 or 13;
+    9 models on ℤ proved over ℤ by z3). S7 rests on a sampled hand proof. Open: 6 claims in S10 `f096b282`
+    and S12 `f5e53602`. With x·y = x∘y, S12 becomes ETP Equations 437 and 3115; ETP says neither implies
+    x = x◇x.
+  - The V1 score saturates on idempotence, and its top two theories score only through z3's budget cap.
+    T4 uses V2.
+  - T3 so far: named theories 8/10 with a duality (the idempotent quasigroups have none), random 0/59.
 
 ## Pitfalls already paid for
 
