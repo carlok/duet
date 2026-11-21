@@ -1,4 +1,4 @@
-# soup: genetic search over two-operation equational theories (Podman bundle)
+# duet: search for synergy between two binary operations (Python package `soup`)
 
 Everything runs inside a container; nothing is installed on the Mac. Data stays in `work/`
 (mounted at `/data`); code is in the `soup/` package, copied into the image.
