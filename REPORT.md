@@ -28,6 +28,12 @@ Command: `podman run --rm -v "$PWD/work:/data" soup python -m soup.t2_smoke --jo
 - **Second prover agrees.** Vampire 5.1.0 (source build, commit 7b2f410e, without z3): A–D CounterSatisfiable
   under the default strategy and under `-sa discount`; absorption, T1, T2 and McKenzie proved
   (`tests/test_named.py::test_vampire_agrees_with_e_on_reference_and_A_to_D`).
+- **Third prover agrees.** Prover9 2026-8A: A–D end with an empty set of support (saturation) in ≈ 0.01 s each
+  (`work/check/mace4_AD.txt`).
+- Mace4 2026-8A on A–D, goal x·x = x, 900 s each, 4 in parallel: no countermodel; sizes fully searched
+  7 (A), 8 (B), 6 (C), 8 (D) (`work/check/mace4_AD_sizes.txt`). Not better than the earlier z3 grounding
+  (8 for A, 7 for C). Consistent with the countermodels being infinite. Stage c now runs Mace4 on sizes 7–10
+  for 300 s; in practice expect it to finish size 7 only on 3-law theories like these.
 - Correction: Prover9/Mace4 is maintained (github.com/AlgorithmicTruth/Prover9, release LADR-2026-8A,
   August 2026, GPL-2.0). My earlier note that LADR was unmaintained since 2009 was wrong.
 - E is now in the verifier: stage b runs E first (saturation ⇒ claim false), stage c runs E before the
