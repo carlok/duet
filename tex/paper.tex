@@ -61,9 +61,17 @@ non-models and proved the survivors with Otter, finding single axioms for lattic
 McCune, Padmanabhan and Veroff~\cite{mpv2003} continued this for lattices. Our pipeline has the same
 shape (enumerate, filter on finite structures, prove) but searches over \emph{sets} of laws and scores
 synergy rather than looking for bases of a fixed variety. The Equational Theories Project~\cite{etp}
-settled all implications between the 4694 one-operation laws of order at most~4; our enumeration
-reproduces that count. The search uses MAP-Elites~\cite{mapelites2015}. Named theories used for
-calibration: lattices, skew lattices~\cite{leech1989}, dimonoids~\cite{loday2001}, one-sided
+settled all 22 million implications between the 4694 one-operation laws of order at most~4, with
+Lean-checked proofs and countermodels; our enumeration reproduces that count. Its methods for
+countermodels (linear, translation-invariant and greedily built magmas) are the ones we use when finite
+search fails. Le Floch~\cite{lefloch2026} determined all implications between conjunctions of 990
+quasigroup laws in three operations, the closest published analogue to a search over theories rather
+than single laws. Reading a saturated clause set as an explicit, possibly infinite model, and emitting it
+from Vampire and E as a checkable certificate, is due to Janota, Rawson and Schulz~\cite{janota2026}; our
+check below is an independent implementation of the same idea. Kondylidou, Blanchette and
+Heule~\cite{krympa2026} shorten machine proofs from the ETP several-fold, so raw prover proof length (our
+difficulty measure) is an upper bound. The search uses MAP-Elites~\cite{mapelites2015}. Named theories used
+for calibration: lattices, skew lattices~\cite{leech1989}, dimonoids~\cite{loday2001}, one-sided
 quasigroups.
 
 \section{Setting}
@@ -131,7 +139,9 @@ lines of independent code that (i) every equation orients as a size-decreasing r
 variable condition, (ii) every critical pair is joinable, (iii) every axiom is joinable. Then the rules
 form a convergent system whose term algebra, with fresh constants, is a model of the axioms
 (Birkhoff~\cite{birkhoff1935}, Knuth--Bendix~\cite{knuthbendix1970}). If the two sides of the goal reach
-different normal forms, the goal fails in that model.
+different normal forms, the goal fails in that model. This is the construction of~\cite{janota2026}; their
+certificates can additionally be checked by certified confluence and termination tools, which we have not
+done yet.
 
 \subsection{Score}
 For each verified emergent law $e$ with difficulty $d_e = \log_{10}(\text{effort}_e/\text{effort}_0)$,

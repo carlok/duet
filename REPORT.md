@@ -2,6 +2,40 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Literature check (21 Nov 2026, evening)
+
+Web and arXiv search for 2024–2026 work, done by a subagent. Each arXiv entry below was confirmed through the arXiv API
+(title, authors, date); entries marked *[not verified]* rest on the subagent's reading only.
+
+| Work | What it means here |
+|---|---|
+| Bolan et al., *The Equational Theories Project*, arXiv:2512.07087 (Dec 2025) | The one-operation census we build on; its countermodel methods (linear, translation-invariant, greedy) are ours for the hard cases. No two-operation census found. |
+| Janota, Rawson, Schulz, *Saturations as Explicit Models in Equational Theories*, arXiv:2602.16324 (Feb 2026) | **Our A–D certificate method is published**: a saturated unit-equality clause set read as a convergent rewrite system, i.e. an explicit, possibly infinite model, emitted from Vampire and E and checkable by certified tools. `soup.confluence` is an independent implementation. Cite it; cross-checking with certified tools is open. |
+| Le Floch, *Implication semilattice of 990 quadratic quasigroup equational laws*, arXiv:2603.29909 (Mar 2026) | All implications between *conjunctions* of 990 laws in three operations: the closest published analogue of a census of theories. |
+| Kondylidou, Blanchette, Heule, *Tao's Equational Proof Challenge Accepted*, arXiv:2605.21200 (May 2026) | Proof minimisation (Krympa) cuts ETP proofs from 62 to 20 and 151 to 10 steps. Raw proof length (V2 difficulty) is an upper bound; noted in the T4 preregistration before the run. |
+| Zhao, Wu, Yang, Miao, *Trace-Tree Magmas*, arXiv:2609.05690 (Sep 2026) | 28 order-5 Austin laws with Lean-certified infinite models; relevant to T7 (order 5). |
+| Berlioz, Melliès, *The Latent Space of Equational Theories*, arXiv:2601.20759 (Jan 2026) | Laws represented by their behaviour on finite magmas, as in our law × structure matrix. |
+| SAIR EQT2 solvers (arXiv:2609.00706, 2610.26467), ALPS (arXiv:2608.15979), *Learning to Disprove* (arXiv:2603.19514) | LLM-assisted work on equational implication; all keep the LLM out of verification, as our rule 6 does. |
+| Leech, *Noncommutative Lattices* (2020), Thm 1.3.4, citing Laslo–Cozac 1998 *[not verified]* | Which order-2 absorption pairs force idempotence is classified; our absorption calibration is a special case: reproduced, not found. |
+| CASC-J13 (2026) rules and TPTP v10.0.0 *[not verified]* | Unit-equality division takes provable problems only; infinite-only non-implications (A–D, S1, S9, S11) fit the FNT division, which accepts saturations. Submission is by contacting the TPTP developers. |
+
+Checked by us against the ETP data (`data/equations.txt`, `2024-11-10-outcomes.json`) and our evaluator:
+
+- With x·y = x∘y, S12 collapses to E437 and E3115. Each has non-idempotent models (2 on 2 elements, 48 on
+  3), but no 2- or 3-element non-idempotent magma satisfies both. ETP: neither implies E3 (x = x◇x), and
+  neither implies the other.
+- S5/S6 collapses to E43 ∧ E48, and E48 alone implies E3. So any countermodel needs · ≠ ∘, as the 13-element
+  one has. T1's second law collapses to E2927, which alone implies E3.
+- **T2 collapses to E55 ∧ E100.** ETP: neither alone implies E3. Together they do: E proves it in 10 steps,
+  Twee in 3. E100 alone saturates; for E55 alone E gives up, and ETP records the non-implication. This is a
+  one-operation pair with synergy, which ETP does not test because it does not consider conjunctions. Not
+  found in the literature; the search was by formula strings, which is weak evidence, so this is not a claim
+  of novelty.
+
+No prior appearance was found for S12, S5/S6, T1 or T2 (formula-string search; weak evidence).
+Prover versions: E 3.2.5 is the latest official release, but development tags reach E 3.5.11, and CASC-J13
+ran E 3.5.1; Vampire 5.1.0, Twee 2.7.1 and LADR-2026-8A are current.
+
 ## Found offline with an LLM, machine-checked (21 Nov 2026, evening)
 
 An external LLM got `prompts/survivors.md` (the 32 survivor claims) outside the repository. Its bundle lives in

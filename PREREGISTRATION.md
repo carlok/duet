@@ -36,7 +36,9 @@ Each section is committed before its run starts. Changes after the start are lis
   deviation, written before it starts.
 - **Known limits, reported with the result.** Only queue-top theories get verified (priority by the cheap
   score): any arm difference inherits this selection. The arms' corpora diverge as each verifies its own
-  theories; that is part of each arm.
+  theories; that is part of each arm. E's proof length is an upper bound on proof length: proof minimisation
+  shortens ETP proofs several-fold (Kondylidou, Blanchette, Heule, arXiv:2605.21200: 62 to 20 steps, 151 to
+  10), so V2 difficulty ranks proofs only roughly. (Added before the run, after the literature check.)
 - **Analysis.** `SOUP_DATA=/data/t4-prior python -m soup.fragments`, the same for `t4-noprior`, then
   `python -m soup.t4_report`.
 
