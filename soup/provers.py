@@ -50,7 +50,7 @@ def prove_e(T, goal, processed_limit=200_000, cpu_limit=300, extra=()):
     m = re.search(r'SZS status (\w+)', out)
     szs = m.group(1) if m else 'None'
     status = {'Theorem': 'proved', 'CounterSatisfiable': 'countersatisfiable'}.get(szs, 'unknown')
-    if szs == 'None' and r.returncode not in (0, 1, 6, 7): status = 'error'
+    if szs == 'None' and r.returncode not in (0, 1, 6, 7, 8): status = 'error'   # 8 = resource out
     pm = re.search(r'# Processed clauses\s*:\s*(\d+)', out)
     return {'status': status, 'szs': szs, 'proof_steps': _proof_steps(out) if status == 'proved' else None,
             'processed': int(pm.group(1)) if pm else None, 'secs': round(time.time() - t0, 2), 'rc': r.returncode}
