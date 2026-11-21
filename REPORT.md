@@ -2,6 +2,61 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Found offline with an LLM, machine-checked (21 Nov 2026, evening)
+
+An external LLM got `prompts/survivors.md` (the 32 survivor claims) outside the repository. Its bundle lives in
+`~/tmp/duet-offline/survivors-external01-2026-11-21/`. Nothing from it entered `work/results`, the corpus or the
+archive. Check: `tar -C <bundle> -cf - S*.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m
+soup.check_offline > <bundle>/check.jsonl`. Axioms and claims come from our `work/results`; only the
+tables, the hand-transcribed ℤ formulas and the lemma statements come from the bundle.
+
+| Theory (key) | Claims | Evidence | Our check |
+|---|---|---|---|
+| S2 `45b1f0fb` | 1 refuted | finite model, 7 elements | `law_vector` + direct evaluation: axioms hold, claim fails, non-degenerate |
+| S3 `4ec6760a` | 3 refuted | finite model, 7 | same |
+| S4 `513de1ad` | 3 refuted | finite models, 7 and 5 | same (our stage a had left sizes 5–6 unsearched) |
+| S5 `5e0dc923`, S6 `bbdd0d1c` | 3 + 3 refuted | finite model on ℤ/13, translation-invariant, commutative | same |
+| S8 `d25065b6` | 3 refuted | finite model, 7 | same |
+| S1 `00f017a6`, S9 `e6403d7a` | 3 + 3 refuted | piecewise-linear model on ℤ | every axiom proved for all integers by z3 (linear integer arithmetic); claims fail at 0 |
+| S11 `f5321de4` | 3 refuted | max/min off the diagonal, x·x = x+1, x∘x = x−1, on ℤ | same |
+| S7 `cdf702b5` | 1 refuted | infinite term model with an "anchor" map | **not certified**: hand proof (read, checked step by step), reimplemented from the prose and sampled (≈ 900 elements, 200k axiom triples, 0 failures) |
+| S10 `f096b282`, S12 `f5e53602` | 6 open | lemma chains only | E proves all 39 lemmas of the bundle from the axioms |
+
+So 25 of the 32 survivor claims are refuted with a machine check (16 by finite models, 9 by models on ℤ
+proved over ℤ). One more (S7) is refuted by a hand proof that has been sampled but not certified. Six remain
+open. The finite-model share says something about our pipeline: 16 survivors had countermodels of size 5, 7
+or 13 that our search never reached (see the corrections below).
+
+## Corrections and fixes (21 Nov 2026, evening)
+
+Found while reviewing the code and the offline results; each fix has a test (`tests/test_fixes.py`,
+`tests/test_check_offline.py`, `tests/test_families.py`; 40 + 1 tests pass in the container).
+
+- **Survivor coverage was overstated.** z3 ran out of budget at size 6 (or 5 and 6) in stage a for 9 of the
+  12 survivor theories, and none reached stage c, so Mace4 never ran on them. Stage c also started Mace4 at 7
+  regardless. Now it starts at the smallest size stage a left unsearched.
+- **OOM kills.** The kernel log of the Podman VM shows 4 Vampire processes of the open-claim sweep killed at
+  2–4.4 GB, and the T3 worker killed at 5.9 GB. E, Vampire, Twee, Prover9 and Mace4 now run under a 2 GB cap
+  (`SOUP_PROVER_MEMORY_MB`). Prover9's and Mace4's own defaults (200 / 500 MB) had silently limited earlier runs.
+- **Prover9 "saturation" was unsound.** `prove_prover9` reported every empty set of support as
+  countersatisfiable, but Prover9 deletes clauses over its default `max_weight`. On S12 it deleted 8,216 of
+  8,561 generated clauses. An empty sos now counts only with zero deletions. A–D re-checked: zero deletions,
+  so the "Prover9 agrees on A–D" line below stands.
+- **Stage b took E saturations without a certificate**, although the paper says every refutation carries one.
+  DEFAULTS now runs `soup.confluence` on each saturation (`certificate` field; status
+  `false (E saturation, uncertified)` when the check fails). T3 keeps the frozen verifier `V1`, without it.
+- **Score artifact.** A claim that E proved but z3 did not got difficulty = log of z3's budget. 14 of 983
+  proved claims; the top two leaderboard theories (`d5584040`, `17b2a537`) score entirely from it. T4 uses
+  the preregistered V2 (difficulty = E proof steps / 10). Post-hoc comparison: `python -m soup.rescore`
+  (641 older proved claims have no E steps and get the floor, so it is only indicative).
+- **Mutation bug.** The remove-a-law mutation removed a random number of laws, not one.
+- **Fragment check was biased toward "not a fragment"** (z3 giving up counted as invalid). It is now
+  three-valued (valid / invalid / undecided) over all 10 named theories of T3.
+- **ETP lookup** (data/2024-11-10-outcomes.json of the Equational Theories Project). The one-operation
+  specialisation of S12 (x·y = x∘y) has the laws Equation 437, `x = x◇(y◇(y◇(x◇y)))`, and Equation 3115,
+  `x = (((y◇x)◇y)◇y)◇x`. ETP: neither implies x = x◇x, and neither implies the other. ETP says nothing about
+  the pair, so the one-operation route to an S12 countermodel stays open.
+
 ## Open-claim sweep (21 Nov 2026)
 
 All 59 claims open in `work/results/` (52 of them verified before E was in the pipeline), re-checked with
