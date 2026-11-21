@@ -44,7 +44,24 @@ def _verify(job):
     return r
 
 
+MODEL_FIRST_SIZES = (6,)   # uniform rejection sampling accepts 0 in 267,682 draws at k = 6 (PREREGISTRATION.md, deviation 1)
+
+
+def model_first_theories(k, count, rng):
+    """Pick a non-degenerate base structure uniformly, then k distinct laws it satisfies (>= 1 bridge)."""
+    from .data import PM, unpack_laws
+    nd = np.flatnonzero(NONDEG); out = []
+    while len(out) < count:
+        laws = np.flatnonzero(unpack_laws(PM[int(rng.choice(nd))]))
+        laws = laws[laws > 0]
+        if len(laws) < k or not BRIDGE[laws].any(): continue
+        T = sorted(int(t) for t in rng.sample(list(laws), k))
+        if any(BRIDGE[t] for t in T): out.append(T)
+    return out
+
+
 def random_theories(k, count, rng):
+    if k in MODEL_FIRST_SIZES: return model_first_theories(k, count, rng)
     out = []
     while len(out) < count:
         T = sorted(rng.sample(range(1, NL), k))
@@ -64,8 +81,12 @@ def main():
         jobs += [(f'random-{k}', 'null', T) for T in random_theories(k, N, rng)]
     out = data(os.environ.get('CALIB_OUT', 'calib_t3.json'))
     res = []
+    from concurrent.futures import as_completed
     with ProcessPoolExecutor(int(os.environ.get('CALIB_JOBS', 10))) as ex:
-        for r in ex.map(_verify, jobs):
+        futs = [ex.submit(_verify, j) for j in jobs]
+        for f in as_completed(futs):      # write as each finishes: a slow theory blocks nothing
+            r = f.result()
+            r['sampler'] = 'model-first' if r['kind'] == 'null' and len(r['T']) in MODEL_FIRST_SIZES else ('uniform' if r['kind'] == 'null' else None)
             res.append(r); json.dump(res, open(out, 'w'), ensure_ascii=False, default=int)
             print(json.dumps({k: r.get(k) for k in ('name', 'score', 'gain', 'max_difficulty', 'richness', 'dualities', 'secs_total')},
                              ensure_ascii=False), flush=True)

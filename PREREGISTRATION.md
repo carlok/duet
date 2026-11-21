@@ -25,4 +25,10 @@ Each section is committed before its run starts. Changes after the start are lis
 
 ## Deviations
 
-(none yet)
+1. **T3, k = 6 null (21 Nov 2026, before any calibration result existed).** Uniform rejection sampling
+   accepted 0 of 267,682 draws at k = 6 (k = 5: 7 of 308,389; k = 3: 1,650 of 434,019; k = 2: 31,473 of
+   549,832; 20 s each). The k = 6 random theories are instead drawn model-first: a non-degenerate base
+   structure uniformly at random, then 6 distinct laws it satisfies, at least one a bridge. Same filter,
+   different weighting; the 6-law comparisons (lattice, skew lattice, bisemilattice) are reported as against
+   this null. k = 2, 3, 5 stay uniform. Fisher's test is reported on all random theories and on the uniform
+   ones only.
