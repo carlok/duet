@@ -1,11 +1,11 @@
 """v2 search: rounds of (cheap MAP-Elites surrogate on the growing corpus) -> (verify top elites)."""
+"""Superseded by soup.stream (T1); kept to reproduce the batch-round runs in results-cloud/."""
 import sys, random, pickle, json, time, math
-sys.path.insert(0, '/home/claude/soup')
 import numpy as np
-from v2 import *
-from soup import NONDEG, SIZES, unpack_probes, LM
-from duality import dualities, image
-from soup2 import TREES
+from .verify import Corpus, verify, BRIDGE, LAWS, ORDER, NL, LEGACY
+from .duality import dualities, image
+from .core import TREES
+from .paths import data
 def _ops(t): return set() if t[0] == 'v' else {t[0]} | _ops(t[1]) | _ops(t[2])
 def _vars(t): return {t[1]} if t[0] == 'v' else _vars(t[1]) | _vars(t[2])
 def _definitional(L, R):
@@ -67,10 +67,10 @@ while time.time() - t_start < BUDGET:
     cands = sorted([s for s in archive.values() if tuple(s['T']) not in verified and any(BRIDGE[t] for t in s['T'])], key=lambda s: -s['score'])[:12]
     before = len(C.extra)
     for s in cands:
-        r = verify(C, s['T']); r['dualities'] = dualities(s['T']); r['round'] = rnd; r['surrogate'] = s['score']; verified[tuple(s['T'])] = r
+        r = verify(C, s['T'], LEGACY); r['dualities'] = dualities(s['T']); r['round'] = rnd; r['surrogate'] = s['score']; verified[tuple(s['T'])] = r
         print(json.dumps({'round': rnd, 'dualities': r['dualities'], 'score': r['score'], 'laws': r['laws'], 'claims': r.get('claims', []), 'open': r.get('open', [])}, ensure_ascii=False), flush=True)
         if time.time() - t_start > BUDGET: break
     single_cache.clear()
     print(f'# round {rnd}: {evals} surrogate evaluations, archive {len(archive)}, verified {len(cands)}, corpus +{len(C.extra) - before} structures (total extra {len(C.extra)})', flush=True)
-    pickle.dump({'verified': verified, 'extra': [(e[0], e[1], e[2], e[3]) for e in C.extra]}, open(f'loopdual_{sys.argv[2] if len(sys.argv) > 2 else 3}.pkl', 'wb'))
+    pickle.dump({'verified': verified, 'extra': [(e[0], e[1], e[2], e[3]) for e in C.extra]}, open(data(f'loopdual_{sys.argv[2] if len(sys.argv) > 2 else 3}.pkl'), 'wb'))
 print('done', flush=True)

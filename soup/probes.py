@@ -1,7 +1,7 @@
 """Probe corpus: finite structures (A, f, g) with two binary operations, carriers 2..6."""
-import itertools, random
+import itertools, random as _random
 import numpy as np
-random.seed(20261120); rng = np.random.default_rng(20261120)
+SEED = 20261120
 NMAX = 6
 
 def affine(n):
@@ -38,6 +38,8 @@ def menu(n):
     return m
 
 def build():
+    # Local generators seeded exactly as the original module-level ones: same sequence, no hidden global state.
+    random = _random.Random(SEED); rng = np.random.default_rng(SEED)
     probes = []  # (name, n, F, G)
     # carrier 2: every pair of tables
     tabs2 = [np.array(t).reshape(2,2) for t in itertools.product(range(2), repeat=4)]

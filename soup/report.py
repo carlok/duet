@@ -1,11 +1,11 @@
 """Summarise calibration (named vs size-matched random theories) and the duality-prior search."""
-import sys, glob, pickle, json
-sys.path.insert(0, '/home/claude/soup')
+import glob, pickle
 import numpy as np
+from .paths import data
 def pct(x, xs):   # share of null values strictly below x, plus half the ties
     xs = np.asarray(xs, float); return round(100 * ((xs < x).mean() + 0.5 * (xs == x).mean()), 1) if len(xs) else None
 R = []
-for f in glob.glob('calib_results*.pkl'):
+for f in glob.glob(str(data('calib_results*.pkl'))):
     if 'buggy' not in f: R += pickle.load(open(f, 'rb'))
 named = [r for r in R if r.get('kind') == 'named']; null = [r for r in R if r.get('kind') == 'null']
 print(f'CALIBRATION: {len(named)} named theories, {len(null)} random theories')
@@ -18,7 +18,7 @@ for r in named:
     g = [x.get('gain', 0) for x in nk]; d = [x.get('max_difficulty', 0) for x in nk]; ri = [x.get('richness', 0) for x in nk]
     print(f"  {r['name']:18s} {len(r['T'])}  {r.get('gain',0):5.3f} {pct(r.get('gain',0), g)} | {r.get('max_difficulty',0):5.3f} {pct(r.get('max_difficulty',0), d)} | {r.get('richness',0):3d} {pct(r.get('richness',0), ri)} | {','.join(r.get('dualities', [])) or '-'}")
 V = {}
-for f in glob.glob('loopdual_*.pkl'):
+for f in glob.glob(str(data('loopdual_*.pkl'))):
     V.update(pickle.load(open(f, 'rb'))['verified'])
 if V:
     vs = sorted(V.values(), key=lambda r: -r.get('score', 0))

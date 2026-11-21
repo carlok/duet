@@ -1,12 +1,11 @@
 """Calibration: score named two-operation theories against size-matched random theories."""
-import sys, random, pickle, json, time
-sys.path.insert(0, '/home/claude/soup')
+import random, pickle, json, time, os
 import numpy as np
-from v2 import *
-from named import parse, law_index
-from soup import NONDEG, unpack_probes, LM
-from duality import dualities
-import os
+from .verify import Corpus, verify, BRIDGE, NL
+from .named import law_index
+from .data import NONDEG, unpack_probes, LM
+from .duality import dualities
+from .paths import data
 random.seed(int(os.environ.get('CALIB_SEED', '7')))
 NAMED = {
   'lattice': ['(x·y)·z = x·(y·z)', '(x∘y)∘z = x∘(y∘z)', 'x·y = y·x', 'x∘y = y∘x', 'x·(x∘y) = x', 'x∘(x·y) = x'],
@@ -18,7 +17,7 @@ NAMED = {
 }
 C = Corpus(); results = []
 def log(r):
-    results.append(r); pickle.dump(results, open(os.environ.get('CALIB_OUT', 'calib_results.pkl'), 'wb'))
+    results.append(r); pickle.dump(results, open(data(os.environ.get('CALIB_OUT', 'calib_results.pkl')), 'wb'))
     print(json.dumps({k: r.get(k) for k in ('name', 'score', 'gain', 'max_difficulty', 'richness', 'dualities')}, ensure_ascii=False), flush=True)
 for name, ls in NAMED.items():
     T = [law_index(s) for s in ls]; assert None not in T, name
@@ -34,5 +33,5 @@ for k, count in by_size.items():
         s = unpack_probes(np.bitwise_and.reduce(LM[T], axis=0))
         if not (s & NONDEG).any(): continue
         t0 = time.time(); r = verify(C, T); r['dualities'] = dualities(T); r['name'] = f'random-{k}'; r['kind'] = 'null'; r['secs'] = round(time.time() - t0, 1); log(r); got += 1
-pickle.dump([(e[0], e[1], e[2], e[3]) for e in C.extra], open('calib_corpus_extra.pkl', 'wb'))
+pickle.dump([(e[0], e[1], e[2], e[3]) for e in C.extra], open(data('calib_corpus_extra.pkl'), 'wb'))
 print('done', flush=True)

@@ -1,7 +1,8 @@
 """Compute the law x probe satisfaction matrix with numba; save packed bit matrices."""
 import numpy as np, numba as nb, time, pickle
-from laws import enumerate_laws
-from probes import build, NMAX
+from .laws import enumerate_laws
+from .probes import build, NMAX
+from .paths import data, ensure
 
 def postfix(t, out):
     if t[0] == 'v': out.append(t[1]); return
@@ -42,7 +43,35 @@ def evaluate(prog, lo, mid, hi, nv, Fs, Gs, sizes):
             out[p, l] = ok
     return out
 
-if __name__ == '__main__':
+@nb.njit(cache=True)
+def evaluate_one(prog, lo, mid, hi, nv, F, G, n):
+    """Serial version of evaluate for a single structure of any size (used for structures found
+    during the search; same interpreter, so the result matches a row of the matrix)."""
+    L = lo.shape[0]
+    out = np.zeros(L, np.uint8)
+    assign = np.zeros(8, np.int64)
+    for l in range(L):
+        v = nv[l]; total = n ** v; ok = 1
+        for c in range(total):
+            r = c
+            for i in range(v): assign[i] = r % n; r //= n
+            if run(prog, lo[l], mid[l], assign, F, G) != run(prog, mid[l], hi[l], assign, F, G):
+                ok = 0; break
+        out[l] = ok
+    return out
+
+def essbin(T, n):
+    """Both arguments matter: the operation is not a projection or constant in either argument."""
+    return any(T[x1, y] != T[x2, y] for y in range(n) for x1 in range(n) for x2 in range(n)) and \
+           any(T[x, y1] != T[x, y2] for x in range(n) for y1 in range(n) for y2 in range(n))
+
+
+def nondeg_mask(probes):
+    return np.array([essbin(F, n) and essbin(G, n) and not np.array_equal(F, G) for _, n, F, G in probes])
+
+
+def main():
+    ensure()
     t0 = time.time()
     laws = list(enumerate_laws(4, ('f', 'g')).values())
     laws.insert(0, (('v', 0), ('v', 0)))  # x = x
@@ -56,11 +85,16 @@ if __name__ == '__main__':
     print('laws', len(laws), 'probes', P, f'{time.time()-t0:.1f}s setup', flush=True)
     M = evaluate(np.array(prog, np.int64), np.array(lo), np.array(mid), np.array(hi), np.array(nv), Fs, Gs, sizes)
     print(f'matrix done {time.time()-t0:.1f}s, density {M.mean():.4f}', flush=True)
-    np.save('M_probe_major.npy', np.packbits(M, axis=1))      # rows = probes, bits = laws
-    np.save('M_law_major.npy', np.packbits(M.T, axis=1))      # rows = laws, bits = probes
+    np.save(data('M_probe_major.npy'), np.packbits(M, axis=1))      # rows = probes, bits = laws
+    np.save(data('M_law_major.npy'), np.packbits(M.T, axis=1))      # rows = laws, bits = probes
     meta = {'laws': [render(L) + ' = ' + render(R) for L, R in laws],
             'law_trees': laws, 'order': [len(prog[a:b]) for a, b in zip(lo, hi)],
             'probes': [(name, n) for name, n, _, _ in probes]}
     meta['order'] = [sum(1 for t in prog[a:b] if t >= 10) for a, b in zip(lo, hi)]
-    pickle.dump(meta, open('meta.pkl', 'wb'))
+    pickle.dump(meta, open(data('meta.pkl'), 'wb'))
+    np.save(data('nondeg.npy'), nondeg_mask(probes))
     print('saved', f'{time.time()-t0:.1f}s')
+
+
+if __name__ == '__main__':
+    main()
