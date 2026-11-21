@@ -81,22 +81,21 @@ Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`
 ## Status (21 Nov 2026, night)
 
 Running (detached containers; `podman ps`; logs with `podman logs <name>`):
-- `soup-sweepc`: stage c over every open claim (32 results), `python -m soup.sweep_c --jobs 5`. Output
-  `work/check/sweep_c.json`; rewrites `work/results/`. finished, 32 of 32; table with `python -m soup.sweep_c --summary`.
-- `soup-b1`, `soup-b1fmb`: one-hour jobs. Do ETP Equations 437 and 3115 together imply `x = x◇x` (Vampire casc_sat,
-  Vampire FMB, E, Twee)? What is the smallest S10 / S12 model with `x·x ≠ x` (Vampire FMB from size 7)? Output in
-  `work/check/b1/`.
+- **T4**, started 21 Nov 21:19 UTC at tag `t4-prereg` (commit `a5c60aa`), 4 h. `soup-t4-prior` and `soup-t4-noprior`:
+  `SOUP_DATA=/data/t4-<arm>`, `SOUP_VERIFIER=V2`, `--searchers 2 --verifiers 3`, seeds 201 / 301, `--budget 14400`.
+  Journals: `work/t4-<arm>/journal/journal.md`.
 - The census session's `census-g3b` (2 CPUs, on its own branch).
 
-Finished tonight: round 2's clean track (stopped after 22 of 32 jobs, once the S10 model made the rest moot; table
-with `python -m soup.round2 summary`). The S10 model is checked with `python -m soup.round2 model`.
+Finished tonight:
+- the stage-c sweep (32 of 32; `python -m soup.sweep_c --summary`);
+- round 2's clean track (stopped after 22 of 32 jobs once the S10 model made the rest moot;
+  `python -m soup.round2 summary`; the model is checked with `python -m soup.round2 model`);
+- the Block 1 follow-up jobs (`work/check/b1/`);
+- the first Lean certificate (`lean/`).
 
-Next, in order:
-1. Final sweep and round-2 numbers in REPORT.md (interim numbers are there now), README and paper.
-2. T4 (approved): `python -m soup.t4_setup`, then two supervisors at once with
-   `SOUP_DATA=/data/t4-prior` / `t4-noprior`, `SOUP_VERIFIER=V2`, `--arm prior|noprior`, `--searchers 2
-   --verifiers 3`, `--seed0 201|301`, `--budget 14400`. Start it once the round-2 container has finished, so the
-   two do not exceed the VM's 12 GB.
+Next, in order (plan: T4, then T5a calibration, profiles, exploratory run, dossiers):
+1. After T4: the preregistered analysis (`fragments` per arm, `t4_report`).
+2. T5a: `python -m soup.profile --set t3 --jobs 8`, then `python -m soup.profile --t5a`.
 3. The assisted round-2 track, after T4: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
    S10.md S12.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m soup.round2 assisted >
    ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E proves each one.

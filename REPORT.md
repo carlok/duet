@@ -79,6 +79,18 @@ saturations.
   ℤ/n family timed out at n = 9 and above. Vampire's FMB, which encodes each size as SAT, is the tool that worked.
   Stage c has no Vampire FMB; it is added after T4 as a new verifier config (V2 is preregistered).
 
+**Follow-up runs (Block 1, 21 Nov, 20:02–21:21 UTC; outputs in `work/check/b1/`, jobs in `jobs.txt`).**
+- *Do ETP Equations 437 and 3115 together imply x = x◇x?* Still open.
+  - Vampire FMB from size 4 searched sizes 4–8 completely and found no model. Size 9 did not finish in 3,600 s.
+    With ETP's own result for sizes 2–3, no magma with x ≠ x◇x on 8 or fewer elements satisfies both laws.
+  - Vampire's casc_sat portfolio, whose FMB strategies went up to size 15, timed out at 3,600 s. Twee found no proof
+    in 3,600 s.
+  - E `--auto-schedule` was stopped by hand after 78 min with no result, so that T4 would run alone.
+  - If the pair does imply x = x◇x, it is an order-4 one-operation synergy pair like E55 + E100, and it would
+    settle S12's last claim only for x·y = x∘y.
+- *Smallest S10 / S12 model with x·x ≠ x:* Vampire FMB from size 7 did not finish size 7 in 3,600 s, on either
+  theory. The smallest such model still has 7–10 elements.
+
 Caveats:
 - Why Prover9 stopped early is not known, because its output was not kept. The likeliest cause is the 2,000 MB
   `max_megs` cap. None of those runs is a saturation.
