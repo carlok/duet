@@ -1,0 +1,22 @@
+# Lean 4 toolchain for the certificates in lean/ (image soup-lean). Mathlib is NOT in the image: check.sh reads the
+# compiled packages of an existing Lake project mounted read-only at /reuse (Lean v4.35.0, Mathlib v4.35.0), as in
+# the curve-symmetry-lean project. Nothing is fetched at check time.
+#   podman build -t soup-lean lean/
+#   podman run --rm -v "$PWD/lean:/src" -v "<reuse project>:/reuse:ro" soup-lean sh /src/check.sh
+FROM docker.io/library/debian:trixie-slim AS fetch
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl zstd \
+    && rm -rf /var/lib/apt/lists/*
+ARG LEAN_VERSION=4.35.0
+# GitHub release leanprover/lean4 v4.35.0 (published 2026-10-12), asset lean-4.35.0-linux_aarch64.tar.zst
+ARG LEAN_SHA256=c8f0f8a3920e839718b1343e6781fd80a3e9b1024fbcd7078eb30f54e806b028
+RUN curl -fsSL -o /tmp/lean.tar.zst \
+      "https://github.com/leanprover/lean4/releases/download/v${LEAN_VERSION}/lean-${LEAN_VERSION}-linux_aarch64.tar.zst" \
+    && echo "${LEAN_SHA256}  /tmp/lean.tar.zst" | sha256sum -c - \
+    && mkdir -p /opt && tar --zstd -xf /tmp/lean.tar.zst -C /opt \
+    && mv "/opt/lean-${LEAN_VERSION}-linux_aarch64" /opt/lean && rm /tmp/lean.tar.zst
+
+FROM docker.io/library/debian:trixie-slim
+COPY --from=fetch /opt/lean /opt/lean
+ENV PATH=/opt/lean/bin:$PATH
+WORKDIR /src
+CMD ["lean", "--version"]

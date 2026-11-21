@@ -65,6 +65,10 @@ their claims undecided. Of their 26 claims, E proves 24, each in 9–23 steps. T
   (`core.law_vector` and the direct evaluation in `check_offline.check_finite`). Result: all five S10 axioms hold,
   x·x = x, x∘x = x and x·(x·x) = x fail, and the model is non-degenerate. The model is now in the corpus;
   tables in `work/check/s10_model.json` and in `tests/test_round2.py`.
+- **Lean 4 certificate.** `lean/Duet/S10.lean` states the three non-implications over all types and proves them
+  with `decide` on the tables. It checks with `-DwarningAsError=true`, and the axiom audit passes (8 declarations;
+  propext, Classical.choice, Quot.sound only). Command: `podman run --rm -v "$PWD/lean:/src" -v "<compiled Mathlib
+  v4.35.0 project>:/reuse:ro" soup-lean sh /src/check.sh`, 107 s.
 - x·x = x fails at exactly one element: 0·0 = 0∘0 = 1.
 - A model of S10 is a model of S12, so S12 ⇒ x·x = x and S12 ⇒ x∘x = x are refuted too. In this model x·x = x∘x
   holds by construction, so it says nothing about S12's third claim.
