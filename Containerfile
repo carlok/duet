@@ -12,7 +12,20 @@ RUN python3 -c "import urllib.request; urllib.request.urlretrieve('https://githu
  && cd /src && ./configure && make -j"$(nproc)" rebuild \
  && /src/PROVER/eprover --version
 
+# ---- Vampire, built from source (BSD-3): tag v5.1.0 pinned by commit; submodules viras and cadical at the
+# commits that tag records; the optional z3 submodule is left out
+FROM docker.io/library/python:3.13.18-slim AS vampire
+ARG V_COMMIT=7b2f410ec4430c26217a85db62cf0c4a97042f8d
+RUN apt-get update && apt-get install -y --no-install-recommends g++ cmake make git ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN git clone -q https://github.com/vprover/vampire /src && cd /src && git checkout -q ${V_COMMIT} \
+ && git submodule update -q --init viras cadical \
+ && cmake -S /src -B /build -DCMAKE_BUILD_TYPE=Release \
+ && cmake --build /build -j"$(nproc)" \
+ && cp "$(find /build -maxdepth 2 -type f -name 'vampire*' -perm -u+x | head -1)" /usr/local/bin/vampire \
+ && /usr/local/bin/vampire --version
+
 FROM docker.io/library/python:3.13.18-slim
+COPY --from=vampire /usr/local/bin/vampire /usr/local/bin/vampire
 COPY --from=eprover /src/PROVER/eprover /usr/local/bin/eprover
 RUN pip install --no-cache-dir numpy==2.5.3 numba==0.68.1 z3-solver==5.4.1.0 pytest==9.0.1
 # Data (matrix, corpus, queue, results, journal, logs) lives in the mounted volume, never in the image.

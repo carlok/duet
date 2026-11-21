@@ -45,3 +45,11 @@ def test_canonical_is_duality_invariant():
     T = sorted(law_index(s) for s in NAMED['dimonoid'])
     for sw, op in ((1, 0), (0, 1), (1, 1)):
         assert canonical({image(t, sw, op) for t in T}) == canonical(T)
+
+
+def test_vampire_agrees_with_e_on_reference_and_A_to_D():
+    from soup.provers import prove_vampire
+    assert prove_vampire(ABS, IDEM_F)['status'] == 'proved'
+    for laws in (['x·(x∘x) = x', 'x∘(x∘y) = y', '((x∘y)∘x)·y = x'], ['(x·y)·y = x', '(x·x)∘x = x', 'x∘(y·(x·y)) = y'],
+                 ['x·(x·x) = x', '(x·y)·y = x', '(x∘y)·(y∘x) = y'], ['x·(x∘x) = x', '(x∘y)·x = y', 'x·((y∘y)∘x) = x']):
+        assert prove_vampire([law_index(s) for s in laws], IDEM_F)['status'] == 'countersatisfiable'

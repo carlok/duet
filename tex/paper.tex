@@ -161,7 +161,8 @@ size~8 (for A) or~7 (for C):
 \text{C}&: x\op(x\op x)=x,\ (x\op y)\op y=x,\ (x\cop y)\op(y\cop x)=y\\
 \text{D}&: x\op(x\cop x)=x,\ (x\cop y)\op x=y,\ x\op((y\cop y)\cop x)=x
 \end{align*}
-E saturates each of them after at most 10 processed clauses, under three term orderings. The independent
+E saturates each of them after at most 10 processed clauses, under three term orderings; Vampire 5.1.0
+reports the same under two saturation algorithms. The independent
 check certifies convergent systems of 5, 5, 5 and 3 rules (10, 10, 11 and 5 critical pairs, all
 joinable) in which $x\op x$ and $x$ have different normal forms. So none of A--D implies $x\op x=x$.
 Every countermodel is infinite, which explains the failure of finite-model search. The general lesson
@@ -194,8 +195,8 @@ countermodels and for the main implications.}
 \end{itemize}
 
 \section*{Reproducibility}
-All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1, E 3.2.5 built from
-source). The matrix rebuild is byte-identical across runs (SHA-256 checked). Every number above is in
+All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1, E 3.2.5 and Vampire 5.1.0
+built from source). The matrix rebuild is byte-identical across runs (SHA-256 checked). Every number above is in
 \texttt{REPORT.md} with the command that produced it.
 
 \bibliographystyle{plain}

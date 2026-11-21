@@ -54,3 +54,25 @@ def prove_e(T, goal, processed_limit=200_000, cpu_limit=300, extra=()):
     pm = re.search(r'# Processed clauses\s*:\s*(\d+)', out)
     return {'status': status, 'szs': szs, 'proof_steps': _proof_steps(out) if status == 'proved' else None,
             'processed': int(pm.group(1)) if pm else None, 'secs': round(time.time() - t0, 2), 'rc': r.returncode}
+
+
+V_BIN = os.environ.get('SOUP_VAMPIRE', 'vampire')
+
+
+def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount')):
+    """Vampire with one fixed saturation algorithm (not the time-sliced portfolio), for cross-checks."""
+    with tempfile.NamedTemporaryFile('w', suffix='.p', delete=False) as fh:
+        fh.write(problem(T, goal)); path = fh.name
+    t0 = time.time()
+    try:
+        r = subprocess.run([V_BIN, *extra, '-t', str(cpu_limit), path], capture_output=True, text=True,
+                           timeout=cpu_limit + 30)
+        out = r.stdout
+    except subprocess.TimeoutExpired:
+        return {'status': 'unknown', 'reason': 'wall timeout'}
+    finally:
+        os.unlink(path)
+    m = re.search(r'SZS status (\w+)', out)
+    szs = m.group(1) if m else ('Theorem' if 'Refutation found' in out else 'None')
+    status = {'Theorem': 'proved', 'CounterSatisfiable': 'countersatisfiable', 'Satisfiable': 'countersatisfiable'}.get(szs, 'unknown')
+    return {'status': status, 'szs': szs, 'secs': round(time.time() - t0, 2)}

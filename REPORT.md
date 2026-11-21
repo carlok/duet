@@ -24,7 +24,12 @@ Command: `podman run --rm -v "$PWD/work:/data" soup python -m soup.t2_smoke --jo
   sets give convergent systems of 5, 5, 5, 3 rules (10, 10, 11, 5 critical pairs, all joinable), axioms
   joinable, x·x and x with different normal forms. Countermodels are infinite (term algebra modulo the
   rules). Caveat: one prover found the rule sets; correctness rests on the checker (tested in
-  `tests/test_confluence.py`). Vampire not yet tried.
+  `tests/test_confluence.py`).
+- **Second prover agrees.** Vampire 5.1.0 (source build, commit 7b2f410e, without z3): A–D CounterSatisfiable
+  under the default strategy and under `-sa discount`; absorption, T1, T2 and McKenzie proved
+  (`tests/test_named.py::test_vampire_agrees_with_e_on_reference_and_A_to_D`).
+- Correction: Prover9/Mace4 is maintained (github.com/AlgorithmicTruth/Prover9, release LADR-2026-8A,
+  August 2026, GPL-2.0). My earlier note that LADR was unmaintained since 2009 was wrong.
 - E is now in the verifier: stage b runs E first (saturation ⇒ claim false), stage c runs E before the
   size-7/8 model search. Difficulty is still z3 effort; E steps are recorded as `e_steps`.
 
