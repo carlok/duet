@@ -76,3 +76,35 @@ def prove_vampire(T, goal, cpu_limit=60, extra=('-sa', 'discount')):
     szs = m.group(1) if m else ('Theorem' if 'Refutation found' in out else 'None')
     status = {'Theorem': 'proved', 'CounterSatisfiable': 'countersatisfiable', 'Satisfiable': 'countersatisfiable'}.get(szs, 'unknown')
     return {'status': status, 'szs': szs, 'secs': round(time.time() - t0, 2)}
+
+
+# ---- Prover9 / Mace4 (LADR). Laws as f(x,y), g(x,y); u..z are variables in LADR syntax.
+from .data import TREES as _TREES
+
+
+def _ladr(t): return 'xyzwuv'[t[1]] if t[0] == 'v' else f"{'f' if t[0] == 'f' else 'g'}({_ladr(t[1])},{_ladr(t[2])})"
+
+
+def ladr_input(T, goal=None, extra=''):
+    ax = '\n'.join(f'{_ladr(_TREES[t][0])} = {_ladr(_TREES[t][1])}.' for t in T)
+    g = f'{_ladr(_TREES[goal][0])} = {_ladr(_TREES[goal][1])}.' if goal is not None else ''
+    return f'{extra}\nformulas(assumptions).\n{ax}\nend_of_list.\nformulas(goals).\n{g}\nend_of_list.\n'
+
+
+def prove_prover9(T, goal, seconds=60):
+    t0 = time.time()
+    r = subprocess.run(['prover9'], input=ladr_input(T, goal, f'assign(max_seconds, {seconds}).'),
+                       capture_output=True, text=True, timeout=seconds + 30)
+    m = re.search(r'Length of proof: (\d+)', r.stdout)
+    st = 'proved' if 'THEOREM PROVED' in r.stdout else ('countersatisfiable' if 'SEARCH FAILED' in r.stdout and 'sos_empty' in r.stdout else 'unknown')
+    return {'status': st, 'proof_length': int(m.group(1)) if m else None, 'secs': round(time.time() - t0, 2)}
+
+
+def mace4(T, goal=None, start=2, end=10, seconds=600):
+    """Smallest model of T (violating goal if given) with start <= size <= end. Returns size or None, and secs."""
+    t0 = time.time()
+    r = subprocess.run(['mace4', '-n', str(start), '-N', str(end), '-t', str(seconds)],
+                       input=ladr_input(T, goal), capture_output=True, text=True, timeout=seconds + 60)
+    m = re.search(r'interpretation\( (\d+),', r.stdout)
+    return {'size': int(m.group(1)) if m else None, 'exhausted_to': end if 'exit (exhausted)' in r.stdout else None,
+            'reason': (re.findall(r'Exiting with (.*)\.', r.stdout) or ['?'])[-1], 'secs': round(time.time() - t0, 1)}

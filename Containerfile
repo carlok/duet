@@ -24,8 +24,17 @@ RUN git clone -q https://github.com/vprover/vampire /src && cd /src && git check
  && cp "$(find /build -maxdepth 2 -type f -name 'vampire*' -perm -u+x | head -1)" /usr/local/bin/vampire \
  && /usr/local/bin/vampire --version
 
+# ---- Prover9 / Mace4 (LADR, maintained fork github.com/AlgorithmicTruth/Prover9, GPL-2.0), tag LADR-2026-8A
+FROM docker.io/library/python:3.13.18-slim AS ladr
+ARG LADR_COMMIT=62ae6ff62fbe85b12c69d8625db1d358973c3d2f
+RUN apt-get update && apt-get install -y --no-install-recommends gcc make libc6-dev git ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN git clone -q https://github.com/AlgorithmicTruth/Prover9 /src && cd /src && git checkout -q ${LADR_COMMIT} \
+ && make -j"$(nproc)" all \
+ && ls bin && cp bin/prover9 bin/mace4 /usr/local/bin/ && (prover9 --version 2>&1 | head -3 || true)
+
 FROM docker.io/library/python:3.13.18-slim
 COPY --from=vampire /usr/local/bin/vampire /usr/local/bin/vampire
+COPY --from=ladr /usr/local/bin/prover9 /usr/local/bin/mace4 /usr/local/bin/
 COPY --from=eprover /src/PROVER/eprover /usr/local/bin/eprover
 RUN pip install --no-cache-dir numpy==2.5.3 numba==0.68.1 z3-solver==5.4.1.0 pytest==9.0.1
 # Data (matrix, corpus, queue, results, journal, logs) lives in the mounted volume, never in the image.
