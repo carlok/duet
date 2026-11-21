@@ -247,7 +247,10 @@ def profile(T, sizes=(2, 3, 4, 5), budget=None):
         models[n] = ms
         spec[n] = {'iso': len(ms), 'nondeg': sum(bool(is_nondeg(F, G, n)) for _, F, G in ms), 'complete': complete}
     out['spectrum'] = spec
-    small = [m for n in sizes if n <= 4 for m in models[n]][:b['term_models']]
+    for n in sizes:                                     # the smallest non-degenerate model, for the dossier
+        nd = [(F, G) for _, F, G in models[n] if is_nondeg(F, G, n)]
+        if nd: out['smallest_nondeg'] = {'n': n, 'F': nd[0][0].tolist(), 'G': nd[0][1].tolist()}; break
+    small =[m for n in sizes if n <= 4 for m in models[n]][:b['term_models']]
     small_all = [m for n in sizes for m in models[n]][:b['term_models'] * 2]
     if not small:
         out['note'] = 'no models on 2-4 elements'

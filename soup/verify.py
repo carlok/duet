@@ -41,7 +41,12 @@ DEFAULTS = dict(V1, certify_e=True)
 # V2 (for T4, preregistered): difficulty from E proof steps instead of z3 effort; stage a takes one claim per
 # order level (up to 4 pending, 12 tried) instead of the 3 lowest-order claims.
 V2 = dict(DEFAULTS, difficulty='e_steps', claims_per_order=True, n_cands=4, max_tried=12)
-CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2}      # the stream verifier picks one by SOUP_VERIFIER
+# V3 (exploratory run X1, after T4): V2 plus Vampire finite model building. In stage b, for every pending claim
+# that E's small run neither proves nor saturates (fmb_secs); in stage c, before Mace4 (c_fmb_secs). A model
+# counts only after check_offline.check_finite accepts it. On S10, Mace4 stalled at size 7 for two hours where
+# Vampire's FMB found a 10-element model in under two minutes (21 Nov 2026).
+V3 = dict(V2, fmb_secs=60, c_fmb_secs=600)
+CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3}      # the stream verifier picks one by SOUP_VERIFIER
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
 LEGACY = dict(V1, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
 
@@ -177,6 +182,22 @@ def _e(c, T, limit, cpu, certify=False):
     return r['status']
 
 
+def _fmb(C, c, T, secs, start):
+    """V3: Vampire finite model building on claim c. True if a model passes our own check (claim refuted)."""
+    from .check_offline import check_finite
+    from .sweep_fmb import fmb
+    t0 = time.time()
+    st, m, _ = fmb(T, c['idx'], secs, start)
+    c['fmb'] = {'status': st, 'secs': round(time.time() - t0, 1), 'start': start}
+    if not (m and m['g'] is not None): return False
+    chk = check_finite(T, [c['idx']], m['f'], m['g'])
+    if not (chk['ok'] and chk['law_vector_agrees']):
+        c['fmb']['status'] = 'model rejected by our check'; return False
+    C.add(f"cm-fmb-{m['n']}", m['n'], np.array(m['f']), np.array(m['g']))
+    c['status'] = f"false (size {m['n']}, Vampire FMB)"; c['fmb']['n'] = m['n']
+    return True
+
+
 def stage_b(C, out, cfg=DEFAULTS):
     t0 = time.time()
     if not out.get('model_sizes'): return out
@@ -186,6 +207,9 @@ def stage_b(C, out, cfg=DEFAULTS):
     for c in out['claims']:
         if c['status'] != 'pending': continue
         if cfg['use_e'] and _e(c, T, cfg['e_limit'], cfg['e_cpu'], cfg.get('certify_e')) == 'countersatisfiable':
+            continue
+        if cfg.get('fmb_secs') and c.get('e_status') != 'proved' and \
+                _fmb(C, c, T, cfg['fmb_secs'], min(list(c.get('cm_unknown_sizes') or []) + [7])):
             continue
         st, used = prove(T, c['idx'], cfg['prove_rlimit'])
         if st != 'proved' and c.get('e_status') == 'proved':
@@ -221,6 +245,8 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
         lo, hi = c_size_range(c, cfg)
         budget = (f"E {cfg['c_e_limit']:.0e} processed clauses, Mace4 sizes {lo}-{hi} "
                   f"({cfg['c_mace4_secs']} s), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
+        if c.get('e_status') != 'proved' and cfg.get('c_fmb_secs') and _fmb(C, c, T, cfg['c_fmb_secs'], lo):
+            continue                    # V3: Vampire FMB before Mace4
         if c.get('e_status') != 'proved':      # a claim E proved has no countermodel: skip the model search
             m = mace4(T, c['idx'], lo, hi, cfg['c_mace4_secs'])          # Mace4 replaces z3 grounding beyond size 6
             c['mace4_sizes'] = [lo, hi]

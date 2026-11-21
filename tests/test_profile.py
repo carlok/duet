@@ -12,6 +12,14 @@ def test_lattice_profile():
     assert p['features']['malcev_term'] and p['features']['finite_free2']
 
 
+def test_equivalence_with_standard_theories():
+    from soup.core import Corpus
+    from soup.equiv import equivalent
+    ap = [law_index(s) for s in NAMED['absorption pair']]
+    found = equivalent(ap, Corpus())
+    assert 'absorption pair' in found and 'lattice' not in found
+
+
 def test_canon_identifies_isomorphic_tables():
     F = np.array([[0, 0], [0, 1]], np.int16); G = np.array([[0, 1], [1, 1]], np.int16)
     swap = np.array([1, 0])

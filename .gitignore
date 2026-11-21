@@ -25,4 +25,6 @@ external/
 work/t4-*/*
 !work/t4-*/journal/
 work/t4_report.json
+work/x1/*
+!work/x1/journal/
 work/fragments.json

@@ -2,6 +2,34 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X1: exploratory run with verifier V3 (written 21 Nov 2026, night, during T4, before X1 starts)
+
+Exploratory and descriptive only: no hypothesis is tested, and nothing from X1 enters T4's analysis.
+
+- Purpose: more verified theories, from the duality-prior search, for the T5a ranking and the dossiers. The user
+  asked to use the rest of the night this way.
+- Setup: `python -m soup.t4_setup --dir x1`, i.e. its own `SOUP_DATA=/data/x1`. Matrix files are linked, and the
+  corpus is copied from the main `work/corpus` at the time of setup.
+- Verifier V3 (`soup/verify.py`): V2 plus Vampire finite model building. Stage b runs it for 60 s on every pending
+  claim that E's small run neither proves nor saturates, starting from the smallest size stage a left unsearched,
+  or 7. Stage c runs it for 600 s before Mace4. A model counts only after `check_offline.check_finite`.
+- Search: arm `prior` (the duality closure and score factor as in T4), 4 searchers and 4 verifiers, seeds 401+.
+- Budget: from the start until 07:30 UTC, at most 14,400 s. It starts after the T4 analysis, the T5a profile run
+  and the T4 profiles.
+- Stop rule: the budget runs out. The run is stopped early only if the VM's free memory drops below 1 GB; that would
+  be reported.
+- Reported descriptively:
+  - verified theories;
+  - the share that are fragments (`fragments.py`), without comparison to T4;
+  - claims refuted by FMB that stage a missed;
+  - the top 20 non-fragments by score.
+
+  The top 20 then go through the profile and the T5a ranking, with the others in its candidate list.
+- Caveats:
+  - The corpus of X1 starts larger than T4's: it includes tonight's S10 model and the sweep's models.
+  - Score and selection are as in T4. V3 refutes more claims than V2, so V3 scores are not comparable with T4
+    scores.
+
 ## T5a: does an algebraist's profile separate named from random theories? (written 21 Nov 2026, night, before the run)
 
 Why: the synergy score does not prefer named theories (T3, H2), so it cannot pick out theories a universal
