@@ -2,6 +2,21 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Open-claim sweep (21 Nov 2026)
+
+All 59 claims open in `work/results/` (52 of them verified before E was in the pipeline), re-checked with
+`python -m soup.sweep_open` (E 2M processed clauses / 300 s; saturations certified by `soup.confluence`;
+Vampire cross-check), then Vampire 300 s with `-sa discount` and with the default strategy on the rest.
+
+| Outcome | Claims |
+| --- | --- |
+| proved (E and Vampire) | 25 |
+| refuted, certified convergent system (infinite countermodel), Vampire agrees | 2 |
+| open after E and Vampire | 32 (12 theories), listed in `work/journal/survivors.md` |
+
+Two E runs were labelled "error": E's CPU limit (exit 8) under load, now reported as unknown.
+Every one of the 32 open claims is one of x·x = x, x∘x = x, x·x = x∘x, x·(x·x) = x, x·(x∘y) = x, x·(y·x) = x.
+
 ## T2: E 3.2.5 (21 Nov 2026)
 
 E 3.2.5 built from the sha256-pinned source tarball (3.5.x tags were 1–12 days old: not pinned).
