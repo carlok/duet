@@ -1,0 +1,203 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\projname}{\textsf{duet}}
+\newcommand{\pending}[1]{\textcolor{gray}{[pending: #1]}}
+\newcommand{\op}{\cdot}
+\newcommand{\cop}{\circ}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+
+\title{Searching for synergy between two binary operations:\\
+an open-ended search over small equational theories\\[4pt]\large Draft, 21 November 2026}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We search the space of small equational theories over two binary operations $\op$ and $\cop$ for
+theories whose laws imply consequences that no single law implies. Laws are enumerated up to order~4
+(71{,}369 laws up to renaming and side swap, 61{,}983 of them mixing both operations). A satisfaction
+matrix against 12{,}509 finite structures gives a cheap surrogate for implication; a quality-diversity
+search proposes theories; each candidate is then verified by finite-model search, the SMT solver Z3 and
+the saturation prover E. The verifier is an exact filter: every reported implication carries a proof,
+every reported non-implication carries a finite countermodel or a checked convergent rewrite system.
+The scored search rediscovers fragments of lattice theory and two laws of McKenzie's 1970 lattice
+basis. It also refutes four implications that finite-model search up to size~8 left open: their
+countermodels are necessarily infinite. Whether the search finds theories that are interesting and not
+already named is the open question; a preregistered comparison is planned.
+\end{abstract}
+
+\section{Question}
+
+A law that mentions both operations is a \emph{bridge}. Bridges are where two theories fuse: absorption
+in lattices, distributivity in rings, the left-division operation of a quasigroup. We measure a fusion by
+\emph{synergy}.
+
+\begin{definition}
+Let $T$ be a finite set of laws. A law $e$ is \emph{emergent} in $T$ if $T \models e$ and
+$\{t\} \not\models e$ for every $t \in T$.
+\end{definition}
+
+The lattice absorption pair $x\op(x\cop y)=x$, $x\cop(x\op y)=x$ is the reference case: together the two
+laws imply $x\op x = x$, neither does alone. We ask whether an automated search over theories, scored by
+emergent laws and checked by provers, finds structure that a mathematician would call interesting, and
+in particular theories that are not already named. No language model is used anywhere in the scoring.
+
+\section{Related work}
+
+McCune and Padmanabhan~\cite{mccune1996} enumerated identities, filtered them through finite
+non-models and proved the survivors with Otter, finding single axioms for lattices and other varieties;
+McCune, Padmanabhan and Veroff~\cite{mpv2003} continued this for lattices. Our pipeline has the same
+shape (enumerate, filter on finite structures, prove) but searches over \emph{sets} of laws and scores
+synergy rather than looking for bases of a fixed variety. The Equational Theories Project~\cite{etp}
+settled all implications between the 4694 one-operation laws of order at most~4; our enumeration
+reproduces that count. The search uses MAP-Elites~\cite{mapelites2015}. Named theories used for
+calibration: lattices, skew lattices~\cite{leech1989}, dimonoids~\cite{loday2001}, one-sided
+quasigroups.
+
+\section{Setting}
+
+Terms are built from variables and the two operations. The order of a law is its number of operation
+symbols. Laws are identified up to variable renaming and exchange of sides
+(Table~\ref{tab:counts}).
+
+\begin{table}[h]\centering
+\begin{tabular}{lr}\toprule
+Laws of order $\le 4$, one operation & 4{,}694 \\
+Laws of order $\le 4$, two operations & 71{,}369 \\
+\quad of which bridges & 61{,}983 \\
+Base structures (carriers 2--6) & 12{,}509 \\
+\bottomrule\end{tabular}
+\caption{Search space. The one-operation count matches~\cite{etp}.}\label{tab:counts}
+\end{table}
+
+Three syntactic dualities act on laws: swapping the operations, taking opposites ($x\op y \mapsto
+y\op x$), and both. A theory \emph{has a duality} if one of them maps it onto itself.
+
+\section{Method}
+
+\subsection{Surrogate}
+For every law and base structure we record whether the law holds (a bit matrix, 2$\times$111\,MB, built
+in 155\,s on 11 cores). The base structures include all pairs of operations on 2 elements, affine
+operations over $\mathbb{Z}/n$ and $\mathbb{F}_4$, group-derived operations on the Klein group, $S_3$ and
+$\mathbb{Z}/6$, the lattices $M_3$, $N_5$, $2^2$, rings $\mathbb{Z}/n$, and random tables. The corpus
+grows during the search: every model and countermodel the verifier finds is added and shared by all
+processes. A theory's \emph{corpus consequences} are the laws true in every corpus structure satisfying
+it; the surrogate score counts corpus-emergent laws, weighted by order. Corpus consequences
+over-approximate true consequences, so every surrogate claim must be verified.
+
+\subsection{Search}
+Each search process runs MAP-Elites over theories of 2--6 laws. Cells are indexed by number of laws,
+number of dualities, number of bridges, a model-count bucket and the order of the shortest emergent law.
+Mutations replace, add or remove a law, cross two elites, or (in the \emph{prior} arm) close a theory
+under a duality. Two filters reject degenerate cases: theories with no corpus model in which both
+operations are distinct and essentially binary, and theories that make one operation a term in the other
+(definitional extensions are not fusions).
+
+\subsection{Streaming verification}
+Every theory that wins or improves a cell is pushed to a priority queue, deduplicated up to the three
+dualities, if its calibrated priority could reach the current top~20. Verifier processes take theories
+in three stages.
+\begin{enumerate}
+\item[a.] Model census (non-isomorphic non-degenerate models, up to 8 per size on 2--4 elements, one on
+  5); independence of each law (countermodel up to size~6, else a bounded proof of redundancy); for the
+  shortest corpus-emergent laws, a countermodel search up to size~6. Finite models are found by grounding
+  the axioms over the domain and solving with Z3.
+\item[b.] E~\cite{eprover2019} with a budget of 20{,}000 processed clauses. If E saturates without a
+  proof the claim is false; otherwise Z3~\cite{z3} attempts a proof with a fixed resource limit, and its
+  resource count gives the difficulty.
+\item[c.] Only for claims still open: E with $2\cdot 10^6$ processed clauses, countermodels on 7 and 8
+  elements, a long Z3 run. Each claim ends as proved, refuted, or open with its budget stated.
+\end{enumerate}
+A supervisor moves processes between search and verification by the number of competitive queued
+theories. All budgets are deterministic (processed clauses, Z3 resource units), not wall time.
+
+\subsection{Refutation without a finite countermodel}
+When E saturates, we do not take its word. From E's saturated clause set we check in a few hundred
+lines of independent code that (i) every equation orients as a size-decreasing rule satisfying the
+variable condition, (ii) every critical pair is joinable, (iii) every axiom is joinable. Then the rules
+form a convergent system whose term algebra, with fresh constants, is a model of the axioms
+(Birkhoff~\cite{birkhoff1935}, Knuth--Bendix~\cite{knuthbendix1970}). If the two sides of the goal reach
+different normal forms, the goal fails in that model.
+
+\subsection{Score}
+For each verified emergent law $e$ with difficulty $d_e = \log_{10}(\text{effort}_e/\text{effort}_0)$,
+the gain is $\sum_e \max(d_e, 0.1)/(1+\mathrm{order}(e))$, multiplied by a log factor in the number of
+small models and halved if a law of the theory is redundant.
+
+\section{Results so far}
+
+\subsection{Calibration}
+On Z3 5.4.1 the absorption pair implies $x\op x=x$ with effort 494, reproduced on two machines. The
+census gives 1, 1, 2 lattices on 2, 3, 4 elements. All six named theories have a duality; none of 35
+random theories of matching size does. On synergy, difficulty and model counts the named theories sit
+between the 9th and 91st percentile of the random ones: difficulty does not separate named from random
+theories, symmetry does. \pending{T3: 30 random theories per size, Fisher's exact test for duality.}
+
+\subsection{Pilot search}
+A first batch-mode search with the duality prior (9 rounds, 2 cores) verified 99 theories. Of the 97 with
+a proved emergent law, 64 are fragments of lattice theory and 8 of skew-lattice theory; an earlier run
+without the prior found 6 lattice fragments among 59. The search rediscovered two laws of McKenzie's
+four-law lattice basis~\cite{mckenzie1970}, $x\op(y\cop(x\cop z))=x$ and $x\cop(y\op(x\op z))=x$. E
+proves commutativity from McKenzie's basis in 21 inference steps; Z3 needs $8.5\cdot 10^6$ resource
+units (328\,s).
+
+\subsection{Four open implications are false}
+The pilot left four implications with goal $x\op x=x$ unproved by Z3 and without countermodels up to
+size~8 (for A) or~7 (for C):
+\begin{align*}
+\text{A}&: x\op(x\cop x)=x,\ x\cop(x\cop y)=y,\ ((x\cop y)\cop x)\op y=x\\
+\text{B}&: (x\op y)\op y=x,\ (x\op x)\cop x=x,\ x\cop(y\op(x\op y))=y\\
+\text{C}&: x\op(x\op x)=x,\ (x\op y)\op y=x,\ (x\cop y)\op(y\cop x)=y\\
+\text{D}&: x\op(x\cop x)=x,\ (x\cop y)\op x=y,\ x\op((y\cop y)\cop x)=x
+\end{align*}
+E saturates each of them after at most 10 processed clauses, under three term orderings. The independent
+check certifies convergent systems of 5, 5, 5 and 3 rules (10, 10, 11 and 5 critical pairs, all
+joinable) in which $x\op x$ and $x$ have different normal forms. So none of A--D implies $x\op x=x$.
+Every countermodel is infinite, which explains the failure of finite-model search. The general lesson
+for the pipeline: an emergent claim that survives countermodel search to size 8 is not evidence of
+truth.
+
+\subsection{Streaming system}
+In a 10-minute test (3 search and 8 verifier processes) the system verified 231 theories and added 1{,}897
+structures to the corpus. The surrogate proposes theories about 30 times faster than they can be
+verified. The highest-scoring theories so far all have the same three emergent laws, $x\op x=x$,
+$x\cop x=x$ and $x\op x=x\cop x$; the score saturates on idempotence. \pending{T5: which of the top
+theories are equivalent to a known variety.}
+
+\section{Planned experiments}
+\pending{T4, preregistered before it runs: duality-prior arm against a matched arm without the prior, ten
+processes, several hours. Primary outcome: share of verified theories that are fragments of a named
+theory, per arm. Secondary: top non-fragment theories, deduplicated up to duality and logical
+equivalence.} \pending{T6: the 21 open claims of the pilot.} \pending{T7: Lean~4 certificates for finite
+countermodels and for the main implications.}
+
+\section{Limitations}
+\begin{itemize}
+\item Z3 effort measures instantiation search, not proof depth: one substitution can cost $10^5$ units.
+  E's proof length correlates with Z3 effort only weakly (Spearman 0.37 over 640 claims both proved).
+\item The queue keeps the theories with the highest surrogate priority; theories the surrogate ranks low
+  are never verified. Any comparison between arms inherits this selection.
+\item Corpus consequences depend on the corpus. Arms share one growing corpus.
+\item ``Not named'' needs a literature search and an equivalence check against known varieties; none of
+  the theories found so far has been claimed as new.
+\end{itemize}
+
+\section*{Reproducibility}
+All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1, E 3.2.5 built from
+source). The matrix rebuild is byte-identical across runs (SHA-256 checked). Every number above is in
+\texttt{REPORT.md} with the command that produced it.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+\end{document}

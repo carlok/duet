@@ -14,3 +14,8 @@ work/journal/
 work/runs/
 work/check/
 *.log
+tex/*.aux
+tex/*.bbl
+tex/*.blg
+tex/*.log
+tex/*.out

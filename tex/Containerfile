@@ -1,0 +1,7 @@
+# LaTeX toolchain for the draft paper only (kept out of the search image).
+FROM docker.io/library/debian:trixie-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      texlive-latex-base texlive-latex-recommended texlive-fonts-recommended lmodern make \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /tex
+CMD ["make"]

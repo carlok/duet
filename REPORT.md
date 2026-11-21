@@ -2,6 +2,43 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## T2: E 3.2.5 (21 Nov 2026)
+
+E 3.2.5 built from the sha256-pinned source tarball (3.5.x tags were 1–12 days old: not pinned).
+Command: `podman run --rm -v "$PWD/work:/data" soup python -m soup.t2_smoke --jobs 10 --cpu 300 --limit 2000000`
+(output `work/check/t2_smoke_e.json`). E options: `--auto`, processed-clause budget, proof object.
+
+| Case | E result | proof steps | processed clauses | z3 (earlier) |
+| --- | --- | --- | --- | --- |
+| absorption ⇒ x·x = x | proved | 9 | 7 | effort 494 |
+| T1 ⇒ x·x = x / x·x = x∘x | proved | 10 / 11 | 5 / 8 | 134,513 |
+| T2 ⇒ x·x = x / x·x = x∘x | proved | 11 / 11 | 6 / 8 | 11,827 |
+| McKenzie basis ⇒ x·y = y·x | proved | 21 | 83 | 8.5M (328 s) |
+| A, B, C, D ⇒ x·x = x | CounterSatisfiable | – | 6, 6, 10, 4 | unknown |
+
+- Soundness control: 22 claims refuted earlier by finite countermodels: E proves 0, saturates 5.
+- Cross-check on 641 claims z3 proved: E proves 640 (misses one `x · x = x ∘ x` at 50k clauses).
+  Spearman z3 effort vs E proof steps 0.365, vs E processed clauses 0.338; E steps median 11, max 27.
+- **A–D refuted.** Same verdict under `--auto`, `-tLPO4 -Garity -Ginvfreq`, `-tLPO4 -Gunary_first`.
+  Independent certificate (`python -m soup.confluence`, output `work/check/confluence_AD.txt`): E's saturated
+  sets give convergent systems of 5, 5, 5, 3 rules (10, 10, 11, 5 critical pairs, all joinable), axioms
+  joinable, x·x and x with different normal forms. Countermodels are infinite (term algebra modulo the
+  rules). Caveat: one prover found the rule sets; correctness rests on the checker (tested in
+  `tests/test_confluence.py`). Vampire not yet tried.
+- E is now in the verifier: stage b runs E first (saturation ⇒ claim false), stage c runs E before the
+  size-7/8 model search. Difficulty is still z3 effort; E steps are recorded as `e_steps`.
+
+## T1 follow-up runs (21 Nov 2026)
+
+| Run | Change | Verified | Notes |
+| --- | --- | --- | --- |
+| `fix5` (300 s) | push gate, z3 memory cap 1.5 GB, grounding cap 60k, interruptible stop | 6 | every verifier took a stage-c task (5+ min each): fixed by capping stage c to verifiers/4 |
+| `e10` (600 s) | + E in stages b/c, stage-c cap, retire only idle verifiers | 119 (115 positive) | 8 claims refuted by E saturation in stage b; shutdown 10 s after budget (was 135 s); peak total PSS 9.0 GB, max one process 1.7 GB |
+
+Commands: `podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 300 --run fix5 --rebalance 60`,
+`... --budget 600 --run e10`. Top scores are all theories forcing x·x = x, x∘x = x, x·x = x∘x: the score
+saturates on idempotence.
+
 ## T1: 10-minute streaming test run (21 Nov 2026, run `test10`)
 
 Command: `podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 600 --run test10`
