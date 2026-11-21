@@ -126,7 +126,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     x = x◇x.
   - The V1 score saturates on idempotence, and its top two theories score only through z3's budget cap.
     T4 uses V2.
-  - T3 so far: named theories 8/10 with a duality (the idempotent quasigroups have none), random 0/59.
+  - T3 done: named theories 8/10 with a duality (the idempotent quasigroups have none), random 0/120,
+    Fisher p = 2.8e-11. On gain, difficulty and score every named theory is at or below the random median:
+    the synergy score does not prefer named theories. 2 random theories hit the 1-h limit (crashed).
 
 ## Pitfalls already paid for
 

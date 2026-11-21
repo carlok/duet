@@ -152,12 +152,20 @@ small models and halved if a law of the theory is redundant.
 
 \subsection{Calibration}
 On Z3 5.4.1 the absorption pair implies $x\op x=x$ with effort 494, reproduced on two machines. The
-census gives 1, 1, 2 lattices on 2, 3, 4 elements. All six named theories have a duality; none of 35
-random theories of matching size does. On synergy, difficulty and model counts the named theories sit
-between the 9th and 91st percentile of the random ones: difficulty does not separate named from random
-theories, symmetry does. In the preregistered T3 run (still running, 2 of 3 null theories done), 8 of
-the 10 named theories have a duality (the two idempotent one-sided quasigroups have none) and 0 of 59
-random ones. \pending{T3: complete table, Fisher's exact test for duality, percentiles.}
+census gives 1, 1, 2 lattices on 2, 3, 4 elements, and the absorption-pair result is a special case of the
+classification of order-2 absorption pairs attributed to Laslo and Cozac in~\cite{leech2020}.
+
+The preregistered calibration compares 10 named theories of order at most~4 (lattice, skew lattice,
+bisemilattice, dimonoid, absorption pair and its right-hand variant, left and right quasigroups, and their
+idempotent versions) with 30 random theories at each size present among them ($k=2,3,5,6$; at $k=6$ drawn
+from the laws of a random structure, since uniform sampling accepts none). Eight of the ten named theories
+have a duality, against 0 of 120 random theories (one-sided Fisher exact test $p=2.8\cdot10^{-11}$;
+$p=2.4\cdot10^{-10}$ on the 90 uniformly sampled ones). The two exceptions are the idempotent one-sided
+quasigroups, where $x\op x=x$ without $x\cop x=x$ breaks the swap symmetry. On gain, difficulty, model counts
+and score every named theory lies between the 10th and 82nd percentile of the random theories of its size,
+and on gain, difficulty and score all ten lie at or below the median. Symmetry separates named from random
+theories; synergy, as scored here, does not, and if anything ranks the named theories low. Two random
+theories reached the one-hour limit and are reported as crashed.
 
 \subsection{Pilot search}
 A first batch-mode search with the duality prior (9 rounds, 2 cores) verified 99 theories. Of the 97 with

@@ -2,6 +2,55 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## T3: calibration, named vs random theories (21 Nov 2026)
+
+Preregistered (PREREGISTRATION.md, T3, deviations 1 and 2). Run: `podman run -d --name soup-calib -v
+"$PWD/work:/data" -e CALIB_JOBS=6 soup python -m soup.calib`, resumed after the crash: 69 results from the first
+run, 61 from the resumed one, 130 in all. Analysis: `podman run --rm -v "$PWD/work:/data:ro" soup python -m
+soup.calib_report` (raw output `work/check/calib_report_t3.txt`). Verifier V1 (z3 5.4.1, E 3.2.5).
+
+**H1 (primary).** Named theories have a duality more often than random ones.
+
+| | with a duality | without | one-sided Fisher p |
+|---|---|---|---|
+| named | 8 | 2 | |
+| random, all 120 | 0 | 120 | 2.8 × 10⁻¹¹ |
+| random, uniform-sampled 90 (k = 2, 3, 5) | 0 | 90 | 2.4 × 10⁻¹⁰ |
+
+The two named theories without a duality are the idempotent left and right quasigroups: adding x·x = x
+without x∘x = x breaks the swap symmetry of the one-sided quasigroup axioms. Two random theories crashed (one
+at k = 5, one at k = 6), both at the 1-hour limit per theory. They count for H1, which is syntactic, and are
+left out of H2. As preregistered, H1 is a sanity check of the duality prior: several named theories were
+chosen because they are symmetric.
+
+**H2 (descriptive).** Percentile of each named theory among random theories of the same size (ties count
+half). The k = 6 null is model-first (deviation 1).
+
+| theory | k | gain | max difficulty (z3) | max E steps | richness | score | dualities |
+|---|---|---|---|---|---|---|---|
+| lattice | 6 | 37.9 | 24.1 | 39.7 | 12.1 | 37.9 | swap |
+| bisemilattice | 6 | 24.1 | 17.2 | 15.5 | 75.9 | 37.9 | all three |
+| skew lattice | 6 | 37.9 | 24.1 | 39.7 | 34.5 | 41.4 | all three |
+| dimonoid | 5 | 10.3 | 10.3 | 10.3 | 81.0 | 10.3 | swap+opposite |
+| idempotent left quasigroup | 3 | 36.7 | 43.3 | 38.3 | 28.3 | 36.7 | – |
+| idempotent right quasigroup | 3 | 40.0 | 26.7 | 38.3 | 28.3 | 36.7 | – |
+| absorption pair | 2 | 50.0 | 50.0 | 61.7 | 70.0 | 50.0 | swap |
+| right absorption pair | 2 | 50.0 | 50.0 | 50.0 | 70.0 | 50.0 | swap |
+| left quasigroup | 2 | 25.0 | 25.0 | 25.0 | 46.7 | 25.0 | swap |
+| right quasigroup | 2 | 25.0 | 25.0 | 25.0 | 46.7 | 25.0 | swap |
+
+Every named theory sits between the 10th and 82nd percentile on every measure. On gain, difficulty and score
+all ten are at or below the median of the random theories of their size. So the synergy score does not
+prefer the theories people named, and if anything ranks them low; symmetry separates them, synergy does not.
+That fits the first-session expectation (9th–91st percentile) and the design of T4, which tests the duality
+prior, not the score, as the route to interesting theories. Random theories with positive score: 15/30 (k = 2),
+24/30 (k = 3), 26/30 (k = 5), 27/30 (k = 6).
+
+Caveats: the shared corpus grew during the run (stream runs before it, the calibration's own models during
+it), so later theories saw more structures. The first 69 theories ran without memory caps. The scores are V1,
+with the z3 budget-cap artifact (see Corrections); the percentile ranks of difficulty and score could move
+under V2.
+
 ## Literature check (21 Nov 2026, evening)
 
 Web and arXiv search for 2024–2026 work, done by a subagent. Each arXiv entry below was confirmed through the arXiv API

@@ -33,8 +33,9 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
 ## Results so far
 
 - **Rediscovery.** The search finds lattice fragments, and two of the four laws of McKenzie's 1970 lattice basis.
-- **Calibration.** Named theories have a syntactic duality and random ones don't: 8 of 10 vs 0 of 59 so far
-  (T3, still running). Proof difficulty does not separate named from random theories.
+- **Calibration (T3, preregistered).** Named theories have a syntactic duality and random ones don't: 8 of 10
+  vs 0 of 120 (one-sided Fisher p = 2.8 × 10⁻¹¹). On gain, difficulty and score all ten named theories sit at
+  or below the median of random theories of their size. Symmetry separates them; the synergy score does not.
 - **Implications that finite search cannot settle.** Four pilot implications (A–D) are false, and their
   countermodels are necessarily infinite. E, Vampire and Prover9 all saturate, and our own check of the
   saturations (`soup/confluence.py`) certifies convergent rewrite systems.
@@ -75,27 +76,26 @@ Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`
 ## Status (21 Nov 2026, evening)
 
 Running (detached containers; `podman ps`; logs with `podman logs <name>`):
-- `soup-calib`: the T3 calibration, resumed after an OOM crash (PREREGISTRATION.md, deviation 2). Output
-  `work/calib_t3.json`, 130 entries when done. Then: `podman run --rm -v "$PWD/work:/data" soup python -m
-  soup.calib_report` and the T3 table in REPORT.md.
+- `soup-sweepc`: stage c over every open claim (32 results), `python -m soup.sweep_c --jobs 5`. Output
+  `work/check/sweep_c.json`; rewrites `work/results/`.
 - `soup-round2`: the second survivor round on S10/S12, clean track (no LLM input; Twee, Vampire portfolios, E
   auto-schedule, Prover9 with no weight limit, Mace4, ℤ/n and piecewise-ℤ model families). Output
   `work/check/round2_clean.json`.
 
 Next, in order:
-1. T3 table in REPORT.md and the paper's calibration paragraph.
-2. Stage-c sweep over every open claim: `python -m soup.sweep_c --jobs 6` (our pipeline; writes `results/`).
-3. T4 (approved): `python -m soup.t4_setup`, then two supervisors at once with
+1. Write up the stage-c sweep and round 2 in REPORT.md.
+2. T4 (approved): `python -m soup.t4_setup`, then two supervisors at once with
    `SOUP_DATA=/data/t4-prior` / `t4-noprior`, `SOUP_VERIFIER=V2`, `--arm prior|noprior`, `--searchers 2
    --verifiers 3`, `--seed0 201|301`, `--budget 14400`. Start it once the round-2 container has finished, so the
    two do not exceed the VM's 12 GB.
-4. The assisted round-2 track, after T4: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
+3. The assisted round-2 track, after T4: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
    S10.md S12.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m soup.round2 assisted >
    ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E proves each one.
-5. T5 (look hard at the top non-fragment theories), T6 (remaining open claims), T7 (Lean certificates,
-   order-5 laws).
+4. T5 (look hard at the top non-fragment theories), T6 (remaining open claims), T7 (Lean certificates,
+   order-5 laws). A separate session is building a census of one-operation synergy pairs on ETP data
+   (`work/census/`).
 
-Task state: T0 (repo hygiene), T1 (streaming system) and T2 (provers) are done. T3 is running and T4 is
+Task state: T0 (repo hygiene), T1 (streaming system), T2 (provers) and T3 (calibration) are done. T4 is
 preregistered; T5–T7 have not started.
 
 Offline LLM work follows `prompts/README.md`: bundles live in `~/tmp/duet-offline/`, never in the repository or
