@@ -11,7 +11,7 @@ import time
 from ..core import Corpus, interrupt_all, set_memory_limit
 from ..duality import dualities
 from ..paths import data, ensure
-from ..verify import stage_a, stage_b, stage_c
+from ..verify import stage_a, stage_b, stage_c, CONFIGS
 from .common import StopWatcher, heartbeat, read_json, write_json, memory
 from .fqueue import FileQueue
 
@@ -22,6 +22,7 @@ def main():
     ap.add_argument('--prefer', default='ab', choices=['ab', 'c'])
     ap.add_argument('--max-c', type=int, default=2, help='at most this many verifiers on stage c at once')
     a = ap.parse_args()
+    cfg_name = os.environ.get('SOUP_VERIFIER', 'DEFAULTS'); cfg = CONFIGS[cfg_name]
     stop = StopWatcher(interrupt_all)
     set_memory_limit(int(os.environ.get('SOUP_Z3_MEMORY_MB', 1500)))
     C = Corpus(store=ensure('corpus')); Q = FileQueue(data('queue')); R = ensure('results')
@@ -45,16 +46,17 @@ def main():
             tag = f':{key}'
             if task['lane'] == 'pending':
                 hb('stage a', key=key)
-                out = stage_a(C, task['T'], tag=tag)
+                out = stage_a(C, task['T'], cfg, tag=tag)
                 hb('stage b', key=key)
-                out = stage_b(C, out)
+                out = stage_b(C, out, cfg)
                 done['ab'] += 1
             else:
                 out = read_json(R / f'{key}.json')
                 if out is None: Q.done(claimed); claimed = None; continue
                 hb('stage c', key=key)
-                out = stage_c(C, out, tag=tag)
+                out = stage_c(C, out, cfg, tag=tag)
                 done['c'] += 1
+            out.update(verifier_cfg=cfg_name)
             out.update(key=key, arm=task.get('arm'), run_pushed=task.get('run'), run=a.run, cheap=task.get('cheap'),
                        prio=task.get('prio'), novelty=task.get('novelty'), desc=task.get('desc'),
                        searcher=task.get('searcher'), t_pushed=task.get('t_pushed'), t_done=time.time(),

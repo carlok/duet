@@ -38,6 +38,10 @@ V1 = dict(
 )
 # Current verifier: V1 plus a convergence certificate for every E saturation in stages b and c.
 DEFAULTS = dict(V1, certify_e=True)
+# V2 (for T4, preregistered): difficulty from E proof steps instead of z3 effort; stage a takes one claim per
+# order level (up to 4 pending, 12 tried) instead of the 3 lowest-order claims.
+V2 = dict(DEFAULTS, difficulty='e_steps', claims_per_order=True, n_cands=4, max_tried=12)
+CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2}      # the stream verifier picks one by SOUP_VERIFIER
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
 LEGACY = dict(V1, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
 
@@ -125,6 +129,9 @@ def stage_a(C, T, cfg=DEFAULTS, tag=''):
         fg = fusion_gain(C, T)          # recomputed: every refutation adds a structure to the corpus
         if fg is None: break
         fg = [e for e in sorted(fg, key=lambda e: (ORDER[e], e)) if e not in tried]
+        if cfg.get('claims_per_order'):    # V2: at most one pending claim per order level
+            busy = {c['order'] for c in claims if c['status'] == 'pending'}
+            fg = [e for e in fg if int(ORDER[e]) not in busy]
         if not fg: break
         e = int(fg[0]); tried.add(e)
         c = {'law': LAWS[e], 'idx': e, 'order': int(ORDER[e])}
@@ -184,9 +191,23 @@ def stage_b(C, out, cfg=DEFAULTS):
         if st != 'proved' and c.get('e_status') == 'proved':
             st = 'proved'; c['z3_unproved'] = True       # E's proof stands; z3 effort is then a lower bound
         c['status'] = st; c['effort'] = used
-        c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
+        c['difficulty_z3'] = round(max(0.0, math.log10(used / base)), 3)
+        if st == 'proved' and cfg.get('use_e') and c.get('e_status') != 'proved' and cfg.get('difficulty') == 'e_steps':
+            _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu'])   # z3 proved it, E (small budget) did not: E again, long budget
+        set_difficulty(c, cfg)
     out['stage'] = 'b'; out['secs_b'] = round(time.time() - t0, 1)
     return score(out)
+
+
+def set_difficulty(c, cfg):
+    """V1: log10(z3 effort / effort of a trivial proof), capped by the z3 budget, so a claim that only E
+    proved got the cap (the leaderboard artifact of 21 Nov 2026). V2 ('e_steps'): E proof steps / 10 (E 3.2.5
+    --auto: absorption 9 steps -> 0.9); a claim E did not prove gets 0.1 and the flag no_e_proof."""
+    if cfg.get('difficulty') == 'e_steps':
+        if c.get('e_steps'): c['difficulty'] = round(c['e_steps'] / 10, 3)
+        else: c['difficulty'] = 0.1; c['no_e_proof'] = True
+    else:
+        c['difficulty'] = c['difficulty_z3']
 
 
 def stage_c(C, out, cfg=DEFAULTS, tag=''):
@@ -200,19 +221,20 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
         lo, hi = c_size_range(c, cfg)
         budget = (f"E {cfg['c_e_limit']:.0e} processed clauses, Mace4 sizes {lo}-{hi} "
                   f"({cfg['c_mace4_secs']} s), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
-        m = mace4(T, c['idx'], lo, hi, cfg['c_mace4_secs'])          # Mace4 replaces z3 grounding beyond size 6
-        c['mace4_sizes'] = [lo, hi]
-        if m['size']:
-            F, Gt = (np.array(x) for x in m['tables']); C.add(f'cm-mace4-{m["size"]}{tag}', m['size'], F, Gt)
-            c['status'] = f"false (size {m['size']})"; continue
-        c['mace4_searched_to'] = m['searched_to']
+        if c.get('e_status') != 'proved':      # a claim E proved has no countermodel: skip the model search
+            m = mace4(T, c['idx'], lo, hi, cfg['c_mace4_secs'])          # Mace4 replaces z3 grounding beyond size 6
+            c['mace4_sizes'] = [lo, hi]
+            if m['size']:
+                F, Gt = (np.array(x) for x in m['tables']); C.add(f'cm-mace4-{m["size"]}{tag}', m['size'], F, Gt)
+                c['status'] = f"false (size {m['size']})"; continue
+            c['mace4_searched_to'] = m['searched_to']
         st, used = prove(T, c['idx'], cfg['c_prove_rlimit'])
-        if st != 'proved' and c.get('e_status') == 'proved':      # E proved it, z3 did not: still proved
-            c['status'] = 'proved'; c['effort'] = used; c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
-            c['proved_in'] = 'c (E)'; continue
-        if st == 'proved':
-            c['status'] = 'proved'; c['effort'] = used; c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
-            c['proved_in'] = 'c'
+        if st == 'proved' or c.get('e_status') == 'proved':        # E's proof stands even if z3 gives up
+            c['status'] = 'proved'; c['effort'] = used
+            c['difficulty_z3'] = round(max(0.0, math.log10(used / base)), 3)
+            if st != 'proved': c['z3_unproved'] = True
+            c['proved_in'] = 'c' if st == 'proved' else 'c (E)'
+            set_difficulty(c, cfg)
         else:
             c['status'] = 'open'; c['budget'] = budget
     out['stage'] = 'c'; out['secs_c'] = round(time.time() - t0, 1)

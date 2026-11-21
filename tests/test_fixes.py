@@ -56,3 +56,15 @@ def test_calib_child_runs_one_theory():
     from soup.calib import run_one
     r = run_one(('absorption pair', 'named', sorted(law_index(s) for s in ['x·(x∘y) = x', 'x∘(x·y) = x'])))
     assert r.get('status') == 'ok' and r['score'] > 0 and r['dualities'] == ['swap']
+
+
+def test_v2_one_claim_per_order_and_e_step_difficulty():
+    from soup.core import Corpus
+    from soup.verify import verify, V2
+    ABS = sorted(law_index(s) for s in ['x·(x∘y) = x', 'x∘(x·y) = x'])
+    r = verify(Corpus(), ABS, V2)
+    pend = [c for c in r['claims'] if not c['status'].startswith('false')]
+    assert len({c['order'] for c in pend}) == len(pend)           # one per order
+    idem = [c for c in r['claims'] if c['law'] == 'x · x = x'][0]
+    assert idem['status'] == 'proved' and idem['difficulty'] == idem['e_steps'] / 10 == 0.9
+    assert 'difficulty_z3' in idem
