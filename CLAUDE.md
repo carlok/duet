@@ -28,33 +28,42 @@ by the whole theory but by no single law of it.
 ## Environment
 
 - Mac: 11 cores. Podman machine sized with `podman machine set --cpus 11 --memory 12288`.
-- Image: `Containerfile` (python:3.13-slim; numpy 2.5.3, numba 0.68.1, z3-solver 5.4.1.0).
+- Image: `Containerfile` (python:3.13.18-slim; numpy 2.5.3, numba 0.68.1, z3-solver 5.4.1.0, pytest 9.0.1).
   z3 effort numbers depend on the z3 version: keep it pinned and never compare across versions.
-  The pins come from an x86_64 cloud machine. The Mac's containers are aarch64, where z3-solver
-  5.4.1.0 may have no wheel (an earlier aarch64 check found 4.15.4). If `podman build` fails on a pin,
-  use the nearest version with an aarch64 wheel, write it down in `REPORT.md`, and treat effort numbers
-  in `results-cloud/` as not comparable: re-measure the reference cases (absorption = 494 on 5.4.1) first.
-- Run: `podman build -t soup . && podman run --rm -v "$PWD/work:/home/claude/soup" soup`
-  (`work/` is mounted at `/home/claude/soup`; the scripts still hardcode that path, see T0).
-- Knobs: `-e BUDGET=3600 -e SEEDS=10 -e CALIB_NULL=30`.
+  z3-solver 5.4.1.0 has an aarch64 wheel; the Mac reproduces absorption = 494, so effort numbers in
+  `results-cloud/` are comparable (checked by `tests/test_named.py`).
+- Code is copied into the image at `/app`; data lives in `work/`, mounted at `/data` (`SOUP_DATA`).
+- Build and test: `podman build -t soup . && podman run --rm -v "$PWD/work:/data" soup bash run.sh test`
+- Matrix (2.5 min on 11 cores): `podman run --rm -v "$PWD/work:/data" soup bash run.sh matrix`;
+  `cd work && shasum -a 256 -c ../tests/matrix.sha256` must say OK for all three files.
+- Streaming search: `podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 3600`
+  (options `--searchers 3 --verifiers 8 --arm prior|noprior --seed0 101 --qmax 1500 --run <id>`;
+  env `BUDGET`, `SEARCHERS`, `VERIFIERS`, `ARM`, `SEED0`, `RUN_ID`).
+- Other scripts: `podman run --rm -v "$PWD/work:/data" soup python3 -m soup.calib` (env `CALIB_NULL`);
+  same for `soup.fragments`, `soup.report`.
 
-## Files in work/
+## Code (package `soup/`)
 
 | File | Role |
 | --- | --- |
+| `paths.py` | `SOUP_DATA` (default `work/`); every file path goes through it |
 | `laws.py` | Enumerates laws up to relabelling and side swap. Order ≤ 4, one op: 4694 (matches ETP). Two ops: 71,369, of which 61,983 bridges |
 | `probes.py` | Deterministic corpus of 12,509 two-op structures on 2–6 elements (all on 2; affine pairs over ℤ/3–ℤ/6; 𝔽₄; Klein, S₃, ℤ/6 group-derived ops; lattices M₃, N₅, 2²; ℤ/n with +,×; random tables) |
-| `matrix.py` | numba: law × structure satisfaction matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`. 8.5 min on 2 cores |
-| `soup.py` | Shared helpers: bit-matrix queries, z3 prover (old, timeout-based), non-degeneracy flags |
-| `soup2.py` | v2: `Corpus` (base + structures found during search), `law_vector`, `prove` (fresh z3 context per proof, returns effort), `find_model` (Mace4-style grounding, optional non-degeneracy and goal violation, `avoid` list) |
-| `v2.py` | `verify(C, T)`: model census (non-isomorphic, ≤ 8 per size, sizes 2–4, plus 5), independence (countermodels ≤ 5, "redundant" only if proved), synergy claims checked by countermodel search then proof effort; score |
-| `named.py` | Parse laws like `'x·(x∘y) = x'`, find their index |
-| `duality.py` | Images under swap / opposite / swap+opposite; `dualities(T)` |
-| `calib.py` | Named theories vs size-matched random theories |
-| `loop_dual.py` | MAP-Elites with duality prior and definitional filter, rounds of cheap search + verification |
-| `fragments.py` | Which verified theories are fragments of lattice / skew-lattice / dimonoid theory |
-| `report.py`, `run.sh` | Summary; container entry point |
-| `results-cloud/` | Results from the first sessions (cloud, 2 cores, z3 5.4.1): `calib_results.pkl`, `loopdual_31.pkl`, `loop_3.pkl`, `fragments.pkl` |
+| `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
+| `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
+| `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
+| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (bounded z3 proofs, score), c (sizes 7–8, long z3); `verify` = a+b; `LEGACY` = first-session settings |
+| `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
+| `calib.py`, `fragments.py`, `report.py` | Calibration, fragment check, summary (ported, outputs in `SOUP_DATA`) |
+| `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
+| `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
+| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones |
+| `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus |
+| `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md` |
+
+Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `journal/`, `logs/<run>/<worker>.log`,
+`logs/stats.jsonl`, `logs/workers/*.json` (heartbeats), `runs/<run>/` (config, archive snapshots).
+`results-cloud/` (in git): results from the first sessions (cloud, 2 cores, z3 5.4.1).
 
 ## What is already known (21 November 2026)
 

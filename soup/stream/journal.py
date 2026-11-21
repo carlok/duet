@@ -13,7 +13,7 @@ def ymd_hm(t=None): return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t o
 class Journal:
     def __init__(self):
         ensure('journal'); self.path = data('journal', 'journal.md')
-        if not self.path.exists(): self.path.write_text('# soup journal\n\nAppend-only. One section per run; times are container-local.\n')
+        if not self.path.exists(): self.path.write_text('# soup journal\n\nAppend-only. One section per run; times are UTC (container clock).\n')
 
     def write(self, text):
         with open(self.path, 'a') as fh: fh.write(text if text.endswith('\n') else text + '\n'); fh.flush()
