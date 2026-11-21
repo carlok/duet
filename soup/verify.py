@@ -6,8 +6,9 @@
            Seconds.
   stage b  E first (20k processed clauses): saturation refutes the claim, a proof gives e_steps; then a
            bounded z3 proof; z3 effort -> difficulty (kept for comparability); score.
-  stage c  only for claims still open after b: E with 2M processed clauses, Mace4 on 7-10 elements
-           (wall-time budget, sizes reached recorded), then a long z3 run. Each claim ends as proved, false (size k) or open with the budget stated.
+  stage c  only for claims still open after b: E with 2M processed clauses, Mace4 up to 10 elements, from
+           the smallest size stage a left unsearched, else from 7 (wall-time budget, sizes reached recorded),
+           then a long z3 run. With certify_e every E saturation gets a soup.confluence certificate. Each claim ends as proved, false (size k) or open with the budget stated.
 
 Every model found goes into the corpus immediately (and so into the shared store, when there is one).
 """
@@ -19,20 +20,34 @@ import numpy as np
 
 from .core import Corpus, Grounding, prove, LAWS, ORDER, NL, TREES
 from .provers import prove_e, mace4
+from .confluence import check
 
 CAP = 8
 BRIDGE = np.array(['·' in s and '∘' in s for s in LAWS])
 
-DEFAULTS = dict(
+# V1: the verifier as of 21 Nov 2026 morning (the streaming runs test10/fix5/e10 and the T3 calibration).
+# Frozen: T3 is preregistered against it, so later changes to DEFAULTS must not reach it.
+V1 = dict(
     census_sizes=(2, 3, 4), census_single=(5,), model_rlimit=10_000_000,
     indep_sizes=(2, 3, 4, 5, 6), redundant_rlimit=10_000_000,
     claim_sizes=(2, 3, 4, 5, 6), n_cands=3, max_tried=9,
     prove_rlimit=30_000_000, base_rlimit=5_000_000,
     c_sizes=(7, 10), c_mace4_secs=300, c_model_rlimit=50_000_000, c_prove_rlimit=300_000_000,
     e_limit=20_000, e_cpu=20, c_e_limit=2_000_000, c_e_cpu=300, use_e=True,
+    certify_e=False,
 )
+# Current verifier: V1 plus a convergence certificate for every E saturation in stages b and c.
+DEFAULTS = dict(V1, certify_e=True)
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
-LEGACY = dict(DEFAULTS, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
+LEGACY = dict(V1, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
+
+
+def c_size_range(c, cfg):
+    """Sizes for the stage-c Mace4 search: from the smallest size stage a left unsearched (z3 ran out of
+    budget there), else from cfg['c_sizes'][0]. Until 21 Nov 2026 stage c always started at 7, so sizes 5-6
+    that stage a could not finish were never searched again."""
+    lo, hi = cfg['c_sizes']
+    return min(list(c.get('cm_unknown_sizes') or []) + [lo]), hi
 
 
 def relabel(T, p):
@@ -137,13 +152,21 @@ def score(out):
     return out
 
 
-def _e(c, T, limit, cpu):
+def _e(c, T, limit, cpu, certify=False):
     """Run E on claim c. Saturation without proof (CounterSatisfiable) refutes the claim in equational
-    logic (the countermodel may be infinite). Proof length goes into e_steps (second difficulty measure)."""
+    logic (the countermodel may be infinite). Proof length goes into e_steps (second difficulty measure).
+    With certify, a saturation is re-checked by soup.confluence (convergent rewrite system, independent of
+    E's correctness); the claim counts as refuted either way, the status says whether it is certified."""
     r = prove_e(T, c['idx'], processed_limit=limit, cpu_limit=cpu)
     c['e_status'] = r['status']; c['e_processed'] = r.get('processed')
     if r['status'] == 'proved': c['e_steps'] = r['proof_steps']
-    if r['status'] == 'countersatisfiable': c['status'] = 'false (E saturation)'
+    if r['status'] == 'countersatisfiable':
+        c['status'] = 'false (E saturation)'
+        if certify:
+            cert = check(T, c['idx'])
+            c['certificate'] = bool(cert.get('ok'))
+            if not cert.get('ok'):
+                c['certificate_why'] = cert.get('why'); c['status'] = 'false (E saturation, uncertified)'
     return r['status']
 
 
@@ -155,7 +178,7 @@ def stage_b(C, out, cfg=DEFAULTS):
     out['base_effort'] = base
     for c in out['claims']:
         if c['status'] != 'pending': continue
-        if cfg['use_e'] and _e(c, T, cfg['e_limit'], cfg['e_cpu']) == 'countersatisfiable':
+        if cfg['use_e'] and _e(c, T, cfg['e_limit'], cfg['e_cpu'], cfg.get('certify_e')) == 'countersatisfiable':
             continue
         st, used = prove(T, c['idx'], cfg['prove_rlimit'])
         if st != 'proved' and c.get('e_status') == 'proved':
@@ -170,14 +193,15 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
     """Long runs for claims left open by stage b."""
     t0 = time.time()
     T = out['T']; G = _G(); base = out.get('base_effort', 1)
-    budget = (f"E {cfg['c_e_limit']:.0e} processed clauses, Mace4 sizes {cfg['c_sizes'][0]}-{cfg['c_sizes'][1]} "
-              f"({cfg['c_mace4_secs']} s), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
     for c in out['claims']:
         if c['status'] != 'unknown': continue
-        if cfg['use_e'] and _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu']) == 'countersatisfiable':
+        if cfg['use_e'] and _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu'], cfg.get('certify_e')) == 'countersatisfiable':
             continue                    # E first: a saturation settles it in seconds
-        lo, hi = cfg['c_sizes']
+        lo, hi = c_size_range(c, cfg)
+        budget = (f"E {cfg['c_e_limit']:.0e} processed clauses, Mace4 sizes {lo}-{hi} "
+                  f"({cfg['c_mace4_secs']} s), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
         m = mace4(T, c['idx'], lo, hi, cfg['c_mace4_secs'])          # Mace4 replaces z3 grounding beyond size 6
+        c['mace4_sizes'] = [lo, hi]
         if m['size']:
             F, Gt = (np.array(x) for x in m['tables']); C.add(f'cm-mace4-{m["size"]}{tag}', m['size'], F, Gt)
             c['status'] = f"false (size {m['size']})"; continue
