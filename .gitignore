@@ -22,3 +22,7 @@ tex/*.out
 offline/
 external/
 .DS_Store
+work/t4-*/*
+!work/t4-*/journal/
+work/t4_report.json
+work/fragments.json

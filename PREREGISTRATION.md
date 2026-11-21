@@ -2,6 +2,44 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## T4: duality-prior search against a matched control (written 21 Nov 2026, evening, before the run)
+
+- **Arms.** `prior`: the searcher with the duality-closure mutation and the score factor (1 + number of
+  dualities). `noprior`: the same searcher without both (same filters: bridge, non-degenerate model,
+  definitional theories rejected; same cap of 6 laws). Code as of the commit that adds this section.
+- **Isolation.** Each arm has its own data directory (`python -m soup.t4_setup`): matrix files linked, a copy
+  of the corpus store as it stands after the stage-c sweep of 21 Nov 2026 (the common start), and its own
+  queue, dedup markers, gate, results, journal and corpus growth. Nothing is shared between the arms while
+  they run.
+- **Verifier V2** (`SOUP_VERIFIER=V2`, `soup/verify.py`), the score change decided before this run:
+  - difficulty of a proved claim = E 3.2.5 `--auto` proof steps / 10 (z3 effort still recorded);
+  - a claim E did not prove gets 0.1;
+  - stage a verifies one claim per order level (at most 4 pending, 12 tried);
+  - every E saturation gets a convergence certificate;
+  - stage c starts Mace4 at the smallest size stage a left unsearched.
+- **Compute.** Both arms run at the same time on the 11-core VM, each under its own supervisor: 2 searchers
+  and 3 verifiers at the start. Rebalancing within an arm is allowed; the total stays 5 processes per arm.
+  Budget 14,400 s (4 h) per arm. Seeds: prior 201–, noprior 301– (one per searcher started). z3-solver
+  5.4.1.0, E 3.2.5, Mace4 2026-8A.
+- **H1 (primary).** Among verified theories with positive score, the share that are fragments of at least
+  one of the 10 named theories of T3 (`python -m soup.fragments`; a law is valid by an E or z3 proof, invalid
+  by a corpus model of the named theory or a certified saturation) is higher in `prior` than in `noprior`.
+  One-sided Fisher exact test, α = 0.05; undecided theories are excluded from the test, and the two bounds
+  (undecided counted as fragments, as non-fragments) are reported. Pilot (first session, different verifier,
+  control without the definitional filter): 64/97 against 6/59.
+- **Secondary (descriptive).** The 10 highest-scoring non-fragment theories per arm, deduplicated across arms
+  up to the three dualities and up to equivalence (E proves each theory's laws from the other; compared only
+  when the model counts on 2–5 elements agree). None is called new without a literature check and a check
+  against the Equational Theories Project data where the theory specialises to one operation.
+- **Stop rule.** Each arm runs once for its budget, without extension or rerun. Crashed workers are restarted
+  by the supervisor and reported. If a supervisor dies, its arm is reported as it stands; a rerun would be a
+  deviation, written before it starts.
+- **Known limits, reported with the result.** Only queue-top theories get verified (priority by the cheap
+  score): any arm difference inherits this selection. The arms' corpora diverge as each verifies its own
+  theories; that is part of each arm.
+- **Analysis.** `SOUP_DATA=/data/t4-prior python -m soup.fragments`, the same for `t4-noprior`, then
+  `python -m soup.t4_report`.
+
 ## T3: calibration, named vs random theories (written 21 Nov 2026, before the run)
 
 - **Theories.** 10 named theories of order ≤ 4 (`soup/calib.py`): lattice, skew lattice, dimonoid,
