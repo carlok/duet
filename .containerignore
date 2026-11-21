@@ -1,3 +1,6 @@
 work
 .git
 **/__pycache__
+external
+offline
+tex
