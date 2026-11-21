@@ -48,12 +48,14 @@ def run(job):
     goal = src if src else g
     if tool == 'e':
         r = provers.prove_e(T, goal, processed_limit=10 ** 9, cpu_limit=arg['secs'], auto='--auto-schedule')
-    elif tool in ('vampire_casc', 'vampire_casc_sat'):
-        r = provers.prove_vampire(T, goal, cpu_limit=arg['secs'], extra=('--mode', tool[len('vampire_'):]))
+    elif tool == 'vampire_casc':
+        r = provers.prove_vampire(T, goal, cpu_limit=arg['secs'], extra=('--mode', 'casc'))
+    elif tool == 'vampire_casc_sat':      # this build has no '--mode casc_sat'; the schedule is the same portfolio
+        r = provers.prove_vampire(T, goal, cpu_limit=arg['secs'], extra=('--mode', 'portfolio', '--schedule', 'casc_sat'))
     elif tool == 'twee':
         r = provers.prove_twee(T, goal, seconds=arg['secs'])
-    elif tool == 'prover9':
-        r = provers.prove_prover9(T, g, seconds=arg['secs'], extra_axioms=arg.get('lemmas', ()))
+    elif tool == 'prover9':          # no weight limit: an empty sos is then a real saturation
+        r = provers.prove_prover9(T, g, seconds=arg['secs'], extra_axioms=arg.get('lemmas', ()), max_weight=10 ** 9)
     elif tool == 'mace4':
         TT = arg.get('T', T); gg = arg.get('goal', g)
         r = provers.mace4(TT, gg, arg['lo'], arg['hi'], arg['secs'])
@@ -63,8 +65,10 @@ def run(job):
             F, G = (np.array(x) for x in r['tables'])
             lv = law_vector(F, G, r['size']); r['checked'] = bool(all(lv[t] for t in TT) and not lv[gg])
     elif tool == 'cyclic':
-        r = {'status': 'none found', 'n_max': arg['n_max'], 'unknown_n': []}
+        r = {'status': 'none found', 'n_max': arg['n_max'], 'unknown_n': [], 'searched_to': 1}
         for n in range(2, arg['n_max'] + 1):
+            if time.time() - t0 > arg.get('secs', 1e9): r['status'] = 'deadline'; break
+            r['searched_to'] = n
             m = families.cyclic(T, g, n, timeout_ms=arg['ms'])
             if m == 'unknown': r['unknown_n'].append(n); continue
             if m is not None:
@@ -82,13 +86,15 @@ def run(job):
 
 
 def clean_jobs(secs):
+    """secs per prover run; the first claim (S12 x.x = x, which would settle all six) gets 2*secs."""
     js = []
-    for key, claim in CLAIMS:                 # order: S12 x.x = x first (it would settle all six)
+    for i, (key, claim) in enumerate(CLAIMS):
+        s = 2 * secs if i == 0 else secs
         for tool in ('twee', 'vampire_casc', 'e', 'vampire_casc_sat', 'prover9'):
-            js.append(('clean', key, claim, tool, {'secs': secs}))
-        js.append(('clean', key, claim, 'mace4', {'lo': 6 if key == S12 else 7, 'hi': 9, 'secs': 2 * secs}))
-        js.append(('clean', key, claim, 'cyclic', {'n_max': 64, 'ms': 300_000}))
-        js.append(('clean', key, claim, 'zpw', {'W': 3, 'secs': secs}))
+            js.append(('clean', key, claim, tool, {'secs': s}))
+        js.append(('clean', key, claim, 'mace4', {'lo': 6 if key == S12 else 7, 'hi': 9, 'secs': 2 * s}))
+        js.append(('clean', key, claim, 'cyclic', {'n_max': 40, 'ms': 120_000, 'secs': s}))
+        js.append(('clean', key, claim, 'zpw', {'W': 3, 'secs': s}))
     return js
 
 

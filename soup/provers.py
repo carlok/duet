@@ -126,14 +126,23 @@ def ladr_input(T, goal=None, extra='', extra_axioms=()):
     return f'{extra}\nformulas(assumptions).\n{ax}\nend_of_list.\nformulas(goals).\n{g}\nend_of_list.\n'
 
 
-def prove_prover9(T, goal, seconds=60, extra_axioms=()):
+def prove_prover9(T, goal, seconds=60, extra_axioms=(), max_weight=None):
+    """An empty set of support is a saturation only if no clause was thrown away: Prover9 deletes clauses
+    over max_weight (default 100) and counts them as Deleted_by_rule; sos_limit deletions likewise. Until
+    21 Nov 2026 (evening) any sos_empty was reported as countersatisfiable, which is unsound."""
     t0 = time.time()
-    r = subprocess.run(['prover9'], input=ladr_input(T, goal, f'assign(max_seconds, {seconds}).\nassign(max_megs, {PROVER_MB}).',
-                                                     extra_axioms),
+    opts = f'assign(max_seconds, {seconds}).\nassign(max_megs, {PROVER_MB}).'
+    if max_weight is not None: opts += f'\nassign(max_weight, {max_weight}).'
+    r = subprocess.run(['prover9'], input=ladr_input(T, goal, opts, extra_axioms),
                        capture_output=True, text=True, timeout=seconds + 30)
     m = re.search(r'Length of proof: (\d+)', r.stdout)
-    st = 'proved' if 'THEOREM PROVED' in r.stdout else ('countersatisfiable' if 'SEARCH FAILED' in r.stdout and 'sos_empty' in r.stdout else 'unknown')
-    return {'status': st, 'proof_length': int(m.group(1)) if m else None, 'secs': round(time.time() - t0, 2)}
+    last = lambda k: int((re.findall(rf'{k}=(\d+)', r.stdout) or ['-1'])[-1])   # final statistics block
+    deleted = {k: last(k) for k in ('Deleted_by_rule', 'Sos_limit_deleted')}
+    complete = 'sos_empty' in r.stdout and all(v == 0 for v in deleted.values())
+    st = 'proved' if 'THEOREM PROVED' in r.stdout else ('countersatisfiable' if complete else 'unknown')
+    reason = f'sos_empty after deletions {deleted} (incomplete)' if st == 'unknown' and 'sos_empty' in r.stdout else None
+    return {'status': st, 'proof_length': int(m.group(1)) if m else None, 'secs': round(time.time() - t0, 2),
+            'deleted': deleted, 'reason': reason}
 
 
 def mace4(T, goal=None, start=2, end=10, seconds=600):
