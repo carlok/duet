@@ -6,7 +6,6 @@ A verifier started with --prefer c takes stage-c work first (so long runs always
 """
 import argparse
 import os
-import random
 import time
 
 from ..core import Corpus, interrupt_all, set_memory_limit
@@ -21,6 +20,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--run', required=True)
     ap.add_argument('--prefer', default='ab', choices=['ab', 'c'])
+    ap.add_argument('--max-c', type=int, default=2, help='at most this many verifiers on stage c at once')
     a = ap.parse_args()
     stop = StopWatcher(interrupt_all)
     set_memory_limit(int(os.environ.get('SOUP_Z3_MEMORY_MB', 1500)))
@@ -35,10 +35,9 @@ def main():
     try:
         while not stop.set:
             C.refresh()
-            # stage c first for the c verifier, and for the others with a probability that grows with the
-            # stage-c backlog (10% per 10 waiting, at most 50%), so long runs never starve
-            backlog = Q.counts()['stage2c'] if a.prefer != 'c' else 0
-            lanes = c_first if a.prefer == 'c' or random.random() < min(0.5, backlog / 100) else ab_first
+            # stage c first for the c verifier; the others help with the stage-c backlog only while fewer
+            # than --max-c verifiers are on stage c (stage c runs for minutes per theory)
+            lanes = c_first if a.prefer == 'c' or Q.running('stage2c') < a.max_c else ab_first
             got = Q.claim(a.name, lanes)
             if got is None:
                 hb('idle'); time.sleep(2); continue

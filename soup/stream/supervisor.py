@@ -8,7 +8,8 @@ number of *competitive* pending theories: priority (cheap score x (1 + novelty),
 sum cheap over verified theories of the arm) at least the score
 of the 20th best theory verified so far in this arm (0 until there are 20).
   competitive > HIGH (= 4 x verifiers) and searchers > 1   -> retire a searcher, start a verifier
-  competitive < LOW  (= verifiers)     and verifiers > 2   -> retire a verifier, start a searcher
+  competitive < LOW  (= verifiers), verifiers > 2, one idle -> retire that verifier, start a searcher
+At most verifiers/4 verifiers (at least 1) work on stage c at the same time.
 The pending lane is trimmed to --qmax tasks (lowest priority moved to queue/dropped/). Searchers push only
 theories with k x priority >= --gate x (20th best score); the supervisor publishes k and that bar in
 queue/gate.json every tick. Workers get SIGTERM at the budget; verifiers interrupt z3 at once.
@@ -62,7 +63,8 @@ class Supervisor:
         name = f'v{self.next_v}'; self.next_v += 1
         if prefer is None:     # keep exactly one verifier that prefers stage c
             prefer = 'ab' if any(getattr(p, 'prefer', None) == 'c' for p in self.active('verify')) else 'c'
-        cmd = [sys.executable, '-m', 'soup.stream.verifier', '--name', name, '--run', self.run, '--prefer', prefer]
+        cmd = [sys.executable, '-m', 'soup.stream.verifier', '--name', name, '--run', self.run, '--prefer', prefer,
+               '--max-c', str(max(1, self.a.verifiers // 4))]
         self.procs[name] = Proc(name, 'verify', cmd, data('logs', self.run, f'{name}.log'))
         self.procs[name].prefer = prefer
         return name
@@ -108,9 +110,10 @@ class Supervisor:
         if comp > high and len(s) > 1:
             victim = min(s, key=lambda p: p.t0); self.retire(victim); new = self.start_verifier()
             return f'{comp} competitive pending (priority >= {th:.3f}) > {high}: retired searcher {victim.name}, started verifier {new}'
-        if comp < low and len(v) > 2:
-            idle = [p for p in v if (read_json(data('logs', 'workers', f'{p.name}.json')) or {}).get('state') == 'idle']
-            victim = [p for p in (idle or v) if getattr(p, 'prefer', '') != 'c'][-1]
+        idle = [p for p in v if (read_json(data('logs', 'workers', f'{p.name}.json')) or {}).get('state') == 'idle'
+                and getattr(p, 'prefer', '') != 'c']
+        if comp < low and len(v) > 2 and idle:      # only a verifier with nothing to do is surplus
+            victim = idle[-1]
             self.retire(victim); new = self.start_searcher()
             return f'{comp} competitive pending (priority >= {th:.3f}) < {low}: retired verifier {victim.name}, started searcher {new}'
         return None
@@ -200,6 +203,7 @@ class Supervisor:
                      f"queue {cfg['queue_before']['pending']} pending / {cfg['queue_before']['stage2c']} stage c\n")
         for name in os.listdir(data('queue', 'claimed')):         # leftovers of a killed earlier run
             self.Q.release(data('queue', 'claimed', name))
+        write_json(data('queue', 'gate.json'), {'arm': a.arm, 'k': self.k(), 'threshold': self.threshold() * a.gate})
         for _ in range(a.searchers): self.start_searcher()
         for i in range(a.verifiers): self.start_verifier('c' if i == 0 else 'ab')
         stop = {'set': False}

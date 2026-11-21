@@ -51,6 +51,9 @@ class FileQueue:
                 except json.JSONDecodeError: dst.unlink(); continue
         return None
 
+    def running(self, lane):
+        return sum(f'__{lane}__' in e for e in os.listdir(self.root / 'claimed'))
+
     def done(self, claimed): Path(claimed).unlink(missing_ok=True)
 
     def release(self, claimed):

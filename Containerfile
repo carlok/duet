@@ -1,7 +1,19 @@
 # Isolated environment for the two-operation theory search. Free software only, versions pinned.
 # z3 effort numbers depend on the z3 version: keep z3-solver pinned, never compare across versions.
 # 5.4.1.0 has an aarch64 wheel, so the Mac and the cloud sessions use the same z3.
+# ---- E prover, built from pinned source (Ubuntu's 3.0.03 package is a crashing debug build)
+FROM docker.io/library/python:3.13.18-slim AS eprover
+ARG E_VERSION=3.2.5
+ARG E_SHA256=de98e5d972318c08cf8ff5f14f8a0a911715200de828637926c56813f9d562a8
+RUN apt-get update && apt-get install -y --no-install-recommends gcc make libc6-dev && rm -rf /var/lib/apt/lists/*
+RUN python3 -c "import urllib.request; urllib.request.urlretrieve('https://github.com/eprover/eprover/archive/refs/tags/E-${E_VERSION}.tar.gz', '/tmp/e.tgz')" \
+ && echo "${E_SHA256}  /tmp/e.tgz" | sha256sum -c - \
+ && mkdir /src && tar xzf /tmp/e.tgz -C /src --strip-components=1 \
+ && cd /src && ./configure && make -j"$(nproc)" rebuild \
+ && /src/PROVER/eprover --version
+
 FROM docker.io/library/python:3.13.18-slim
+COPY --from=eprover /src/PROVER/eprover /usr/local/bin/eprover
 RUN pip install --no-cache-dir numpy==2.5.3 numba==0.68.1 z3-solver==5.4.1.0 pytest==9.0.1
 # Data (matrix, corpus, queue, results, journal, logs) lives in the mounted volume, never in the image.
 ENV SOUP_DATA=/data \

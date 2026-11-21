@@ -24,6 +24,16 @@ def test_absorption_synergy_proved():
     r = verify(Corpus(), ABS)
     proved = {c['law'] for c in r['claims'] if c['status'] == 'proved'}
     assert {'x · x = x', 'x ∘ x = x'} <= proved
+    assert all(c.get('e_status') == 'proved' and c['e_steps'] > 0 for c in r['claims'] if c['status'] == 'proved')
+
+
+def test_e_prover_reference_cases():
+    from soup.provers import prove_e
+    r = prove_e(ABS, IDEM_F)
+    assert r['status'] == 'proved' and r['proof_steps'] == 9     # E 3.2.5, --auto
+    assert prove_e(ABS[:1], IDEM_F)['status'] == 'countersatisfiable'
+    mck = [law_index(s) for s in ['x·(y∘(x∘z)) = x', 'x∘(y·(x·z)) = x', '((y∘x)·(x∘z))·x = x', '((y·x)∘(x·z))∘x = x']]
+    assert prove_e(mck, law_index('x·y = y·x'))['status'] == 'proved'
 
 
 @pytest.mark.parametrize('name', list(NAMED))

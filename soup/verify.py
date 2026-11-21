@@ -4,9 +4,10 @@
            independence of each law (countermodel to size 6, else a bounded proof),
            emergent-law claims (fusion gain on the corpus) checked by countermodel search to size 6.
            Seconds.
-  stage b  bounded z3 proof of the surviving claims; effort -> difficulty; score.
-  stage c  only for claims still open after b: grounded countermodel search on 7-8 elements and a
-           long z3 run. Each claim ends as proved, false (size k) or open with the budget stated.
+  stage b  E first (20k processed clauses): saturation refutes the claim, a proof gives e_steps; then a
+           bounded z3 proof; z3 effort -> difficulty (kept for comparability); score.
+  stage c  only for claims still open after b: grounded countermodel search on 7-8 elements, E with
+           2M processed clauses, then a long z3 run. Each claim ends as proved, false (size k) or open with the budget stated.
 
 Every model found goes into the corpus immediately (and so into the shared store, when there is one).
 """
@@ -17,6 +18,7 @@ import time
 import numpy as np
 
 from .core import Corpus, Grounding, prove, LAWS, ORDER, NL, TREES
+from .provers import prove_e
 
 CAP = 8
 BRIDGE = np.array(['·' in s and '∘' in s for s in LAWS])
@@ -26,10 +28,11 @@ DEFAULTS = dict(
     indep_sizes=(2, 3, 4, 5, 6), redundant_rlimit=10_000_000,
     claim_sizes=(2, 3, 4, 5, 6), n_cands=3, max_tried=9,
     prove_rlimit=30_000_000, base_rlimit=5_000_000,
-    c_sizes=(7, 8), c_model_rlimit=200_000_000, c_prove_rlimit=300_000_000,
+    c_sizes=(7, 8), c_model_rlimit=50_000_000, c_prove_rlimit=300_000_000,
+    e_limit=20_000, e_cpu=20, c_e_limit=2_000_000, c_e_cpu=300, use_e=True,
 )
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
-LEGACY = dict(DEFAULTS, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4))
+LEGACY = dict(DEFAULTS, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
 
 
 def relabel(T, p):
@@ -134,6 +137,16 @@ def score(out):
     return out
 
 
+def _e(c, T, limit, cpu):
+    """Run E on claim c. Saturation without proof (CounterSatisfiable) refutes the claim in equational
+    logic (the countermodel may be infinite). Proof length goes into e_steps (second difficulty measure)."""
+    r = prove_e(T, c['idx'], processed_limit=limit, cpu_limit=cpu)
+    c['e_status'] = r['status']; c['e_processed'] = r.get('processed')
+    if r['status'] == 'proved': c['e_steps'] = r['proof_steps']
+    if r['status'] == 'countersatisfiable': c['status'] = 'false (E saturation)'
+    return r['status']
+
+
 def stage_b(C, out, cfg=DEFAULTS):
     t0 = time.time()
     if not out.get('model_sizes'): return out
@@ -142,7 +155,11 @@ def stage_b(C, out, cfg=DEFAULTS):
     out['base_effort'] = base
     for c in out['claims']:
         if c['status'] != 'pending': continue
+        if cfg['use_e'] and _e(c, T, cfg['e_limit'], cfg['e_cpu']) == 'countersatisfiable':
+            continue
         st, used = prove(T, c['idx'], cfg['prove_rlimit'])
+        if st != 'proved' and c.get('e_status') == 'proved':
+            st = 'proved'; c['z3_unproved'] = True       # E's proof stands; z3 effort is then a lower bound
         c['status'] = st; c['effort'] = used
         c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
     out['stage'] = 'b'; out['secs_b'] = round(time.time() - t0, 1)
@@ -161,7 +178,13 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
         if n:
             c['status'] = f'false (size {n})'; continue
         if unk: c['cm_unknown_sizes'] = c.get('cm_unknown_sizes', []) + unk
+        if cfg['use_e']:
+            st = _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu'])
+            if st == 'countersatisfiable': continue
         st, used = prove(T, c['idx'], cfg['c_prove_rlimit'])
+        if st != 'proved' and c.get('e_status') == 'proved':      # E proved it, z3 did not: still proved
+            c['status'] = 'proved'; c['effort'] = used; c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
+            c['proved_in'] = 'c (E)'; continue
         if st == 'proved':
             c['status'] = 'proved'; c['effort'] = used; c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)
             c['proved_in'] = 'c'
