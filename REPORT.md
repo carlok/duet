@@ -4,8 +4,8 @@ Newest first. Every number has the command that produced it. Times in the journa
 
 ## Stage-c sweep and second survivor round, clean track (21 Nov 2026, night)
 
-Neither run uses any LLM input. The sweep was still going when this was written (interim numbers, replaced before
-T4 starts). Round 2 was stopped once its remaining jobs were moot.
+Neither run uses any LLM input. The sweep finished all 32 results, with no crashes. Round 2 was stopped once its
+remaining jobs were moot.
 
 **Stage-c sweep.**
 - Run: `podman run -d --name soup-sweepc -v "$PWD/work:/data" soup python -m soup.sweep_c --jobs 5`.
@@ -16,8 +16,7 @@ T4 starts). Round 2 was stopped once its remaining jobs were moot.
   a left unsearched and goes up to size 10. z3 gets a long run.
 - Process: each result runs in its own child process. The first attempt used a shared process pool, and one dying
   worker took the pool down after 8 results (see Corrections).
-- Progress: 27 of 32 results done (20 s to 3,495 s each, median 504 s). Not done yet: S9, S10, S11, S12 and
-  `ef29638a`.
+- Done: 32 of 32 results (20 s to 5,095 s each, median 673 s; finished 21 Nov, about 20:55 UTC).
 
 Survivor theories, compared with the offline LLM's refutations (table "Found offline with an LLM, machine-checked"
 below):
@@ -31,14 +30,16 @@ below):
 | S5 `5e0dc923`, S6 `bbdd0d1c` | 3 + 3 | open; Mace4 complete to size 7 (S5 x∘x = x: 8), budget out | model on ℤ/13 | no: size 13 is beyond Mace4's 10 |
 | S1 `00f017a6` | 3 | open; Mace4 complete to 9 | piecewise-linear model on ℤ | no, as expected: no finite model is known |
 | S7 `cdf702b5` | 1 | open; Mace4 did not finish size 7 | infinite term model (hand proof) | no, as expected |
+| S9 `e6403d7a`, S11 `f5321de4` | 3 + 3 | open; Mace4 complete to 7–8 (S9) and 10 (S11) | models on ℤ | no, as expected |
+| S10 `f096b282`, S12 `f5e53602` | 3 + 3 | open; Mace4 complete to 5–6 only | none (left open) | — (round 2 below refutes 5 of the 6) |
 
-Our pipeline alone reproduces 10 of the LLM's 16 finite refutations. The other 6 (S5, S6) need 13 elements. The
+Our stage c alone reproduces 10 of the LLM's 16 finite refutations. The other 6 (S5, S6) need 13 elements. The
 models on ℤ and S7's term model are out of reach of finite search, which is what we expected. Every model found
-here went into the shared corpus.
+here went into the shared corpus. On S10 and S12, Mace4 did not get past size 5–6 in its stage-c budget.
 
-The other 19 results that the sweep has finished are not among the 12 survivor theories. Stage b's budget had left
-their claims undecided. Of their 26 claims, E proves 24, each in 9–23 steps. The other 2, in
-`8fae253a`, are refuted by certified E saturations.
+The other 20 results are not among the 12 survivor theories. Stage b's budget had left their claims undecided. Of
+their 27 claims, E proves 25, each in 9–23 steps. The other 2, in `8fae253a`, are refuted by certified E
+saturations.
 
 **Second survivor round, clean track.**
 - Run: `podman run -d --name soup-round2 -v "$PWD/work:/data" soup python -m soup.round2 clean --jobs 5 --secs

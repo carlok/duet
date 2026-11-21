@@ -49,7 +49,7 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
     10-element model of S10 in which `x·x = x` fails at one element. Both of our evaluators check it, and it is
     also a model of S12. **One claim is still open: S12 ⇒ `x·x = x∘x`.**
   - Our own stage c, with no LLM input, independently finds 10 of the 16 finite refutations (S2, S3, S4, S8; sizes
-    5 and 7). The other 6 need 13 elements, more than Mace4's 10 (interim: 27 of 32 results swept).
+    5 and 7). The other 6 need 13 elements, more than Mace4's 10 (all 32 results swept).
 - **Synergy inside one operation.** Setting `x·y = x∘y` in the theory T2 gives ETP Equations 55,
   `x = x◇(y◇(y◇x))`, and 100, `x = x◇((x◇x)◇y)`. By the ETP data neither implies `x = x◇x`, but together
   they do (E: 10 steps, Twee: 3). ETP's implication graph does not cover conjunctions. A Lean Zulip thread has
@@ -82,7 +82,7 @@ Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`
 
 Running (detached containers; `podman ps`; logs with `podman logs <name>`):
 - `soup-sweepc`: stage c over every open claim (32 results), `python -m soup.sweep_c --jobs 5`. Output
-  `work/check/sweep_c.json`; rewrites `work/results/`. 27 of 32 done; table with `python -m soup.sweep_c --summary`.
+  `work/check/sweep_c.json`; rewrites `work/results/`. finished, 32 of 32; table with `python -m soup.sweep_c --summary`.
 - `soup-b1`, `soup-b1fmb`: one-hour jobs. Do ETP Equations 437 and 3115 together imply `x = x◇x` (Vampire casc_sat,
   Vampire FMB, E, Twee)? What is the smallest S10 / S12 model with `x·x ≠ x` (Vampire FMB from size 7)? Output in
   `work/check/b1/`.

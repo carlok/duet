@@ -192,6 +192,15 @@ def store_model(out_file, key, name):
     rec = {'key': r['key'], 'laws': r['laws'], 'n': m['n'], 'F': m['f'], 'G': m['g'], 'source': out_file,
            'claims': per_claim, 'added_to_corpus': bool(added), 'checked': time.strftime('%Y-%m-%d %H:%M:%S')}
     json.dump(rec, open(ensure('check') / f'{name}_model.json', 'w'), ensure_ascii=False, indent=1)
+    # record the refutation in the result itself, as stage c records its own countermodels
+    from .stream.common import write_json
+    path = glob.glob(str(data('results', f'{key}*.json')))[0]
+    for c in r['claims']:
+        if per_claim[c['law']]['refuted'] and c['status'] in ('unknown', 'open'):
+            c['status'] = f"false (size {m['n']}, Vampire FMB)"
+            c['fmb'] = {'n': m['n'], 'source': out_file, 'check': f'check/{name}_model.json'}
+    r['round2_model'] = time.strftime('%Y-%m-%d %H:%M:%S')
+    write_json(path, r)
     print(json.dumps({k: v for k, v in rec.items() if k not in ('F', 'G')}, ensure_ascii=False, indent=1))
 
 

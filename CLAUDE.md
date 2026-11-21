@@ -134,7 +134,7 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - T3 done: named theories 8/10 with a duality (the idempotent quasigroups have none), random 0/120,
     Fisher p = 2.8e-11. On gain, difficulty and score every named theory is at or below the random median:
     the synergy score does not prefer named theories. 2 random theories hit the 1-h limit (crashed).
-  - Stage-c sweep (night, interim 27/32): with no LLM input, our Mace4 finds 10 of the LLM's 16 finite refutations
+  - Stage-c sweep (night, 32/32): with no LLM input, our Mace4 finds 10 of the LLM's 16 finite refutations
     (S2, S3, S4, S8). S5 and S6 need 13 elements; S1 and S7 are infinite-only.
   - Round 2 (night): Vampire FMB found a 10-element model of S10 (x·x = x fails at one element; checked by
     law_vector and direct evaluation; `tests/test_round2.py`). It refutes S10's three claims and S12's x·x = x and
