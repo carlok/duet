@@ -39,6 +39,13 @@ def _definitional(L, R):
 
 
 DEFN = np.array([_definitional(L, R) for L, R in TREES])
+
+
+def drop_one(a, rng):
+    """Remove exactly one law (drawn once; until 21 Nov 2026 the draw sat inside the comprehension and
+    removed a random number of laws)."""
+    drop = rng.choice(a)
+    return [t for t in a if t != drop]
 BY_ORDER = {o: np.flatnonzero(ORDER == o) for o in range(1, 5)}
 
 
@@ -162,7 +169,7 @@ class Searcher:
         if u < 0.5:
             T = list(a); T[rng.randrange(len(T))] = self.rand_law(); return T
         if u < 0.65:
-            return list(a) + [self.rand_law()] if len(a) < MAX_LAWS else [t for t in a if t != rng.choice(a)]
+            return list(a) + [self.rand_law()] if len(a) < MAX_LAWS else drop_one(a, rng)
         b = rng.choice(elites)['T']
         return list({rng.choice(a), rng.choice(b)} | ({rng.choice(b)} if rng.random() < 0.5 else set()))
 
