@@ -3,7 +3,7 @@
 Everything runs inside a container; nothing is installed on the Mac. Data stays in `work/`
 (mounted at `/data`); code is in the `soup/` package, copied into the image.
 
-    cd ~/tmp/soup
+    cd <this repository>
     podman build -t soup .
     podman run --rm -v "$PWD/work:/data" soup bash run.sh test            # builds the matrix first if missing
     podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 3600
