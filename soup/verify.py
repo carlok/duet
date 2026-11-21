@@ -6,8 +6,8 @@
            Seconds.
   stage b  E first (20k processed clauses): saturation refutes the claim, a proof gives e_steps; then a
            bounded z3 proof; z3 effort -> difficulty (kept for comparability); score.
-  stage c  only for claims still open after b: grounded countermodel search on 7-8 elements, E with
-           2M processed clauses, then a long z3 run. Each claim ends as proved, false (size k) or open with the budget stated.
+  stage c  only for claims still open after b: E with 2M processed clauses, Mace4 on 7-10 elements
+           (wall-time budget, sizes reached recorded), then a long z3 run. Each claim ends as proved, false (size k) or open with the budget stated.
 
 Every model found goes into the corpus immediately (and so into the shared store, when there is one).
 """
@@ -18,7 +18,7 @@ import time
 import numpy as np
 
 from .core import Corpus, Grounding, prove, LAWS, ORDER, NL, TREES
-from .provers import prove_e
+from .provers import prove_e, mace4
 
 CAP = 8
 BRIDGE = np.array(['·' in s and '∘' in s for s in LAWS])
@@ -28,7 +28,7 @@ DEFAULTS = dict(
     indep_sizes=(2, 3, 4, 5, 6), redundant_rlimit=10_000_000,
     claim_sizes=(2, 3, 4, 5, 6), n_cands=3, max_tried=9,
     prove_rlimit=30_000_000, base_rlimit=5_000_000,
-    c_sizes=(7, 8), c_model_rlimit=50_000_000, c_prove_rlimit=300_000_000,
+    c_sizes=(7, 10), c_mace4_secs=300, c_model_rlimit=50_000_000, c_prove_rlimit=300_000_000,
     e_limit=20_000, e_cpu=20, c_e_limit=2_000_000, c_e_cpu=300, use_e=True,
 )
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
@@ -170,16 +170,18 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
     """Long runs for claims left open by stage b."""
     t0 = time.time()
     T = out['T']; G = _G(); base = out.get('base_effort', 1)
-    budget = (f"countermodels to size {max(cfg['claim_sizes'] + cfg['c_sizes'])} "
-              f"(z3 rlimit {cfg['c_model_rlimit']:.0e}), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
+    budget = (f"E {cfg['c_e_limit']:.0e} processed clauses, Mace4 sizes {cfg['c_sizes'][0]}-{cfg['c_sizes'][1]} "
+              f"({cfg['c_mace4_secs']} s), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
     for c in out['claims']:
         if c['status'] != 'unknown': continue
         if cfg['use_e'] and _e(c, T, cfg['c_e_limit'], cfg['c_e_cpu']) == 'countersatisfiable':
             continue                    # E first: a saturation settles it in seconds
-        n, unk = _countermodel(C, G, T, c['idx'], cfg['c_sizes'], cfg['c_model_rlimit'], f'cm{tag}')
-        if n:
-            c['status'] = f'false (size {n})'; continue
-        if unk: c['cm_unknown_sizes'] = c.get('cm_unknown_sizes', []) + unk
+        lo, hi = cfg['c_sizes']
+        m = mace4(T, c['idx'], lo, hi, cfg['c_mace4_secs'])          # Mace4 replaces z3 grounding beyond size 6
+        if m['size']:
+            F, Gt = (np.array(x) for x in m['tables']); C.add(f'cm-mace4-{m["size"]}{tag}', m['size'], F, Gt)
+            c['status'] = f"false (size {m['size']})"; continue
+        c['mace4_searched_to'] = m['searched_to']
         st, used = prove(T, c['idx'], cfg['c_prove_rlimit'])
         if st != 'proved' and c.get('e_status') == 'proved':      # E proved it, z3 did not: still proved
             c['status'] = 'proved'; c['effort'] = used; c['difficulty'] = round(max(0.0, math.log10(used / base)), 3)

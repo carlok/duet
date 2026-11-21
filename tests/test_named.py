@@ -53,3 +53,14 @@ def test_vampire_agrees_with_e_on_reference_and_A_to_D():
     for laws in (['x·(x∘x) = x', 'x∘(x∘y) = y', '((x∘y)∘x)·y = x'], ['(x·y)·y = x', '(x·x)∘x = x', 'x∘(y·(x·y)) = y'],
                  ['x·(x·x) = x', '(x·y)·y = x', '(x∘y)·(y∘x) = y'], ['x·(x∘x) = x', '(x∘y)·x = y', 'x·((y∘y)∘x) = x']):
         assert prove_vampire([law_index(s) for s in laws], IDEM_F)['status'] == 'countersatisfiable'
+
+
+def test_mace4_model_is_parsed_correctly():
+    import numpy as np
+    from soup.core import law_vector
+    from soup.provers import mace4
+    r = mace4(ABS[:1], IDEM_F, 2, 4, 30)
+    assert r['size'] == 2
+    F, G = (np.array(x) for x in r['tables'])
+    lv = law_vector(F, G, 2)
+    assert lv[ABS[0]] and not lv[IDEM_F]

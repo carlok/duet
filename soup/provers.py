@@ -106,5 +106,16 @@ def mace4(T, goal=None, start=2, end=10, seconds=600):
     r = subprocess.run(['mace4', '-n', str(start), '-N', str(end), '-t', str(seconds)],
                        input=ladr_input(T, goal), capture_output=True, text=True, timeout=seconds + 60)
     m = re.search(r'interpretation\( (\d+),', r.stdout)
-    return {'size': int(m.group(1)) if m else None, 'exhausted_to': end if 'exit (exhausted)' in r.stdout else None,
+    sizes = [int(x) for x in re.findall(r'DOMAIN SIZE (\d+)', r.stdout)]
+    exhausted = 'exit (exhausted)' in r.stdout or 'exhausted' in r.stdout.split('Exiting with')[-1]
+    # sizes completely searched without a model: all started sizes, minus the last one unless the search exhausted
+    done_to = (max(sizes) if exhausted else max(sizes) - 1) if sizes and not m else None
+    tables = None
+    if m:
+        n = int(m.group(1)); tables = []
+        for op in ('f', 'g'):
+            t = re.search(op + r'\(_,_\), \[([\d,\s]+)\]', r.stdout)
+            vals = [int(v) for v in t.group(1).replace(',', ' ').split()] if t else [0] * (n * n)
+            tables.append([vals[i * n:(i + 1) * n] for i in range(n)])
+    return {'size': int(m.group(1)) if m else None, 'tables': tables, 'searched_to': done_to, 'exhausted_to': end if exhausted else None,
             'reason': (re.findall(r'Exiting with (.*)\.', r.stdout) or ['?'])[-1], 'secs': round(time.time() - t0, 1)}
