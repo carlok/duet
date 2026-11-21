@@ -1,6 +1,6 @@
 # soup — genetic search over two-operation equational theories
 
-Project memory for Claude Code. Read all of it before the first command.
+Project memory for Claude Code. Read all of it before the first command, then `HANDOFF.md`.
 Background note (literature, design, earlier results): https://claude.ai/artifact/3YweiTzEurAomActQxPUQB
 
 ## The question
@@ -117,6 +117,14 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   Require a model with two distinct, essentially binary operations.
 - Definitional theories (one operation a term in the other, e.g. x∘y = y·x) are not fusions: filtered.
 - Ubuntu's `eprover` 3.0.03 package is a debug build that crashes at start. Test any prover first.
+- Finite-model search cannot refute claims whose countermodels are infinite (A–D: none up to size 8).
+  Run E first: a saturation (CounterSatisfiable) plus `soup.confluence` settles it in seconds.
+- E exit code 8 is "resource out", not a crash. GitHub archive tarballs lack submodules (Vampire needs
+  viras and cadical): clone at a pinned commit instead.
+- Uniform rejection sampling of random theories is infeasible at 6 laws (0 accepted in 267,682 draws).
+- `ProcessPoolExecutor.map` returns in order: one slow job blocks all output. Use `as_completed`.
+- z3 calls are not interrupted by Python signal handlers; the stop watcher (wakeup fd + `ctx.interrupt()`)
+  is what makes SIGTERM work. z3 grounding at size ≥ 6 with 5–6 variables can take > 2 GB: capped.
 
 ## Tasks, in order
 
