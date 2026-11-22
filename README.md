@@ -58,9 +58,20 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
 - **The duality prior steers toward named structure (T4, preregistered).** With the prior, 330 of 998 verified
   theories are fragments of a named theory, nearly all of lattices. Without it, 31 of 393 are (one-sided Fisher
   p = 2e-25). The difference holds within each number of laws, which was checked post hoc.
-- **Not yet:** no theory found so far is new. The old score saturates on idempotence, and its top two
-  theories were an artifact of z3's budget cap. The top non-fragments of T4 now go through an algebraist's
-  profile (T5a, preregistered) before any is looked at as a candidate.
+- **An algebraist's profile (T5a, preregistered).** Of four structural features, only a convergent presentation
+  separates named theories from random ones (6 of 10 against 13 of 120, Holm p = 0.002). It ranks the candidates.
+- **What the top candidates turn out to be (post hoc).** New checks look for split theories (a ·-theory plus a
+  ∘-theory, whose bridges only look like bridges), for hidden definitions, and for named theories under all 8
+  relabellings.
+  - 13 of 81 candidates are split, including the top-ranked one.
+  - The second is an idempotent left quasigroup with ∘ written as the division.
+  - Four more are absorption-type algebras without associativity.
+  - One, `10c98c4b`, has a two-operation core: (x·y)∘(y·x) = x and (x∘y)·(y∘x) = x, meaning · is orthogonal to
+    its transpose and ∘ decodes it (Schröder's second law when ∘ = ·), plus four absorption laws.
+  - Web searches found no source for any of them, so they are candidates (`work/dossiers/`, with Lean
+    certificates for their smallest models).
+- **Not yet:** no theory found so far is new. The search's filters are syntactic: they let split theories and
+  divisions in disguise through.
 
 ## Open problems
 
@@ -73,7 +84,7 @@ finite countermodel, or an infinite one with a checkable construction settles it
   model satisfies `x·x = x∘x`, so it does not answer this question. No model on 2–6 elements has `x·x ≠ x`
   (complete search), so the smallest one has 7–10 elements. With `x·y = x∘y` the laws become ETP Equations 437 and
   3115. Each alone has non-idempotent models, but no 2- or 3-element non-idempotent magma satisfies both. Whether
-  the two together imply `x = x◇x` is open; a run is going.
+  the two together imply `x = x◇x` is still open after the follow-up runs (`REPORT.md`, Block 1).
 - **The infinite-only non-implications** (A–D in the paper, and S1, S9, S11 in `REPORT.md`) are candidates
   for the TPTP library's non-theorem problems. Their countermodels are certified but necessarily infinite.
 
@@ -82,33 +93,44 @@ finite countermodel, or an infinite one with a checkable construction settles it
 Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`, `tex/`): CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/).
 
-## Status (22 Nov 2026, night)
+## Status (22 Nov 2026, morning)
 
-Running (detached containers; `podman ps`; logs with `podman logs <name>`):
-- **T5a**, the profile of the 130 T3 theories: `soup-t5a`, `python -m soup.profile --set t3 --jobs 8`.
+Nothing is running. All commits are local. Since the T4 tag, nothing has been pushed: `main` and `t4-prereg` were
+pushed when T4 started, and later commits wait for the user.
 
-Finished tonight:
-- **T4**: both arms ran 4 h at tag `t4-prereg` (commit `a5c60aa`), from 21:20 to 01:20 UTC. Fragment checks and
-  the preregistered analysis are in `REPORT.md`, T4. Journals: `work/t4-<arm>/journal/journal.md`.
-- the stage-c sweep (32 of 32; `python -m soup.sweep_c --summary`);
-- round 2's clean track (stopped after 22 of 32 jobs once the S10 model made the rest moot;
-  `python -m soup.round2 summary`; the model is checked with `python -m soup.round2 model`);
-- the Block 1 follow-up jobs (`work/check/b1/`);
-- the first Lean certificate (`lean/`).
+Finished overnight (details and commands in `REPORT.md`, newest first):
+- **T4** (preregistered, 4 h per arm at tag `t4-prereg`): H1 supported, 33% against 8% fragments.
+- **T5a** (preregistered): only a convergent presentation separates named from random theories. It ranks the
+  candidates.
+- **X1** (exploratory, verifier V3): stopped by its memory rule after 1.5 of 4 h (deviation 4). 521 theories
+  verified; Vampire FMB refuted 10 claims that stage a left open.
+- **Candidates**: 81 profiled and ranked; equivalence checks `soup.hidden`, `soup.split`, `soup.relabel`;
+  dossiers for the top 10 (`work/dossiers/`) with literature notes (`work/check/literature.json`); Lean certificates
+  for their smallest models (`lean/`, 11 modules, audit passes).
+- **Split scan of the T4 non-fragments** (post hoc): 35 of 668 in prior and 4 of 362 in noprior are split.
 
-Next, in order (plan: T5a calibration, profiles, exploratory run X1, dossiers):
-1. T5a: `python -m soup.profile --t5a` once the profile run ends.
-2. Candidates (`python -m soup.dossier candidates`), their profiles, X1 (PREREGISTRATION.md), ranking and dossiers.
-3. The assisted round-2 track, after T4: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
+Disclosures from the night, all in `REPORT.md` or `PREREGISTRATION.md`:
+- Deviation 3: OOM kills in the T5a profile run, handled by a rerun.
+- Deviation 4: X1 was stopped early by its memory rule.
+- A correction of the T4 crash list.
+- Three slips of rule 1, all harmless. Twice an empty `python3 -` ran on the host; it did nothing. Once a read-only
+  `python3 -c` on the host checked a JSON file.
+
+Next, in order:
+1. A filter for split theories and for divisions in disguise inside the search (the `soup.split` screen is cheap at
+   2–4 elements), then a new preregistered run.
+2. `10c98c4b`, the one candidate with a two-operation core: a literature search beyond the web, starting with
+   Evans and Belousov on orthogonality identities; models of B alone; whether its absorptions have a natural
+   meaning.
+3. The assisted round-2 track: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
    S10.md S12.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m soup.round2 assisted >
-   ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E proves each one.
-4. T5 (look hard at the top non-fragment theories), T6 (remaining open claims), T7 (Lean certificates,
-   order-5 laws). A separate session is building a census of one-operation synergy pairs on ETP data
-   (`work/census/`). Its next measure: which pairs that force idempotence keep a non-trivial model, and which
-   collapse to x = y.
+   ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E
+   proves each one.
+4. T6 (S12 ⇒ x·x = x∘x), T7 (more Lean certificates, order-5 laws). A separate session is building a census of
+   one-operation synergy pairs on ETP data (`work/census/`, its own branch, not merged here).
 
-Task state: T0 (repo hygiene), T1 (streaming system), T2 (provers), T3 (calibration) and T4 (duality prior) are
-done. T5 has started with the T5a profile; T6 has one open claim left; T7 has its first Lean certificate.
+Task state: T0–T4 are done. T5 has its profile (T5a), ranking, equivalence checks and dossiers. T6 has one open
+claim left. T7 has Lean certificates for 11 finite models.
 
 Offline LLM work follows `prompts/README.md`: bundles live in `~/tmp/duet-offline/`, never in the repository or
 `work/`, and count only after `soup.check_offline` (in their own REPORT table).

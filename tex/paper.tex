@@ -38,8 +38,10 @@ countermodels are necessarily infinite. Of 32 claims that resisted the verifier 
 refuted (one by a hand proof that is not certified). The last of them fell to a 10-element model that Mace4 did not
 reach and Vampire's finite model builder found. In a preregistered comparison, a prior that rewards dualities
 triples the share of verified theories that are fragments of a named theory (33\% against 8\%, mostly lattice
-fragments). It steers the search toward known structure. Whether the search finds theories that are interesting
-and not already named is still open.
+fragments). It steers the search toward known structure. Among the non-fragments, the best-ranked candidates
+are not fusions after all. Some are split into a theory of each operation, and some are one-operation varieties
+with the division written as a second operation. Whether the search finds theories that are interesting and not
+already named is still open.
 \end{abstract}
 
 \section{Question}
@@ -266,9 +268,36 @@ laws: at two laws the shares are 30/121 against 4/111, at three 77/250 against 1
 already been named. Whether it also finds unnamed structure is a separate question. We take it up with the 668
 non-fragments of the prior arm.
 
+\subsection{Structural features, and what the top candidates turn out to be}
+The synergy score does not prefer named theories, so before ranking candidates we tested four features that
+algebraists use on the T3 calibration set (preregistered as T5a): a Mal'cev-type term proved by E, a finite free
+algebra on two generators, a convergent presentation (an E saturation checked for confluence), and non-degenerate
+models on at least three sizes. Only the convergent presentation separates named from random theories (6 of 10
+against 13 of 120, Holm-corrected $p=0.002$). The named theories that have one are the absorption pairs and the
+one-sided quasigroups. The preregistered ranking of 62 candidates (top non-fragments of both T4 arms and of earlier
+runs) puts first the theories with a convergent presentation.
+
+Post-hoc equivalence checks then show how a theory can be old without being a fragment of a named theory. With
+19 candidates from a shorter exploratory run added, 13 of the 81 are \emph{split}: E derives every law from
+consequences in one operation, so the theory is a $\op$-theory and a $\cop$-theory side by side, and its bridges
+only look like bridges. The 68 others have a finite certificate against this: the $\op$ table of one model and the
+$\cop$ table of another, on at most four elements, together violate a law. Four of the top ten are split, the first
+among them. The second is an idempotent left quasigroup in disguise: E proves it equivalent to $y\cop x=x\backslash y$
+with $x\op(y\op x)=y\op x$ and $(x\op y)\op y=y$. Four more are absorption-type algebras without associativity.
+The tenth is the only one with a two-operation core of its own: E proves it equivalent to
+$(x\op y)\cop(y\op x)=x$ and $(x\cop y)\op(y\cop x)=x$ plus four absorption laws. The first pair says that
+$(x,y)\mapsto(x\op y,y\op x)$ is a bijection of $A^2$ whose inverse is given by $\cop$. So $\op$ is orthogonal to
+its transpose, and $\cop$ decodes it. With $\cop=\op$ this is Schr\"oder's second law. We found none of these law
+sets in the literature (by web search). Lean~4 certificates (by \texttt{decide}, with an axiom audit) check the
+smallest non-degenerate model of each of the top ten. They show the theories are consistent and non-degenerate,
+not that they are new. The search's filters are syntactic: they keep out definitional theories, but not split ones
+or one-operation varieties written with a division.
+
 \section{Planned experiments}
-\pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for finite
-countermodels, the models on $\mathbb{Z}$, the term model, and the main implications.}
+\pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the
+other finite countermodels, the models on $\mathbb{Z}$, the term model, and the main implications (the S10 model and
+the five candidate models are done).} \pending{A filter for split theories and for divisions in disguise, inside
+the search.}
 
 \section{Limitations}
 \begin{itemize}
@@ -281,7 +310,8 @@ countermodels, the models on $\mathbb{Z}$, the term model, and the main implicat
 \item 26 of the survivor refutations were found by a language model outside the pipeline. They are
   reported only after our own check; one of them (the term model) is not certified.
 \item ``Not named'' needs a literature search and an equivalence check against known varieties; none of
-  the theories found so far has been claimed as new.
+  the theories found so far has been claimed as new. Our equivalence checks cover ten named theories under all
+  relabellings, hidden definitions, and splits. Our literature checks are web searches, not a survey.
 \end{itemize}
 
 \section*{Reproducibility}

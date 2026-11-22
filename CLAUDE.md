@@ -73,6 +73,10 @@ by the whole theory but by no single law of it.
 | `families.py`, `round2.py` | Countermodel families (translation-invariant on ℤ/n; piecewise-linear on ℤ by CEGAR); second survivor round on S10/S12 |
 | `check_offline.py` | Machine check of an offline LLM bundle read as a tar from stdin |
 | `t4_setup.py`, `t4_report.py` | T4: one data directory per arm; preregistered analysis |
+| `profile.py` | T5a algebraist's profile (Mal'cev-type terms, free algebra on 1–2 generators, convergent presentation, spectrum, ETP numbers); `--t5a [name]` analysis. Killed provers give *unknown*, not 0 |
+| `dossier.py` | Candidates (`candidates --sources ...`), preregistered ranking (`rank`), dossiers (`write --top N`), model JSON for Lean (`lean-json`); certificates are matched by key, not rank |
+| `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
+| `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
 | `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones |
@@ -141,6 +145,18 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     x∘x = x. Only S12 ⇒ x·x = x∘x is still open. S12 has no model with x·x ≠ x on 2–6 elements.
   - Conjunctions of ETP laws: a Lean Zulip thread (Le Floch, Sep 2025) covers order ≤ 2 only (59 classes). The
     E55 + E100 pair (order 3) is not covered there. The census session (own branch) is counting these pairs.
+- **22 Nov, night (details in REPORT.md):**
+  - T4 (preregistered): H1 supported, 330/998 fragments with the prior against 31/393 without (p = 2e-25).
+  - T5a (preregistered): only a convergent presentation separates named from random theories (6/10 against
+    13/120). It is the ranking feature.
+  - X1 (V3, exploratory): stopped by its memory rule after 1.5 h (deviation 4); 521 verified, 25% lattice fragments.
+  - 81 candidates ranked. 13 are **split** (a ·-theory plus a ∘-theory), the top-ranked one among them. The second is
+    an idempotent left quasigroup with ∘ as its reversed division. Four are absorption-type algebras without
+    associativity. `10c98c4b` has a two-operation core: (x·y)∘(y·x) = x and (x∘y)·(y∘x) = x, meaning · is
+    orthogonal to its transpose and ∘ decodes it, plus four absorption laws (E, both ways). No literature source
+    was found for any of them, so all are still candidates.
+  - Split scan of the T4 non-fragments: 35/668 (prior) and 4/362 (noprior) are split.
+  - Lean: 11 modules (S10 plus 10 candidate models), axiom audit passes on 116 declarations.
 
 ## Pitfalls already paid for
 
@@ -182,6 +198,14 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - Vampire 5.1.0 has no `--mode casc_sat`; use `--mode portfolio --schedule casc_sat`.
 - Offline LLM bundles live in `~/tmp/duet-offline/<name>/`, are read by `soup.check_offline` from a tar on
   stdin (no container mounts them), and are ignored by git and the build context.
+- The bridge filter is syntactic. Split theories (bijective translations turn bridges into one-operation laws) and
+  one-operation varieties with the division written as ∘ pass it. The top-ranked candidate of T5a was split. Run
+  `soup.split` and `soup.relabel` before looking at any candidate.
+- Order-4 laws can have 5 variables. Code that evaluates laws on tables must size its grid from the law, not use a
+  fixed 4 (`split.holds` crashed on this in the first T4 scan).
+- Nothing extra next to a stream run: two post hoc scans (each loads the corpus) drove the VM to 170 MB free and
+  tripped X1's memory stop. Long scans wait until the run ends, or get a memory check first.
+- Python on the host is still Python on the host, even for a one-line JSON check: use `podman run ... python3 -c`.
 
 ## Tasks, in order
 

@@ -2,6 +2,161 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Process notes and corrections (22 Nov 2026, night)
+
+- **Rule 1 (host commands).** Three times a `python3` ran on the Mac instead of in the container. Twice it was
+  an empty `python3 -`, which did nothing (21 Nov evening, 22 Nov about 01:33 UTC). Once it was a read-only
+  `python3 -c` that loaded `work/check/literature.json` to check that it parses (22 Nov about 04:15 UTC). Nothing
+  was installed or changed on the host.
+- **T5a launch.** The first start of the T5a profile stopped on a `KeyError` for the 2 T3 theories whose
+  verification had crashed: they have no `laws` field. It was fixed (`9dd1b79`, laws taken from the law indices)
+  before any profile was computed.
+- **T4 crashes.** A first version of the T4 section said no worker crashed. Four did, and all were restarted (T4
+  section).
+- **Split count.** A status message gave 6 split theories among the 62 candidates. There are 7: rank 6,
+  `b302a8c7`, had been missed.
+- **X1** was stopped by its memory rule (deviation 4). The most likely cause is the two split scans I started next
+  to it.
+
+## X1: exploratory run with verifier V3 (22 Nov 2026, 02:20–03:50 UTC; descriptive)
+
+Preregistered as exploratory (PREREGISTRATION.md, X1): duality-prior arm, 4 searchers and 4 verifiers, seeds 401+,
+its own data directory, verifier V3 (V2 plus Vampire finite model building on the claims that stage a leaves open).
+**It ran 1 h 30 min of the planned 4 h.** The preregistered memory rule stopped it at 03:50 UTC, when the VM had
+170 MB available (deviation 4). The most likely cause is the two post hoc split scans I had started two minutes
+earlier. It was not restarted. 5 verifiers exited on SIGSEGV (02:26, 03:07, 03:25, 03:34, 03:39); the supervisor
+restarted each and put its claimed task back.
+
+Commands: `podman run -d --name soup-x1 -v "$PWD/work:/data" -e SOUP_DATA=/data/x1 -e SOUP_VERIFIER=V3 soup python
+-m soup.stream.supervisor --arm prior --searchers 4 --verifiers 4 --seed0 401 --budget 14400 --run x1`; fragment check
+`... -e SOUP_DATA=/data/x1 -e FRAG_JOBS=3 soup python -m soup.fragments`. Journal: `work/x1/journal/`.
+
+| X1 | |
+| --- | --- |
+| theories verified (all V3) | 521 |
+| with a proved emergent law | 474 |
+| fragments of a named theory | 118 (24.9%), all of them lattice fragments (also skew lattice 11, absorption pair 3, bisemilattice 3, idempotent one-sided quasigroups 2 + 2) |
+| not fragments | 356 |
+| emergent claims | 1,781: 1,522 proved, 132 refuted by E saturation (39 of them without a confluence certificate), 68 by stage a's finite models (sizes 3–6), 10 by Vampire FMB, 47 unknown, 2 open |
+| Vampire FMB | ran on 59 claims; refuted 10, on 5, 6 (2), 7 (6) and 8 elements |
+
+Not compared with T4, as preregistered: the corpus was larger at the start, the verifier differs, and the run is
+shorter. Vampire FMB settles claims that stage a cannot reach. Its 10 refutations in 1.5 h are on sizes 5–8. Stage a stops at size 6, and
+it did not finish sizes 5 or 6 for those claims (`cm_unknown_sizes`).
+
+The top 20 non-fragments by score went into the candidate list (81 candidates in all, 19 of them new; `b302a8c7`
+was already in). Their profiles, equivalence checks and ranking are below.
+
+## Candidates after the ranking: equivalence checks, literature, Lean (22 Nov 2026, early morning; post hoc)
+
+These checks were written after the T5a ranking had been seen and are **not part of the preregistered rubric**.
+They follow rule 4: no theory is called new without an equivalence check and a literature check. The standard list
+of `soup.equiv`, the 10 named theories as written and the three dualities miss three ways a theory can be old:
+- **hidden definition** (`soup.hidden`): one operation is a short term in the other. Terms of size ≤ 5 are
+  evaluated on all models of sizes 2–4, then E proves any match;
+- **split** (`soup.split`): the theory is a ·-theory plus a ∘-theory, and its bridges only look like bridges.
+  - Certificate for *not split*: the · table of one model and the ∘ table of another fail a law. If the theory were
+    V(·) ∪ W(∘), every such pair would be a model.
+  - Proof of *split*: E derives every law from one-operation consequences of order ≤ 3;
+- **relabelling** (`soup.relabel`): the named theories under all 8 relabellings (swap the operations, reverse ·,
+  reverse ∘). Implications in either direction count only with an E proof (30 s each).
+
+Commands: `podman run -d -v "$PWD/work:/data" soup python -m soup.{hidden,split,relabel} --set candidates`
+(output `work/check/{hidden,split,relabel}_candidates.json`). Tests: `tests/test_hidden.py`, `tests/test_split.py`.
+
+| check | 62 candidates (T4 and earlier runs) | 19 X1 candidates | all 81 |
+| --- | --- | --- | --- |
+| hidden definition: definitional | 0 | 0 | 0 (6 have a term that agrees on all models; E proves none) |
+| **split** (E proof) | **7** | **6** | **13** |
+| not split (finite certificate on 2 / 3 / 4 elements) | 55 | 13 | 68 (7 / 53 / 8) |
+| relabelled named theory implied | 17 | 5 | 22: absorption pair 17, right absorption pair 10, one-sided quasigroups 4 |
+| fragment of, or equivalent to, a relabelled named theory | 0 | 0 | 0 |
+
+Split theories:
+- from the earlier runs: `4dc33674`, `b302a8c7`, `adefe707`, `79bea529`;
+- from T4 prior: `bbaf0199`, its top non-fragment by score;
+- from T4 noprior: `2e6502d8`, `09184a57`;
+- from X1: `c8e6ca60`, `695c2c2b`, `f5a5150b`, `0e846588`, `f85b2386`, `3c197ddc`.
+
+An earlier status message gave 6 for the 62; the file gives 7. The syntactic bridge filter does not keep these
+theories out, and both rankings put one of them first. `c8e6ca60` is the clearest case: E's convergent presentation
+of it has no bridge at all.
+
+**The top 10 of the preregistered ranking (81 candidates), after these checks.** Ranking:
+`python -m soup.dossier rank` (`work/check/ranking.txt`). Dossiers: `python -m soup.dossier write --top 10`
+(`work/dossiers/`), with details and sources. The E runs in the table are one-off checks: a scratch script, `fof`
+axioms against a goal, 30 s, E 3.2.5. A saturation is CounterSatisfiable.
+
+| rank | key | source | what it is |
+| --- | --- | --- | --- |
+| 1 | `4dc33674` | earlier | **Split**: equivalent (E, both ways) to {x·(x·y) = y, (x·y)·y = y} on · plus the mirror on ∘. Not a fusion. Its laws resemble those of bikei (Nelson–Rosenfield, arXiv:1603.02719), but it is not a bikei fragment. |
+| 2 | `8a512957` | T4 prior | **An idempotent left quasigroup in disguise**: equivalent (E, both ways) to y∘x = x\y with x·x = x, x·(y·x) = y·x and (x·y)·y = y. Not a rack, not a twisted Ward left quasigroup, not a cycle set (E saturates on each). Its 3-element model and the affine model x·y = 2x + 3y on ℤ/4 (checked by evaluation) are quandles. No source for these identities in left quasigroups. Rank 19, `977c3603`, is the same without (x·y)·y = y. |
+| 3 | `1ca933c1` | T4 prior | A subvariety of the named absorption pairs (both sides), and a proper subvariety of rank 7: E proves rank 7's laws from it and saturates the other way. Neither operation is associative or commutative (E saturates). |
+| 4 | `c8e6ca60` | X1 | **Split**. |
+| 5 | `87137d88` | X1 | In the same absorption family: a proper subvariety of rank 7, and incomparable with rank 3 (E). |
+| 6 | `695c2c2b` | X1 | **Split**. |
+| 7 | `3078949b` | earlier | A subvariety of the right absorption pair. E's convergent presentation (12 rules): both operations idempotent; x·(x·y) = x and (x·y)·y = x·y in each; the right absorptions; (x·y)∘x = x·y and (x∘y)·x = x∘y. |
+| 8 | `2dc27508` | earlier | No relabelled named theory implied. · satisfies x·(y·x) = x and (x·y)·x = x (ETP 10, 25); ∘ alone satisfies only x∘x = x. Not split (2-element certificate). |
+| 9 | `f5a5150b` | X1 | **Split**. |
+| 10 | `10c98c4b` | X1 | **Transpose orthogonality with a decoder, plus absorption.** Equivalent (E, both ways) to B ∪ {(x∘y)·x = x, x·(y∘x) = x, (x·y)∘x = x, x∘(y·x) = x}, with B = {(x·y)∘(y·x) = x, (x∘y)·(y∘x) = x}. B says that (x,y) ↦ (x·y, y·x) is a bijection of A² with inverse (u,v) ↦ (u∘v, v∘u): · is orthogonal to its transpose, and ∘ decodes. With ∘ = ·, B becomes Schröder's second law (xy)(yx) = x. · is not Latin in any non-degenerate model. Models: 0, 0, 2, 14 on 2–5 elements. |
+
+Leaving the split theories out (post hoc), the top 6 are `8a512957`, `1ca933c1`, `87137d88`, `3078949b`,
+`2dc27508` and `10c98c4b`. Two kinds recur:
+- one-operation varieties written with a division: `8a512957` is a left quasigroup with extra identities, so it lies
+  inside a named variety;
+- absorption-type algebras without associativity: `1ca933c1`, `87137d88`, `3078949b`, plus `2dc27508` with a nearly
+  free ∘.
+
+`10c98c4b` is different, and it is the one we would show an algebraist. Its core B is a natural two-operation
+condition (a groupoid orthogonal to its transpose, with the decoder as a second operation), and the search's
+absorptions sit on top of it. Web searches (22 Nov 2026) found no source for B as a variety, nor for any of the six
+law sets; the nearest named relatives are in the table. That is a literature check by web search, not a survey, so
+`10c98c4b` stays a candidate.
+
+**Lean.** `lean/Duet/Cand1.lean` … `Cand10.lean` hold the smallest non-degenerate model of 10 candidates, with
+proofs by `decide` that it satisfies the laws and refutes x·y = x, x·y = y, x∘y = x, x∘y = y, x·y = x∘y and
+x·y = y∘x where they fail. The numbers follow the order in which certificates were made, not the rank: Cand1–5 are
+the top 5 of the 62-candidate ranking, and Cand6–10 the new entries of the top 10. Each dossier names its file.
+- Model JSON: `work/check/cand<i>_model.json`, written by `python -m soup.dossier lean-json --top 10` and checked by
+  both evaluators.
+- Generated with `python -m soup.lean_cert model --json ... --name Cand<i>`.
+- `lean/check.sh` checks all 11 modules (with S10), and the axiom audit passes on 116 declarations: only `propext`,
+  `Classical.choice` and `Quot.sound` appear.
+
+The certificates are about finite models only. They show the theories are consistent and non-degenerate. They say
+nothing about novelty.
+
+Caveats:
+- "Split" is proved by E, and "not split" has a finite certificate. "Not definitional" means no term of size ≤ 5
+  matched on the models, or no matching term was proved in 30 s.
+- The relabelling check uses the 10 named theories only. A theory can still be a known variety outside that list:
+  rank 2 is one (left quasigroups with extra identities). The literature checks are web searches by the session,
+  not a systematic survey.
+- The 19 X1 candidates come from a run cut to 1.5 h (deviation 4). The ranking is the preregistered rubric applied
+  to all 81. The first ranking, of the 62 (T5a section), is kept there as it was.
+- Split theories and disguised one-operation varieties are a gap in the search's filters, not only in the ranking.
+  The post hoc split scan over all T4 non-fragments shows the size of the gap (next table).
+
+**Split scan of all T4 non-fragments (post hoc).** Command: `podman run -d -v "$PWD/work:/data" -e
+SOUP_DATA=/data/t4-<arm> soup python -m soup.split --fragments 1 --jobs 1` (output
+`work/t4-<arm>/split_nonfragments.json`). A first start crashed on laws with five variables, before any result was
+written. Fixed, with a test, and rerun.
+
+| T4 non-fragments | prior | noprior |
+| --- | --- | --- |
+| checked | 668 | 362 |
+| split (E proof) | 35 | 4 |
+| not split (certificate on 2 / 3 / 4 elements) | 532 (122 / 368 / 42) | 334 (32 / 233 / 69) |
+| unknown (no certificate on 2–4 elements, and E derived no bridge from one-operation laws) | 101 | 24 |
+| split share among the decided | 6.2% | 1.2% |
+| split share, bounds with unknowns counted either way | 5.2–20.4% | 1.1–7.7% |
+
+Among the decided, the prior arm has more split theories: 35/567 against 4/338, one-sided Fisher p = 1.2e-4. That
+test is post hoc, not part of H1. 22 of the 35 split theories of the prior arm have a duality, and none of the 4 of
+noprior does. A plausible reading: V(·) together with its mirror on ∘ is self-dual, so the duality prior rewards
+it. Among the top 20 non-fragments by score, 1 is split in prior and 2 in noprior. T4's H1 counts fragments, so this
+does not change it. It does mean that some of T4's non-fragments are not fusions at all.
+
 ## T5a: does an algebraist's profile separate named from random theories? (22 Nov 2026, night)
 
 Preregistered (PREREGISTRATION.md, T5a). There are two analyses, because of deviation 3: the VM's OOM killer ended
@@ -59,7 +214,8 @@ by score. Commands: `python -m soup.dossier candidates --sources t4-prior,t4-nop
 | 5 | earlier runs | `2dc27508` | x·(y·(x·x)) = x; ((x·x)·y)·x = x; (x∘y)·x = x·(z∘x) | yes | see dossier |
 
 Dossiers: `work/dossiers/0N-<key>.md` (`python -m soup.dossier write --top 5`). They are candidates, not results.
-The literature check, a hidden-definition check (`soup.hidden`, below) and Lean certificates follow.
+The equivalence checks, the literature check and the Lean certificates are in the section above (post hoc). That
+section also has the ranking after the 19 X1 candidates were added.
 
 ## T4: duality-prior search against a matched control (21–22 Nov 2026, night)
 
@@ -141,7 +297,10 @@ Caveats:
 - **What H1 shows.** The duality prior steers the search toward self-dual, lattice-type theories, i.e. toward
   structure people have already named. It does not show that the prior finds *unnamed* structure. The 668
   non-fragments of the prior arm, 353 of them with a duality, are where that question goes next (T5a profile,
-  ranking and dossiers below).
+  ranking and dossiers above).
+- **Not every non-fragment is a fusion** (post hoc, section "Candidates after the ranking"). 35 of the prior arm's
+  668 non-fragments and 4 of noprior's 362 are split into a ·-theory and a ∘-theory (E proof); 101 and 24 are
+  undecided.
 - Scores are V2 scores. The E proof length is an upper bound on proof length (preregistered limit).
 
 ## Stage-c sweep and second survivor round, clean track (21 Nov 2026, night)
