@@ -50,6 +50,9 @@ check, no R1 result on X4 and no dedupe result has been read.
   - **not known as far as our checks and searches go:** the N1 list in order, with its marks as the metric.
 
   Below them: candidates that fail "works", and those with no verification record.
+- A live summary in `README.md`, between `<!-- candidates:start -->` and `<!-- candidates:end -->` (`--readme`;
+  added at the user's request before computing): the metric, the counts, and the N1 top 10. It is regenerated each
+  time `soup.novelty` runs, which is after every run's checks.
 - The gate counts: how many fail each condition.
 - The overlap of N1's and T5a's top 10.
 - The share of each run in N1's top 10. Expectation, not a test: X4 takes a larger share of N1's top 10 than of

@@ -56,10 +56,24 @@ Where to look:
   operation, or absorption-type subvarieties. Two cores are prior art:
   - `10c98c4b`'s core is the Δ-bijectivity of the Yang–Baxter literature.
   - `31d6d970` plus associativity is the rectangular skew lattices; the full theory has no source found.
-- **A diagonal attractor.** 97% of the scored theories prove an emergent law in one variable, such as `x·x = x∘x`,
-  and none proves emergent associativity. Run X4 counts only synergy that does not go through the diagonal.
+- **A diagonal attractor.** Up to X3, 97% of the scored theories proved an emergent law in one variable, such as
+  `x·x = x∘x`, and none proved emergent associativity. The score was rewarding what a fusion forces on x·x.
+- **Leaving the named corner (X4).** A new search arm counts only synergy that does not go through the diagonal, and
+  skips the lattice corner. It also builds a quarter of its proposals from a law of `·`, a law of `∘` and a bridge.
+  - **Results:** 636 theories verified, and none of the 565 scored ones is a fragment of a named theory (X3: 31.6%).
+    Only 3 were split.
+  - **Less charted ground:** finite models refute 21% of its claims, against 3% in X3.
+  - **The attractor moved:** the most common laws now say a left translation sends a family to x·x, as in
+    `x·(x·y) = x·x`.
 - **Scale.** All runs together verified 4,222 theories, against 1.8 × 10²⁶ law sets of up to six laws. The search
   has mostly seen the corner humans know best, and "no source found" is weak evidence.
+
+## Candidates (live)
+
+<!-- candidates:start -->
+*Not computed yet. The novelty ranking N1 (PREREGISTRATION.md, N1) runs after X4's checks, and this block is
+regenerated each time it runs.*
+<!-- candidates:end -->
 
 ## Open problems
 
@@ -75,16 +89,21 @@ infinite one with a checkable construction settles it.
 - **Infinite-only non-implications** (A–D, S1, S9, S11 in `REPORT.md`): candidates for the TPTP library's non-theorem
   problems, with certified but necessarily infinite countermodels.
 
-## Status (22 Nov 2026, afternoon)
+## Status (22 Nov 2026, late afternoon)
 
-- **Running:** X4, about 13:00–15:30 UTC (PREREGISTRATION.md, X4), a search arm aimed at fusions that are new
-  rather than nearby.
-  - Its score counts only synergy that does not go through the diagonal.
-  - It skips the lattice corner.
-  - A quarter of its proposals join a law of `·`, a law of `∘` and a bridge.
-  - Its first 3-minute attempt exposed a loophole, `x·x = y·y`, which was fixed before the restart (deviation 6).
-- **Next:** X4's preregistered checks, a "disconnected" measure (works, but no check links it to anything known),
-  then the open claims (T6) and more Lean certificates (T7).
+- **Done today:**
+  - X3 (verifier V4, the disguise filters);
+  - X4 (the fusion arm), which ran to budget after a 3-minute false start exposed the loophole `x·x = y·y`
+    (deviation 6);
+  - the rediscovery measure R1 (7 of 13 catalogued structures);
+  - the introduction [`intro/intro-reading.pdf`](intro/intro-reading.pdf);
+  - the paper draft, updated through X4.
+- **Running:** X4's preregistered checks on its 20 candidates (profile, hidden definitions, split, relabelling).
+- **Next:**
+  - the rediscovery check and split scan on X4;
+  - merging candidates that are the same variety (`soup.dedupe`);
+  - the novelty ranking N1, which fills the live section above.
+  - Later: the open claims (T6) and more Lean certificates (T7).
 
 `main` is pushed to the private origin at each milestone. Offline LLM work follows `prompts/README.md` and counts only
 after a machine check. Deviations and slips are disclosed in `PREREGISTRATION.md` and `REPORT.md`.
