@@ -4,8 +4,9 @@ import Mathlib.Data.Prod.Basic
 /-! # The core of candidate 10c98c4b: Δ-bijective algebras with their dual operation
 
 General statements, for every type and every pair of operations; no finite model and no `decide`.
-Written by hand on 22 Nov 2026 (`notes/10c98c4b.md`). The facts are prior art: Bonatto, Kinyon, Stanovský and
-Vojtěchovský, arXiv:1910.02148, §2.5, Lemmas 2.10 and 2.11 (idea credited to Rump, Adv. Math. 193, 2005).
+Written by hand on 22 Nov 2026 (`notes/10c98c4b.md`). The facts are prior art: Dehornoy, Adv. Math. 282 (2015),
+arXiv:1403.3019, §1 (the involutivity laws); Bonatto, Kinyon, Stanovský and Vojtěchovský, arXiv:1910.02148, §2.5,
+Lemmas 2.10 and 2.11 (idea credited to Rump, Adv. Math. 193, 2005).
 What is checked here is our reading of them and the reformulation of the four absorption laws.
 
 * `B_iff_inverse`: B says that `delta g` is a two-sided inverse of `delta f`, where `delta f (x, y) = (f x y, f y x)`.
