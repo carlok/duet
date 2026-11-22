@@ -503,3 +503,10 @@ No random theory and no T4 theory had been profiled.
    - Everything else is as preregistered: arm, seeds 701+, budget 9,000 s from the restart, stop rule, post-run steps.
    - Reported: x4a as a separate 3-minute attempt, with its tally. The first form of the attractor is itself an outcome:
      with one-variable laws excluded, the search found the next diagonal loophole within three minutes.
+7. **X4 post-run: `soup.split` on the candidates stopped after 17 of 20 (22 Nov 2026, 17:28 UTC).** The step ran from
+   about 15:37. For a candidate with no finite certificate, `prove_split` gives E up to 200 attempts of 30 s, so the
+   last 3 could have taken about five more hours.
+   - Results by then: 14 not split (finite certificate), 3 undecided.
+   - The 3 left (`f1f50575`, `33eca86a`, `d82738a2`) passed V4's split screen during the run, like every X4 theory
+     with a positive score. N1 flags them "split not run", as its gate already allows.
+   - `soup.relabel` then ran on its own. Every other post-run step is unchanged.
