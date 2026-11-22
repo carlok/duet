@@ -55,7 +55,12 @@ in `Delta.lean`; the axiom audit passes on 151 declarations.
     infinite model fails it.
   - `10c98c4b`, relabelled, implies it.
 
-Notes: `work/check/literature.json`. **Split scan of all 654 X2 non-fragments:** SPLITSCAN_PENDING.
+Notes: `work/check/literature.json`.
+
+**Split scan of all 654 X2 non-fragments** (`-e SOUP_DATA=/data/x2 soup python3 -m soup.split --fragments 1 --jobs 4`,
+run last, about 8 min): 33 split, 477 not split (finite certificate), 144 unknown, 0 errors. Among the decided ones
+that is 6.5% split, close to T4's prior arm (6.2%). So the search keeps producing split theories at the same rate
+when nothing filters them; X3's verifier V4 does.
 
 Caveats: X2 is exploratory, and the comparisons with X1 are descriptive. X2's starting corpus did not include X1's
 finds.
