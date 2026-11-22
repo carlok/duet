@@ -30,3 +30,5 @@ work/x1/*
 !work/x1/journal/
 work/fragments.json
 work/t4_report_asrun.json
+work/x2/*
+!work/x2/journal/

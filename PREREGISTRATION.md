@@ -2,6 +2,33 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X2: a second exploratory run, as X1 (written 22 Nov 2026, 04:25 UTC, before X2 starts)
+
+Exploratory and descriptive only: no hypothesis is tested. The user asked that, with time left, a fresh batch of
+candidates go through the pipeline again. X1 was cut to 1.5 h (deviation 4).
+
+- Setup: `python -m soup.t4_setup --dir x2`, with its own `SOUP_DATA=/data/x2`. Matrix files are linked; the corpus
+  is copied from the main `work/corpus` at setup.
+- Search and verifier: exactly as X1. Arm `prior`, 4 searchers and 4 verifiers, verifier V3, seeds 501+. No code
+  change to the search or the verifier.
+- Budget: 10,200 s from the start (until about 07:20 UTC).
+- Stop rule: as X1. The budget runs out, or the VM's available memory drops below 1 GB, which gets reported.
+  Nothing else heavy runs next to it: no scans, no profiles, no prover batches. Light reads and docs only.
+- After the run, in this order:
+  1. the fragment check;
+  2. the top 20 non-fragments by score join the candidate list (sources `t4-prior,t4-noprior,.,x1,x2`);
+  3. profile, `soup.hidden`, `soup.split` and `soup.relabel` on the new candidates;
+  4. the T5a ranking of all candidates, dossiers and Lean certificates for new entries in the top 10;
+  5. a split scan of all X2 non-fragments (`soup.split --fragments 1 --jobs 4`), run last.
+- Reported descriptively:
+  - theories verified;
+  - fragment share;
+  - claims refuted by FMB;
+  - split share among non-fragments;
+  - the top 20 non-fragments and where they land in the ranking.
+- Caveats: the corpus at the start includes neither X1's models nor X1's corpus. Not compared with X1 or T4 by a
+  test.
+
 ## X1: exploratory run with verifier V3 (written 21 Nov 2026, night, during T4, before X1 starts)
 
 Exploratory and descriptive only: no hypothesis is tested, and nothing from X1 enters T4's analysis.
