@@ -5,6 +5,11 @@ verification queue. Verified scores flow back from results/ and replace the chea
 
 Arms: 'prior' (duality-closure mutation, score bonus per duality) or 'noprior' (same filters and law cap,
 no duality operator, no duality bonus). Elites are only shared within an arm.
+'fusion' (X4, 22 Nov 2026; soup/offdiag.py): 'noprior' plus three changes.
+  1. The cheap score counts off-diagonal emergent laws only, weighted W_FUSION (order 4 no longer weighs 0).
+  2. Theories that hold in the 2-element lattice are skipped.
+  3. In place of the duality-closure mutation (25% of proposals) a tradition-fusion proposal: one law in · alone
+     and one in ∘ alone from the pools, plus one random bridge.
 """
 import argparse
 import math
@@ -23,6 +28,7 @@ from .fqueue import FileQueue
 
 MAX_LAWS = 6
 W = {0: 0, 1: 1.0, 2: 0.5, 3: 0.1, 4: 0.0}
+W_FUSION = {0: 0, 1: 1.0, 2: 0.5, 3: 0.25, 4: 0.125}
 
 
 def _ops(t): return set() if t[0] == 'v' else {t[0]} | _ops(t[1]) | _ops(t[2])
@@ -53,8 +59,15 @@ class Searcher:
     def __init__(self, name, seed, arm, run):
         self.name, self.arm, self.run = name, arm, run
         self.prior = arm == 'prior'
+        self.fusion = arm == 'fusion'
         self.rng = random.Random(seed)
         self.C = Corpus(store=ensure('corpus'))
+        self.lat_skipped = 0
+        if self.fusion:
+            from ..offdiag import lat2, pools
+            self.lat2 = lat2()
+            self.pool_f, self.pool_g = pools(self.C)
+            self.bridges = np.flatnonzero(BRIDGE)
         self.Q = FileQueue(data('queue'))
         self.results_dir = ensure('results')
         self.archive = {}           # desc -> elite {T, key, cheap, desc, verified}
@@ -75,18 +88,25 @@ class Searcher:
     def surrogate(self, T):
         T = sorted(set(T))
         if len(T) < 2: return None
+        if self.fusion and self.lat2[T].all():
+            self.lat_skipped += 1; return None    # holds in the 2-element lattice: the mapped corner
         m, nd, sizes = self.C.stats(T)
         if m < 5 or not nd or len(sizes) < 2: return None
         imp = self.C.implied(T)
         if (imp & DEFN).any(): return None       # one operation is a term in the other: not a real fusion
-        single = np.zeros(NL, bool)
-        for t in T:
-            s = self.imp1(t)
-            if s is not None: single |= s
-        fg = np.flatnonzero(imp & ~single)
-        if not len(fg): return None
+        if self.fusion:
+            from ..offdiag import offdiag_gain
+            fg = offdiag_gain(self.C, T, imp)
+        else:
+            single = np.zeros(NL, bool)
+            for t in T:
+                s = self.imp1(t)
+                if s is not None: single |= s
+            fg = np.flatnonzero(imp & ~single)
+        if fg is None or not len(fg): return None
         du = dualities(T)
-        score = sum(W[ORDER[e]] for e in fg) / (1 + sum(ORDER[t] for t in T)) * ((1 + len(du)) if self.prior else 1)
+        w = W_FUSION if self.fusion else W
+        score = sum(w[ORDER[e]] for e in fg) / (1 + sum(ORDER[t] for t in T)) * ((1 + len(du)) if self.prior else 1)
         nb = int(sum(BRIDGE[t] for t in T))
         desc = (len(T), len(du), nb, min(4, int(math.log2(m)) // 2), int(min(ORDER[e] for e in fg)))
         return {'T': T, 'cheap': score, 'desc': desc, 'dualities': du, 'n_gain': int(len(fg))}
@@ -166,6 +186,8 @@ class Searcher:
             sw, op = rng.choice([(1, 0), (0, 1), (1, 1)])
             T = sorted(set(a) | {image(t, sw, op) for t in a})
             return T if len(T) <= MAX_LAWS else None
+        if u < 0.25 and self.fusion:      # tradition-fusion proposal: a · law and a ∘ law from the pools, one bridge
+            return [int(rng.choice(self.pool_f)), int(rng.choice(self.pool_g)), int(rng.choice(self.bridges))]
         if u < 0.5:
             T = list(a); T[rng.randrange(len(T))] = self.rand_law(); return T
         if u < 0.65:
@@ -182,6 +204,7 @@ class Searcher:
         heartbeat(self.name, role='search', arm=self.arm, run=self.run, state='searching',
                   evals=self.evals, evals_per_s=round(self.evals / max(1e-9, time.time() - t_start), 1),
                   archive=len(self.archive), wins=self.wins, pushed=self.pushed, held=self.held, gate=self.gate.get('threshold'), corpus=len(self.C),
+                  lat_skipped=self.lat_skipped,
                   verified_seen=len(self.verified), k=round(self.k(), 4), mem=memory(os.getpid()))
 
     def snapshot(self):
@@ -208,7 +231,7 @@ class Searcher:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--seed', type=int, required=True)
-    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior'])
+    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion'])
     ap.add_argument('--run', required=True); ap.add_argument('--budget', type=float, default=1e9)
     a = ap.parse_args()
     s = Searcher(a.name, a.seed, a.arm, a.run)

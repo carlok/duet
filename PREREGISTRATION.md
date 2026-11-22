@@ -2,6 +2,79 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X4: fusion arm, away from the diagonal and the lattice corner (written 22 Nov 2026, 10:55 UTC, during X3, before X4 starts)
+
+Exploratory and descriptive only: no hypothesis is tested. The user's aim (22 Nov, morning): find theories in the
+spirit of the "jazz" example, an original jump of the kind a human makes, and look for strategies that find
+legitimate, probably unexplored, valid new theories. Two measurements motivate X4:
+- **Coverage.** All runs together verified 4,222 theories against 1.8 × 10²⁶ law sets, and the duality prior keeps
+  them in the most-studied corner (`notes/coverage.py`, REPORT "Coverage").
+- **A diagonal attractor.** Of the 3,574 theories with a positive verified score in T4, X1, X2 and X3 (at 10:40 UTC),
+  2,495 (70%) prove an emergent law in one variable (`x·x = x`, `x·x = x∘x`, ...). The ten most frequent proved
+  emergent laws are all laws about squares, and none of the 3,574 proves emergent associativity. The score rewards
+  what a fusion forces on the diagonal; the lattice absorption pair, our reference case, is itself such a case. (One-off
+  tally in a container over `results/*.json` of those four directories. It is repeated after X3 and reported with its
+  script.)
+
+Setup and arm:
+- Setup: `python -m soup.t4_setup --dir x4`, own `SOUP_DATA=/data/x4`, as X2 and X3.
+- Search: new arm `fusion` (`soup/stream/searcher.py`, `soup/offdiag.py`). It is arm `noprior` (no duality operator,
+  no duality bonus) with three changes:
+  1. **Off-diagonal gain.** The cheap score counts only laws that T implies on the corpus and that no single law of
+     T implies even together with all the one-variable laws T implies. Weights by order: 1, 0.5, 0.25, 0.125 (the
+     old weights gave order-4 laws, such as associativity, weight 0).
+  2. **The lattice corner is skipped.** Theories that hold in the 2-element lattice are not scored. The count of
+     skipped theories goes into the heartbeats.
+  3. **Tradition-fusion proposals.** In the 25% slot the prior arm uses for duality closure: one law in · alone and
+     one in ∘ alone, each drawn from a pool of restrictive one-operation laws with non-degenerate corpus models at
+     three or more sizes, plus one random bridge. These are two "traditions" and a bridge between them. The other
+     mutations are unchanged.
+- Verifier V5 (`soup/verify.py`) = V4, but stage a draws its claims from the off-diagonal emergent laws. So the
+  verified score counts only laws the fusion produces without going through the diagonal. The split and division
+  screens of V4 stay.
+- 4 searchers and 4 verifiers, seeds 701+, budget 9,000 s. The stop rule is as X3: memory below 1 GB, reported, and
+  nothing heavy alongside.
+- Tests before the start: `tests/test_fusion.py`.
+  - Positive control: McKenzie's lattice basis has commutativity of both operations among its off-diagonal emergent
+    laws.
+  - Negative control: the absorption pair's emergent `x·x = x` does not count.
+  - The 2-element lattice holds the lattice laws and not the Δ-bijective core; the pools are one-operation and
+    non-empty.
+
+  The whole suite must pass.
+
+After the run, in this order (as X3, with `x4` added to the sources):
+1. the fragment check;
+2. the top 20 non-fragments join the candidate list;
+3. profile, `soup.hidden`, `soup.split`, `soup.relabel` on the new candidates;
+4. the T5a ranking, dossiers and Lean certificates for new top-10 entries;
+5. `soup.rediscover` on X4;
+6. the split scan of X4's non-fragments, last.
+
+Post hoc, and labelled as such: the off-diagonal gain of X3's verified theories, computed on X3's final corpus, as a
+baseline for how often off-diagonal synergy occurs without being selected for.
+
+Reported descriptively, X4 next to X3:
+- theories verified per hour;
+- the share of verified theories with a proved off-diagonal emergent law;
+- the ten most frequent proved emergent laws (does a new attractor appear?);
+- fragment share;
+- V4 marks;
+- theories skipped as lattice-valid;
+- FMB refutations;
+- the share of the top-20 non-fragments that the post hoc checks identify;
+- the top 20 that no check identifies.
+
+Each unidentified one gets a literature check (Latin-square, quasigroup, Yang–Baxter/rack/cycle-set, bisemilattice
+and ETP sources). None is called new without that check and a check by someone who knows the field. Our web
+searches are weak evidence (REPORT, "Coverage").
+
+Caveats:
+- Three changes at once: what X4 finds cannot be attributed to one of them.
+- X4 scores differently from X3, so scores are not comparable across the two runs. Shares and counts are.
+- The pools and the off-diagonal gain depend on the corpus, which grows during the run.
+- An empty result (no theory with a proved off-diagonal emergent law) is a possible outcome, and it gets reported.
+
 ## X3: an exploratory run with filters for known disguises (written 22 Nov 2026, 06:45 UTC, before X3 starts)
 
 Exploratory and descriptive only: no hypothesis is tested. The night showed that most top candidates are old

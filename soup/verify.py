@@ -51,7 +51,11 @@ V3 = dict(V2, fmb_secs=60, c_fmb_secs=600)
 # Mace4 on 2-4 elements, then E. Division: T implies a one-sided quasigroup pair under one of the 8 relabellings
 # (soup.relabel), so ∘ is a division of · or the reverse. Either gives score 0 and skips stages b and c.
 V4 = dict(V3, split_screen=True, split_secs=10, split_cap=60, division_screen=True, division_secs=10)
-CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4}   # the stream verifier picks one by SOUP_VERIFIER
+# V5 (run X4, arm 'fusion', PREREGISTRATION.md): V4, but the claims of stage a are drawn from the off-diagonal emergent
+# laws (soup.offdiag.offdiag_gain) instead of all emergent laws. So one-variable laws are never claimed, and the score
+# counts only laws the fusion produces without going through the diagonal.
+V5 = dict(V4, offdiag=True)
+CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4, 'V5': V5}   # the stream verifier picks one by SOUP_VERIFIER
 DIVISION = {'left quasigroup': ['x·(x∘y) = y', 'x∘(x·y) = y'], 'right quasigroup': ['(x·y)∘y = x', '(x∘y)·y = x']}
 
 
@@ -165,7 +169,11 @@ def stage_a(C, T, cfg=DEFAULTS, tag=''):
     out['redundant'] = redundant; out['independence_unconfirmed'] = unconfirmed
     claims, tried = [], set()
     while len(tried) < cfg['max_tried'] and len([c for c in claims if c['status'] == 'pending']) < cfg['n_cands']:
-        fg = fusion_gain(C, T)          # recomputed: every refutation adds a structure to the corpus
+        if cfg.get('offdiag'):
+            from .offdiag import offdiag_gain
+            fg = offdiag_gain(C, T)
+        else:
+            fg = fusion_gain(C, T)      # recomputed: every refutation adds a structure to the corpus
         if fg is None: break
         fg = [e for e in sorted(fg, key=lambda e: (ORDER[e], e)) if e not in tried]
         if cfg.get('claims_per_order'):    # V2: at most one pending claim per order level
