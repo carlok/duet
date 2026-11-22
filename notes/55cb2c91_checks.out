@@ -1,0 +1,43 @@
+T = x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x
+31 laws of order <= 3 implied on the corpus
+30 proved by E; 13 of them not implied by a single law on the corpus
+    x = x
+    x · (x ∘ x) = x
+  * ((x ∘ x) · x) ∘ x = x
+  * ((x ∘ y) · x) ∘ x = x
+  * (x · x) · x = x · x
+  * (x · y) · y = x · y
+  * (x ∘ (x ∘ x)) ∘ x = x
+  * (x ∘ (x ∘ y)) ∘ x = x
+  * x · ((x ∘ x) · x) = x
+  * x · ((x ∘ x) · y) = x
+  * x · ((x ∘ y) · x) = x
+  * x · ((x ∘ y) · y) = x
+  * x · ((x ∘ y) · z) = x
+    x · (x · x) = x · x
+    x · (x · y) = x · x
+    x · (x ∘ (x · x)) = x
+    x · (x ∘ (x · y)) = x
+    x · (x ∘ (x ∘ x)) = x
+    x · (x ∘ (x ∘ y)) = x
+    x · (x ∘ (y · x)) = x
+    x · (x ∘ (y · y)) = x
+    x · (x ∘ (y · z)) = x
+    x · (x ∘ (y ∘ x)) = x
+    x · (x ∘ (y ∘ y)) = x
+    x · (x ∘ (y ∘ z)) = x
+    x · (y · x) = x · y
+    x · (y · y) = x · y
+    x · (y · z) = x · y
+  * x · x = (x · x) ∘ x
+  * x · y = (y · x) ∘ x
+T = x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x
+C = x · (x ∘ y) = x & x · (y · z) = x · y & (x · y) · y = x · y & x · y = (y · x) ∘ x
+T => C {'x · (y · z) = x · y': True, '(x · y) · y = x · y': True, 'x · y = (y · x) ∘ x': True}
+C => T {'x · y = ((y · z) · x) ∘ x': True}
+  C minus x · (x ∘ y) = x        => it: False
+  C minus x · (y · z) = x · y    => it: False
+  C minus (x · y) · y = x · y    => it: True
+  C minus x · y = (y · x) ∘ x    => it: False
+T = x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x
+· tables on 3 elements with x·(y·z) = x·y: prediction agrees on 63, disagrees on 0; 19 extend to a model of T
