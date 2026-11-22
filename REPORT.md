@@ -2,6 +2,25 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `1d0a5211` (N1 rank 2): what the theory is (22 Nov 2026, evening, recorded 21:45 UTC; post hoc)
+
+Command: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/1d0a5211_checks.py`, parts 1–3
+(output `notes/1d0a5211_checks.out`). Memo: `notes/1d0a5211.md`. T = {(A) x·(x∘y) = y∘x, (B) (x∘(y·z))∘z = z}.
+
+| Check | Result |
+| --- | --- |
+| short consequences (order ≤ 3, suggested by the corpus) | 22 proved by E (20 s each), 4 of them emergent, all from x·(x∘(y·x)) = x |
+| where they come from | B alone gives (x·y)∘y = y, in one superposition of B into itself (E proof object). A turns x·(x∘(y·x)) into (y·x)∘x, and that is x |
+| A + (x·y)∘y = y ⟹ B? | no proof (E, 120 s) |
+| not implied (E, 30 s each) | x·x = x, x∘x = x, (x∘y)∘y = y, x∘(x·y) = y, (x·y)·y = x·y, x·(y·x) = x, (x∘y)·y = x, x·(y∘x) = x |
+| with x·y = x∘y | x·y = x and x·y = y (E): only one-element models; no shadow model with x·y ≠ x on 2–6 elements (Mace4) |
+| non-degenerate models, sizes 2 / 3 / 4 / 5 | 0 / 7 / ≥ 669 / ≥ 2,971 (`soup.profile`, dossier) |
+| literature (targeted web-only agent; key claims rechecked) | with · = ∘, A is ETP 335 = Stein's first law x(xy) = yx, and B is ETP 238 (both mappings checked by `law_index`); no source for B or for T |
+
+**Verdict:** not identified; related in pieces. T splits Stein's law across two operations. Its synergy is real but
+shallow, two rewriting steps, and its one-operation shadow is trivial, as for `55cb2c91`. Not run for this
+candidate: Lean (no general statement emerged) and a proof that A + K does not imply B (E only failed to prove it).
+
 ## `55cb2c91` (N1 rank 1): what the theory is (22 Nov 2026, 20:00–20:50 UTC; post hoc)
 
 Command: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/55cb2c91_checks.py`, parts 1–4

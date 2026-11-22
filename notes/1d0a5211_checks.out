@@ -1,0 +1,56 @@
+# notes/1d0a5211_checks.py, parts 1-3, run 22 Nov 2026, evening, finished before 21:37 UTC (main corpus; E 20-60 s per goal)
+## part 1
+T = x · (x ∘ y) = y ∘ x & (x ∘ (y · z)) ∘ z = z
+22 laws of order <= 3 implied on the corpus
+22 proved by E; 4 of them not implied by a single law on the corpus
+    x = x
+    (x · x) ∘ x = x
+    (x · y) ∘ y = y
+    ((x · x) · x) ∘ x = x
+    ((x · x) · y) ∘ y = y
+    ((x · y) · x) ∘ x = x
+    ((x · y) · y) ∘ y = y
+    ((x · y) · z) ∘ z = z
+    ((x ∘ x) · x) ∘ x = x
+    ((x ∘ x) · y) ∘ y = y
+    ((x ∘ y) · x) ∘ x = x
+    ((x ∘ y) · y) ∘ y = y
+    ((x ∘ y) · z) ∘ z = z
+    (x ∘ (x · x)) ∘ x = x
+    (x ∘ (x · y)) ∘ y = y
+    (x ∘ (y · x)) ∘ x = x
+    (x ∘ (y · y)) ∘ y = y
+  * x · ((x · x) · x) = x
+  * x · ((y · x) · x) = x
+  * x · (x ∘ (x · x)) = x
+  * x · (x ∘ (y · x)) = x
+    x · (x ∘ x) = x ∘ x
+## part 2
+T = x · (x ∘ y) = y ∘ x & (x ∘ (y · z)) ∘ z = z
+A => K False | B => K True | T => K True
+A + K => B False
+  T => x·((y·x)·x)=x          True
+  T => x·(x∘(y·x))=x          True
+  T => x·(x∘x)=x∘x            True
+  T => (x∘y)∘y=y              False
+  T => x∘(x·y)=y              False
+  T => (x·y)·y=x·y            False
+  T => x·(y·x)=x              False
+  T => x·x=x                  False
+  T => x∘x=x                  False
+  T => (x∘y)·y=x              False
+  T => x·(y∘x)=x              False
+## part 3
+T = x · (x ∘ y) = y ∘ x & (x ∘ (y · z)) ∘ z = z
+  T + (x·y = x∘y) => x·y=x              True
+  T + (x·y = x∘y) => x·y=y              True
+  T + (x·y = x∘y) => x·x=x              True
+  T + (x·y = x∘y) => x·y=y·x            True
+  T + (x·y = x∘y) => x·(y·z)=(x·y)·z    True
+  T + (x·y = x∘y) => (x·y)·y=x          True
+  T + (x·y = x∘y) => x·(x·y)=y          True
+  T + (x·y = x∘y) => x=y                -
+  Mace4, shadow model with x·y != x on 2-6: {'size': None, 'tables': None, 'searched_to': 6, 'exhausted_to': 6, 'reason': 'failure', 'secs': 0.0}
+## the one-step E proof of B => (x·y)∘y = y (eprover --auto --proof-object): one superposition of B into itself,
+## g(g(X1,f(X2,X3)),X3)=X3 with X1 := g(u, f(v, f(X2,X3))), so that g(X1, f(X2,X3)) = f(X2,X3).
+## ETP mapping (soup.named.law_index): A with · = ∘ is ETP 335, x◇y = y◇(y◇x); B is ETP 238, x = (y◇(z◇x))◇x. Both True.

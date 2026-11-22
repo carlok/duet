@@ -66,7 +66,7 @@ by the whole theory but by no single law of it.
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
 | `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
 | `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `LEGACY` (first session) |
-| `offdiag.py` | X4: off-diagonal gain (emergent laws that no single law gives even with all one-variable consequences; certified by corpus models), `lat2()` (laws of the 2-element lattice), `pools()` (restrictive one-operation laws for the fusion proposals) |
+| `offdiag.py` | X4: off-diagonal gain (emergent laws that no single law gives even with all one-variable consequences; certified by corpus models), `lat2()` (laws of the 2-element lattice), `pools()` (restrictive one-operation laws for the fusion proposals); X5: `IGNORE` (argument-ignoring laws, skipped by arm `fusion2`), `SQUARE` (analysis) |
 | `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
 | `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
 | `calib.py`, `calib_report.py` | T3: one child process per theory, resumable; Fisher test and percentiles |
@@ -84,7 +84,7 @@ by the whole theory but by no single law of it.
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
-| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals) |
+| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip) |
 | `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus |
 | `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md` |
 
@@ -205,6 +205,13 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - On chains, ∘ is Gödel logic's strict-order connective (Baaz, Ciabattoni, Zach 2000).
     - The template for digging into a candidate: E for structure, a plain reading, models from order theory, a
       targeted literature agent, then Lean for the general statements.
+  - `1d0a5211` (N1 rank 2): not identified, related in pieces (`notes/1d0a5211.md`).
+    - Its law x·(x∘y) = y∘x is Stein's first law x(xy) = yx (ETP 335) split across the two operations.
+    - B alone gives (x·y)∘y = y. The synergy is two rewriting steps, and with x·y = x∘y only one-element models are left.
+  - X5 (night 22–23 Nov, arm `fusion2`): X4 plus a skip of theories implying an argument-ignoring law
+    (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
+    rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
+    square-free form (`notes/x5_baseline.py`).
   - Workflow after every run: the post-run checks, then `soup.dedupe`, then
     `soup.novelty --readme /repo/README.md` (mount README.md and notes/). Then push.
 
