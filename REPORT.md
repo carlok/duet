@@ -2,6 +2,64 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X2: second exploratory run with verifier V3 (22 Nov 2026, 04:21–07:12 UTC; descriptive)
+
+Preregistered as exploratory (PREREGISTRATION.md, X2): as X1, seeds 501+, its own data directory, 10,200 s. It ran
+to budget (exit 0). Nothing heavy ran alongside. No worker crashed; X1 had 5 SIGSEGV restarts. The VM's available
+memory reached a minimum of 1,026 MB, 2 MB above the stop rule, with nothing else running. X3's budget was set
+to match (PREREGISTRATION.md, X3).
+
+Commands:
+- run: `podman run -d --name soup-x2 -v "$PWD/work:/data" -e SOUP_DATA=/data/x2 -e SOUP_VERIFIER=V3 soup python3 -m
+  soup.stream.supervisor --arm prior --searchers 4 --verifiers 4 --seed0 501 --budget 10200 --run x2`;
+- fragments: `-e SOUP_DATA=/data/x2 -e FRAG_JOBS=3 soup python3 -m soup.fragments`;
+- statistics: a read-only script over `work/x2/results`.
+
+| | X2 | X1 (for reference, 1.5 h) |
+| --- | --- | --- |
+| verified theories | 1,015 (357 per hour) | 521 (347 per hour) |
+| with an emergent law | 948 | 474 |
+| fragments of a named theory | 294 (31.0%): lattice 293, skew lattice 20, bisemilattice 11, absorption pair 7, idempotent left/right quasigroup 6/5 | 118 (24.9%) |
+| non-fragments | 654 | 356 |
+| claims | 3,425 | 1,781 |
+| proved | 3,022 | 1,522 |
+| refuted by E saturation | 239 (80 uncertified) | 132 (39 uncertified) |
+| refuted by finite models (stages a and c) | 86 | 68 |
+| refuted by Vampire FMB | 17 (sizes 6 ×6, 7 ×3, 8 ×8; FMB ran on 80 claims) | 10 |
+| unknown / open | 55 / 6 | 47 / 2 |
+
+**Candidates.** X2's top 20 non-fragments add 18 new candidates; the other 2 were already listed up to duality. That
+makes 99 in all.
+- `soup.split`: 1 split (`5358ef8f`), and 17 with a certificate of non-split (on 2 / 3 / 4 elements: 4 / 12 / 1).
+- `soup.hidden`: 0 definitional.
+- `soup.relabel`: 8 imply an absorption pair (6 the absorption pair, 4 the right one, under some relabelling). None
+  implies a quasigroup pair, so there is no division in disguise, and none is a fragment of or equivalent to a
+  named theory.
+
+So X2's candidates have fewer known disguises than T4's (7 split of 62) and X1's (6 of 19).
+
+**T5a ranking of the 99** (`dossier rank`, 4 min 44 s; `work/check/ranking.txt`). X2's candidates land at ranks 3, 4,
+11, 22, 23, 28, 34, … 83. Dossiers were written for the top 13 (`dossier write --top 13`), and Lean certificates
+added for the two new top-10 entries (Cand11, Cand12). `lean/check.sh`: 14 modules, including the general proofs
+in `Delta.lean`; the axiom audit passes on 151 declarations.
+- **Rank 3, `69dfbd8e`, is the variety of rank 10, `2dc27508`**, found again from different laws. E proves both
+  directions (as written, and under rev· rev∘). Both have the same 10-rule convergent presentation. The candidate
+  list deduplicates up to the three dualities, not up to logical equivalence, so this variety is counted twice. It
+  is a rediscovery inside the search: two runs with different seeds and corpora reached one variety.
+- **Rank 4, `d1e1c31f`**: an absorption-type algebra (it implies the absorption pair with ∘ reversed), not related
+  by implication to the others of that family under any relabelling (E). No source found.
+- **Rank 11, `3e068fa6`**: E's convergent presentation has 3 rules, (x∘y)·(y∘x) = y, x·x = x and x∘x = x. That is
+  half of the Δ-bijective core with both operations idempotent.
+  - Every finite model satisfies the other half too, since an injective self-map of a finite set is bijective.
+  - The equational theory does not: E's presentation is convergent and does not join the two sides, so some
+    infinite model fails it.
+  - `10c98c4b`, relabelled, implies it.
+
+Notes: `work/check/literature.json`. **Split scan of all 654 X2 non-fragments:** SPLITSCAN_PENDING.
+
+Caveats: X2 is exploratory, and the comparisons with X1 are descriptive. X2's starting corpus did not include X1's
+finds.
+
 ## `10c98c4b`: structure and literature memo (22 Nov 2026, morning; post hoc)
 
 Command: `podman run -i --rm soup python3 - < notes/10c98c4b_checks.py` (output `notes/10c98c4b_checks.out`; E, Mace4

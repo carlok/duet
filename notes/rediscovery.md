@@ -20,6 +20,9 @@ Routes:
 | 5 | `1ca933c1`, `3078949b`, `87137d88` | subvarieties of the absorption pairs | automatic (`soup.relabel`) | T3's named list | same night |
 | 6 | `10c98c4b`'s core B = {(x·y)∘(y·x) = x, (x∘y)·(y∘x) = x} | Δ-bijective algebras with their dual operation, from the Yang–Baxter literature | prover (B isolated by E, 04:20), then literature (06:21) | Bonatto, Kinyon, Stanovský, Vojtěchovský, arXiv:1910.02148, Lemma 2.10; Rump 2005 | about 3 h after verification. The first literature pass looked only at Latin squares and missed it. |
 
+| 7 | `69dfbd8e` (X2, rank 3) | the variety of `2dc27508` (rank 10, from the earlier runs), axiomatized differently | prover: the two convergent presentations had the same 10 rules, then E both ways | none needed | about 40 min after X2 ended. The ranking had not noticed: it deduplicates only up to the dualities. |
+| 8 | `3e068fa6` (X2, rank 11) = {(x∘y)·(y∘x) = y, x·x = x, x∘x = x} | half of the Δ-bijective core (relabelled), plus idempotence; its finite models are Δ-bijective pairs | prover (E's 3-rule presentation), then the argument "injective on a finite set means bijective" | as row 6 | about 40 min after X2 ended |
+
 Not rediscoveries, kept apart: the synergy pair ETP 55 + 100 (no source found), and the full `10c98c4b` theory (no
 source found; `notes/10c98c4b.md`).
 
