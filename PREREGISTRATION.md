@@ -199,3 +199,13 @@ No random theory and no T4 theory had been profiled.
      features calibrated in **both** (`soup.dossier rank`).
    - The OOM killer also hit T4 once (searcher s302 of noprior, 00:00 UTC). The supervisor restarted it, as
      preregistered; REPORT lists it with the T4 crashes.
+4. **X1, stopped by its memory rule (22 Nov 2026, 03:50 UTC, before any X1 result was analysed).** X1 started at
+   02:20:41 UTC with a 14,400 s budget. At 03:50:29 UTC the watcher read 170 MB of available memory in the VM, below
+   the preregistered 1 GB, and stopped the run (`podman stop -t 30`; the supervisor's last journal line is
+   "stopped by signal" at 03:50:43, the container exit code 137). It ran 1 h 30 min of the planned 4 h.
+   - Most likely cause: I started two post hoc split scans (`soup.split --fragments`, 1 job each, each loading the
+     corpus) about two minutes earlier, alongside X1's 8 workers. Twenty minutes later the VM had 9.2 GB available
+     and the kernel log showed no OOM kill in the last 30 min.
+   - Not restarted: the stop rule says stop, and a second start would be a run with a different budget and corpus.
+   - Reported: X1 as run (1.5 h), with the descriptive outcomes listed above. The top 20 non-fragments go through
+     the profile and ranking as planned.
