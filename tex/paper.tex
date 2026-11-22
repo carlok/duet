@@ -461,7 +461,21 @@ collapses a family onto $x\op x$.}
 \section*{Reproducibility}
 All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1; E 3.2.5, Vampire 5.1.0,
 Prover9/Mace4 LADR-2026-8A and Twee 2.7.1 built from pinned sources). The matrix rebuild is byte-identical
-across runs (SHA-256 checked). Every number above is in \texttt{REPORT.md} with the command that produced it. An introduction for readers without a background in algebra is in \texttt{intro/}.
+across runs (SHA-256 checked). Every number above is in \texttt{REPORT.md} with the command that produced it. An
+introduction for readers without a background in algebra is in \texttt{intro/}.
+
+\section*{How this work was made}
+An AI coding assistant (Claude Code, by Anthropic) designed, coded, ran and wrote most of this project, directed and
+reviewed by the author. The repository's commits carry \texttt{Co-Authored-By} trailers, and its \texttt{CLAUDE.md} is
+the assistant's working memory. No language model takes part in the search or its scoring. Language models were used
+outside it in two ways:
+\begin{itemize}
+\item an external model worked offline on 32 survivor claims, as described above;
+\item web-only AI agents did literature lookups.
+\end{itemize}
+Neither counts on its own. Every refutation from the offline work was checked by our own code, and every key
+literature claim was rechecked by machine: prover proofs, finite models or Lean. The claims in this paper rest on
+those checks, not on any model's word.
 
 \bibliographystyle{plain}
 \bibliography{refs}

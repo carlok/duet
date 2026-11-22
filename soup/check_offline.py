@@ -1,7 +1,7 @@
 """Machine check of an offline LLM bundle (prompts/README.md). Nothing in the bundle is trusted or run.
 
-    tar -C ~/tmp/duet-offline/<bundle> -cf - . | podman run -i --rm -v "$PWD/work:/data:ro" soup \
-        python -m soup.check_offline > ~/tmp/duet-offline/<bundle>/check.jsonl
+    tar -C "$OFFLINE/<bundle>" -cf - . | podman run -i --rm -v "$PWD/work:/data:ro" soup \
+        python -m soup.check_offline > "$OFFLINE/<bundle>/check.jsonl"
 
 The bundle arrives as a tar on stdin, so no container mounts the offline directory. Only the per-theory
 files `S<n>.md` are read; each starts with `# S<n> (`<key>`)`. Axioms and open claims come from our

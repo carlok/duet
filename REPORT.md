@@ -955,7 +955,7 @@ ran E 3.5.1; Vampire 5.1.0, Twee 2.7.1 and LADR-2026-8A are current.
 ## Found offline with an LLM, machine-checked (21 Nov 2026, evening)
 
 An external LLM got `prompts/survivors.md` (the 32 survivor claims) outside the repository. Its bundle lives in
-`~/tmp/duet-offline/survivors-external01-2026-11-21/`. Nothing from it entered `work/results`, the corpus or the
+`$OFFLINE/survivors-external01-2026-11-21/` (a scratch directory outside the repository). Nothing from it entered `work/results`, the corpus or the
 archive. Check: `tar -C <bundle> -cf - S*.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m
 soup.check_offline > <bundle>/check.jsonl`. Axioms and claims come from our `work/results`; only the
 tables, the hand-transcribed ℤ formulas and the lemma statements come from the bundle.
