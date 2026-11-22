@@ -44,10 +44,10 @@ def holds(T, F, G):
     return True
 
 
-def screen(T, sizes=(2, 3, 4), cap=80):
+def screen(T, sizes=(2, 3, 4), cap=80, secs=60):
     from .profile import all_models
     for n in sizes:
-        ms = all_models(T, n, 3000, 60)[0][:cap]
+        ms = all_models(T, n, 3000, secs)[0][:cap]
         Fs = {np.asarray(F).tobytes(): F for _, F, _ in ms}
         Gs = {np.asarray(G).tobytes(): G for _, _, G in ms}
         for F, G in itertools.product(Fs.values(), Gs.values()):
@@ -68,12 +68,23 @@ def one_op(t):
 _C = None
 
 
-def prove_split(T, max_order=3, secs=30, cap=200):
+def mixed_certificate(T, models):
+    """A certificate of non-split from given models of T (no prover): the · table of one and the ∘ table of
+    another together violate a law. Verifier V4 runs this on stage a's census models first."""
+    for (n1, F, _), (n2, _, G) in itertools.product(models, models):
+        if n1 == n2 and not holds(T, F, G):
+            return {'split': False, 'witness': {'n': n1, 'F': np.asarray(F).tolist(), 'G': np.asarray(G).tolist()}}
+    return {'split': None}
+
+
+def prove_split(T, max_order=3, secs=30, cap=200, C=None):
     global _C
     from .core import Corpus, ORDER
     from .provers import prove_e
-    if _C is None: _C = Corpus(store=data('corpus'))
-    imp = _C.implied(sorted(T))
+    if C is None:
+        if _C is None: _C = Corpus(store=data('corpus'))
+        C = _C
+    imp = C.implied(sorted(T))
     if imp is None: return {'split': None, 'why': 'no corpus model'}
     cand = [int(t) for t in np.nonzero(imp)[0] if ORDER[t] <= max_order and one_op(int(t)) and t not in T][:cap]
     proved = [t for t in cand if prove_e(sorted(T), t, processed_limit=200_000, cpu_limit=secs)['status'] == 'proved']

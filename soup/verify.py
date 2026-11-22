@@ -46,7 +46,34 @@ V2 = dict(DEFAULTS, difficulty='e_steps', claims_per_order=True, n_cands=4, max_
 # counts only after check_offline.check_finite accepts it. On S10, Mace4 stalled at size 7 for two hours where
 # Vampire's FMB found a 10-element model in under two minutes (21 Nov 2026).
 V3 = dict(V2, fmb_secs=60, c_fmb_secs=600)
-CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3}      # the stream verifier picks one by SOUP_VERIFIER
+# V4 (exploratory run X3, PREREGISTRATION.md): V3 plus two screens for known disguises in stage a, after the census.
+# Split: a ·-theory plus a ∘-theory (soup.split); a certificate of non-split from the census models first, then
+# Mace4 on 2-4 elements, then E. Division: T implies a one-sided quasigroup pair under one of the 8 relabellings
+# (soup.relabel), so ∘ is a division of · or the reverse. Either gives score 0 and skips stages b and c.
+V4 = dict(V3, split_screen=True, split_secs=10, split_cap=60, division_screen=True, division_secs=10)
+CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4}   # the stream verifier picks one by SOUP_VERIFIER
+DIVISION = {'left quasigroup': ['x·(x∘y) = y', 'x∘(x·y) = y'], 'right quasigroup': ['(x·y)∘y = x', '(x∘y)·y = x']}
+
+
+def screens(C, T, census, cfg):
+    """V4's two screens. Returns {'split': ..., 'division': ...}; 'hit' names the disguise found, if any."""
+    from . import split as sp
+    from .relabel import check as relabel_check
+    res = {}
+    if cfg.get('split_screen'):
+        s = sp.mixed_certificate(T, census)
+        if s['split'] is None:
+            try: s = sp.screen(T, secs=cfg['split_secs'])
+            except Exception as e: s = {'split': None, 'why': f'screen error: {type(e).__name__}'}
+        if s['split'] is None:
+            s = sp.prove_split(T, secs=cfg['split_secs'], cap=cfg['split_cap'], C=C)
+        res['split'] = {k: v for k, v in s.items() if k != 'witness'} | ({'witness_n': s['witness']['n']} if 'witness' in s else {})
+        if s['split'] is True: res['hit'] = 'split'
+    if cfg.get('division_screen') and 'hit' not in res:
+        d = relabel_check(T, C, secs=cfg['division_secs'], named=DIVISION, fragments=False)['implies']
+        res['division'] = d
+        if d: res['hit'] = 'division'
+    return res
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
 LEGACY = dict(V1, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
 
@@ -100,14 +127,14 @@ def stage_a(C, T, cfg=DEFAULTS, tag=''):
     t0 = time.time()
     T = sorted(set(T)); out = {'T': T, 'laws': [LAWS[t] for t in T]}
     G = _G()
-    counts = {}
+    counts = {}; census = []
     for n in cfg['census_sizes']:
         found = []
         while len(found) < CAP:
             avoid = [(relabel(F, p), relabel(Gt, p)) for F, Gt in found for p in itertools.permutations(range(n))]
             r = G(T, n).find(nondeg=True, rlimit=cfg['model_rlimit'], avoid=avoid)
             if not isinstance(r, tuple): break
-            found.append(r); C.add(f'model-{n}{tag}', n, *r)
+            found.append(r); C.add(f'model-{n}{tag}', n, *r); census.append((n, *r))
         counts[n] = len(found)
     for n in cfg['census_single']:
         r = G(T, n).find(nondeg=True, rlimit=cfg['model_rlimit'])
@@ -119,6 +146,13 @@ def stage_a(C, T, cfg=DEFAULTS, tag=''):
         out.update(score=0.0, status='no small non-degenerate model', claims=[], open=[], stage='a',
                    secs_a=round(time.time() - t0, 1))
         return out
+    if cfg.get('split_screen') or cfg.get('division_screen'):
+        t1 = time.time(); scr = screens(C, T, census, cfg); scr['secs'] = round(time.time() - t1, 1)
+        out['screen'] = scr
+        if scr.get('hit'):
+            out.update(score=0.0, status=scr['hit'], screened=scr['hit'], claims=[], open=[], stage='a',
+                       secs_a=round(time.time() - t0, 1))
+            return out
     redundant, unconfirmed = [], []
     for t in T:
         rest = [u for u in T if u != t]
@@ -200,7 +234,7 @@ def _fmb(C, c, T, secs, start):
 
 def stage_b(C, out, cfg=DEFAULTS):
     t0 = time.time()
-    if not out.get('model_sizes'): return out
+    if not out.get('model_sizes') or out.get('screened'): return out
     T = out['T']
     base = max(1, prove(T, T[0], cfg['base_rlimit'])[1])
     out['base_effort'] = base

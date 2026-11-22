@@ -2,6 +2,83 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X3: an exploratory run with filters for known disguises (written 22 Nov 2026, 06:45 UTC, before X3 starts)
+
+Exploratory and descriptive only: no hypothesis is tested. The night showed that most top candidates are old
+structures in disguise: split theories, and one-operation varieties with their division written as ∘. X3 asks
+what the search finds when those two disguises score nothing. The user's framing (22 Nov, morning): measuring
+rediscovery should help new findings, not replace the search for them.
+
+- Setup: `python -m soup.t4_setup --dir x3`, with its own `SOUP_DATA=/data/x3`, as X2.
+- Search: as X2. Arm `prior`, 4 searchers and 4 verifiers, seeds 601+. No change to the search code.
+- Verifier V4 (`soup/verify.py`) = V3 plus two screens in stage a, after the census:
+  - **Split screen.** `soup.split.screen` looks for a certificate of non-split on 2–4 elements. Without one,
+    `soup.split.prove_split` runs (E, 30 s). A proved split sets `split` in the result and gives verified score 0.
+  - **Division screen.** `soup.relabel.check` runs against the left and right quasigroup pairs only, under the 8
+    relabellings (E, 10 s per law). If T implies one, ∘ is a one-sided division of · (or the reverse): `division`
+    is set and the verified score is 0.
+
+  Neither screen uses the R1 catalogue or anything outside the code (rule 6). Tests: `tests/test_v4.py`.
+- Budget: 10,800 s from the start.
+- Stop rule: as X2. The budget runs out, or the VM's available memory drops below 1 GB, which gets reported. Nothing
+  else heavy runs next to it.
+- After the run, in this order:
+  1. the fragment check;
+  2. the top 20 non-fragments by score join the candidate list (sources `t4-prior,t4-noprior,.,x1,x2,x3`);
+  3. profile, `soup.hidden`, `soup.split` and `soup.relabel` on the new candidates;
+  4. the T5a ranking of all candidates, dossiers and Lean certificates for new entries in the top 10;
+  5. `soup.rediscover` (R1's method) on X3's verified theories;
+  6. a split scan of all X3 non-fragments (`soup.split --fragments 1 --jobs 4`), run last.
+- Reported descriptively, X3 next to X2:
+  - theories verified per hour;
+  - fragment share;
+  - split and division marks set by V4;
+  - claims refuted by FMB;
+  - the share of the top-20 non-fragments that the post hoc checks identify as split, division or a catalogue
+    entry;
+  - the top 20 and where they land in the ranking.
+- Caveats: V4 sets split and division theories to score 0, so X3's archive differs from X2's by construction. The
+  comparison is descriptive. The corpus at the start is the main `work/corpus` (as X2).
+
+## R1: rediscovery against a fixed catalogue (post hoc; written 22 Nov 2026, 06:45 UTC, before anything is computed)
+
+Post hoc analysis of existing results. The user's framing (22 Nov, morning): rediscovery has value as a process.
+It is measured here against a catalogue fixed in advance.
+
+- Catalogue: `soup/catalogue.py`, `KNOWN`, 13 entries, committed with this section:
+  - the 10 named theories of T3 (`soup.calib.NAMED`, unchanged);
+  - doppelsemigroups (= mutually interassociative semigroups);
+  - weakly associative lattices;
+  - Δ-bijective pairs, marked `post_hoc`: it was added because candidate `10c98c4b` contains it.
+
+  Sources are in the file. All entries have laws of order ≤ 4. Quasilattices were dropped: their axioms have
+  order 5.
+- Data: every verified theory with a law list in `.`, `t4-prior`, `t4-noprior`, `x1` and `x2` (and `x3` after it
+  runs).
+- For each theory T, entry K and relabelling r (`soup.relabel.relabellings`, 8, including the 3 dualities):
+  - **fragment**: every law of T holds in r(K) (r(K) ⇒ T), and T has an emergent law;
+  - **subvariety**: T ⇒ every law of r(K);
+  - **equivalent**: both.
+
+  Method: a model filter first. The corpus models of r(K) (resp. T) must satisfy the law (`Corpus.implied`). Then
+  E proves it: 10 s and 500,000 processed clauses per law. Only proofs count, and an E timeout is "unknown".
+  Results are cached per (r(K), law) and per (T, r(K)).
+- **Primary outcome:** the number of catalogue entries rediscovered at least once (some T equivalent to, or a
+  fragment of, some r(K)). Reported out of 13 and out of the 12 entries that are not `post_hoc`, per data
+  directory and overall.
+- Secondary outcomes:
+  - counts of fragment, subvariety and equivalent per entry and per directory;
+  - for the top-20 non-fragments of each run, the share identified by any route (split, division, a catalogue
+    relation).
+- Positive controls: the lattice fragments of `fragments.json` (as written) must reappear, and `10c98c4b` must be a
+  subvariety of the Δ-bijective entry.
+- Budget: 6 jobs and a 2 h wall cap, with nothing else heavy alongside. Theories not reached are reported.
+- Caveats:
+  - Post hoc. The catalogue was written by us after seeing the results, with the help of an LLM working outside
+    the search, and it covers only structures with axioms of order ≤ 4.
+  - Equivalence is up to the 8 relabellings, not up to arbitrary term equivalence. `soup.hidden` and `soup.split`
+    cover two other kinds.
+
 ## X2: a second exploratory run, as X1 (written 22 Nov 2026, 04:25 UTC, before X2 starts)
 
 Exploratory and descriptive only: no hypothesis is tested. The user asked that, with time left, a fresh batch of

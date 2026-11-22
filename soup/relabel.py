@@ -47,12 +47,15 @@ def _proves(A, B, secs):
     return all(prove_e(sorted(A), b, processed_limit=500_000, cpu_limit=secs)['status'] == 'proved' for b in B if b not in A)
 
 
-def check(T, C, secs=30):
-    from .calib import NAMED
+def check(T, C, secs=30, named=None, fragments=True):
+    """named: {name: [law strings]} (default: the 10 of calib.NAMED, as used for every output before 22 Nov
+    2026 morning). fragments=False skips the 'fragment of' direction (verifier V4's division screen)."""
     from .named import law_index
+    if named is None:
+        from .calib import NAMED as named
     T = sorted(set(T)); impT = C.implied(T)
     out = {'implies': [], 'fragment_of': [], 'equivalent_to': []}
-    for nm, laws in NAMED.items():
+    for nm, laws in named.items():
         N0 = [law_index(s.replace(' ', '')) for s in laws]
         seen = set()
         for rname, r in relabellings():
@@ -60,7 +63,7 @@ def check(T, C, secs=30):
             if None in N or tuple(N) in seen: continue
             seen.add(tuple(N)); tag = f'{nm} ({rname})'
             imp = impT is not None and all(impT[v] for v in N) and _proves(T, N, secs)
-            impN = C.implied(N)
+            impN = C.implied(N) if fragments else None
             frag = impN is not None and all(impN[t] for t in T) and _proves(N, T, secs)
             if imp: out['implies'].append(tag)
             if frag: out['fragment_of'].append(tag)
