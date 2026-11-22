@@ -1,0 +1,10 @@
+x2: results 1015, score>0 948, with emergent law 948, claims 3425
+ claim outcomes: {'proved': 3022, 'unknown': 55, 'FMB': 17, 'E sat': 159, 'E sat (uncertified)': 80, 'finite (stage a/c)': 86, 'open': 6}
+ FMB ran on 80 claims; refutation sizes {6: 6, 7: 3, 8: 8}
+ stage c results: 2 | verifier cfgs: {'V3': 1015}
+ V4 screens: {} | screen secs median None max None
+x3: results 970, score>0 833, with emergent law 833, claims 3002
+ claim outcomes: {'proved': 2664, 'finite (stage a/c)': 89, 'unknown': 56, 'FMB': 15, 'E sat': 117, 'E sat (uncertified)': 58, 'open': 3}
+ FMB ran on 75 claims; refutation sizes {6: 2, 7: 9, 8: 4}
+ stage c results: 2 | verifier cfgs: {'V4': 970}
+ V4 screens: {'split': 47, 'division': 36} | screen secs median 0.0 max 434.2

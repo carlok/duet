@@ -1,0 +1,19 @@
+T = 31d6d970: x · (x ∘ y) = x & (x ∘ y) · y = y & (x · x) · (y · x) = x & (x · y) · (x · x) = x
+T => x · x = x                    proved
+T => x ∘ x = x                    proved
+T => x · (y · x) = x              proved
+T => (x · y) · x = x              proved
+T => (x · y) · z = x · (y · z)    fails in the 3-element model
+T => (x ∘ y) ∘ z = x ∘ (y ∘ z)    fails in the 3-element model
+T => (x · y) · z = x · z          fails in the 3-element model
+T => x ∘ (x · y) = x              -
+T => (x · y) ∘ y = y              fails in the 3-element model
+T => x ∘ y = y ∘ x                fails in the 3-element model
+T => x · y = y · x                fails in the 3-element model
+T => x · y = y ∘ x                fails in the 3-element model
+T + assoc(·) => x · y = y ∘ x            proved
+T + assoc(·) => (x · y) · z = x · z      proved
+T + assoc(·) => (x ∘ y) ∘ z = x ∘ (y ∘ z) proved
+T + assoc(·) => x ∘ (x · y) = x          proved
+T + assoc(·) => (x · y) ∘ y = y          proved
+rectangular band with ∘ its transpose => T: proved

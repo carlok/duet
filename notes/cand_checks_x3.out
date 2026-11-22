@@ -1,0 +1,5 @@
+x3: 19 candidates; checked: split 19, hidden 19, relabel 19
+ split: {'False': 16, 'None': 3}
+ hidden definitional: 0
+ relabel: imply a named theory 5 {'absorption pair (rev· rev∘)': 2, 'right absorption pair (rev· rev∘)': 1, 'right absorption pair (rev∘)': 2} | fragment of one 0 | equivalent to one 0
+ ranks among 118 : [3, 12, 31, 38, 41, 44, 46, 58, 60, 61, 64, 68, 72, 82, 85, 94, 97, 98, 118]

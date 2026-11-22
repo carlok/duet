@@ -22,9 +22,13 @@ Routes:
 
 | 7 | `69dfbd8e` (X2, rank 3) | the variety of `2dc27508` (rank 10, from the earlier runs), axiomatized differently | prover: the two convergent presentations had the same 10 rules, then E both ways | none needed | about 40 min after X2 ended. The ranking had not noticed: it deduplicates only up to the dualities. |
 | 8 | `3e068fa6` (X2, rank 11) = {(x∘y)·(y∘x) = y, x·x = x, x∘x = x} | half of the Δ-bijective core (relabelled), plus idempotence; its finite models are Δ-bijective pairs | prover (E's 3-rule presentation), then the argument "injective on a finite set means bijective" | as row 6 | about 40 min after X2 ended |
+| 9 | `31d6d970` (X3, rank 3) = {x·(x∘y) = x, (x∘y)·y = y, (x·x)·(y·x) = x, (x·y)·(x·x) = x} | its associative case is a rectangular band with ∘ the transpose, which is term-equivalent to the rectangular skew lattices; laws 1–2 are Leech's absorptions a∧(a∨b) = a, (b∨a)∧a = a | literature (web-only agent: Leech's book, Prop. 1.3.14), then E both ways (`notes/31d6d970_checks.py`) | Leech 2020, Zbl 1530.06001 | about 1 h after X3 ended (11:08 → 12:15 UTC) |
 
 Not rediscoveries, kept apart: the synergy pair ETP 55 + 100 (no source found), and the full `10c98c4b` theory (no
-source found; `notes/10c98c4b.md`).
+source found; `notes/10c98c4b.md`). The full `31d6d970` theory is not associative (both associativity laws fail in
+its 3-element model) and has no source found. It is a non-associative weakening of rectangular skew lattices, much as
+Fried's weakly associative lattices weaken lattices. Zelinka's anticommutative conservative groupoids, with ∘ their
+transpose, are models.
 
 ## R1 (22 Nov 2026, 08:31 UTC; REPORT.md, R1)
 
