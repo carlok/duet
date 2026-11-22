@@ -95,8 +95,9 @@ Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`
 
 ## Status (22 Nov 2026, morning)
 
-Nothing is running. All commits are local. Since the T4 tag, nothing has been pushed: `main` and `t4-prereg` were
-pushed when T4 started, and later commits wait for the user.
+Running: **X2**, a second exploratory run as X1 (`soup-x2`, 04:21 to about 07:12 UTC; PREREGISTRATION.md, X2),
+with nothing heavy alongside. All commits are local. Since the T4 tag, nothing has been pushed: `main` and
+`t4-prereg` were pushed when T4 started, and later commits wait for the user.
 
 Finished overnight (details and commands in `REPORT.md`, newest first):
 - **T4** (preregistered, 4 h per arm at tag `t4-prereg`): H1 supported, 33% against 8% fragments.
