@@ -246,8 +246,8 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   tripped X1's memory stop. Long scans wait until the run ends, or get a memory check first.
 - Python on the host is still Python on the host, even for a one-line JSON check: use `podman run ... python3 -c`.
 - `soup.split`'s E stage (`prove_split`, 200 attempts × 30 s) can take more than an hour per theory with no finite
-  certificate. X4's candidates did (deviation 7). Expect the split scan of a fusion-arm run to take hours, and run it
-  last.
+  certificate. X4's candidates did (deviation 7). The scan of X4's 565 non-fragments still took only 38 min
+  (`--jobs 4`), because most theories get a certificate quickly. Run it last anyway.
 - The non-degeneracy test (· ≠ ∘, both essentially binary) is not invariant under the 8 relabellings. Equivalent
   varieties can show different non-degenerate counts (`2dc27508` against `31d6d970`: 4 against 6 on 3 elements).
   Compare total model counts.

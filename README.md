@@ -113,21 +113,22 @@ infinite one with a checkable construction settles it.
 - **Infinite-only non-implications** (A–D, S1, S9, S11 in `REPORT.md`): candidates for the TPTP library's non-theorem
   problems, with certified but necessarily infinite countermodels.
 
-## Status (22 Nov 2026, late afternoon)
+## Status (22 Nov 2026, evening)
 
 - **Done today:**
-  - X3 (verifier V4, the disguise filters);
-  - X4 (the fusion arm), which ran to budget after a 3-minute false start exposed the loophole `x·x = y·y`
-    (deviation 6);
-  - the rediscovery measure R1 (7 of 13 catalogued structures);
-  - the introduction [`intro/intro-reading.pdf`](intro/intro-reading.pdf);
-  - the paper draft, updated through X4.
-- **Running:** X4's preregistered checks on its 20 candidates (profile, hidden definitions, split, relabelling).
+  - X3, with verifier V4 and its disguise filters.
+  - X4, the fusion arm, with all its preregistered checks. None of its 20 candidates is identified, and none of
+    its 565 scored theories is split.
+  - The rediscovery measure R1: 7 of 13 catalogued structures.
+  - `soup.dedupe`: 138 candidates are 120 varieties.
+  - The novelty ranking N1, live above, with literature checks of its top 10. No source was found; `a9295908` is
+    left as a lead.
+  - The introduction [`intro/intro-reading.pdf`](intro/intro-reading.pdf), and the paper draft through N1.
+- **Running:** nothing.
 - **Next:**
-  - the rediscovery check and split scan on X4;
-  - merging candidates that are the same variety (`soup.dedupe`);
-  - the novelty ranking N1, which fills the live section above.
-  - Later: the open claims (T6) and more Lean certificates (T7).
+  - a search that steers away from X4's new attractor;
+  - an expert look at `a9295908`;
+  - the open claims (T6) and more Lean certificates (T7).
 
 `main` is pushed to the private origin at each milestone. Offline LLM work follows `prompts/README.md` and counts only
 after a machine check. Deviations and slips are disclosed in `PREREGISTRATION.md` and `REPORT.md`.

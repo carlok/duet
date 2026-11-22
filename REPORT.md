@@ -137,7 +137,9 @@ Commands:
 - **Off-diagonal baseline** (preregistered, `notes/offdiag_baseline.py x3`, output `notes/offdiag_baseline_x3.out`, on
   X3's final corpus). Without selection for it, 226 of X3's 833 positive theories (27.1%) prove an off-diagonal
   emergent law, and 673 (80.8%) have a non-empty off-diagonal gain on the corpus. X4: 565 of 565, by construction.
-- **Split scan of X4's 565 non-fragments** (`soup.split --fragments 1 --jobs 4`): running, last, from 18:24 UTC.
+- **Split scan of X4's 565 non-fragments** (`-e SOUP_DATA=/data/x4 soup python3 -m soup.split --fragments 1 --jobs 4`,
+  run last, 18:24–19:02 UTC): **0 split**, 408 not split (finite certificate), 157 unknown, 0 errors. X3: 0 of 570;
+  X2, unfiltered: 33 of 654.
 
 ## X3: exploratory run with verifier V4 (22 Nov 2026, 08:33–11:08 UTC; descriptive)
 
