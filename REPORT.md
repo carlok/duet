@@ -2,6 +2,53 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X4: fusion arm, away from the diagonal (22 Nov 2026, 13:01–15:31 UTC; descriptive; checks in progress)
+
+Preregistered as exploratory (PREREGISTRATION.md, X4; deviation 6). Arm `fusion` with verifier V5, seeds 701–704,
+4 searchers and 4 verifiers, budget 9,000 s, its own data directory (starting corpus 4,252 found structures).
+- **Ran to budget**, exit code 0. The minimum available memory was 1,627 MB.
+- **First attempt `x4a`** (12:55–12:58 UTC), stopped after 3 minutes: 10 of its 18 positive results proved
+  `x·x = y·y` (`notes/diagonal_x4a.out`). The diagonal was then widened to laws in which each side has at most one
+  variable, and the run restarted (deviation 6).
+
+Commands:
+- run: `podman run -d --name soup-x4 -v "$PWD/work:/data" -e SOUP_DATA=/data/x4 -e SOUP_VERIFIER=V5 soup python3 -m
+  soup.stream.supervisor --arm fusion --searchers 4 --verifiers 4 --seed0 701 --budget 9000 --run x4`;
+- fragments: `-e SOUP_DATA=/data/x4 -e FRAG_JOBS=3 soup python3 -m soup.fragments`;
+- statistics: `notes/runstats.py x4`, `notes/diagonal.py x4` and `notes/heartbeats.py x4` (outputs `notes/*_x4.out`).
+
+| | X4 (fusion, V5) | X3 (prior, V4) |
+| --- | --- | --- |
+| verified theories | 636 (254 per hour) | 970 (375 per hour) |
+| positive score | 565 (each with a proved off-diagonal emergent law, by construction) | 833 |
+| fragments of a named theory | **0 of 565** | 263 of 833 (31.6%) |
+| screened by V4 | 3 split, 0 division | 47 split, 36 division |
+| skipped as lattice-valid | 70,453 of 3,267,852 evaluations (2.2%) | not applicable |
+| claims / proved | 1,309 / 955 | 3,002 / 2,664 |
+| refuted by finite models (stages a and c) | 276 (21% of claims) | 89 (3%) |
+| refuted by Vampire FMB | 22 (sizes 6 ×5, 7 ×9, 8 ×3, 9 ×1, 10 ×4; FMB ran on 46 claims) | 15 |
+| refuted by E saturation | 40 (15 uncertified) | 175 (58 uncertified) |
+| unknown / open | 13 / 3 | 56 / 3 |
+| proving a one-variable emergent law | 0 (by construction) | 810 of 833 (97%) |
+| proving emergent associativity / commutativity | 0 / 7 | 0 / 9 |
+| structures added to the corpus | 3,844 | — |
+
+**Preliminary reading:**
+- **The run left the named corner.** No theory is a fragment of a named theory.
+- **It works on less charted ground.** Finite models refute 21% of its claims, against 3% in X3. The corpus guesses
+  for off-diagonal laws are weaker, and the corpus grew by 3,844 structures.
+- **The attractor moved, it did not disappear.** The most frequent proved laws are x·(x·x) = x·(x·y) (104),
+  x·(x·x) = x·(x∘y) (86), x·(x∘y) = x·x (61) and x·(x·y) = x·x (61). A left translation sends a family of elements
+  to x·x. These are two-variable laws that still pivot on the square.
+
+Pending, in the preregistered order:
+- the candidate checks: profile, hidden, split, relabel;
+- the ranking, Lean certificates and dossiers;
+- R1 on X4;
+- the "disconnected" marks against X3's baseline;
+- the off-diagonal baseline of X3;
+- the split scan.
+
 ## X3: exploratory run with verifier V4 (22 Nov 2026, 08:33–11:08 UTC; descriptive)
 
 Preregistered as exploratory (PREREGISTRATION.md, X3). It is X2 with verifier V4: split theories and divisions in

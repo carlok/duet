@@ -1,0 +1,5 @@
+s701: evals 28365, pushed 471, lattice-skipped 313
+s702: evals 54867, pushed 641, lattice-skipped 532
+s703: evals 1584341, pushed 1067, lattice-skipped 36324
+s704: evals 1600279, pushed 900, lattice-skipped 33284
+x4: 70453 of 3267852 evaluations skipped as lattice-valid (2.2%)

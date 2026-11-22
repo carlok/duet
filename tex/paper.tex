@@ -16,7 +16,7 @@
 \newtheorem{proposition}{Proposition}
 
 \title{Searching for synergy between two binary operations:\\
-an open-ended search over small equational theories\\[4pt]\large Draft, 21 November 2026}
+an open-ended search over small equational theories\\[4pt]\large Draft, 22 November 2026}
 \author{}
 \date{}
 
@@ -43,7 +43,7 @@ are not fusions after all. Some are split into a theory of each operation, and s
 with the division written as a second operation. We treat rediscovery as calibration and measure it. Against a
 catalogue of 13 known structures fixed in advance, the search rediscovered 7, among them twelve different lattice
 bases and Fried's weakly associative lattices. The core of the best remaining candidate turned out to be the
-$\Delta$-bijectivity of the Yang--Baxter literature. Whether the search finds theories that are interesting and not
+$\Delta$-bijectivity of the Yang--Baxter literature. Nearly all scored theories owe their synergy to the diagonal (97\% prove an emergent law in one variable); a run that counts only off-diagonal synergy leaves the named corner entirely (no fragment of a named theory among 565 scored theories). Whether the search finds theories that are interesting and not
 already named is still open.
 \end{abstract}
 
@@ -308,7 +308,7 @@ or one-operation varieties written with a division.
 \subsection{Rediscovery as calibration}
 An open-ended search that finds nothing known is suspect, and so is one whose finds are all known. We therefore
 record every case where a find turned out to be known, with the route that identified it and the time it took
-(\texttt{notes/rediscovery.md}). Six cases so far:
+(\texttt{notes/rediscovery.md}). Nine cases so far:
 \begin{itemize}
 \item two laws of McKenzie's lattice basis (identified through the literature);
 \item T4's lattice fragments (automatic);
@@ -316,26 +316,78 @@ record every case where a find turned out to be known, with the route that ident
 \item two idempotent left quasigroups written with their division (automatic, then a prover equivalence);
 \item three absorption-type subvarieties (automatic);
 \item the $\Delta$-bijective core of the tenth candidate, from the Yang--Baxter literature rather than the
-  Latin-square literature where we first looked (prover, then literature).
+  Latin-square literature where we first looked (prover, then literature);
+\item one variety reached twice from different axioms (two convergent presentations with the same rules, then E
+  both ways);
+\item half of the $\Delta$-bijective core with both operations idempotent, whose finite models are $\Delta$-bijective
+  pairs because an injective self-map of a finite set is bijective (prover, then that argument);
+\item a non-associative relative of the rectangular skew lattices: with associativity added, the theory
+  $\{x\op(x\cop y)=x,\ (x\cop y)\op y=y,\ (x\op x)\op(y\op x)=x,\ (x\op y)\op(x\op x)=x\}$ is exactly a rectangular band
+  with $\cop$ its transpose, which is term-equivalent to Leech's rectangular skew lattices (Leech 2020, Prop.\
+  1.3.14; E both ways). Both associativity laws fail in its 3-element model, and no source was found for the
+  full theory (a web-only literature agent, its key claims rechecked).
 \end{itemize}
-Four of the six were identified by pipeline checks, which were written only after the first candidates were in
-hand. The two found through the literature took hours, and one of them needed a second search in another field.
+Five of the nine were identified by pipeline checks, which were written only after the first candidates were in
+hand. The cases found through the literature took between under an hour and several hours, and one of them needed
+a second search in another field.
 A systematic measure against a catalogue of 13 known structures, fixed before the analysis, is preregistered as
 R1. Over 3,381 verified theories, the search rediscovered 7 of the 13 entries as a fragment or an exact
 equivalent (7 of the 12 entries that were not added after the fact). The exact equivalents are 12 different bases
-for lattices, 17 axiomatizations of absorption pairs, and three of Fried and Gr\"atzer's weakly associative
+for lattices, 17 axiomatizations of absorption pairs (26 with the later run X3), and three of Fried and Gr\"atzer's weakly associative
 lattices, a structure that was not on our named list. Dimonoids, doppelsemigroups, the one-sided quasigroups, the
 right absorption pair and the $\Delta$-bijective pair occur only as consequences of found theories. Of the 99 top
 candidates, 44 are identified by an automatic route (split, a division, or a catalogue relation); the cases in the
 ledger needed a prover by hand or the literature. The filters that
-now remove split theories and divisions in disguise during the search came out of this ledger
-\pending{X3: what the search finds with them}.
+now remove split theories and divisions in disguise during the search came out of this ledger.
+
+\subsection{Filtering the disguises during the search (X3)}
+The exploratory run X3 (preregistered as descriptive) uses verifier V4. That is V3 with two screens in the first
+stage: a split screen (a finite certificate of non-split, else Mace4 on 2--4 elements, else E) and a division screen
+(implication of a one-sided quasigroup pair under the 8 relabellings, E). Either one sets the verified score to 0.
+\begin{itemize}
+\item \textbf{The run.} It verified 970 theories in 9{,}304~s, when its memory rule stopped it at 91\% of the budget
+  (deviation 5). Of these, 83 were screened: 47 split and 36 divisions. Consistently, R1's method finds exactly 36
+  theories of X3 that imply a one-sided quasigroup pair.
+\item \textbf{The screens worked.} The split scan of X3's 570 non-fragments finds none split, against 33 of 654 in
+  the unfiltered run X2.
+\item \textbf{The fragment share did not change:} 31.6\%, against 31.0\% for X2, nearly all of lattices.
+\item \textbf{Fewer of the top candidates are recognised.} Of X3's 19 new candidates, the automatic checks
+  identify 5 (all absorption-type subvarieties), against 9 of 18 for X2 and 11 of 19 for X1.
+\item \textbf{One new top-ranked candidate.} The highest new one is the non-associative relative of the rectangular
+  skew lattices in the ledger above.
+\end{itemize}
+
+\subsection{A diagonal attractor, and a fusion arm (X4)}
+Across T4, X1, X2 and X3, 3{,}478 of the 3{,}596 theories with a positive verified score (97\%) prove an emergent
+law in one variable, such as $x\op x=x$ or $x\op x=x\cop x$, and none proves emergent associativity. The score
+rewarded what a fusion forces on the diagonal, and the reference case, the absorption pair, is itself of that kind.
+
+The exploratory run X4 (preregistered) is a new arm, \emph{fusion}. It counts a law as gained only if no single
+axiom implies it even together with all the \emph{diagonal} laws the theory implies, those whose sides each have at
+most one variable. The arm also skips theories that hold in the 2-element lattice, and draws a quarter of its
+proposals as one law in $\op$ alone, one in $\cop$ alone and a bridge. Its verifier V5 claims only such laws.
+
+A first attempt counted only one-variable laws as diagonal. Within three minutes, 10 of its 18 positive theories
+proved $x\op x=y\op y$: the same attractor in another form. It was stopped, the definition widened, and the run
+restarted (deviation 6).
+
+\emph{Preliminary results}, before the post-run checks:
+\begin{itemize}
+\item \textbf{The run.} X4 verified 636 theories in 9{,}000~s; 565 have a positive score. None is a fragment of any
+  of the ten named theories (X3: 31.6\%), and only 3 were screened as split.
+\item \textbf{Less charted ground.} Finite models refute 21\% of its claims, against 3\% in X3. The cheap
+  implication guesses are much weaker there, and the run added 3{,}844 structures to its corpus.
+\item \textbf{The attractor moved.} The most frequent proved laws are now of the form $x\op(x\op y)=x\op x$ and
+  $x\op(x\op x)=x\op(x\op y)$: a left translation sends a whole family of elements to $x\op x$. They are two-variable
+  laws that still pivot on the square.
+\end{itemize}
+\pending{X4: candidate checks, ranking, rediscovery, the preregistered ``disconnected'' marks.}
 
 \section{Planned experiments}
 \pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the
 other finite countermodels, the models on $\mathbb{Z}$, the term model, and the main implications (the S10 model and
-the five candidate models are done).} \pending{X3: the search with filters for split theories and for divisions in
-disguise (verifier V4, preregistered).}
+the candidate models are done).} \pending{A ranking aimed at novelty rather than at resemblance to named theories
+(the preregistered ranking prefers a convergent presentation and a duality, the features of named theories).}
 
 \section{Limitations}
 \begin{itemize}
@@ -366,7 +418,7 @@ disguise (verifier V4, preregistered).}
 \section*{Reproducibility}
 All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1; E 3.2.5, Vampire 5.1.0,
 Prover9/Mace4 LADR-2026-8A and Twee 2.7.1 built from pinned sources). The matrix rebuild is byte-identical
-across runs (SHA-256 checked). Every number above is in \texttt{REPORT.md} with the command that produced it.
+across runs (SHA-256 checked). Every number above is in \texttt{REPORT.md} with the command that produced it. An introduction for readers without a background in algebra is in \texttt{intro/}.
 
 \bibliographystyle{plain}
 \bibliography{refs}
