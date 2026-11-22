@@ -2,6 +2,65 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## T5a: does an algebraist's profile separate named from random theories? (22 Nov 2026, night)
+
+Preregistered (PREREGISTRATION.md, T5a). There are two analyses, because of deviation 3: the VM's OOM killer ended
+3 profile children and 3 E runs during the first run, and the profile code counted a killed E run as "not
+proved".
+
+Commands:
+- as run: `podman run -d -v "$PWD/work:/data" soup python -m soup.profile --set t3 --jobs 8`;
+- rerun, fixed code, 4 jobs: `... python -m soup.profile --set t3 --name t3_rerun --jobs 4`;
+- analysis: `python -m soup.profile --t5a` and `python -m soup.profile --t5a t3_rerun` (raw data
+  `work/check/profile_t3*.json`, `work/check/t5a_report*.json`).
+
+| feature | named (as run) | random (as run) | Holm p (as run) | named (rerun) | random (rerun) | Holm p (rerun) |
+| --- | --- | --- | --- | --- | --- | --- |
+| F1 Mal'cev-type term (primary, uncorrected) | 1/10 | 21/117 | 0.86 | 1/10 | 22/120 | 0.87 |
+| F2 finite free algebra on 2 generators | 2/10 | 17/117 | 0.48 | 2/10 | 17/120 | 0.52 |
+| **F3 convergent presentation** | **6/10** | **13/117** | **0.0022** | **6/10** | **13/120** | **0.0020** |
+| F4 non-degenerate models on ≥ 3 sizes | 8/10 | 74/117 | 0.48 | 8/10 | 77/120 | 0.52 |
+
+The rerun had no crashes and no prover errors, and there were no OOM kills during it (kernel log). Of the
+127 × 4 feature values computed in both runs, one changed: a random theory's F4, from no to yes. The 3 theories that
+crashed in the first run (random k = 2, 5 and 6) completed in the rerun.
+
+- **H1 (primary, F1) is not supported.** Only the lattice has a Mal'cev-type term among the named theories: a
+  majority term of size 4. 22 of the 120 random theories have one: 21 Mal'cev terms, 11 minority terms, and a few
+  majority and Pixley terms. Several of these come from strong laws with very few models, such as
+  group-like or affine structure over ℤ/2. Our named list has no congruence-permutable theory: the quasigroups in it
+  are one-sided, and full quasigroups need three operations.
+- **H3 (F3) is supported.** The named theories with a convergent presentation are the absorption pairs and the four
+  one-sided quasigroups. Lattices, skew lattices and bisemilattices have none from E in 30 s. For lattices this is
+  expected, since lattice theory has no finite convergent rewrite system (Freese, Ježek and Nation 1993).
+  13 random theories have one.
+- **H2 and H4 (F2, F4) are not supported.**
+- Calibrated feature for the ranking (both analyses): **F3 only.**
+
+Caveats:
+- 10 named theories is a small sample. Several of them were picked for symmetry (T3), and F3 picks out exactly
+  the absorption and quasigroup families.
+- F3 depends on E's ordering and 30 s budget. "Not convergent" means none was found in that budget.
+- The rerun was decided after the first result had been seen (deviation 3). The two agree on every test.
+
+**Ranking (PREREGISTRATION.md, T5a "Use in ranking").** 62 candidates: the top 20 non-fragments by score from
+each T4 arm and from the earlier runs, plus T1 and T2. No candidate is equivalent to a standard theory. 14 have F3;
+they are ranked first, with ties broken by duality, then by the number of sizes with non-degenerate models, then
+by score. Commands: `python -m soup.dossier candidates --sources t4-prior,t4-noprior,.`,
+`python -m soup.profile --set candidates --jobs 2` (rerun from scratch after deviation 3),
+`python -m soup.dossier rank` (table in `work/check/ranking.txt`).
+
+| rank | source | key | laws | duality | non-degenerate models on 2/3/4/5 |
+| --- | --- | --- | --- | --- | --- |
+| 1 | earlier runs | `4dc33674` | x·(x·y) = y; (x∘y)∘y = x; x∘(x∘(x·y)) = x; ((x∘y)·y)·y = y | swap+opposite | 0 / 2 / 107 / ≥ 375 |
+| 2 | T4 prior | `8a512957` | x·(y∘x) = y∘y; x·x = (y·x)∘y; x∘(x∘((y·z)∘x)) = x; ((x·(y∘z))·x)·x = x | swap+opposite | see dossier |
+| 3 | T4 prior | `1ca933c1` | x·(y∘(x∘y)) = x; x∘(y·(x·y)) = x; x·((y∘x)∘y) = x; x∘((y·x)·y) = x; x·(((x·x)·y)∘z) = x; x∘(((x∘x)∘y)·z) = x | swap | see dossier |
+| 4 | earlier runs | `3078949b` | x·(x·(y∘y)) = x; x·(y∘(x∘x)) = x; x∘(y·(x·x)) = x; x∘(x∘(y·y)) = x | yes | see dossier |
+| 5 | earlier runs | `2dc27508` | x·(y·(x·x)) = x; ((x·x)·y)·x = x; (x∘y)·x = x·(z∘x) | yes | see dossier |
+
+Dossiers: `work/dossiers/0N-<key>.md` (`python -m soup.dossier write --top 5`). They are candidates, not results.
+The literature check, a hidden-definition check (`soup.hidden`, below) and Lean certificates follow.
+
 ## T4: duality-prior search against a matched control (21–22 Nov 2026, night)
 
 Preregistered (PREREGISTRATION.md, T4) and run unchanged at tag `t4-prereg` (`a5c60aa`):

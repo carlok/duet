@@ -61,11 +61,15 @@ def one_op(t):
     return len(ops) == 1
 
 
+_C = None
+
+
 def prove_split(T, max_order=3, secs=30, cap=200):
+    global _C
     from .core import Corpus, ORDER
     from .provers import prove_e
-    C = Corpus(store=data('corpus'))
-    imp = C.implied(sorted(T))
+    if _C is None: _C = Corpus(store=data('corpus'))
+    imp = _C.implied(sorted(T))
     if imp is None: return {'split': None, 'why': 'no corpus model'}
     cand = [int(t) for t in np.nonzero(imp)[0] if ORDER[t] <= max_order and one_op(int(t)) and t not in T][:cap]
     proved = [t for t in cand if prove_e(sorted(T), t, processed_limit=200_000, cpu_limit=secs)['status'] == 'proved']
@@ -89,7 +93,19 @@ def main():
     from .data import LAWS
     ap = argparse.ArgumentParser()
     ap.add_argument('--set'); ap.add_argument('--laws')
+    ap.add_argument('--fragments', help='post hoc: every non-fragment of SOUP_DATA/fragments.json -> split_nonfragments.json')
+    ap.add_argument('--jobs', type=int, default=2)
     a = ap.parse_args()
+    if a.fragments:
+        from concurrent.futures import ProcessPoolExecutor
+        rows = [r for r in json.load(open(data('fragments.json'))) if not r['fragment_of']]
+        with ProcessPoolExecutor(a.jobs) as ex:
+            res = [dict(x, key=r['key'], score=r['score'], laws=r['laws'], T=r['T'], dualities=r['dualities'])
+                   for r, x in zip(rows, ex.map(check, [r['T'] for r in rows], chunksize=4))]
+        json.dump(res, open(data('split_nonfragments.json'), 'w'), ensure_ascii=False, indent=1)
+        n = len(res); s = sum(x['split'] is True for x in res); u = sum(x['split'] is None for x in res)
+        print(f'{n} non-fragments: {s} split, {n - s - u} not split (finite certificate), {u} unknown')
+        return
     if a.set == 'candidates':
         jobs = [(str(r['key']), r['source'], r['laws'], r['T']) for r in json.load(open(data('check', 'candidates.json')))]
     else:
