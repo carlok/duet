@@ -26,4 +26,15 @@ Routes:
 Not rediscoveries, kept apart: the synergy pair ETP 55 + 100 (no source found), and the full `10c98c4b` theory (no
 source found; `notes/10c98c4b.md`).
 
-R1's systematic results are added below when computed.
+## R1 (22 Nov 2026, 08:31 UTC; REPORT.md, R1)
+
+Against a catalogue of 13 entries fixed in advance, the search rediscovered 7: lattice, skew lattice, absorption
+pair, bisemilattice, idempotent left and right quasigroups, and weakly associative lattices. That is also 7 of the
+12 entries that were not added post hoc. Exact equivalences:
+- 12 different bases for lattices;
+- 17 axiomatizations of absorption pairs;
+- 3 of Fried's weakly associative lattices (X1; that name was not on T3's list).
+
+All of these were found by an automatic check (`soup.rediscover`). Of the 99 top candidates, 44 are identified by
+an automatic route: split, division, or a catalogue relation. The ledger rows above are the cases that needed a
+prover by hand or the literature.

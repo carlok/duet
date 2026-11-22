@@ -2,6 +2,71 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## R1: rediscovery against a fixed catalogue (22 Nov 2026, 07:56–08:31 UTC; post hoc, preregistered plan)
+
+Plan and catalogue committed before computing (`534c1af`; PREREGISTRATION.md, R1). The catalogue is 13 known
+two-operation structures: the 10 named theories of T3, doppelsemigroups, weakly associative lattices, and
+Δ-bijective pairs (marked post hoc).
+
+Commands: `podman run --rm -v "$PWD/work:/data" soup python3 -m soup.rediscover --sources . --jobs 6`, then
+`--sources t4-prior,t4-noprior,x1,x2 --jobs 6 --wall 7200`, then `--summary --candidates`. Output:
+`work/check/rediscover.json`.
+
+Run:
+- 3,381 verified theories, all with a non-degenerate model.
+- 51 relabelled catalogue variants, with 6,860 Mace4 models of them on 2–4 elements used as the model filter.
+- 11,748 E jobs, 371 of them unknown.
+- 39 min wall clock; no theory was left out at the wall cap.
+
+**Primary outcome: 7 of the 13 entries were rediscovered (a fragment or an equivalent at least once), and 7 of the
+12 that are not post hoc.**
+- Rediscovered: lattice, skew lattice, absorption pair, bisemilattice, idempotent left quasigroup, idempotent right
+  quasigroup, weakly associative lattice.
+- Not rediscovered: dimonoid, left quasigroup, right quasigroup, right absorption pair, doppelsemigroup, and
+  Δ-bijective pair (post hoc). Each of these occurs only as something implied (a subvariety), never as a fragment.
+
+| entry | . | t4-prior | t4-noprior | x1 | x2 |
+| --- | --- | --- | --- | --- | --- |
+| theories | 354 | 1,050 | 441 | 521 | 1,015 |
+| lattice | 247 / 1 / 1 | 329 / 4 / 4 | 30 / 0 / 0 | 118 / 1 / 1 | 293 / 6 / 6 |
+| skew lattice | 44 / 1 / 0 | 51 / 4 / 0 | 1 / 0 / 0 | 19 / 1 / 0 | 38 / 6 / 0 |
+| absorption pair | 8 / 187 / 2 | 23 / 323 / 7 | 1 / 80 / 1 | 4 / 175 / 2 | 11 / 341 / 5 |
+| bisemilattice | 4 / 1 / 0 | 17 / 4 / 0 | 0 / 0 / 0 | 3 / 1 / 0 | 11 / 6 / 0 |
+| idempotent left / right quasigroup | 3 / 0 / 0 | 13 / 60 / 0 | 2 / 1 / 0 | 2 / 12 / 0 | 6 / 25 / 0 |
+| weakly associative lattice | 138 / 1 / 0 | 129 / 4 / 0 | 12 / 0 / 0 | 58 / 4 / **3** | 159 / 6 / 0 |
+| left / right quasigroup | 0 / 0 / 0 | 0 / 60 / 0 | 0 / 1 / 0 | 0 / 13 / 0 | 0 / 25 / 0 |
+| right absorption pair | 0 / 202 / 0 | 0 / 254 / 0 | 0 / 39 / 0 | 0 / 160 / 0 | 0 / 305 / 0 |
+| dimonoid | 0 / 0 / 0 | 0 / 6 / 0 | 0 / 0 / 0 | 0 / 24 / 0 | 0 / 24 / 0 |
+| doppelsemigroup | 0 / 0 / 0 | 0 / 6 / 0 | 0 / 0 / 0 | 0 / 25 / 0 | 0 / 24 / 0 |
+| Δ-bijective pair (post hoc) | 0 / 0 / 0 | 0 / 85 / 0 | 0 / 1 / 0 | 0 / 41 / 0 | 0 / 68 / 0 |
+
+Cells are fragment / subvariety / equivalent counts of distinct theories, over all 8 relabellings.
+
+**Exact rediscoveries (equivalent):**
+- **Lattices**: 12 theories (1 + 4 + 1 + 6), each a different basis for lattices. X2 alone has six, for example
+  {x·x = x, x∘x = x, x·(y·(x∘z)) = y·x, x∘(y∘(x·z)) = y∘x, ((x∘y)·z)·y = y·z, ((x·y)∘z)∘y = y∘z}.
+- **Absorption pairs**: 17 theories.
+- **Weakly associative lattices** (Fried and Grätzer 1973): 3 theories in X1, all commutative and all containing
+  x·((x∘y)·(z∘x)) = x with its dual. A structure whose name we did not have in T3's list was found exactly.
+
+**Positive controls pass.**
+- R1's lattice fragments (as written) equal those of `fragments.json` in all five directories: 247, 329, 30, 118,
+  293, with identical key sets.
+- `10c98c4b` is a subvariety of the Δ-bijective entry.
+
+**Top candidates identified by any route** (`--summary --candidates`; split, division, or any catalogue relation,
+including "implies"): `.` 11/20, t4-prior 9/20, t4-noprior 4/20, X1 11/19, X2 9/18 (and pilot 0/2). That is 44/99
+in all. "Identified" here is weak: implying an absorption pair counts. Equivalence is the strong form.
+
+Caveats:
+- Post hoc on existing data, with a catalogue we wrote after seeing the results (the Δ-bijective entry is marked
+  as such).
+- Only order-4 axiomatizations can be found at all.
+- A fragment of a weak entry (weakly associative lattice, absorption pair) is weak evidence; most of them are also
+  lattice fragments.
+- "Not rediscovered" includes entries that no reachable theory could match. The search has no laws of order 5 or
+  more, and its prior favours dualities.
+
 ## X2: second exploratory run with verifier V3 (22 Nov 2026, 04:21–07:12 UTC; descriptive)
 
 Preregistered as exploratory (PREREGISTRATION.md, X2): as X1, seeds 501+, its own data directory, 10,200 s. It ran
