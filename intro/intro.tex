@@ -40,12 +40,27 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
-\newtheorem{exercise}{Exercise}[section]
+\newtheorem{exercise}{Exercise}
+
+% Two versions from one source. intro.pdf: exercises at the end of each section. intro-reading.pdf (built with
+% \def\readingversion{} first, see the Makefile): no exercises in the main text, which never refers to them;
+% exercises and solutions in two appendices.
+\newif\ifreading
+\ifdefined\readingversion \readingtrue \else \readingfalse \fi
+\newcommand{\either}[2]{\ifreading#2\else#1\fi}      % {text with exercises}{reading text}
+\newcommand{\exnote}[1]{\ifreading\else#1\fi}        % a pointer to an exercise, only with exercises
+\newcounter{exgroup}
+\renewcommand{\theexercise}{\arabic{exgroup}.\arabic{exercise}}
+\newcommand{\exgroup}[2]{\setcounter{exgroup}{#1}\setcounter{exercise}{0}%
+  \ifreading\par\bigskip\noindent{\bfseries Section #1\quad #2}\par\nobreak\fi}
+\newcommand{\inlineexercises}[1]{\ifreading\else\csname exercises@#1\endcsname\fi}
 
 % an exercise points to its solution, the solution points back
 \newcommand{\solref}[1]{\hfill\mbox{\textit{(solution on p.~\pageref{sol:#1})}}}
 \newcommand{\solution}[1]{\par\medskip\noindent\textbf{Solution~\ref{ex:#1}.}\label{sol:#1}
   \textit{(exercise on p.~\pageref{ex:#1})}\ }
+
+\input{exercises}
 
 \begin{document}
 
@@ -62,8 +77,9 @@
 ideas needed to understand what the \proj{} project does: binary operations, laws, theories and their models, and what
 it means for laws to \emph{imply} other laws. It then explains the project's question. Can a machine, searching
 without help, find small sets of laws in two operations whose combination does more than the parts? It also
-explains how that search is built, what it has found so far, and why the question could matter. Most sections end
-with exercises, and the solutions are at the end. Numbers about the project are as of 22 November 2026; the
+explains how that search is built, what it has found so far, and why the question could matter.
+\either{Most sections end with exercises, and the solutions are at the end.}{Exercises and their solutions are kept
+out of the way, in two appendices at the end.} Numbers about the project are as of 22 November 2026; the
 repository's \file{REPORT.md} is the authoritative record, with the command behind every number.
 
 \medskip
@@ -106,19 +122,7 @@ This small fact comes back later. Some laws say ``a certain map is injective''. 
 already makes it bijective, but in an infinite one it does not. So a statement can be true in every \emph{finite}
 structure of a kind and still not follow from the laws.
 
-\begin{exercise}\label{ex:prod}
-Write out $\{0,1\}\times\{0,1,2\}$. How many elements does it have? \solref{prod}
-\end{exercise}
-
-\begin{exercise}\label{ex:funcs}
-How many functions are there from $\{0,1,2\}$ to $\{0,1\}$? How many are injective? How many are surjective?
-\solref{funcs}
-\end{exercise}
-
-\begin{exercise}\label{ex:inj}
-Check Proposition~\ref{prop:finite} on $A=\{0,1,2\}$ by counting: how many functions $A\to A$ are injective, and how
-many of those are not surjective? \solref{inj}
-\end{exercise}
+\inlineexercises{1}
 
 \section{Binary operations}
 
@@ -161,14 +165,7 @@ four. Small sets already hold more operations than anyone could look at one by o
 Projections and constant operations are \emph{degenerate}: they do not really combine their two arguments. We will
 need to rule them out later.
 
-\begin{exercise}\label{ex:count}
-Check the counts $16$ and $19{,}683$. \solref{count}
-\end{exercise}
-
-\begin{exercise}\label{ex:idem2}
-An operation is \emph{idempotent} if $x\op x=x$ for every $x$. How many of the 16 operations on $\{0,1\}$ are
-idempotent? Name them. \solref{idem2}
-\end{exercise}
+\inlineexercises{2}
 
 \section{Laws}
 
@@ -193,26 +190,10 @@ commutativity $2$, idempotence $1$. The project works with all laws of order at 
 Two laws that differ only by the names of their variables say the same thing: $x\op y=y\op x$ and $u\op v=v\op u$.
 So do $s=t$ and $t=s$. Laws are therefore counted \emph{up to renaming}: each law is written once, with its
 variables named $x,y,z,\dots$ in order of first appearance. In one operation, for example, there are exactly five
-laws of order~1 up to renaming (Exercise~\ref{ex:order1}).
+laws of order~1 up to renaming\either{ (Exercise~\ref{ex:order1})}{: $x\op x=x$, $x\op x=y$, $x\op y=x$, $x\op y=y$
+and $x\op y=z$}.
 
-\begin{exercise}\label{ex:max}
-Which of these laws hold for $\max$ on $\{0,1,2\}$: associativity, commutativity, idempotence, $x\op y=x$,
-$x\op(x\op y)=x\op y$? Is there an element $e$ with $e\op x=x$ for all $x$? \solref{max}
-\end{exercise}
-
-\begin{exercise}\label{ex:lp}
-Show that the left projection $x\op y=x$ on a set with at least two elements is associative and idempotent but
-not commutative. \solref{lp}
-\end{exercise}
-
-\begin{exercise}\label{ex:cost}
-How many assignments must you try to check associativity on 3 elements? On 6? \solref{cost}
-\end{exercise}
-
-\begin{exercise}\label{ex:order1}
-List the laws of order~1 in one operation, up to renaming. (One side is a variable, the other a product of two
-variables.) \solref{order1}
-\end{exercise}
+\inlineexercises{3}
 
 \section{Theories, models and implication}
 
@@ -258,27 +239,7 @@ The Equational Theories Project (ETP, 2024--2025) did this at scale for one oper
 22 million implications between pairs of single laws of order at most $4$ (there are $4{,}694$ such laws up to
 renaming), with proofs and countermodels checked in the proof assistant Lean~\cite{etp}.
 
-\begin{exercise}\label{ex:abs}
-The \emph{absorption laws} for two operations are $x\op(x\cop y)=x$ and $x\cop(x\op y)=x$. Prove that together they
-imply $x\op x=x$. (Hint: use the second law with $y=x$, then the first law with $y=x\op x$.) \solref{abs}
-\end{exercise}
-
-\begin{exercise}\label{ex:abs2}
-How many pairs of operations $(\op,\cop)$ on $\{0,1\}$ satisfy both absorption laws? How many of them are
-non-degenerate? Here that means both operations combine their arguments and the two operations differ.
-\solref{abs2}
-\end{exercise}
-
-\begin{exercise}\label{ex:abs3}
-Show that the first absorption law \emph{alone} does not imply $x\op x=x$: find a model of $x\op(x\cop y)=x$ on
-$\{0,1\}$ in which $x\op x=x$ fails. \solref{abs3}
-\end{exercise}
-
-\begin{exercise}\label{ex:corpus}
-Suppose you only know two structures: $\max$ on $\{0,1\}$ and the left projection on $\{0,1\}$. Both are idempotent
-and both are associative. Does idempotence imply associativity? Test $x\op y=2x+2y \bmod 3$ on $\{0,1,2\}$.
-\solref{corpus}
-\end{exercise}
+\inlineexercises{4}
 
 \section{Two operations}
 
@@ -286,7 +247,8 @@ From now on a structure is a set with \emph{two} binary operations, written $x\o
 both. Many of the most studied structures in algebra are of this kind.
 \begin{itemize}
 \item \textbf{Lattices.} $\max$ and $\min$ on a chain such as $\{0,1,2\}$, or union and intersection of sets. The
-  laws: both operations associative, commutative and idempotent, plus the two absorption laws.
+  laws: both operations associative, commutative and idempotent, plus the two \emph{absorption laws}
+  $x\op(x\cop y)=x$ and $x\cop(x\op y)=x$.
 \item \textbf{Rings.} $+$ and $\times$ on $\Z$, linked by distributivity $x\times(y+z)=(x\times y)+(x\times z)$. That
   law has order $5$, beyond what the project enumerates.
 \item \textbf{Quasigroups with their divisions.} A \emph{left quasigroup} has an operation $\op$ in which every
@@ -307,22 +269,18 @@ operation by its \emph{opposite} ($x\op' y:=y\op x$). These three moves (swap, o
 generate 8 relabellings. A theory that is mapped to itself by one of them has a \emph{duality}. Lattices are the
 classic case: swapping $\max$ and $\min$ gives a lattice again.
 
-\begin{exercise}\label{ex:lat3}
-How many pairs $(\op,\cop)$ on $\{0,1,2\}$ are lattices, counting tables, not shapes? Why exactly this many?
-\solref{lat3}
-\end{exercise}
-
-\begin{exercise}\label{ex:dual}
-Apply each relabelling to $x\op(x\cop y)=x$: the swap, the opposite of $\op$, the opposite of $\cop$, and both
-opposites. \solref{dual}
-\end{exercise}
+\inlineexercises{5}
 
 \partline{II}{The project}
 
-\section{Synergy: when the whole does more than the parts}
+\section{Synergy: when the whole does more than the parts}\label{sec:synergy}
 
-Exercises~\ref{ex:abs} and~\ref{ex:abs3} contain the central idea. Neither absorption law alone forces $x\op x=x$,
-but the two together do.
+\either{Exercises~\ref{ex:abs} and~\ref{ex:abs3} contain the central idea. Neither absorption law alone forces
+$x\op x=x$, but the two together do.}{The absorption laws of the previous section contain the central idea. Together
+they force $x\op x=x$. The second law with $y=x$ gives $x\cop(x\op x)=x$. The first law with $y=x\op x$ gives
+$x\op\bigl(x\cop(x\op x)\bigr)=x$, and replacing the inner term by $x$ turns this into $x\op x=x$. Neither law alone
+does it. On $\{0,1\}$, let $x\cop y=0$ for all $x,y$, and let $\op$ have $0\op0=0\op1=0$, $1\op0=1$ and $1\op1=0$. The first
+law holds, but $1\op1\neq1$. Exchanging the roles of the two operations shows the same for the second law.}
 
 \begin{definition}[\cite{paper}]
 Let $T$ be a theory. A law $e$ is \emph{emergent} in $T$ if $T\models e$ but no single law of $T$ implies $e$. A
@@ -340,15 +298,7 @@ by provers, find structure that a mathematician would call interesting? In parti
 \emph{not already named}? No language model is used anywhere in the search or its scoring, so what it finds is
 found, not recalled.
 
-\begin{exercise}\label{ex:emerg}
-Using Exercises~\ref{ex:abs} and~\ref{ex:abs3} (and the mirror image of~\ref{ex:abs3}), show that $x\op x=x$ is
-emergent in the absorption pair. \solref{emerg}
-\end{exercise}
-
-\begin{exercise}\label{ex:defsyn}
-Let $T=\{\,x\cop y=y\op x,\ (x\op y)\op z=x\op(y\op z)\,\}$. Show that $T\models (x\cop y)\cop z=x\cop(y\cop z)$, and that
-this is emergent. Why is it nevertheless not an interesting fusion? \solref{defsyn}
-\end{exercise}
+\inlineexercises{6}
 
 \section{Disguises: synergy that is not a real fusion}
 
@@ -358,7 +308,7 @@ way. Four kinds of theory look like fusions and are not.
 \item \textbf{Collapse.} If a theory forces an operation to be a projection or a constant, thousands of laws become
   true at once. The project requires a model in which both operations are essentially binary and different.
 \item \textbf{Definitions.} If one law says $x\cop y=y\op x$, or any other way of writing $\cop$ as a term in $\op$,
-  then $\cop$ is not a second operation at all (Exercise~\ref{ex:defsyn}). Such theories are filtered out.
+  then $\cop$ is not a second operation at all\exnote{ (Exercise~\ref{ex:defsyn})}. Such theories are filtered out.
 \item \textbf{Split theories.} Some theories are really a theory of $\op$ plus a separate theory of $\cop$; their
   bridges only look like bridges. For example, if a law makes every map $y\mapsto x\op y$ a bijection, an
   apparent bridge can turn out to be a law about one operation alone.
@@ -371,29 +321,10 @@ The filters for the last two were added after the search kept ranking such theor
 Let $T=\{\,x\op(x\op y)=y,\ x\op(y\cop z)=x\op(z\cop y)\,\}$. The second law is a bridge. But the first law says that the
 map $y\mapsto x\op y$ undoes itself, so it is injective. Then the second law can be ``cancelled'': it says exactly
 $y\cop z=z\cop y$. So $T$ has the same models as $\{x\op(x\op y)=y,\ y\cop z=z\cop y\}$, a law about $\op$ alone next to a law
-about $\cop$ alone. The bridge was a disguise (Exercise~\ref{ex:split2}).
+about $\cop$ alone. The bridge was a disguise\exnote{ (Exercise~\ref{ex:split2})}.
 \end{example}
 
-\begin{exercise}\label{ex:rb}
-A \emph{rectangular band} on $I\times J$ is the operation $(i,j)\op(k,l)=(i,l)$. On $\{0,1\}\times\{0,1\}$, check that it
-is associative and idempotent, and that $x\op(y\op x)=x$ and $(x\op y)\op z=x\op z$ hold. \solref{rb}
-\end{exercise}
-
-\begin{exercise}\label{ex:31}
-With $\op$ the rectangular band of Exercise~\ref{ex:rb} and $x\cop y:=y\op x$, check the four laws
-$x\op(x\cop y)=x$, $(x\cop y)\op y=y$, $(x\op x)\op(y\op x)=x$ and $(x\op y)\op(x\op x)=x$. (These four laws are a theory the
-search found; see Section~\ref{sec:found}.) \solref{31}
-\end{exercise}
-
-\begin{exercise}\label{ex:split}
-The theory $\{x\op y=x,\ x\cop y=x\}$ has no bridge, yet it implies the bridge $x\op y=x\cop y$. Why? Which rule
-excludes it? \solref{split}
-\end{exercise}
-
-\begin{exercise}\label{ex:split2}
-Prove the claim of the split-theory example: under $x\op(x\op y)=y$, the law $x\op(y\cop z)=x\op(z\cop y)$ holds if and only
-if $y\cop z=z\cop y$. \solref{split2}
-\end{exercise}
+\inlineexercises{7}
 
 \section{How the search is made}
 
@@ -405,8 +336,10 @@ program gives $4{,}694$ laws, the ETP's count, as a check.
 fixed collection of $12{,}509$ small structures on 2 to 6 elements: all pairs of operations on 2 elements, affine
 operations modulo $n$, lattices, group-derived operations, random tables. It records, once, which of the $71{,}369$
 laws hold in each of them. To guess what $T$ implies, it looks at the structures that satisfy $T$ and collects the
-laws true in all of them. Exercise~\ref{ex:corpus} shows why this is only a guess: a law can hold in every structure
-you happen to have and still not follow. Every countermodel the verifier finds later is added to the collection,
+laws true in all of them. \either{Exercise~\ref{ex:corpus} shows why this is only a guess: a law can hold in every
+structure you happen to have and still not follow.}{This is only a guess: a law can hold in every structure you
+happen to have and still not follow. For example, $\max$ and the left projection on $\{0,1\}$ are both idempotent and
+both associative. Yet $x\op y=2x+2y\bmod 3$ on $\{0,1,2\}$ is idempotent and not associative.} Every countermodel the verifier finds later is added to the collection,
 so the guesses improve.
 
 \paragraph{The search.} The search is a \emph{quality-diversity} algorithm, MAP-Elites~\cite{mapelites}. Theories are
@@ -432,10 +365,10 @@ pipeline.
 \item \emph{Guess.} Among the 12,509 structures, those satisfying $T$ include the lattices and many projection
   pairs. The laws true in all of them, minus the laws guessed for either law of $T$ alone, are the guessed emergent
   laws: $x\op x=x$, $x\cop x=x$, $x\op x=x\cop x$, and others.
-\item \emph{Models.} The search for small models finds the 2-element lattice (Exercise~\ref{ex:abs2}), so the
-  theory has a non-degenerate model.
+\item \emph{Models.} The search for small models finds the 2-element lattice\exnote{ (Exercise~\ref{ex:abs2})}, so
+  the theory has a non-degenerate model.
 \item \emph{Refute or prove.} No countermodel to $x\op x=x$ exists, and E finds the two-step proof of
-  Exercise~\ref{ex:abs} at once. The claim is confirmed.
+  \either{Exercise~\ref{ex:abs}}{Section~\ref{sec:synergy}} at once. The claim is confirmed.
 \item \emph{Score.} The theory scores for each proved emergent law, weighted by its difficulty and by the richness of
   its small models.
 \item \emph{Identify.} The post hoc checks note that every lattice satisfies $T$: $T$ is a \emph{fragment} of lattice
@@ -447,10 +380,7 @@ checked against known structures under all 8 relabellings, tested for splits and
 for in the literature. A candidate is not a result. ``New'' needs a literature check, an equivalence check, and
 ideally someone who knows the field.
 
-\begin{exercise}\label{ex:pairs}
-How many theories of exactly two laws can be formed from the $71{,}369$ laws? Compare with the $4{,}222$ theories the
-project has verified. \solref{pairs}
-\end{exercise}
+\inlineexercises{8}
 
 \section{What has been found so far}\label{sec:found}
 
@@ -463,8 +393,9 @@ As of 22 November 2026, honestly stated:
 \item \textbf{Prior art from a distant field.} The core of one top candidate is $(x\op y)\cop(y\op x)=x$ and
   $(x\cop y)\op(y\cop x)=x$. This turned out to be known from the study of the Yang--Baxter equation in physics and
   combinatorics: \emph{$\Delta$-bijective} algebras~\cite{bonatto}. The search was not aimed at that field.
-\item \textbf{A non-associative relative of a known structure.} Add associativity to the four laws of
-  Exercise~\ref{ex:31} and you get exactly the rectangular skew lattices of Leech~\cite{leech2020}, up to notation. Without associativity the
+\item \textbf{A non-associative relative of a known structure.} The search found the four laws $x\op(x\cop y)=x$,
+  $(x\cop y)\op y=y$, $(x\op x)\op(y\op x)=x$ and $(x\op y)\op(x\op x)=x$\exnote{ (Exercise~\ref{ex:31})}. Add associativity and
+  you get exactly the rectangular skew lattices of Leech~\cite{leech2020}, up to notation. Without associativity the
   theory has more models, and no source for it was found. It remains a candidate.
 \item \textbf{A diagonal attractor.} 97\% of the scored theories prove an emergent law in one variable, such as
   $x\op x=x$ or $x\op x=x\cop x$, and none proves emergent associativity. The search had learned to fuse cheaply
@@ -509,6 +440,22 @@ No theory found so far is claimed to be new.
 \end{itemize}
 
 \appendix
+\ifreading
+\clearpage
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+Exercises for each section of the text, in order. The solutions follow in the next appendix.
+\csname exercises@1\endcsname
+\csname exercises@2\endcsname
+\csname exercises@3\endcsname
+\csname exercises@4\endcsname
+\csname exercises@5\endcsname
+\csname exercises@6\endcsname
+\csname exercises@7\endcsname
+\csname exercises@8\endcsname
+\clearpage
+\fi
 \section*{Solutions}
 \addcontentsline{toc}{section}{Solutions}
 

@@ -9,8 +9,9 @@ whose laws together imply laws that no single law implies (*synergy*). The refer
 pair, which forces both operations to be idempotent. Every claim goes through finite-model search and theorem
 provers before it is reported. No language model is used in the search or its scoring.
 
-**New to the subject?** [`intro/intro.pdf`](intro/intro.pdf) builds the background from sets and functions, in
-11 pages with exercises and solutions, up to how the search works and why it could matter.
+**New to the subject?** [`intro/intro-reading.pdf`](intro/intro-reading.pdf) builds the background from sets and
+functions, in about 9 pages, up to how the search works and why it could matter. Exercises and solutions are in
+appendices, or inline at the end of each section in [`intro/intro.pdf`](intro/intro.pdf).
 
 ## Running it
 

@@ -1,0 +1,130 @@
+% Exercises of intro.tex, one macro per section. Inline at the end of each section in intro.pdf;
+% collected in an appendix in intro-reading.pdf. Solutions are in intro.tex (appendix) in both versions.
+
+% Section 1: Sets and functions
+\expandafter\newcommand\csname exercises@1\endcsname{%
+\exgroup{1}{Sets and functions}%
+\begin{exercise}\label{ex:prod}
+Write out $\{0,1\}\times\{0,1,2\}$. How many elements does it have? \solref{prod}
+\end{exercise}
+\begin{exercise}\label{ex:funcs}
+How many functions are there from $\{0,1,2\}$ to $\{0,1\}$? How many are injective? How many are surjective?
+\solref{funcs}
+\end{exercise}
+\begin{exercise}\label{ex:inj}
+Check Proposition~\ref{prop:finite} on $A=\{0,1,2\}$ by counting: how many functions $A\to A$ are injective, and how
+many of those are not surjective? \solref{inj}
+\end{exercise}
+}
+
+% Section 2: Binary operations
+\expandafter\newcommand\csname exercises@2\endcsname{%
+\exgroup{2}{Binary operations}%
+\begin{exercise}\label{ex:count}
+Check the counts $16$ and $19{,}683$. \solref{count}
+\end{exercise}
+\begin{exercise}\label{ex:idem2}
+An operation is \emph{idempotent} if $x\op x=x$ for every $x$. How many of the 16 operations on $\{0,1\}$ are
+idempotent? Name them. \solref{idem2}
+\end{exercise}
+}
+
+% Section 3: Laws
+\expandafter\newcommand\csname exercises@3\endcsname{%
+\exgroup{3}{Laws}%
+\begin{exercise}\label{ex:max}
+Which of these laws hold for $\max$ on $\{0,1,2\}$: associativity, commutativity, idempotence, $x\op y=x$,
+$x\op(x\op y)=x\op y$? Is there an element $e$ with $e\op x=x$ for all $x$? \solref{max}
+\end{exercise}
+\begin{exercise}\label{ex:lp}
+Show that the left projection $x\op y=x$ on a set with at least two elements is associative and idempotent but
+not commutative. \solref{lp}
+\end{exercise}
+\begin{exercise}\label{ex:cost}
+How many assignments must you try to check associativity on 3 elements? On 6? \solref{cost}
+\end{exercise}
+\begin{exercise}\label{ex:order1}
+List the laws of order~1 in one operation, up to renaming. (One side is a variable, the other a product of two
+variables.) \solref{order1}
+\end{exercise}
+}
+
+% Section 4: Theories, models and implication
+\expandafter\newcommand\csname exercises@4\endcsname{%
+\exgroup{4}{Theories, models and implication}%
+\begin{exercise}\label{ex:abs}
+The \emph{absorption laws} for two operations are $x\op(x\cop y)=x$ and $x\cop(x\op y)=x$. Prove that together they
+imply $x\op x=x$. (Hint: use the second law with $y=x$, then the first law with $y=x\op x$.) \solref{abs}
+\end{exercise}
+\begin{exercise}\label{ex:abs2}
+How many pairs of operations $(\op,\cop)$ on $\{0,1\}$ satisfy both absorption laws? How many of them are
+non-degenerate? Here that means both operations combine their arguments and the two operations differ.
+\solref{abs2}
+\end{exercise}
+\begin{exercise}\label{ex:abs3}
+Show that the first absorption law \emph{alone} does not imply $x\op x=x$: find a model of $x\op(x\cop y)=x$ on
+$\{0,1\}$ in which $x\op x=x$ fails. \solref{abs3}
+\end{exercise}
+\begin{exercise}\label{ex:corpus}
+Suppose you only know two structures: $\max$ on $\{0,1\}$ and the left projection on $\{0,1\}$. Both are idempotent
+and both are associative. Does idempotence imply associativity? Test $x\op y=2x+2y \bmod 3$ on $\{0,1,2\}$.
+\solref{corpus}
+\end{exercise}
+}
+
+% Section 5: Two operations
+\expandafter\newcommand\csname exercises@5\endcsname{%
+\exgroup{5}{Two operations}%
+\begin{exercise}\label{ex:lat3}
+How many pairs $(\op,\cop)$ on $\{0,1,2\}$ are lattices, counting tables, not shapes? Why exactly this many?
+\solref{lat3}
+\end{exercise}
+\begin{exercise}\label{ex:dual}
+Apply each relabelling to $x\op(x\cop y)=x$: the swap, the opposite of $\op$, the opposite of $\cop$, and both
+opposites. \solref{dual}
+\end{exercise}
+}
+
+% Section 6: Synergy: when the whole does more than the parts
+\expandafter\newcommand\csname exercises@6\endcsname{%
+\exgroup{6}{Synergy: when the whole does more than the parts}%
+\begin{exercise}\label{ex:emerg}
+Using Exercises~\ref{ex:abs} and~\ref{ex:abs3} (and the mirror image of~\ref{ex:abs3}), show that $x\op x=x$ is
+emergent in the absorption pair. \solref{emerg}
+\end{exercise}
+\begin{exercise}\label{ex:defsyn}
+Let $T=\{\,x\cop y=y\op x,\ (x\op y)\op z=x\op(y\op z)\,\}$. Show that $T\models (x\cop y)\cop z=x\cop(y\cop z)$, and that
+this is emergent. Why is it nevertheless not an interesting fusion? \solref{defsyn}
+\end{exercise}
+}
+
+% Section 7: Disguises: synergy that is not a real fusion
+\expandafter\newcommand\csname exercises@7\endcsname{%
+\exgroup{7}{Disguises: synergy that is not a real fusion}%
+\begin{exercise}\label{ex:rb}
+A \emph{rectangular band} on $I\times J$ is the operation $(i,j)\op(k,l)=(i,l)$. On $\{0,1\}\times\{0,1\}$, check that it
+is associative and idempotent, and that $x\op(y\op x)=x$ and $(x\op y)\op z=x\op z$ hold. \solref{rb}
+\end{exercise}
+\begin{exercise}\label{ex:31}
+With $\op$ the rectangular band of Exercise~\ref{ex:rb} and $x\cop y:=y\op x$, check the four laws
+$x\op(x\cop y)=x$, $(x\cop y)\op y=y$, $(x\op x)\op(y\op x)=x$ and $(x\op y)\op(x\op x)=x$. (These four laws are a theory the
+search found; see Section~\ref{sec:found}.) \solref{31}
+\end{exercise}
+\begin{exercise}\label{ex:split}
+The theory $\{x\op y=x,\ x\cop y=x\}$ has no bridge, yet it implies the bridge $x\op y=x\cop y$. Why? Which rule
+excludes it? \solref{split}
+\end{exercise}
+\begin{exercise}\label{ex:split2}
+Prove the claim of the split-theory example: under $x\op(x\op y)=y$, the law $x\op(y\cop z)=x\op(z\cop y)$ holds if and only
+if $y\cop z=z\cop y$. \solref{split2}
+\end{exercise}
+}
+
+% Section 8: How the search is made
+\expandafter\newcommand\csname exercises@8\endcsname{%
+\exgroup{8}{How the search is made}%
+\begin{exercise}\label{ex:pairs}
+How many theories of exactly two laws can be formed from the $71{,}369$ laws? Compare with the $4{,}222$ theories the
+project has verified. \solref{pairs}
+\end{exercise}
+}
