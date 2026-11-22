@@ -389,3 +389,14 @@ No random theory and no T4 theory had been profiled.
    - Not restarted: the stop rule says stop, and a second start would be a run with a different budget and corpus.
    - Reported: X1 as run (1.5 h), with the descriptive outcomes listed above. The top 20 non-fragments go through
      the profile and ranking as planned.
+5. **X3, stopped by its memory rule (22 Nov 2026, 11:08 UTC, before any X3 result was analysed).** X3 started at
+   08:33:28 UTC with a 10,200 s budget. At 11:08:32 UTC the watcher read 975 MB of available memory, below the
+   preregistered 1 GB, and stopped the run (`podman stop -t 30`; journal "stopped by signal" at 11:08:37; exit code 137).
+   It ran 9,304 s, 91% of the budget: 970 theories verified.
+   - Likely cause: the run's own memory. The supervisor's PSS total rose from 7,087 MB (10:45) to 8,334 MB (11:07). X2,
+     with the same worker count, ended at a minimum of 1,026 MB.
+   - Nothing of mine ran in the last 23 minutes. Earlier, during the run, two light read-only containers counted
+     result files (`notes/coverage.py` at 10:14, `notes/diagonal.py` at 10:43), each finishing in seconds.
+   - The VM also hosts four containers of other projects. Together they use about 120 MB.
+   - Not restarted. Reported as run, with the post-run steps as planned.
+   - For X4: its budget (9,000 s) is below the point where X3 stopped. The stop rule is unchanged.

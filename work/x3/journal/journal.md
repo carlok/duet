@@ -1,0 +1,263 @@
+# soup journal
+
+Append-only. One section per run; times are UTC (container clock).
+
+## 2026-11-22 08:33:28 · run x3 started
+
+- budget 10200 s · 4 searchers (seeds 601–604, arm prior) · 4 verifiers (v0 prefers stage c) · z3 5.4.1 · 11 cores
+- before: 0 verified theories, 4252 found structures, queue 0 pending / 0 stage c
+- 08:33:39 · `4495c93d` stage b · score **1.122** (cheap 5.320) · swap · prior · models 2/3/4/5 = 1/8/8/1 · v3 in 2s
+  - laws: x · (x ∘ y) = x & x ∘ (x · y) = x
+  - claims: x · x = x proved (effort 494); x · x = x ∘ x proved (effort 563); x · (x · x) = x · x proved (effort 568); x · (x · x) = x · (x ∘ x) proved (effort 623)
+- 08:33:40 · `398baaf8` stage b · score **0.127** (cheap 2.750) · - · prior · models 2/3/4/5 = 0/0/8/1 · v1 in 2s
+  - laws: x · x = x & x · (x ∘ y) = y
+  - claims: x ∘ x = x false (E saturation); x · x = x ∘ x false (E saturation); x · (x · x) = x ∘ x false (E saturation); x · (x · x) = x · (x ∘ x) proved (effort 554)
+- 08:33:40 · `2583dbf0` stage b · score **1.176** (cheap 6.444) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/8/8/1 · v0 in 3s
+  - laws: x · (x ∘ y) = x & x ∘ (x · y) = x & (x ∘ y) · y = y & (x · y) ∘ y = y
+  - claims: x · x = x proved (effort 858); x · x = x ∘ x proved (effort 988); x · (x · x) = x · x proved (effort 991); x · (x · y) = x · (y · y) proved (effort 1,248)
+- 08:33:43 · **new #1**: `2583dbf0` score 1.176: x · (x ∘ y) = x & x ∘ (x · y) = x & (x ∘ y) · y = y & (x · y) ∘ y = y
+- 08:33:50 · `74feb2c2` stage b · score **0.980** (cheap 4.440) · swap+opposite · prior · models 2/3/4/5 = 1/1/2/1 · v3 in 11s
+  - laws: x · ((y ∘ x) ∘ y) = x & (x · (y · x)) ∘ y = y & x ∘ ((y · z) · (x · z)) = x & ((x ∘ y) ∘ (x ∘ z)) · y = y
+  - claims: x · x = x proved (effort 23,167); x · x = x ∘ x proved (effort 18,086); x · (x · x) = x · x proved (effort 2,509); x · (x · y) = x · (y · y) proved (effort 918,106)
+- 08:33:58 · `c66ab1b5` stage b · score **0.240** (cheap 6.613) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/1/2/1 · v3 in 8s
+  - laws: x · x = x & x ∘ x = x & x · ((y ∘ x) ∘ z) = x & x ∘ ((y · x) · z) = x & (x ∘ (y ∘ z)) · y = y & (x · (y · z)) ∘ y = y
+  - claims: x · x = x ∘ x proved (effort 1,193); x · (x · y) = x · y proved (effort 13,651); x · (x · y) = x · (y · y) proved (effort 1,860)
+  - redundant (proved from the others): x · x = x; x ∘ x = x
+- 08:34:11 · `7de8bdad` stage b · score **1.005** (cheap 9.662) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/1/2/1 · v3 in 13s
+  - laws: x · ((y ∘ x) ∘ z) = x & x ∘ ((y · x) · z) = x & (x ∘ (y ∘ z)) · y = y & (x · (y · z)) ∘ y = y
+  - claims: x · x = x proved (effort 3,344); x · x = x ∘ x proved (effort 3,899); x · (x · x) = x · x proved (effort 4,222); x · (x · y) = x · (y · y) proved (effort 10,836)
+- 08:34:25 · `80e25a8c` stage b · score **1.005** (cheap 9.538) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/1/2/1 · v3 in 13s
+  - laws: x · (y ∘ (x ∘ z)) = x & x ∘ (y · (x · z)) = x & ((x ∘ y) ∘ z) · y = y & ((x · y) · z) ∘ y = y
+  - claims: x · x = x proved (effort 3,344); x · x = x ∘ x proved (effort 3,899); x · (x · x) = x · x proved (effort 4,094); x · (x · y) = x · (y · y) proved (effort 8,463)
+- 08:34:33 · `e7992409` stage b · score **1.906** (cheap 5.506) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/5/8/0 · v2 in 50s
+  - laws: x · (y ∘ ((z ∘ w) ∘ x)) = x & x ∘ (y · ((z · w) · x)) = x & ((x ∘ (y ∘ z)) ∘ w) · x = x & ((x · (y · z)) · w) ∘ x = x
+  - claims: x · x = x proved (effort 27,842); x · x = x ∘ x proved (effort 28,553); x · (x · x) = x · x proved (effort 41,116); x · (x · y) = x · (y · y) proved (effort 197,338)
+- 08:34:35 · **new #1**: `e7992409` score 1.906: x · (y ∘ ((z ∘ w) ∘ x)) = x & x ∘ (y · ((z · w) · x)) = x & ((x ∘ (y ∘ z)) ∘ w) · x = x & ((x · (y · z)) · w) ∘ x = x
+- 08:34:37 · `049bc2bc` stage b · score **0.195** (cheap 8.727) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/8/8/1 · v2 in 4s
+  - laws: x · x = y ∘ y & x · (x ∘ y) = x ∘ (x · z) & (x ∘ y) · y = (z · y) ∘ y
+  - claims: x · (x · x) = x · (x ∘ y) proved (effort 5,962)
+- 08:34:45 · `d5acea44` stage b · score **0.437** (cheap 5.705) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/2/6/1 · v1 in 65s
+  - laws: x · x = x & x ∘ x = x & x · (y · (y ∘ z)) = y · x & x ∘ (y ∘ (y · z)) = y ∘ x & ((x ∘ y) · y) · z = z · y & ((x · y) ∘ y) ∘ z = z ∘ y
+  - claims: x · x = x ∘ x proved (effort 1,331); x · (x · y) = x · y proved (effort 909,413); x · (x · y) = x · (y · y) proved (effort 30,000,082)
+  - redundant (proved from the others): x · (y · (y ∘ z)) = y · x; x ∘ (y ∘ (y · z)) = y ∘ x; ((x ∘ y) · y) · z = z · y
+- 08:34:48 · `a9bbeeee` stage b · score **0.501** (cheap 7.908) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/2/6/1 · v1 in 2s
+  - laws: x · y = y · x & x ∘ y = y ∘ x & x · (x ∘ y) = x & x ∘ (x · y) = x & (x ∘ y) · y = y & (x · y) ∘ y = y
+  - claims: x · x = x proved (effort 1,185); x · x = x ∘ x proved (effort 1,324); x · (x · x) = x · x proved (effort 1,425); x · (x · y) = x · (y · y) proved (effort 1,913)
+  - redundant (proved from the others): x · (x ∘ y) = x; x ∘ (x · y) = x; (x ∘ y) · y = y; (x · y) ∘ y = y
+- 08:34:57 · `8a13a094` stage b · score **0.551** (cheap 8.240) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/1/2/1 · v3 in 14s
+  - laws: x · x = x ∘ x & x · ((y ∘ x) ∘ z) = x & x ∘ ((y · x) · z) = x & (x ∘ (y ∘ z)) · y = y & (x · (y · z)) ∘ y = y
+  - claims: x · x = x proved (effort 3,543); x · (x · x) = x proved (effort 1,221); x · (x · x) = x · x proved (effort 1,230); x · (x · y) = x · (y · y) proved (effort 1,950)
+  - redundant (proved from the others): x · x = x ∘ x
+- 08:34:58 · `db230137` stage b · score **0.807** (cheap 4.927) · swap · prior · models 2/3/4/5 = 1/2/6/1 · v0 in 78s
+  - laws: x · x = x & x ∘ x = x & x · (y · (y ∘ z)) = y · x & x ∘ (y ∘ (y · z)) = y ∘ x
+  - claims: x · x = x ∘ x proved (effort 891); x · (x · y) = x · y proved (effort 30,000,052); x · (x · y) = x · (y · y) proved (effort 30,000,056)
+- 08:35:03 · `9c8d1078` stage b · score **0.666** (cheap 7.692) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/2/8/1 · v3 in 4s
+  - laws: x · x = y · y & x ∘ x = y ∘ y & x · (y ∘ z) = (z · w) ∘ x & (x ∘ y) · z = z ∘ (w · x)
+  - claims: x · x = x ∘ x proved (effort 17,417); x · (x · x) = x · (x ∘ x) proved (effort 65,129)
+- 08:35:04 · `4d3f73a4` stage b · score **0.657** (cheap 7.692) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/0/8/1 · v0 in 5s
+  - laws: x · x = y · y & x ∘ x = y ∘ y & x · (y · z) = w ∘ (z ∘ y) & (x · y) · z = (y ∘ x) ∘ w
+  - claims: x · x = x ∘ x proved (effort 17,814); x · (x · x) = x · x proved (effort 10,721); (x · x) · x = x · (x · x) proved (effort 22,303)
+- 08:35:17 · `cbb3d087` stage b · score **1.215** (cheap 3.729) · - · prior · models 2/3/4/5 = 0/2/8/1 · v0 in 13s
+  - laws: x · ((x ∘ y) ∘ z) = x & (x · y) ∘ (x ∘ y) = x
+  - claims: x · x = x proved (effort 2,598); x · x = x ∘ x proved (effort 2,631); x · (x · x) = x · x proved (effort 30,090); x · (y · x) = x · (y · y) false (size 5); x · (x · x) = x · (x ∘ x) proved (effort 21,767)
+- 08:35:42 · rebalance: 1106 competitive pending (priority >= 0.195) > 16: retired searcher s601, started verifier v4
+- 08:36:03 · `caaad781` stage b · score **1.002** (cheap 6.600) · swap · prior · models 2/3/4/5 = 1/2/6/1 · v0 in 2s
+  - laws: x · y = y · x & x ∘ y = y ∘ x & x · (x ∘ y) = x & x ∘ (x · y) = x
+  - claims: x · x = x proved (effort 841); x · x = x ∘ x proved (effort 940); x · (x · x) = x · x proved (effort 988); x · (x · y) = x · (y · y) proved (effort 1,413)
+- 08:37:47 · rebalance: 184 competitive pending (priority >= 0.366) > 20: retired searcher s602, started verifier v5
+- 08:38:08 · `254669f7` stage b · score **1.176** (cheap 6.444) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/8/8/1 · v5 in 2s
+  - laws: x · (y ∘ x) = x & x ∘ (y · x) = x & (x ∘ y) · x = x & (x · y) ∘ x = x
+  - claims: x · x = x proved (effort 858); x · x = x ∘ x proved (effort 988); x · (x · x) = x · x proved (effort 992); x · (x · y) = x · (y · y) proved (effort 1,248)
+- 08:38:14 · `2c357e20` stage b · score **1.060** (cheap 6.236) · swap · prior · models 2/3/4/5 = 1/1/2/1 · v5 in 3s
+  - laws: x · y = y · x & x ∘ y = y ∘ x & x · (y ∘ (x ∘ z)) = x & x ∘ (y · (x · z)) = x
+  - claims: x · x = x proved (effort 2,433); x · x = x ∘ x proved (effort 2,757); x · (x · x) = x · x proved (effort 1,047); x · (x · y) = x · (y · y) proved (effort 2,043)
+- 08:38:14 · `cc2a0a69` stage b · score **1.046** (cheap 5.036) · opposite · prior · models 2/3/4/5 = 1/2/6/1 · v1 in 3s
+  - laws: x · (x ∘ y) = x & (x ∘ y) · y = y & x ∘ ((y · y) · x) = x & (x · (y · y)) ∘ x = x
+  - claims: x · x = x proved (effort 6,593); x · x = x ∘ x proved (effort 3,108); x · (x · x) = x · x proved (effort 929); x · (x · y) = x · (y · y) proved (effort 1,714)
+- 08:38:17 · `1dbc4a2b` stage b · score **1.236** (cheap 6.182) · swap+opposite · prior · models 2/3/4/5 = 1/1/2/1 · v1 in 3s
+  - laws: x · y = y · x & x ∘ y = y ∘ x & x · ((y ∘ x) ∘ z) = x & (x · (y · z)) ∘ y = y
+  - claims: x · x = x proved (effort 2,423); x · x = x ∘ x proved (effort 2,749); x · (x · x) = x · x proved (effort 1,047); x · (x · y) = x · (y · y) proved (effort 2,039)
+- 08:38:50 · status: 50 verified this run (45 positive), queue 1500 pending / 6 claimed / 0 stage c (0 competitive at >= 0.551, 4672 dropped), 29 unremarkable results not listed, corpus 4444 found structures, 404,566 surrogate evaluations, PSS total 4376 MB
+- 08:39:17 · `4e7b6e16` stage b · score **0.222** (cheap 3.300) · - · prior · models 2/3/4/5 = 0/8/8/1 · v4 in 200s
+  - laws: (x · y) · (z ∘ z) = y · z & (x ∘ y) · ((x ∘ y) ∘ y) = y
+  - claims: x ∘ (x · x) = x unknown; x · ((x ∘ x) ∘ x) = x proved (effort 30,000,038); (x · x) ∘ x = x ∘ (x ∘ x) false (size 8, Vampire FMB)
+- 08:42:03 · `c720ecad` stage b · score **1.819** (cheap 5.653) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/8/8/1 · v5 in 3s
+  - laws: x · x = x ∘ x & x · (y ∘ (x · x)) = x & x ∘ (y · (x ∘ x)) = x & ((x · x) ∘ y) · x = x & ((x ∘ x) · y) ∘ x = x
+  - claims: x · x = x proved (effort 10,217); x · (x · x) = x proved (effort 53,373); x · (x · x) = x · x proved (effort 53,377); x · (x · y) = x · (y · y) proved (effort 57,138)
+- 08:42:13 · `970dc880` stage b · score **1.050** (cheap 3.760) · opposite · prior · models 2/3/4/5 = 0/6/8/1 · v5 in 2s
+  - laws: x · x = x & (x ∘ y) · (y ∘ x) = x
+  - claims: x ∘ x = x proved (effort 496); x · x = x ∘ x proved (effort 543); x · (x · x) = x ∘ x proved (effort 579); x · (x · x) = x · (x ∘ x) proved (effort 614)
+- 08:43:07 · `99fddecf` stage b · score **1.256** (cheap 4.018) · swap · prior · models 2/3/4/5 = 1/8/8/1 · v1 in 2s
+  - laws: x · (y ∘ (x · x)) = x & x ∘ (y · (x ∘ x)) = x & x · (x ∘ y) = x ∘ (x · z)
+  - claims: x · x = x proved (effort 2,050); x · x = x ∘ x proved (effort 910); x · (x · x) = x · x proved (effort 2,806); x · (x · x) = x · (x ∘ x) proved (effort 939)
+- 08:43:58 · status: 100 verified this run (87 positive), queue 1487 pending / 6 claimed / 0 stage c (0 competitive at >= 0.769, 4701 dropped), 75 unremarkable results not listed, corpus 4630 found structures, 855,559 surrogate evaluations, PSS total 4654 MB
+- 08:45:18 · `c99cccec` stage b · score **0.000** (cheap 8.727) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/0/8/1 · v2 in 636s
+  - laws: x · x = y ∘ y & (x · y) · y = x · (x · y) & (x ∘ y) ∘ y = x ∘ (x ∘ y)
+  - claims: x · (x · x) = x · x unknown; x · (x · x) = x · (x · y) false (size 5); x · (x · x) = y · (x · x) unknown
+- 08:45:30 · `db5eadd4` stage b · score **0.000** (cheap 6.400) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/0/8/1 · v3 in 628s
+  - laws: x · x = y · y & x · x = y ∘ y & x ∘ x = y ∘ y & (x · y) · y = x · (x · y) & (x ∘ y) ∘ y = x ∘ (x ∘ y)
+  - claims: x · (x · x) = x · x unknown; x · (x · x) = x · (x · y) false (size 5); x · (x · x) = y · (x · x) unknown
+  - redundant (proved from the others): x · x = y · y; x ∘ x = y ∘ y
+- 08:46:31 · `f3e13c16` stage b · score **1.066** (cheap 5.356) · opposite · prior · models 2/3/4/5 = 1/2/6/1 · v3 in 2s
+  - laws: x · (x ∘ y) = x & x ∘ (y · x) = x & (x ∘ y) · y = y & (x · y) ∘ x = x
+  - claims: x · x = x proved (effort 858); x · x = x ∘ x proved (effort 988); x · (x · x) = x · x proved (effort 991); x · (x · y) = x · (y · y) proved (effort 1,581)
+- 08:46:40 · `7718a1e2` stage b · score **0.106** (cheap 6.533) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/0/8/1 · v0 in 637s
+  - laws: x · x = y · y & x · x = x ∘ x & x ∘ x = y ∘ y & (x · y) · y = x · (x · y) & (x ∘ y) ∘ y = x ∘ (x ∘ y)
+  - claims: x · x = y ∘ y proved (effort 1,123); x · (x · x) = x · x unknown; x · (x · x) = x · (x · y) false (size 5); x · (x · x) = y · (x · x) unknown
+  - redundant (proved from the others): x · x = y · y; x ∘ x = y ∘ y
+- 08:46:42 · `8a2ab9a5` stage b · score **1.636** (cheap 3.663) · - · prior · models 2/3/4/5 = 1/2/8/1 · v1 in 159s
+  - laws: x · ((y ∘ x) ∘ z) = x & x · ((y · z) ∘ z) = z · x
+  - claims: x · x = x proved (effort 30,000,034); x · x = x ∘ x proved (effort 30,000,036); x · (x · x) = x · x proved (effort 30,000,036); x · (x · y) = x · (y · y) proved (effort 30,000,040)
+- 08:46:43 · `d552e154` stage b · score **1.420** (cheap 3.567) · - · prior · models 2/3/4/5 = 0/7/8/1 · v3 in 5s
+  - laws: x · (y ∘ x) = x & x ∘ (y ∘ (z · x)) = x
+  - claims: x · x = x proved (effort 2,556); x · x = x ∘ x proved (effort 2,277); x · (x · x) = x · x proved (effort 3,467); x · (x · x) = x · (y · x) proved (effort 26,588)
+- 08:48:57 · `45881a10` stage b · score **1.605** (cheap 3.538) · - · prior · models 2/3/4/5 = 1/2/8/1 · v1 in 129s
+  - laws: x · ((y ∘ x) ∘ z) = x & (x ∘ (y · x)) · z = z · x
+  - claims: x · x = x proved (effort 30,000,034); x · x = x ∘ x proved (effort 30,000,036); x · (x · x) = x · x proved (effort 164,487); x · (x · y) = x · (y · y) proved (effort 30,000,040)
+- 08:49:09 · status: 145 verified this run (121 positive), queue 1464 pending / 6 claimed / 2 stage c (0 competitive at >= 1.000, 4701 dropped), 113 unremarkable results not listed, corpus 4813 found structures, 1,237,137 surrogate evaluations, PSS total 5571 MB
+- 08:49:09 · `5c6da20c` stage b · score **2.276** (cheap 3.471) · swap · prior · models 2/3/4/5 = 0/8/8/1 · v1 in 6s
+  - laws: (x · y) · (z ∘ z) = y · z & (x ∘ y) ∘ (z · z) = y ∘ z & (x ∘ y) · ((x ∘ y) ∘ y) = y & (x · y) ∘ ((x · y) · y) = y
+  - claims: x · x = x proved (effort 3,288); x · x = x ∘ x proved (effort 2,123); x · (x · x) = x · x proved (effort 4,240); x · (y · x) = y · (x · x) proved (effort 24,477)
+- 08:49:17 · `154abc19` stage b · score **1.492** (cheap 3.488) · - · prior · models 2/3/4/5 = 0/5/8/1 · v2 in 24s
+  - laws: x · (x ∘ y) = y ∘ x & x ∘ (y · ((z · w) · x)) = x
+  - claims: x · x = x proved (effort 5,774); x · x = x ∘ x proved (effort 2,354); x · (x · x) = x · x proved (effort 2,659); x · (x · x) = x · (x ∘ x) proved (effort 2,979)
+- 08:49:21 · `bc9fe203` stage b · score **1.317** (cheap 3.436) · swap · prior · models 2/3/4/5 = 0/7/8/1 · v1 in 4s
+  - laws: x · (y ∘ x) = x & x ∘ (y · x) = x & x · (y ∘ (y · x)) = x & x ∘ (y · (y ∘ x)) = x
+  - claims: x · x = x proved (effort 916); x · x = x ∘ x proved (effort 1,037); x · (x · x) = x · x proved (effort 1,001); x · (x · x) = x · (y · x) proved (effort 1,333)
+- 08:49:24 · **new #1**: `5c6da20c` score 2.276: (x · y) · (z ∘ z) = y · z & (x ∘ y) ∘ (z · z) = y ∘ z & (x ∘ y) · ((x ∘ y) ∘ y) = y & (x · y) ∘ ((x · y) · y) = y
+- 08:49:31 · `31d6d970` stage b · score **1.807** (cheap 3.400) · opposite · prior · models 2/3/4/5 = 0/6/8/1 · v3 in 3s
+  - laws: x · (x ∘ y) = x & (x ∘ y) · y = y & (x · x) · (y · x) = x & (x · y) · (x · x) = x
+  - claims: x · x = x proved (effort 2,395); x · x = x ∘ x proved (effort 10,692); x · (x · x) = x · x proved (effort 4,421); x · (x · x) = x · (y · x) proved (effort 23,942)
+- 08:49:36 · `911b3304` stage b · score **1.298** (cheap 2.538) · - · prior · models 2/3/4/5 = 0/8/8/1 · v2 in 4s
+  - laws: x · ((x ∘ y) · z) = x & (x · y) · y = (x ∘ y) · y
+  - claims: x · x = x proved (effort 1,194); x · x = x ∘ x proved (effort 833); x · (x · x) = x · x proved (effort 1,567); x · (x · x) = x · (x · y) proved (effort 3,755)
+- 08:50:03 · `b7afba56` stage b · score **2.457** (cheap 5.031) · swap+opposite · prior · models 2/3/4/5 = 1/2/6/1 · v2 in 10s
+  - laws: x · (x · x) = x & (x ∘ x) ∘ x = x & x · (y · (y ∘ z)) = y · x & ((x · y) ∘ y) ∘ z = z ∘ y
+  - claims: x · x = x proved (effort 88,483); x · x = x ∘ x proved (effort 210,551); x · (x · x) = x · x proved (effort 88,522); x · (x · y) = x · (y · y) proved (effort 1,480,614)
+- 08:50:11 · **new #1**: `b7afba56` score 2.457: x · (x · x) = x & (x ∘ x) ∘ x = x & x · (y · (y ∘ z)) = y · x & ((x · y) ∘ y) ∘ z = z ∘ y
+- 08:50:39 · `00d885cb` stage b · score **1.500** (cheap 4.911) · swap+opposite · prior · models 2/3/4/5 = 1/8/8/1 · v5 in 4s
+  - laws: x · x = x ∘ x & x · ((y ∘ x) ∘ z) = x & (x · (y · z)) ∘ y = y
+  - claims: x · x = x proved (effort 1,719); x · (x · x) = x proved (effort 794); x · (x · x) = x · x proved (effort 803); x · (x · x) = x · (x ∘ y) proved (effort 971)
+- 08:51:29 · `41f413df` stage b · score **1.554** (cheap 4.822) · swap · prior · models 2/3/4/5 = 1/8/8/1 · v3 in 37s
+  - laws: x · x = x ∘ x & x · (y ∘ (x ∘ z)) = x & x ∘ (y · (x · z)) = x
+  - claims: x · x = x proved (effort 1,719); x · (x · x) = x proved (effort 794); x · (x · x) = x · x proved (effort 803); x · (x · x) = x · (x ∘ y) proved (effort 30,000,047)
+- 08:52:04 · `ff637819` stage b · score **1.644** (cheap 3.250) · - · prior · models 2/3/4/5 = 0/2/8/1 · v5 in 82s
+  - laws: x · (y ∘ (y · x)) = x & (((x · x) ∘ y) · z) · x = x
+  - claims: x · x = x proved (effort 15,213); x · x = x ∘ x proved (effort 6,069); x · (x · y) = x · y proved (effort 30,000,036); x · (x · x) = x · (y · x) proved (effort 30,000,040)
+- 08:54:17 · `c12f6e49` stage b · score **1.522** (cheap 3.624) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/6/8/1 · v5 in 12s
+  - laws: x · ((y · z) · x) = y ∘ y & x · x = y ∘ ((x ∘ z) ∘ y) & (x · (y · z)) · x = z ∘ z & x · x = (y ∘ (z ∘ x)) ∘ y
+  - claims: x · x = x ∘ x proved (effort 4,412); x · (x · x) = x · x proved (effort 1,367); x · (x · x) = y · (x · x) proved (effort 1,865)
+- 08:54:20 · status: 285 verified this run (239 positive), queue 1340 pending / 6 claimed / 2 stage c (0 competitive at >= 1.256, 4701 dropped), 243 unremarkable results not listed, corpus 5392 found structures, 1,642,522 surrogate evaluations, PSS total 5539 MB
+- 08:55:02 · `6ecccd5b` stage b · score **1.885** (cheap 4.440) · swap+opposite · prior · models 2/3/4/5 = 1/2/6/1 · v3 in 36s
+  - laws: x · (y ∘ (x · x)) = x & ((x ∘ x) · y) ∘ x = x & x · (y · (y ∘ z)) = y · x & ((x · y) ∘ y) ∘ z = z ∘ y
+  - claims: x · x = x proved (effort 30,086); x · x = x ∘ x proved (effort 30,314); x · (x · x) = x · x proved (effort 7,462); x · (x · y) = x · (y · y) proved (effort 30,000,064)
+- 08:57:12 · `0b86da22` stage b · score **0.332** (cheap 4.311) · opposite · prior · models 2/3/4/5 = 0/0/2/0 · v2 in 111s
+  - laws: x · x = x & (x ∘ y) · (z ∘ x) = x & (x · y) · y = x · (x · y)
+  - claims: x ∘ x = x proved (effort 680); x · x = x ∘ x proved (effort 736); x · (x · y) = x · y unknown; x · (x · x) = x · (x ∘ x) proved (effort 850)
+- 08:59:30 · status: 368 verified this run (312 positive), queue 1264 pending / 6 claimed / 3 stage c (0 competitive at >= 1.285, 4701 dropped), 324 unremarkable results not listed, corpus 5734 found structures, 2,038,942 surrogate evaluations, PSS total 5580 MB
+- 09:04:40 · status: 379 verified this run (322 positive), queue 1262 pending / 6 claimed / 3 stage c (0 competitive at >= 1.298, 4701 dropped), 335 unremarkable results not listed, corpus 5805 found structures, 2,467,591 surrogate evaluations, PSS total 5890 MB
+- 09:04:51 · `d0034cc5` stage b · score **0.090** (cheap 3.043) · - · prior · models 2/3/4/5 = 0/1/4/1 · v3 in 213s
+  - laws: x · x = x & x ∘ x = x & (x ∘ y) · (z ∘ (x ∘ w)) = z
+  - claims: x · x = x ∘ x proved (effort 667); x · (y · x) = y · x unknown; x · (y · x) = y · (x · x) unknown
+  - redundant (proved from the others): x · x = x; x ∘ x = x
+- 09:04:59 · `77d0dd0e` stage b · score **0.791** (cheap 2.706) · opposite · prior · models 2/3/4/5 = 0/0/8/1 · v2 in 252s
+  - laws: x · ((y · z) · y) = z · z & (x · (y · x)) · z = y · y & x ∘ ((y ∘ x) ∘ (y · y)) = y & ((x · x) ∘ (y ∘ x)) ∘ y = x
+  - claims: x · x = x ∘ x proved (effort 582,062); x · (x · x) = x ∘ x unknown; x · (x · x) = x · (x ∘ x) proved (effort 30,000,068)
+- 09:05:27 · `44e9ed1a` stage b · score **0.000** (cheap 4.200) · - · prior · models 2/3/4/5 = 0/1/6/1 · v5 in 469s
+  - laws: x · (y ∘ x) = y & x ∘ (x ∘ (y ∘ x)) = x
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (y · x) = y · (x · x) unknown
+- 09:05:42 · `4e7b6e16` stage c · score **0.222** (cheap 3.300) · - · prior · models 2/3/4/5 = 0/8/8/1 · v4 in 1784s
+  - laws: (x · y) · (z ∘ z) = y · z & (x ∘ y) · ((x ∘ y) ∘ y) = y
+  - claims: x ∘ (x · x) = x OPEN (E 2e+06 processed clauses, Mace4 sizes 6-10 (300 s), z3 proof rlimit 3e+08); x · ((x ∘ x) ∘ x) = x proved (effort 30,000,038); (x · x) ∘ x = x ∘ (x ∘ x) false (size 8, Vampire FMB)
+- 09:05:42 · `2201781e` stage b · score **0.000** (cheap 2.138) · - · prior · models 2/3/4/5 = 0/0/4/0 · v1 in 563s
+  - laws: x · (y ∘ (x · y)) = y & x ∘ ((y ∘ y) ∘ (x · x)) = y
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · x) = x · (x ∘ x) unknown
+- 09:08:10 · `fa5d1b2e` stage b · score **1.617** (cheap 3.911) · swap+opposite · prior · models 2/3/4/5 = 1/8/8/0 · v3 in 98s
+  - laws: x · (y ∘ ((z ∘ w) ∘ x)) = x & ((x · (y · z)) · w) ∘ x = x
+  - claims: x · x = x proved (effort 30,000,036); x · x = x ∘ x proved (effort 30,000,038); x · (x · x) = x · x proved (effort 30,000,038); x · (x · x) = x · (x ∘ x) proved (effort 30,000,042)
+- 09:08:45 · `f7565a8d` stage b · score **1.615** (cheap 3.720) · swap · prior · models 2/3/4/5 = 0/4/8/1 · v3 in 8s
+  - laws: x · (y · (x ∘ x)) = x & x ∘ (y ∘ (x · x)) = x & ((x ∘ y) · (y ∘ x)) · y = y & ((x · y) ∘ (y · x)) ∘ y = y
+  - claims: x · x = x proved (effort 1,730); x · x = x ∘ x proved (effort 2,534); x · (x · x) = x · x proved (effort 4,282); x · (x · x) = x · (y · x) proved (effort 9,297)
+- 09:09:51 · status: 508 verified this run (433 positive), queue 1136 pending / 6 claimed / 7 stage c (0 competitive at >= 1.383, 4701 dropped), 458 unremarkable results not listed, corpus 6448 found structures, 2,846,746 surrogate evaluations, PSS total 6152 MB
+- 09:15:03 · status: 571 verified this run (488 positive), queue 1077 pending / 6 claimed / 7 stage c (0 competitive at >= 1.420, 4701 dropped), 521 unremarkable results not listed, corpus 6814 found structures, 3,180,739 surrogate evaluations, PSS total 6080 MB
+- 09:18:25 · `70039782` stage b · score **0.000** (cheap 2.333) · - · prior · models 2/3/4/5 = 1/8/8/1 · v1 in 293s
+  - laws: x · ((x ∘ x) ∘ x) = y ∘ y & ((x · y) · x) ∘ (x · z) = x
+  - claims: x · (x ∘ x) = x ∘ x unknown; x · (x ∘ x) = y · (x ∘ x) unknown
+- 09:18:38 · `538b3e13` stage b · score **1.768** (cheap 2.307) · swap+opposite · prior · models 2/3/4/5 = 0/8/8/1 · v1 in 13s
+  - laws: x · (y · (x ∘ x)) = x & ((x · x) ∘ y) ∘ x = x & x ∘ ((x · (y ∘ x)) · x) = x & (x ∘ ((x · y) ∘ x)) · x = x
+  - claims: x · x = x proved (effort 83,975); x · x = x ∘ x proved (effort 81,307); x · (x · x) = x · x proved (effort 3,735); x · (x · x) = x · (y · x) proved (effort 113,886)
+- 09:20:15 · status: 619 verified this run (533 positive), queue 1036 pending / 6 claimed / 8 stage c (0 competitive at >= 1.472, 4701 dropped), 567 unremarkable results not listed, corpus 7089 found structures, 3,521,543 surrogate evaluations, PSS total 6092 MB
+- 09:21:22 · `74353855` stage b · score **0.000** (cheap 2.337) · - · prior · models 2/3/4/5 = 0/8/8/1 · v4 in 479s
+  - laws: x · ((y ∘ y) ∘ x) = x & (x ∘ ((x ∘ y) · z)) ∘ z = z
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · x) = x · (x ∘ x) unknown
+- 09:21:52 · `c0c6f140` stage b · score **0.617** (cheap 3.443) · - · prior · models 2/3/4/5 = 0/1/4/1 · v1 in 181s
+  - laws: x · x = x & x · (y ∘ x) = y & x ∘ (y ∘ z) = x ∘ y
+  - claims: x ∘ x = x proved (effort 1,297); x · x = x ∘ x proved (effort 1,386); x · (y · x) = y · x unknown; x · (y · x) = y · (x · x) unknown
+- 09:25:27 · status: 642 verified this run (552 positive), queue 1019 pending / 6 claimed / 10 stage c (0 competitive at >= 1.472, 4701 dropped), 588 unremarkable results not listed, corpus 7183 found structures, 3,868,947 surrogate evaluations, PSS total 6270 MB
+- 09:28:46 · `55feb39e` stage b · score **0.000** (cheap 5.675) · opposite · prior · models 2/3/4/5 = 0/0/2/0 · v5 in 477s
+  - laws: (x ∘ y) · (z ∘ x) = x & (x · y) · y = x · (x · y)
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · x) = x · (x ∘ x) unknown
+- 09:30:39 · status: 670 verified this run (575 positive), queue 998 pending / 6 claimed / 11 stage c (0 competitive at >= 1.472, 4701 dropped), 615 unremarkable results not listed, corpus 7294 found structures, 4,211,065 surrogate evaluations, PSS total 6494 MB
+- 09:35:51 · status: 686 verified this run (588 positive), queue 987 pending / 6 claimed / 11 stage c (0 competitive at >= 1.472, 4701 dropped), 631 unremarkable results not listed, corpus 7383 found structures, 4,565,309 surrogate evaluations, PSS total 6539 MB
+- 09:38:04 · `15df4a0a` stage b · score **0.083** (cheap 3.308) · opposite · prior · models 2/3/4/5 = 0/0/4/1 · v1 in 467s
+  - laws: x · x = y · y & x · x = x ∘ x & x ∘ (y ∘ x) = y & (x ∘ y) ∘ x = y & (x · y) · y = x · (x · y)
+  - claims: x · x = y ∘ y proved (effort 1,057); x · (x · x) = x · x unknown; x · (x · x) = x · (x · y) false (size 5); x · (x · x) = y · (x · x) unknown
+  - redundant (proved from the others): x ∘ (y ∘ x) = y; (x ∘ y) ∘ x = y
+- 09:40:39 · `f784c3c9` stage b · score **0.000** (cheap 6.419) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 1/2/6/1 · v5 in 444s
+  - laws: x · y = y · x & x ∘ y = y ∘ x & (x ∘ y) · (y ∘ (y · z)) = y & (x · y) ∘ (y · (y ∘ z)) = y & ((x · y) ∘ y) · (y ∘ z) = y & ((x ∘ y) · y) ∘ (y · z) = y
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · y) = x · (y · y) unknown
+  - redundant (proved from the others): (x ∘ y) · (y ∘ (y · z)) = y; (x · y) ∘ (y · (y ∘ z)) = y; ((x · y) ∘ y) · (y ∘ z) = y; ((x ∘ y) · y) ∘ (y · z) = y
+- 09:41:03 · status: 689 verified this run (589 positive), queue 984 pending / 6 claimed / 13 stage c (0 competitive at >= 1.472, 4701 dropped), 632 unremarkable results not listed, corpus 7383 found structures, 4,938,670 surrogate evaluations, PSS total 7078 MB
+- 09:43:31 · `c99cccec` stage c · score **0.000** (cheap 8.727) · swap,opposite,swap+opposite · prior · models 2/3/4/5 = 0/0/8/1 · v0 in 4046s
+  - laws: x · x = y ∘ y & (x · y) · y = x · (x · y) & (x ∘ y) ∘ y = x ∘ (x ∘ y)
+  - claims: x · (x · x) = x · x OPEN (E 2e+06 processed clauses, Mace4 sizes 7-10 (300 s), z3 proof rlimit 3e+08); x · (x · x) = x · (x · y) false (size 5); x · (x · x) = y · (x · x) OPEN (E 2e+06 processed clauses, Mace4 sizes 7-10 (300 s), z3 proof rlimit 3e+08)
+- 09:46:16 · status: 728 verified this run (625 positive), queue 949 pending / 6 claimed / 12 stage c (0 competitive at >= 1.492, 4701 dropped), 671 unremarkable results not listed, corpus 7576 found structures, 5,268,141 surrogate evaluations, PSS total 7065 MB
+- 09:46:54 · `3e545b75` stage b · score **0.000** (cheap 5.675) · opposite · prior · models 2/3/4/5 = 0/0/3/0 · v1 in 529s
+  - laws: (x ∘ y) · (y ∘ z) = y & (x · y) · y = x · (x · y)
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · x) = x · (x ∘ x) unknown
+- 09:49:26 · `339be34a` stage b · score **0.000** (cheap 3.200) · opposite · prior · models 2/3/4/5 = 0/0/3/1 · v5 in 244s
+  - laws: x · x = y ∘ y & (x · y) · y = x · (x · y) & (x ∘ y) ∘ z = w ∘ (z · y) & (x · y) ∘ z = y ∘ (x ∘ w)
+  - claims: x · (x · x) = x · x unknown; x · (x · x) = y · (x · x) unknown
+- 09:51:37 · status: 748 verified this run (641 positive), queue 932 pending / 6 claimed / 14 stage c (0 competitive at >= 1.500, 4701 dropped), 689 unremarkable results not listed, corpus 7677 found structures, 5,530,197 surrogate evaluations, PSS total 7090 MB
+- 09:57:01 · status: 787 verified this run (673 positive), queue 893 pending / 6 claimed / 14 stage c (0 competitive at >= 1.522, 4701 dropped), 728 unremarkable results not listed, corpus 7924 found structures, 5,723,310 surrogate evaluations, PSS total 7091 MB
+- 10:02:26 · status: 814 verified this run (696 positive), queue 866 pending / 6 claimed / 14 stage c (0 competitive at >= 1.522, 4701 dropped), 755 unremarkable results not listed, corpus 8093 found structures, 5,928,176 surrogate evaluations, PSS total 7697 MB
+- 10:07:47 · status: 829 verified this run (710 positive), queue 858 pending / 6 claimed / 14 stage c (0 competitive at >= 1.522, 4701 dropped), 770 unremarkable results not listed, corpus 8196 found structures, 6,173,601 surrogate evaluations, PSS total 7711 MB
+- 10:07:48 · `d075c2d9` stage b · score **0.000** (cheap 3.129) · - · prior · models 2/3/4/5 = 0/1/6/1 · v1 in 690s
+  - laws: x · x = x & x · (y ∘ x) = y & x ∘ (x ∘ (y ∘ x)) = x
+  - claims: x ∘ x = x unknown; x · x = x ∘ x unknown; x · (y · x) = y · x unknown; x · (y · x) = y · (x · x) unknown
+- 10:13:13 · status: 839 verified this run (718 positive), queue 849 pending / 6 claimed / 15 stage c (0 competitive at >= 1.522, 4701 dropped), 779 unremarkable results not listed, corpus 8247 found structures, 6,405,793 surrogate evaluations, PSS total 7348 MB
+- 10:14:19 · `ebabc5d9` stage b · score **0.000** (cheap 5.675) · opposite · prior · models 2/3/4/5 = 0/0/2/0 · v5 in 584s
+  - laws: (x ∘ y) · (z ∘ x) = x & (x · x) · y = x · (y · y)
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · x) = x · (x ∘ x) unknown
+- 10:18:42 · status: 859 verified this run (734 positive), queue 829 pending / 6 claimed / 16 stage c (0 competitive at >= 1.522, 4701 dropped), 798 unremarkable results not listed, corpus 8400 found structures, 6,599,475 surrogate evaluations, PSS total 7304 MB
+- 10:20:05 · `f7658701` stage b · score **2.270** (cheap 2.373) · swap · prior · models 2/3/4/5 = 1/8/8/1 · v5 in 5s
+  - laws: x · (y ∘ x) = x ∘ x & x · x = x ∘ (y · x) & x · ((y ∘ x) · (x ∘ y)) = x & x ∘ ((y · x) ∘ (x · y)) = x
+  - claims: x · x = x proved (effort 5,534); x · x = x ∘ x proved (effort 10,011); x · (x · x) = x · x proved (effort 14,728); x · (x · x) = x · (x ∘ x) proved (effort 24,574)
+- 10:24:04 · status: 872 verified this run (745 positive), queue 820 pending / 6 claimed / 16 stage c (0 competitive at >= 1.528, 4701 dropped), 810 unremarkable results not listed, corpus 8479 found structures, 6,832,917 surrogate evaluations, PSS total 7304 MB
+- 10:29:34 · status: 872 verified this run (745 positive), queue 824 pending / 6 claimed / 16 stage c (0 competitive at >= 1.528, 4701 dropped), 810 unremarkable results not listed, corpus 8479 found structures, 7,076,645 surrogate evaluations, PSS total 7414 MB
+- 10:32:57 · `2ffe81df` stage b · score **0.213** (cheap 4.156) · opposite · prior · models 2/3/4/5 = 0/6/8/1 · v5 in 538s
+  - laws: x · (x ∘ y) = x & (x ∘ y) · y = y & (x · y) · x = x · (z · x)
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x proved (effort 2,625); x · (x · y) = x · (y · y) unknown
+- 10:35:04 · status: 876 verified this run (749 positive), queue 825 pending / 6 claimed / 17 stage c (0 competitive at >= 1.528, 4701 dropped), 813 unremarkable results not listed, corpus 8496 found structures, 7,313,235 surrogate evaluations, PSS total 7636 MB
+- 10:36:04 · `b1e29acb` stage b · score **1.842** (cheap 2.369) · swap · prior · models 2/3/4/5 = 0/8/8/1 · v5 in 6s
+  - laws: x · x = y · y & x ∘ x = y ∘ y & x · (x · y) = y ∘ (y · z) & x · (x ∘ y) = z ∘ (z ∘ x)
+  - claims: x · x = x ∘ x proved (effort 8,483); x · (x · x) = x · x proved (effort 12,920); x · (x · x) = x · (x · y) proved (effort 52,382)
+- 10:40:10 · `ceac4acf` stage b · score **0.791** (cheap 2.360) · swap+opposite · prior · models 2/3/4/5 = 1/8/8/1 · v5 in 105s
+  - laws: x · (y ∘ x) = x ∘ x & x · x = (x · y) ∘ x & x · ((y ∘ x) · (x ∘ y)) = x & ((x · y) ∘ (y · x)) ∘ y = y
+  - claims: x · x = x unknown; x · x = x ∘ x proved (effort 1,422); x · (x · x) = x · x proved (effort 1,586); x · (x · x) = x · (x ∘ x) proved (effort 2,147)
+- 10:40:27 · status: 902 verified this run (770 positive), queue 801 pending / 6 claimed / 18 stage c (0 competitive at >= 1.554, 4701 dropped), 837 unremarkable results not listed, corpus 8600 found structures, 7,546,429 surrogate evaluations, PSS total 6941 MB
+- 10:42:22 · `fab766d9` stage b · score **1.706** (cheap 2.340) · - · prior · models 2/3/4/5 = 0/8/8/1 · v5 in 18s
+  - laws: x · x = x & x ∘ (x ∘ x) = x & (x ∘ x) ∘ x = x & x · (y ∘ (x ∘ z)) = y · x
+  - claims: x ∘ x = x proved (effort 1,028); x · x = x ∘ x proved (effort 1,042); x · (x · x) = x ∘ x proved (effort 1,078); x · (x · x) = x · (x ∘ x) proved (effort 1,073)
+- 10:45:52 · status: 938 verified this run (804 positive), queue 766 pending / 6 claimed / 18 stage c (0 competitive at >= 1.569, 4701 dropped), 872 unremarkable results not listed, corpus 8890 found structures, 7,732,120 surrogate evaluations, PSS total 7087 MB
+- 10:51:10 · status: 960 verified this run (824 positive), queue 745 pending / 6 claimed / 18 stage c (0 competitive at >= 1.569, 4701 dropped), 894 unremarkable results not listed, corpus 9006 found structures, 8,009,766 surrogate evaluations, PSS total 7601 MB
+- 10:56:26 · status: 963 verified this run (827 positive), queue 747 pending / 6 claimed / 18 stage c (0 competitive at >= 1.569, 4701 dropped), 897 unremarkable results not listed, corpus 9018 found structures, 8,316,707 surrogate evaluations, PSS total 7707 MB
+- 10:59:52 · `5eade9c9` stage b · score **0.000** (cheap 5.675) · opposite · prior · models 2/3/4/5 = 0/0/3/0 · v3 in 517s
+  - laws: (x ∘ y) · (y ∘ z) = y & (x · x) · y = x · (y · y)
+  - claims: x · x = x unknown; x · x = x ∘ x unknown; x · (x · x) = x · x unknown; x · (x · x) = x · (x ∘ x) unknown
+- 11:01:43 · status: 964 verified this run (827 positive), queue 749 pending / 6 claimed / 19 stage c (0 competitive at >= 1.569, 4701 dropped), 897 unremarkable results not listed, corpus 9019 found structures, 8,624,208 surrogate evaluations, PSS total 8108 MB
+- 11:02:45 · `e81db722` stage b · score **2.454** (cheap 4.969) · opposite · prior · models 2/3/4/5 = 1/2/6/1 · v3 in 173s
+  - laws: (x · x) · (y · y) = y · x & (x ∘ y) · (y ∘ (y · z)) = y & ((x · y) ∘ y) · (y ∘ z) = y
+  - claims: x · x = x proved (effort 30,000,049); x · x = x ∘ x proved (effort 30,000,051); x · (x · y) = x · y proved (effort 30,000,051); x · (x · y) = x · (y · y) proved (effort 30,000,055)
+- 11:07:02 · status: 970 verified this run (833 positive), queue 746 pending / 6 claimed / 19 stage c (0 competitive at >= 1.573, 4701 dropped), 902 unremarkable results not listed, corpus 9019 found structures, 8,951,421 surrogate evaluations, PSS total 8334 MB
+- 11:08:37 · stopped by signal
