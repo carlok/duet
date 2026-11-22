@@ -19,7 +19,9 @@ rediscovery should help new findings, not replace the search for them.
     is set and the verified score is 0.
 
   Neither screen uses the R1 catalogue or anything outside the code (rule 6). Tests: `tests/test_v4.py`.
-- Budget: 10,800 s from the start.
+- Budget: 10,200 s from the start, the same as X2. The first version of this entry (commit `534c1af`) said 10,800
+  s. It was changed before the start because X2's available memory reached a minimum of 1,026 MB, just above the
+  stop rule, with nothing alongside.
 - Stop rule: as X2. The budget runs out, or the VM's available memory drops below 1 GB, which gets reported. Nothing
   else heavy runs next to it.
 - After the run, in this order:

@@ -25,5 +25,7 @@ def test_known_models():
     assert holds(laws_of('doppelsemigroup'), z2, z2)
     rect = [[2 * (a // 2) + b % 2 for b in range(4)] for a in range(4)]      # 2x2 rectangular band
     assert holds(laws_of('Delta-bijective pair'), rect, rect)
-    left = [[a for b in range(2)] for a in range(2)]                         # (x,y) -> (x, y) is not bijective here
-    assert not holds(laws_of('Delta-bijective pair'), left, left)
+    left = [[a for b in range(2)] for a in range(2)]          # left projection: (x,y) -> (x,y), bijective, self-decoding
+    assert holds(laws_of('Delta-bijective pair'), left, left)
+    const = [[0, 0], [0, 0]]                                  # constant: (x,y) -> (0,0), not bijective
+    assert not holds(laws_of('Delta-bijective pair'), const, const)
