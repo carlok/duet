@@ -2,7 +2,7 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
-## N1: a novelty ranking of the candidates (post hoc; written 22 Nov 2026, 15:50 UTC, before it is computed)
+## N1: a novelty ranking of the candidates (post hoc; written 22 Nov 2026, 15:40 UTC, before it is computed)
 
 **Why.** The preregistered T5a ranking sorts candidates by the features that separate named theories from random
 ones: a convergent presentation, then a duality. It rewards resemblance to the known, which is right for "is this
@@ -45,7 +45,7 @@ check, no R1 result on X4 and no dedupe result has been read.
 
 **Outputs.**
 - `work/check/novelty_ranking.json`, and the N1 top 20 with every mark.
-- `notes/candidates_table.md` (added at the user's request, 15:55 UTC, before computing), in two tables:
+- `notes/candidates_table.md` (added at the user's request, 15:43 UTC, before computing), in two tables:
   - **known:** every candidate a check identifies, with what it is and which check said so;
   - **not known as far as our checks and searches go:** the N1 list in order, with its marks as the metric.
 
