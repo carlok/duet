@@ -1,0 +1,5 @@
+IGNORE laws: 53 ; SQUARE laws: 26980
+X4: 565 scored; 519 imply an IGNORE law on the final corpus; 483 have a proved claim with a square
+x4: sample 300, rigid 28, rigid with off-diagonal gain 25
+x3: sample 300, rigid 15, rigid with off-diagonal gain 4
+X4 sample of 150, smallest square-free off-diagonal law: [('x · (x · y) = x · (x · z)', 26), ('x · (x · y) = x · (x ∘ y)', 24), ('x · (x · y) = x · (z · x)', 14)]

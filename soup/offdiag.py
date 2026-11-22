@@ -23,6 +23,15 @@ LAT2 is the law vector of the 2-element lattice (· = join, ∘ = meet; the swap
 0 <-> 1). A theory all of whose laws hold there is a fragment of distributive-lattice theory, or something weaker.
 The fusion arm skips those theories: that corner is mapped.
 
+IGNORE (arm 'fusion2', run X5, 23 Nov 2026): the 53 argument-ignoring laws, t = t' where t' is t with one variable
+that occurs once renamed to a fresh one (x·y = x·z, x·(x·y) = x·(x·z), x·(x∘y) = x·(x∘z), ...). Such a law says that
+a derived operation of order at most 2 ignores an argument. X4's off-diagonal attractor, x·(x·y) = x·x and its kin,
+implies one. So do absorption, x·(y·z) = x·y and the rectangular-band laws, so the whole lattice-and-band region
+implies one. 'fusion2' skips every theory whose corpus-implied laws contain one. The corpus over-approximates
+implication, so a theory that passes really implies no IGNORE law: a corpus model refutes each one. What is left are
+"rigid" theories, in which every derived operation of order <= 2 depends on all its arguments, as in quasigroups and
+rings. SQUARE (laws with a subterm s·s or s∘s) is for analysis only.
+
 Pools: the one-operation laws that serve as "traditions" for the fusion arm's proposal operator. A law qualifies if its
 corpus models include a non-degenerate structure at three or more sizes. Within each operation, the more restrictive
 half (fewer corpus models) is kept.
@@ -39,6 +48,20 @@ def _ops(t): return set() if t[0] == 'v' else {t[0]} | _ops(t[1]) | _ops(t[2])
 
 ONEVAR = np.array([len(_vars(L) | _vars(R)) == 1 for L, R in TREES])
 DIAG = np.array([len(_vars(L)) <= 1 and len(_vars(R)) <= 1 for L, R in TREES])   # each side in one variable
+def _sq(t): return t[0] != 'v' and (t[1] == t[2] or _sq(t[1]) or _sq(t[2]))
+def _occ(t, c):
+    if t[0] == 'v': c[t[1]] = c.get(t[1], 0) + 1
+    else: _occ(t[1], c); _occ(t[2], c)
+    return c
+def _ren(t, v, w): return ('v', w) if t == ('v', v) else t if t[0] == 'v' else (t[0], _ren(t[1], v, w), _ren(t[2], v, w))
+def _ignores(L, R):
+    cl, cr = _occ(L, {}), _occ(R, {})
+    return any(_ren(L, v, w) == R for v in cl if cl[v] == 1 and v not in cr
+               for w in cr if cr[w] == 1 and w not in cl)
+
+
+SQUARE = np.array([_sq(L) or _sq(R) for L, R in TREES])                            # a subterm s·s or s∘s
+IGNORE = np.array([_ignores(L, R) or _ignores(R, L) for L, R in TREES])            # a derived operation ignores an argument
 OPS = [_ops(L) | _ops(R) for L, R in TREES]
 ONLY_F = np.array([o == {'f'} for o in OPS])     # laws in · alone
 ONLY_G = np.array([o == {'g'} for o in OPS])     # laws in ∘ alone

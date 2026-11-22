@@ -2,6 +2,86 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X5: the fusion arm, restricted to rigid theories (written 22 Nov 2026, 21:40 UTC, before X5 starts)
+
+Exploratory and descriptive. The aim is the user's: steer the search away from X4's attractor and toward fusions
+that work but are not clearly connected to known structure.
+
+**Why this restriction, measured before writing this.**
+- **X4's attractor.** It was off the diagonal but still about squares: `x · (x · y) = x · x` and its kin. Of X4's 565
+  scored theories, 483 (85%) prove a claim with a subterm `s · s` or `s ∘ s`.
+- **First design, rejected.** It excluded laws with a square subterm (26,980 of 71,369 laws) and was rejected on two
+  measurements, neither from a run:
+  1. With those laws as background, McKenzie's positive control loses commutativity. With idempotence, a square law
+     such as `x · (y · y) = y · x` is commutativity in disguise.
+  2. Without them as background, a sample of 150 X4 theories still gains the same attractor in square-free form.
+     The most frequent remaining law is `x · (x · y) = x · (x · z)`.
+- **What the attractor really is.** A derived operation of order ≤ 2 that ignores an argument. Call a law
+  *argument-ignoring* if it reads `t = t'`, where `t'` is `t` with one variable that occurs once renamed to a fresh
+  one. Examples are `x · y = x · z`, `x · (x · y) = x · (x · z)` and `x · (x ∘ y) = x · (x ∘ z)`. There are 53 such
+  laws (`soup.offdiag.IGNORE`). On X4's final corpus, 519 of its 565 scored theories (92%) imply one. On samples of 300,
+  X4 has 28 rigid theories and X3 has 15. Script: `notes/x5_baseline.py`, output
+  `notes/x5_baseline.out`.
+
+**The single change from X4.** Arm `fusion2` is arm `fusion` plus one skip.
+- Any theory whose corpus-implied laws contain an argument-ignoring law is skipped and counted in the heartbeats
+  (`ign_skipped`).
+- The corpus over-approximates implication. So a theory that passes really implies no argument-ignoring law: a
+  finite model refutes each one.
+- What is left are *rigid* theories, in which every derived operation of order ≤ 2 depends on all its arguments, as
+  in quasigroups and rings. Absorption, the lattice region, bands and X4's attractor are all excluded.
+- Everything else is as in X4: verifier V5, the off-diagonal score, the lattice skip, the pools, 4 searchers and
+  4 verifiers, a budget of 9,000 s. Seeds are 801+.
+- The stop rule is as in X3 and X4: available memory below 1 GB, reported. Nothing heavy runs alongside.
+- Setup: `python -m soup.t4_setup --dir x5`.
+- Run: `podman run -d --name soup-x5 -v "$PWD/work:/data" -e SOUP_DATA=/data/x5 -e SOUP_VERIFIER=V5 soup python3 -m
+  soup.stream.supervisor --arm fusion2 --searchers 4 --verifiers 4 --seed0 801 --budget 9000 --run x5`.
+
+**Done before this entry, disclosed.** A 4-minute engineering smoke run (`work/x5smoke`, seeds 901–904, deleted
+afterwards) checked that the skip does not starve the search. About 4% of evaluations were skipped, and 12 theories
+were verified, 7 with a positive score. Nothing else from it was read.
+
+**Tests before the start** (`tests/test_fusion.py`, the whole suite, 71 tests, passes):
+- the masks on named laws;
+- absorption, McKenzie's basis and an attractor theory each imply an argument-ignoring law on the corpus;
+- the left quasigroup with `∘` its left division implies none.
+
+**Predictions** (descriptive; none is a test with a p-value):
+- P1: by construction, no X5 theory implies an argument-ignoring law on X5's final corpus. A violation would be a bug.
+- P2: the ten most frequent proved emergent laws of X5 share at most 3 with X4's.
+- P3: the share of scored theories with a proved claim containing a square is below X4's 85%.
+- P4: the classical constructions (affine, group-derived, rings), which are rigid, model more of the top-20
+  non-fragments than in X4. The risk is that X5 mostly finds known quasigroup and ring fragments.
+
+**After the run, as X4** (sources plus `x5`):
+1. fragments;
+2. top 20 into the candidates;
+3. profile, `soup.hidden`, `soup.split`, `soup.relabel`;
+4. T5a ranking, dossiers, Lean;
+5. `soup.rediscover`;
+6. `notes/disconnected.py`;
+7. `soup.dedupe`, with `x5` in its corpora;
+8. `soup.novelty --readme`;
+9. the split scan of X5's non-fragments, last.
+
+**Reported next to X4:**
+- theories verified per hour;
+- the share with a proved off-diagonal law;
+- the ten most frequent proved emergent laws;
+- fragment share;
+- V4 marks;
+- skips;
+- FMB refutations;
+- identification share of the top 20;
+- the disconnected marks;
+- N1 entries from X5.
+
+**Caveats:**
+- The rigid region is where quasigroups, groups and rings live. Rediscovery there is likely, and the catalogue covers
+  it less well than the lattice region, so "unidentified" is weaker still.
+- The skip depends on the corpus, which grows during the run.
+- An empty or near-empty result is possible and gets reported.
+
 ## N1: a novelty ranking of the candidates (post hoc; written 22 Nov 2026, 15:40 UTC, before it is computed)
 
 **Why.** The preregistered T5a ranking sorts candidates by the features that separate named theories from random

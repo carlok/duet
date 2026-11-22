@@ -4,7 +4,7 @@ import numpy as np
 from soup.core import Corpus, LAWS
 from soup.named import law_index
 from soup.paths import data
-from soup.offdiag import DIAG, ONEVAR, ONLY_F, ONLY_G, lat2, offdiag_gain, pools
+from soup.offdiag import DIAG, IGNORE, SQUARE, ONEVAR, ONLY_F, ONLY_G, lat2, offdiag_gain, pools
 from soup.verify import fusion_gain
 
 C = Corpus()          # base probes only: deterministic, independent of any run's corpus
@@ -82,3 +82,29 @@ def test_pools_are_one_operation_and_nonempty():
     pf, pg = pools(C)
     assert len(pf) > 10 and len(pg) > 10
     assert ONLY_F[pf].all() and ONLY_G[pg].all()
+
+
+
+# ---- X5 (arm 'fusion2'): theories implying an argument-ignoring law are skipped
+
+def test_ignore_and_square_masks():
+    for law in ['x·y=x·z', 'x·(x·y)=x·(x·z)', 'x·(x∘y)=x·(x∘z)', 'x·(y·z)=x·(y·w)']:
+        assert IGNORE[law_index(law)], law
+    for law in ['x·(x·y)=y', 'x·y=y·x', '(x·y)·z=x·(y·z)', 'x·(x∘y)=x', 'x·(x·y)=x·x']:
+        assert not IGNORE[law_index(law)], law
+    assert int(IGNORE.sum()) == 53 and int(SQUARE.sum()) == 26980
+    assert SQUARE[law_index('x·(x·y)=x·x')] and not SQUARE[law_index('x·(x·y)=x·(x·z)')]
+
+
+def test_ignore_catches_the_attractors_and_absorption():
+    # the corpus-implied laws of each theory contain an IGNORE law, so arm 'fusion2' skips them
+    CM = Corpus(store=data('corpus'))
+    for th in [ABSORPTION, MCKENZIE, ['x·(x·y)=x·x', 'x∘(x·y)=y∘x']]:
+        imp = CM.implied(T(th))
+        assert imp is not None and (imp & IGNORE).any(), th
+
+
+def test_rigid_theories_pass():
+    # a left quasigroup with ∘ its left division implies no IGNORE law (corpus models refute each one)
+    imp = Corpus(store=data('corpus')).implied(T(['x∘(x·y)=y', 'x·(x∘y)=y']))
+    assert imp is not None and not (imp & IGNORE).any()
