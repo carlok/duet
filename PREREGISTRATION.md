@@ -2,19 +2,20 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
-## X4: fusion arm, away from the diagonal and the lattice corner (written 22 Nov 2026, 10:55 UTC, during X3, before X4 starts)
+## X4: fusion arm, away from the diagonal and the lattice corner (written 22 Nov 2026, 10:40 UTC, during X3, before X4 starts)
 
 Exploratory and descriptive only: no hypothesis is tested. The user's aim (22 Nov, morning): find theories in the
 spirit of the "jazz" example, an original jump of the kind a human makes, and look for strategies that find
 legitimate, probably unexplored, valid new theories. Two measurements motivate X4:
 - **Coverage.** All runs together verified 4,222 theories against 1.8 × 10²⁶ law sets, and the duality prior keeps
   them in the most-studied corner (`notes/coverage.py`, REPORT "Coverage").
-- **A diagonal attractor.** Of the 3,574 theories with a positive verified score in T4, X1, X2 and X3 (at 10:40 UTC),
-  2,495 (70%) prove an emergent law in one variable (`x·x = x`, `x·x = x∘x`, ...). The ten most frequent proved
-  emergent laws are all laws about squares, and none of the 3,574 proves emergent associativity. The score rewards
-  what a fusion forces on the diagonal; the lattice absorption pair, our reference case, is itself such a case. (One-off
-  tally in a container over `results/*.json` of those four directories. It is repeated after X3 and reported with its
-  script.)
+- **A diagonal attractor.** Of the 3,596 theories with a positive verified score in T4, X1, X2 and X3 (10:45 UTC,
+  X3 running), 3,478 (97%) prove an emergent law in one variable. The ten most frequent proved emergent laws are all
+  about squares (`x·x = x∘x`, `x·(x·x) = x·x`, `x·x = x`, ...), and none of the 3,596 proves emergent associativity.
+  So the score rewards what a fusion forces on the diagonal. The lattice absorption pair, our reference case, is
+  itself such a case. Script: `notes/diagonal.py`, output `notes/diagonal_pre_x4.out`. A first one-off tally at
+  10:40 counted only three laws (`x·x = x`, `x∘x = x`, `x·x = x∘x`): 2,495 of 3,574, 70%. That figure was in this entry's
+  first commit, `3faeeb9`.
 
 Setup and arm:
 - Setup: `python -m soup.t4_setup --dir x4`, own `SOUP_DATA=/data/x4`, as X2 and X3.

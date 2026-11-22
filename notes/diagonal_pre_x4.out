@@ -1,0 +1,12 @@
+t4-prior t4-noprior x1 x2 x3: 3943 results, 3596 with positive score, 3478 prove a one-variable emergent law
+  2236  x · x = x ∘ x  (1 variable)
+  1851  x · (x · x) = x · x  (1 variable)
+  1354  x · x = x  (1 variable)
+   973  x · (x · x) = x · (x ∘ x)  (1 variable)
+   725  x · (x · y) = x · (y · y)  (2 variables)
+   549  x ∘ x = x  (1 variable)
+   456  x · (x · x) = x ∘ x  (1 variable)
+   352  x · (x · x) = x · (x · y)  (2 variables)
+   330  x · (x · y) = x · y  (2 variables)
+   221  x · (x · x) = x  (1 variable)
+proved emergent associativity 0 | commutativity 66
