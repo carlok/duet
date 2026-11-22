@@ -22,7 +22,11 @@ ARMS = ('prior', 'noprior')
 def proves_all(job):
     from .provers import prove_e
     A, B = job
-    return all(prove_e(A, t, processed_limit=200_000, cpu_limit=60)['status'] == 'proved' for t in B if t not in A)
+    for t in B:
+        if t in A: continue
+        s = prove_e(A, t, processed_limit=200_000, cpu_limit=60)['status']
+        if s != 'proved': return None if s == 'error' else False     # 'error': E was killed, e.g. by the OOM killer
+    return True
 
 
 def main():
@@ -56,10 +60,13 @@ def main():
         x['dkey'] = theory_key(x['T']); x['mc'] = R[x['arm']][x['key']].get('model_counts')
     pairs = [(i, j) for i in range(len(cand)) for j in range(i + 1, len(cand))
              if cand[i]['dkey'] != cand[j]['dkey'] and cand[i]['mc'] == cand[j]['mc']]
-    with ProcessPoolExecutor(10) as ex:
+    import os
+    with ProcessPoolExecutor(int(os.environ.get('T4R_JOBS', 10))) as ex:   # 10 E runs at once hit the OOM killer
         fw = list(ex.map(proves_all, [(cand[i]['T'], cand[j]['T']) for i, j in pairs]))
         bw = list(ex.map(proves_all, [(cand[j]['T'], cand[i]['T']) for i, j in pairs]))
     same = {(i, j) for (i, j), f, b in zip(pairs, fw, bw) if f and b}
+    out['equivalence_pairs'] = len(pairs)
+    out['equivalence_unknown'] = [[i, j] for (i, j), f, b in zip(pairs, fw, bw) if f is None or b is None]
     rep = list(range(len(cand)))
     for i in range(len(cand)):
         for j in range(i):

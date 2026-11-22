@@ -53,6 +53,8 @@ def rank():
     profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
     t5a = json.load(open(data('check', 't5a_report.json')))
     cal = t5a['calibrated']
+    rerun = data('check', 't5a_report_t3_rerun.json')          # deviation 3: features calibrated in both analyses
+    if rerun.exists(): cal = [f for f in cal if f in json.load(open(rerun))['calibrated']]
     C = Corpus(store=data('corpus'))
     rows = []
     for c in cands:

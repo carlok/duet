@@ -78,14 +78,15 @@ def all_models(T, n, cap=3000, secs=60):
                            input=ladr_input(T, None), capture_output=True, text=True, timeout=secs + 60)
         out = r.stdout
     except subprocess.TimeoutExpired:
-        return [], False
+        return [], False, None
     ms = _parse_models(out)
     complete = len(ms) < cap and ('exhausted' in out.split('Exiting with')[-1] or 'all_models' in out)
     seen, uniq = set(), []
     for m in ms:
         k = canon(*m)
         if k not in seen: seen.add(k); uniq.append(m)
-    return uniq, complete
+    # a negative return code is a signal (e.g. the VM's OOM killer): a crash, not a budget limit
+    return uniq, complete, (f'mace4 killed (signal {-r.returncode})' if r.returncode < 0 else None)
 
 
 # ---------------------------------------------------------------- term functions on the models
@@ -188,10 +189,13 @@ def convergent(T, cpu=30):
     from .provers import E_BIN, PROVER_MB
     src = '\n'.join(fof(a, f'a{k}', 'axiom') for k, a in enumerate(T)) + '\nfof(goal,conjecture,! [X,Y] : (X = Y)).\n'
     try:
-        out = subprocess.run([E_BIN, '--auto', '-s', '--print-saturated', f'--cpu-limit={cpu}', f'--memory-limit={PROVER_MB}'],
-                             input=src, capture_output=True, text=True, timeout=cpu + 30).stdout
+        r = subprocess.run([E_BIN, '--auto', '-s', '--print-saturated', f'--cpu-limit={cpu}', f'--memory-limit={PROVER_MB}'],
+                           input=src, capture_output=True, text=True, timeout=cpu + 30)
+        out = r.stdout
     except subprocess.TimeoutExpired:
         return {'convergent': False, 'why': 'E wall timeout'}
+    if r.returncode < 0:                                # killed by a signal: unknown, not "did not saturate"
+        return {'convergent': None, 'why': f'E killed (signal {-r.returncode})'}
     if 'Theorem' in out.split('SZS status')[-1][:20]: return {'convergent': False, 'why': 'trivial: T proves x = y'}
     if 'CounterSatisfiable' not in out: return {'convergent': False, 'why': 'E did not saturate'}
     R = []
@@ -241,11 +245,12 @@ def profile(T, sizes=(2, 3, 4, 5), budget=None):
     b = dict(mace4_secs=60, mace4_cap=3000, clone_secs=60, malcev_size=5, binary_size=7, e_secs=30, term_models=60)
     b.update(budget or {})
     out = {'T': list(T), 'budget': b}; t0 = time.time()
-    models, spec = {}, {}
+    models, spec, errors = {}, {}, []
     for n in sizes:
-        ms, complete = all_models(T, n, b['mace4_cap'], b['mace4_secs'] * (2 if n >= 5 else 1))
+        ms, complete, err = all_models(T, n, b['mace4_cap'], b['mace4_secs'] * (2 if n >= 5 else 1))
         models[n] = ms
         spec[n] = {'iso': len(ms), 'nondeg': sum(bool(is_nondeg(F, G, n)) for _, F, G in ms), 'complete': complete}
+        if err: spec[n]['error'] = err; errors.append(f'size {n}: {err}')
     out['spectrum'] = spec
     for n in sizes:                                     # the smallest non-degenerate model, for the dossier
         nd = [(F, G) for _, F, G in models[n] if is_nondeg(F, G, n)]
@@ -264,13 +269,17 @@ def profile(T, sizes=(2, 3, 4, 5), budget=None):
         mal = {}
         for kind, ts in cands.items():
             mal[kind] = {'candidates': [term_str(t) for t in ts], 'proved': None}
+            killed = False
             for t in ts:
                 pr = prove_kind(T, t, kind, b['e_secs'])
                 if pr['proved']: mal[kind] = {'term': term_str(t), 'proved': True, 'e_steps': pr['e_steps']}; break
-                mal[kind]['proved'] = False
+                if pr.get('e') == 'error': killed = True; errors.append(f'E {kind} {term_str(t)}: error')
+                mal[kind]['proved'] = None if killed else False      # an E crash leaves the kind unknown
         out['malcev'] = mal; out['ternary'] = {'functions': len(flat), 'per_size': per, 'truncated': trunc,
                                                'models_used': len(small)}
     out['convergent'] = convergent(T, b['e_secs'])
+    if out['convergent'].get('convergent') is None: errors.append(out['convergent']['why'])
+    out['errors'] = errors
     out['duality'] = dualities(T)
     out['etp'] = etp_numbers(T)
     out['features'] = features(out)
@@ -279,14 +288,19 @@ def profile(T, sizes=(2, 3, 4, 5), budget=None):
 
 
 def features(p):
-    """The preregistered binary features (PREREGISTRATION.md, T5a)."""
+    """The preregistered binary features (PREREGISTRATION.md, T5a). None = unknown because a prover crashed
+    (deviation 3): such a theory is left out of the test for that feature."""
     mal = p.get('malcev', {})
     c2 = p.get('clone2', {})
     nd = [n for n, s in p['spectrum'].items() if s['nondeg'] > 0]
-    return {'malcev_term': any(v.get('proved') is True for v in mal.values()),
+    mt = any(v.get('proved') is True for v in mal.values())
+    sp_err = any(s.get('error') for s in p['spectrum'].values())
+    cv = p['convergent'].get('convergent')
+    return {'malcev_term': True if mt else (None if any(v.get('proved') is None and v.get('candidates')
+                                                        for v in mal.values()) else False),
             'finite_free2': c2.get('closed') is True,
-            'convergent': p['convergent'].get('convergent') is True,
-            'spectrum3': len(nd) >= 3,
+            'convergent': None if cv is None else cv is True,
+            'spectrum3': True if len(nd) >= 3 else (None if sp_err else False),
             'duality': bool(p['duality'])}
 
 
@@ -347,42 +361,49 @@ def summary(name):
 FEATURES = ('malcev_term', 'finite_free2', 'convergent', 'spectrum3')
 
 
-def t5a_report():
+def t5a_report(name='t3'):
     """The preregistered T5a analysis (PREREGISTRATION.md): one-sided Fisher per feature, named > random; Holm
-    over F2-F4. Writes SOUP_DATA/check/t5a_report.json."""
+    over F2-F4. Reads check/profile_<name>.json; writes check/t5a_report.json (name t3) or
+    check/t5a_report_<name>.json. A feature that is None (a prover crashed, deviation 3) leaves that theory out of
+    that feature's test."""
     from .calib_report import fisher_greater
-    rs = json.load(open(data('check', 'profile_t3.json')))
+    rs = json.load(open(data('check', f'profile_{name}.json')))
     ok = [r for r in rs if r.get('status') != 'crashed']
-    out = {'theories': len(rs), 'crashed': len(rs) - len(ok), 'features': {}}
+    out = {'profile': name, 'theories': len(rs), 'crashed': len(rs) - len(ok),
+           'crashed_names': [r.get('calib_name') for r in rs if r.get('status') == 'crashed'], 'features': {}}
     for f in FEATURES:
-        a = sum(1 for r in ok if r.get('kind') == 'named' and r['features'][f])
-        b = sum(1 for r in ok if r.get('kind') == 'named' and not r['features'][f])
-        c = sum(1 for r in ok if r.get('kind') != 'named' and r['features'][f])
-        d = sum(1 for r in ok if r.get('kind') != 'named' and not r['features'][f])
+        kn = [r for r in ok if r['features'][f] is not None]
+        a = sum(1 for r in kn if r.get('kind') == 'named' and r['features'][f])
+        b = sum(1 for r in kn if r.get('kind') == 'named' and not r['features'][f])
+        c = sum(1 for r in kn if r.get('kind') != 'named' and r['features'][f])
+        d = sum(1 for r in kn if r.get('kind') != 'named' and not r['features'][f])
         out['features'][f] = {'named': [a, a + b], 'random': [c, c + d], 'p': fisher_greater(a, b, c, d),
-                              'named_with': [r.get('calib_name') for r in ok if r.get('kind') == 'named' and r['features'][f]]}
+                              'unknown': len(ok) - len(kn),
+                              'named_with': [r.get('calib_name') for r in kn if r.get('kind') == 'named' and r['features'][f]]}
     sec = sorted(FEATURES[1:], key=lambda f: out['features'][f]['p'])
     m = len(sec); prev = 0
     for i, f in enumerate(sec):                                    # Holm step-down, monotone
         adj = max(prev, min(1.0, (m - i) * out['features'][f]['p'])); out['features'][f]['p_holm'] = adj; prev = adj
     out['features']['malcev_term']['p_holm'] = out['features']['malcev_term']['p']   # primary: not corrected
     out['calibrated'] = [f for f in FEATURES if out['features'][f]['p_holm'] < 0.05]
-    json.dump(out, open(ensure('check') / 't5a_report.json', 'w'), ensure_ascii=False, indent=1)
+    fn = 't5a_report.json' if name == 't3' else f't5a_report_{name}.json'
+    json.dump(out, open(ensure('check') / fn, 'w'), ensure_ascii=False, indent=1)
     for f in FEATURES:
         x = out['features'][f]
         print(f"{f:13s} named {x['named'][0]}/{x['named'][1]}  random {x['random'][0]}/{x['random'][1]}  "
-              f"p = {x['p']:.3g}  p_holm = {x['p_holm']:.3g}  named: {x['named_with']}")
-    print('crashed', out['crashed'], '; calibrated features:', out['calibrated'])
+              f"p = {x['p']:.3g}  p_holm = {x['p_holm']:.3g}  unknown {x['unknown']}  named: {x['named_with']}")
+    print('crashed', out['crashed'], out['crashed_names'], '; calibrated features:', out['calibrated'])
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--set'); ap.add_argument('--keys'); ap.add_argument('--laws'); ap.add_argument('--name')
     ap.add_argument('--jobs', type=int, default=8); ap.add_argument('--timeout', type=float, default=1800)
-    ap.add_argument('--one', action='store_true'); ap.add_argument('--summary'); ap.add_argument('--t5a', action='store_true')
+    ap.add_argument('--one', action='store_true'); ap.add_argument('--summary')
+    ap.add_argument('--t5a', nargs='?', const='t3', help='profile name to analyse (default t3; t3_rerun, deviation 3)')
     a = ap.parse_args()
     if a.summary: summary(a.summary); return
-    if a.t5a: t5a_report(); return
+    if a.t5a: t5a_report(a.t5a); return
     if a.one:
         print(MARK + json.dumps(child(json.loads(sys.stdin.read())), ensure_ascii=False, default=str), flush=True); return
     js = jobs_for(a); name = a.name or a.set or 'adhoc'
