@@ -1,61 +1,76 @@
 \documentclass[11pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
+% one typeface for everything: Palatino for text and mathematics, with real small caps
+\usepackage[sc]{mathpazo}
+\linespread{1.05}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{booktabs}
-\usepackage[margin=1in]{geometry}
-\usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage[margin=1.1in]{geometry}
+\usepackage[hidelinks,pdftitle={Two operations and a machine that looks for surprises},
+  pdfsubject={An introduction from scratch to the duet project}]{hyperref}
 
 \newcommand{\op}{\cdot}
 \newcommand{\cop}{\circ}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\proj}{\textsf{duet}}
+\newcommand{\proj}{\textsc{duet}}
+\newcommand{\file}[1]{\textit{#1}}          % file names: italic, same typeface
 
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}[theorem]{Proposition}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{exercise}{Exercise}[section]
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-
-% an exercise points to its solution, the solution points back
-\newcommand{\solref}[1]{\hfill\mbox{\textit{(Solution: p.~\pageref{sol:#1})}}}
-
-% a compact table of contents: no extra space between section entries
+% headings: only two sizes (large for sections, normal for run-in paragraphs), all bold, same typeface
 \makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{-3.2ex \@plus -1ex \@minus -.2ex}{1.4ex \@plus .2ex}%
+  {\normalfont\large\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{1.8ex \@plus .5ex \@minus .2ex}{-0.6em}%
+  {\normalfont\normalsize\bfseries}}
+% a part is a quiet small-caps line, not a page-sized heading
+\newcommand{\partline}[2]{\par\bigskip\addcontentsline{toc}{part}{Part #1\quad #2}%
+  {\centering\normalfont\large\scshape Part #1\quad #2\par}\nobreak\medskip}
+% table of contents: parts in small caps at normal size, sections without extra space between them
+\renewcommand*\l@part[2]{\addpenalty{-\@highpenalty}\vskip .8em \@plus\p@
+  {\parindent\z@\rightskip\@pnumwidth\parfillskip-\@pnumwidth\normalfont\scshape #1\hfil\hb@xt@\@pnumwidth{\hss #2}\par}}
 \let\intro@lsection\l@section
 \renewcommand{\l@section}[2]{\begingroup\let\addvspace\@gobble\intro@lsection{#1}{#2}\endgroup}
 \makeatother
-\newcommand{\solution}[1]{\par\medskip\noindent\textbf{Solution to Exercise~\ref{ex:#1}}\label{sol:#1}
-  \textit{(p.~\pageref{ex:#1})}.\ }
 
-\title{Two operations and a machine that looks for surprises\\[4pt]
-\large An introduction from scratch to the \proj{} project}
-\author{}
-\date{22 November 2026}
+% every statement upright, with a bold label
+\newtheoremstyle{uniform}{\medskipamount}{\medskipamount}{\normalfont}{}{\bfseries}{.}{0.5em}{}
+\theoremstyle{uniform}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}{Exercise}[section]
+
+% an exercise points to its solution, the solution points back
+\newcommand{\solref}[1]{\hfill\mbox{\textit{(solution on p.~\pageref{sol:#1})}}}
+\newcommand{\solution}[1]{\par\medskip\noindent\textbf{Solution~\ref{ex:#1}.}\label{sol:#1}
+  \textit{(exercise on p.~\pageref{ex:#1})}\ }
 
 \begin{document}
-\maketitle
 
-\begin{abstract}
-This text assumes nothing beyond sets and functions. It builds, step by step, the few ideas needed to understand
-what the \proj{} project does: binary operations, laws, theories and their models, and what it means for laws to
-\emph{imply} other laws. It then explains the project's question. Can a machine, searching without help, find
-small sets of laws in two operations whose combination does more than the parts? It also explains how that search
-is built, what it has found so far, and why the question could matter. Most sections end with exercises, and the
-solutions are at the end. Numbers about the project are as of 22 November 2026. \texttt{REPORT.md} in the repository
-is the authoritative record, with the command behind every number.
-\end{abstract}
+\begin{center}
+{\Large\bfseries Two operations and a machine that looks for surprises\par}
+\medskip
+{\large An introduction from scratch to the \proj{} project\par}
+\medskip
+22 November 2026
+\end{center}
 
+\bigskip
+\noindent\textbf{About this text.} It assumes nothing beyond sets and functions. It builds, step by step, the few
+ideas needed to understand what the \proj{} project does: binary operations, laws, theories and their models, and what
+it means for laws to \emph{imply} other laws. It then explains the project's question. Can a machine, searching
+without help, find small sets of laws in two operations whose combination does more than the parts? It also
+explains how that search is built, what it has found so far, and why the question could matter. Most sections end
+with exercises, and the solutions are at the end. Numbers about the project are as of 22 November 2026; the
+repository's \file{REPORT.md} is the authoritative record, with the command behind every number.
+
+\medskip
+\renewcommand{\contentsname}{Contents}
 \tableofcontents
 
-\part{From scratch}
+\partline{I}{From scratch}
 
 \section{Sets and functions}
 
@@ -160,10 +175,11 @@ idempotent? Name them. \solref{idem2}
 To talk about all elements at once we use \emph{variables} $x,y,z,\dots$ and build \emph{terms} from them with the
 operation: $x$, $x\op y$, $(x\op y)\op z$, $x\op(y\op x)$, and so on. A \emph{law} (an identity, an equation) is a
 pair of terms written $s=t$, for example
-\[
-(x\op y)\op z = x\op (y\op z)\quad\text{(associativity)},\qquad x\op y=y\op x\quad\text{(commutativity)},\qquad
-x\op x=x\quad\text{(idempotence)}.
-\]
+\begin{align*}
+(x\op y)\op z &= x\op (y\op z) && \text{(associativity)},\\
+x\op y &= y\op x && \text{(commutativity)},\\
+x\op x &= x && \text{(idempotence)}.
+\end{align*}
 A law \emph{holds} in a magma if the two sides are equal for \emph{every} choice of elements for the variables. So
 associativity holds in $(A,\op)$ when $(a\op b)\op c=a\op(b\op c)$ for all $a,b,c\in A$.
 
@@ -301,7 +317,7 @@ Apply each relabelling to $x\op(x\cop y)=x$: the swap, the opposite of $\op$, th
 opposites. \solref{dual}
 \end{exercise}
 
-\part{The project}
+\partline{II}{The project}
 
 \section{Synergy: when the whole does more than the parts}
 
@@ -489,14 +505,14 @@ No theory found so far is claimed to be new.
 \item W.~McCune and R.~Padmanabhan, \emph{Automated Deduction in Equational Logic and Cubic Curves} (LNCS 1095,
   1996): the closest earlier method (enumerate laws, filter by small structures, prove).
 \item The project's own records: the README; the report, with every number and the command behind it
-  (\texttt{REPORT.md}); the preregistrations (\texttt{PREREGISTRATION.md}); and the draft paper in \texttt{tex/}.
+  (\file{REPORT.md}); the preregistrations (\file{PREREGISTRATION.md}); and the draft paper in \file{tex/}.
 \end{itemize}
 
 \appendix
 \section*{Solutions}
 \addcontentsline{toc}{section}{Solutions}
 
-The numeric answers are computed by \texttt{intro/checks.py} (output in \texttt{intro/checks.out}).
+The numeric answers are computed by \file{intro/checks.py} (output in \file{intro/checks.out}).
 
 \solution{prod}
 $\{(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)\}$: $2\cdot 3=6$ elements.
@@ -601,7 +617,7 @@ $\binom{71369}{2}=2{,}546{,}731{,}396$, about $2.5\times10^9$ pairs, and about $
 $4{,}222$ verified theories are less than two in a million of the pairs alone.
 
 \begin{thebibliography}{9}
-\bibitem{paper} The \proj{} project, draft paper \texttt{tex/paper.pdf} and \texttt{REPORT.md} in the repository.
+\bibitem{paper} The \proj{} project, draft paper \file{tex/paper.pdf} and \file{REPORT.md} in the repository.
 \bibitem{etp} M.~Bolan, J.~Breitner, J.~Brox, N.~Carlini et al., \emph{The Equational Theories Project: Advancing
   Collaborative Mathematical Research at Scale}, arXiv:2512.07087 (2025).
 \bibitem{mckenzie1970} R.~McKenzie, Equational bases for lattice theories, \emph{Math.\ Scand.}\ 27 (1970) 24--38.
