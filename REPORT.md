@@ -177,6 +177,8 @@ Caveat: post hoc, on one candidate chosen after the ranking.
 - **Model count of B (corrected 22 Nov, morning).** The `10c98c4b` literature note and dossier said that B alone has
   40 non-degenerate models on 3 elements. It has 38 (Mace4, and an enumeration of all 3⁹ tables). The wrong number
   was in commit `2255b8e`, which is pushed.
+- **Paper abstract (corrected 22 Nov, morning).** It said that the duality prior "triples" the fragment share. 33%
+  against 8% is a factor of 4.2; the abstract now gives the two numbers.
 - **`10c98c4b` "no source found" (corrected 22 Nov, morning).** The night's note said that no source was found for
   B. B is prior art (Δ-bijective algebras, Rump 2005; Bonatto et al.). The night's searches had looked only in the
   Latin-square literature. The first draft of the memo also gave the wrong author (Belyavskaya) for the Mullen and

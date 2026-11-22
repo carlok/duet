@@ -37,10 +37,13 @@ basis. It also refutes four implications that finite-model search up to size~8 l
 countermodels are necessarily infinite. Of 32 claims that resisted the verifier in short pilot runs, 31 are now
 refuted (one by a hand proof that is not certified). The last of them fell to a 10-element model that Mace4 did not
 reach and Vampire's finite model builder found. In a preregistered comparison, a prior that rewards dualities
-triples the share of verified theories that are fragments of a named theory (33\% against 8\%, mostly lattice
+raises the share of verified theories that are fragments of a named theory from 8\% to 33\% (mostly lattice
 fragments). It steers the search toward known structure. Among the non-fragments, the best-ranked candidates
 are not fusions after all. Some are split into a theory of each operation, and some are one-operation varieties
-with the division written as a second operation. Whether the search finds theories that are interesting and not
+with the division written as a second operation. We treat rediscovery as calibration and measure it. Against a
+catalogue of 13 known structures fixed in advance, the search rediscovered 7, among them twelve different lattice
+bases and Fried's weakly associative lattices. The core of the best remaining candidate turned out to be the
+$\Delta$-bijectivity of the Yang--Baxter literature. Whether the search finds theories that are interesting and not
 already named is still open.
 \end{abstract}
 
@@ -346,7 +349,12 @@ disguise (verifier V4, preregistered).}
   reported only after our own check; one of them (the term model) is not certified.
 \item ``Not named'' needs a literature search and an equivalence check against known varieties; none of
   the theories found so far has been claimed as new. Our equivalence checks cover ten named theories under all
-  relabellings, hidden definitions, and splits. Our literature checks are web searches, not a survey.
+  relabellings, hidden definitions, and splits. Our literature checks are web searches, not a survey. They missed
+  the Yang--Baxter source of one core on the first pass, because we looked only in the Latin-square literature.
+\item Candidates are deduplicated up to the three dualities, not up to logical equivalence: one variety reached the
+  top ten twice, with different axioms.
+\item The rediscovery catalogue was written by us after seeing results. It covers only structures with axioms of
+  order at most~4.
 \end{itemize}
 
 \section*{Reproducibility}
