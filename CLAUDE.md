@@ -64,7 +64,7 @@ by the whole theory but by no single law of it.
 | `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
 | `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
-| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `LEGACY` (first session) |
+| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `LEGACY` (first session) |
 | `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
 | `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
 | `calib.py`, `calib_report.py` | T3: one child process per theory, resumable; Fisher test and percentiles |
@@ -76,7 +76,8 @@ by the whole theory but by no single law of it.
 | `profile.py` | T5a algebraist's profile (Mal'cev-type terms, free algebra on 1–2 generators, convergent presentation, spectrum, ETP numbers); `--t5a [name]` analysis. Killed provers give *unknown*, not 0 |
 | `dossier.py` | Candidates (`candidates --sources ...`), preregistered ranking (`rank`), dossiers (`write --top N`), model JSON for Lean (`lean-json`); certificates are matched by key, not rank |
 | `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
-| `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root |
+| `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
+| `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
 | `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones |
@@ -161,6 +162,10 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - Under B the absorptions say that every translation is idempotent, so no model is a left quasigroup. No
       source was found for that full theory.
     - Pitfall: search the Yang–Baxter, cycle-set and rack literature as well as the Latin-square one.
+    - X2 (V3, 1,015 verified, 31% fragments, 17 FMB refutations, no crashes; minimum available memory 1,026 MB, so
+      X3's budget was set to match). Its rank-3 candidate `69dfbd8e` is the variety of rank 10, `2dc27508`.
+    - Pitfall: candidates are deduplicated up to the dualities only. Compare convergent presentations, or prove
+      equivalence both ways, before counting two candidates as different.
   - Split scan of the T4 non-fragments: 35/668 (prior) and 4/362 (noprior) are split.
   - Lean: 11 modules (S10 plus 10 candidate models), axiom audit passes on 116 declarations.
 
@@ -246,6 +251,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - **T5 – Look hard at T1, T2 and the new top finds.** Model counts on 2–7 elements, automorphisms,
   whether a known variety is equivalent (implies and is implied by its laws), and a literature
   search. Write what is found, including "already known as X".
+- **T5b – Rediscovery as a measured process** (22 Nov; PREREGISTRATION.md R1 and X3). R1 counts which catalogue
+  entries the search rediscovered. `notes/rediscovery.md` is the ledger of every identification, with its route
+  and the time it took. X3 runs the search with verifier V4, so that the known disguises score 0.
 - **T6 – Open claims.** A–D and the 21 open claims: longer prover runs, Mace4 to size 8–10,
   affine and group-derived countermodel families. Each one ends as proved, refuted, or open with
   the budget stated.
