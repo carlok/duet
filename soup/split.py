@@ -30,12 +30,16 @@ def _ev(t, X, F, G):
     return (F if t[0] == 'f' else G)[a, b]
 
 
+def _nvars(t):
+    return t[1] + 1 if t[0] == 'v' else max(_nvars(t[1]), _nvars(t[2]))
+
+
 def holds(T, F, G):
     from .data import TREES
     n = len(F); F = np.asarray(F); G = np.asarray(G)
     for t in T:
         L, R = TREES[t]
-        X = np.meshgrid(*[np.arange(n)] * 4, indexing='ij')
+        X = np.meshgrid(*[np.arange(n)] * max(_nvars(L), _nvars(R)), indexing='ij')   # order 4: up to 5 variables
         if not (_ev(L, X, F, G) == _ev(R, X, F, G)).all(): return False
     return True
 
@@ -88,6 +92,11 @@ def check(T):
     return prove_split(T)
 
 
+def _check_safe(T):                                     # one bad theory must not end a scan of a thousand
+    try: return check(T)
+    except Exception as e: return {'split': None, 'why': f'error: {type(e).__name__}: {e}'}
+
+
 def main():
     from .named import law_index
     from .data import LAWS
@@ -101,10 +110,11 @@ def main():
         rows = [r for r in json.load(open(data('fragments.json'))) if not r['fragment_of']]
         with ProcessPoolExecutor(a.jobs) as ex:
             res = [dict(x, key=r['key'], score=r['score'], laws=r['laws'], T=r['T'], dualities=r['dualities'])
-                   for r, x in zip(rows, ex.map(check, [r['T'] for r in rows], chunksize=4))]
+                   for r, x in zip(rows, ex.map(_check_safe, [r['T'] for r in rows], chunksize=4))]
         json.dump(res, open(data('split_nonfragments.json'), 'w'), ensure_ascii=False, indent=1)
         n = len(res); s = sum(x['split'] is True for x in res); u = sum(x['split'] is None for x in res)
-        print(f'{n} non-fragments: {s} split, {n - s - u} not split (finite certificate), {u} unknown')
+        e = sum(str(x.get('why', '')).startswith('error') for x in res)
+        print(f'{n} non-fragments: {s} split, {n - s - u} not split (finite certificate), {u} unknown ({e} errors)')
         return
     if a.set == 'candidates':
         jobs = [(str(r['key']), r['source'], r['laws'], r['T']) for r in json.load(open(data('check', 'candidates.json')))]
