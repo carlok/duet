@@ -44,6 +44,9 @@ fragments of lattices only.
 
 **Secondary: the top 10 non-fragment theories per arm, by V2 score.** None of the 20 is equivalent to another,
 either up to the three dualities or by E proofs both ways. Every one is a candidate, not a result (rule 4).
+The first run of `t4_report` ran 10 E processes at once, and the OOM killer ended 3 of them (deviation 3). It was
+rerun with `T4R_JOBS=3`: E compared 34 pairs (those with equal model counts), none of the checks crashed, and the
+table is unchanged. The first output is kept in `work/t4_report_asrun.txt`.
 
 | # | arm | score | laws |
 | --- | --- | --- | --- |
