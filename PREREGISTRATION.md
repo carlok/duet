@@ -70,6 +70,25 @@ Each unidentified one gets a literature check (Latin-square, quasigroup, Yang–
 and ETP sources). None is called new without that check and a check by someone who knows the field. Our web
 searches are weak evidence (REPORT, "Coverage").
 
+**Added 22 Nov 2026, 12:54 UTC, before X4 starts: "disconnected" candidates.** The user confirmed the reading of the
+jazz example and added a second one: something that works but is not clearly connected to what came before.
+Post hoc, on X4's top-20 non-fragments, and on X3's 19 as a baseline, each candidate gets three marks:
+- **works:** non-degenerate models at two or more sizes, and at least one proved emergent law (off-diagonal for X4);
+- **unconnected:** none of the checks relates it to anything known. That means no fragment, subvariety or equivalence
+  to any of the 13 catalogue entries under the 8 relabellings (R1's method), no V4 mark, not split, not definitional
+  (`soup.hidden`), and no relation in `soup.relabel`. A relation left unknown by E's budget counts as unknown, not as
+  unconnected;
+- **no classical model:** no non-degenerate model on 3 or more elements among the structured probe families (affine
+  over ℤ/n, 𝔽₄, Klein, ℤ/n with + and ×, S₃, the min/max and Boolean families, M₃, N₅). Random tables, the complete
+  set on 2 elements, and the structures found by the search do not count as classical.
+
+Reported:
+- the number of candidates with all three marks, X4 against X3;
+- the list of those candidates, each with its literature check.
+
+Script: `notes/disconnected.py`, written during the run, before any X4 result is read. "Unconnected" means
+unconnected to our checks and catalogue. It is no claim about the literature, which gets its own check.
+
 Caveats:
 - Three changes at once: what X4 finds cannot be attributed to one of them.
 - X4 scores differently from X3, so scores are not comparable across the two runs. Shares and counts are.
