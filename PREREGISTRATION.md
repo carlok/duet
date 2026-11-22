@@ -9,7 +9,7 @@ spirit of the "jazz" example, an original jump of the kind a human makes, and lo
 legitimate, probably unexplored, valid new theories. Two measurements motivate X4:
 - **Coverage.** All runs together verified 4,222 theories against 1.8 × 10²⁶ law sets, and the duality prior keeps
   them in the most-studied corner (`notes/coverage.py`, REPORT "Coverage").
-- **A diagonal attractor.** Of the 3,596 theories with a positive verified score in T4, X1, X2 and X3 (10:45 UTC,
+- **A diagonal attractor.** Of the 3,596 theories with a positive verified score in T4, X1, X2 and X3 (10:43 UTC,
   X3 running), 3,478 (97%) prove an emergent law in one variable. The ten most frequent proved emergent laws are all
   about squares (`x·x = x∘x`, `x·(x·x) = x·x`, `x·x = x`, ...), and none of the 3,596 proves emergent associativity.
   So the score rewards what a fusion forces on the diagonal. The lattice absorption pair, our reference case, is
