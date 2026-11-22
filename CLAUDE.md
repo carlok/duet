@@ -78,7 +78,8 @@ by the whole theory but by no single law of it.
 | `dossier.py` | Candidates (`candidates --sources ...`), preregistered ranking (`rank`), dossiers (`write --top N`), model JSON for Lean (`lean-json`); certificates are matched by key, not rank |
 | `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
 | `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
-| `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter, then E both ways); post hoc, the ranking is not changed |
+| `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter on every run's corpus, then E both ways, in parallel); post hoc, the ranking is not changed |
+| `novelty.py` | N1 (preregistered): gate (works, nothing identifies it, one per dedupe class) and order (off-diagonal law, no classical model, not related, sizes, axiom size, score); writes `notes/candidates_table.md` (known / not known) and, with `--readme`, the README's live block between `<!-- candidates:start -->` and `<!-- candidates:end -->`. Rerun after every run's checks |
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
@@ -183,7 +184,18 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - `31d6d970` (X3, rank 3): with associativity of ·, exactly a rectangular band with ∘ its transpose, which is
     term-equivalent to the rectangular skew lattices (Leech 2020, Prop. 1.3.14; E both ways). Associativity fails in its
     3-element model. No source was found for the full theory.
-  - Candidates: 118, ranked. Lean: 15 modules, audit 162 declarations.
+  - X4 (fusion arm, V5, 22 Nov 13:01–15:31, to budget; deviation 6 = the 3-min x4a loophole `x·x = y·y`):
+    - 636 verified; 0 of 565 are fragments of a named theory.
+    - Finite models refute 21% of claims (X3: 3%).
+    - A new weaker attractor, `x·(x·y) = x·x`-type.
+    - None of its 20 candidates is identified. "Disconnected" marks: 14/20 (X3 10/19).
+    - Deviation 7: the post hoc split check on its candidates stopped at 17/20.
+  - Candidates: 138, which are 120 varieties after `soup.dedupe`. `2dc27508` = `69dfbd8e` = `31d6d970` (one variety,
+    three runs).
+  - N1: 56 known, 77 ranked; its top 10 is disjoint from T5a's, and X4 has 7 of it. Dossiers `work/dossiers/n1-*`.
+    Lean: 25 modules, audit 272 declarations.
+  - Workflow after every run: the post-run checks, then `soup.dedupe`, then
+    `soup.novelty --readme /repo/README.md` (mount README.md and notes/). Then push.
 
 ## Pitfalls already paid for
 
@@ -233,6 +245,17 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - Nothing extra next to a stream run: two post hoc scans (each loads the corpus) drove the VM to 170 MB free and
   tripped X1's memory stop. Long scans wait until the run ends, or get a memory check first.
 - Python on the host is still Python on the host, even for a one-line JSON check: use `podman run ... python3 -c`.
+- `soup.split`'s E stage (`prove_split`, 200 attempts × 30 s) can take more than an hour per theory with no finite
+  certificate. X4's candidates did (deviation 7). Expect the split scan of a fusion-arm run to take hours, and run it
+  last.
+- The non-degeneracy test (· ≠ ∘, both essentially binary) is not invariant under the 8 relabellings. Equivalent
+  varieties can show different non-degenerate counts (`2dc27508` against `31d6d970`: 4 against 6 on 3 elements).
+  Compare total model counts.
+- A corpus-based model filter needs models from the theory's own run: `soup.dedupe` first used the main corpus only,
+  where theories of later runs have none, so they were never compared.
+- Write timestamps from `date -u` at the time, not from estimates: three preregistration times had to be corrected on
+  22 Nov.
+- BSD `sed` on the Mac writes a multi-line replacement as one line. Use the Edit tool for multi-line code changes.
 
 ## Tasks, in order
 
