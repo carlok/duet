@@ -2,7 +2,66 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
-## X4: fusion arm, away from the diagonal (22 Nov 2026, 13:01–15:31 UTC; descriptive; checks in progress)
+## N1: a novelty ranking next to T5a, and the candidates up to equivalence (22 Nov 2026, 18:09–18:24 UTC; post hoc)
+
+**Dedupe** (`soup.dedupe --set candidates --jobs 6`, 25 s for the proofs; `work/check/dedupe_candidates.json`). Since
+the afternoon the model filter uses the corpora of all runs (26,708 found structures), not the main one only.
+- 58 (pair, relabelling) pass the model filter, and E proves 51 of them both ways.
+- **138 candidates are 120 varieties**: 14 classes have more than one member. Many members are the same theory written
+  in dual form by different runs.
+- **One variety was reached three times:** `2dc27508` (the early runs), `69dfbd8e` (X2) and `31d6d970` (X3).
+  - The equivalence was rechecked by hand: E both ways under rev∘ and under rev·, and 8 models on 3 elements and
+    325+ on 4 for both.
+  - The non-degenerate counts differ (6 against 4 on 3 elements) because the non-degeneracy test (· ≠ ∘) is not
+    invariant under relabelling.
+  - So the identification of `31d6d970` covers this variety: with associativity it is the rectangular skew
+    lattices.
+- Other classes:
+  - `3e068fa6` with `f8d1f554` (X1);
+  - T5a's rank 7, `c8e6ca60`, with `b302a8c7`;
+  - X3's `5c6da20c` with X2's `2e73bcd0`;
+  - X3's `154abc19` with `c1760e50` (t4-noprior).
+
+**N1** (PREREGISTRATION.md, N1, written before computing, with one clarification before computing: a partial
+identification applies to the whole dedupe class). Command: `podman run --rm -v "$PWD/work:/data" -v "$PWD/notes:/notes"
+-v "$PWD/README.md:/repo/README.md" soup python3 -m soup.novelty --readme /repo/README.md`. Outputs:
+`work/check/novelty_ranking.json`, `notes/candidates_table.md`, and the README's live section.
+
+| gate | candidates |
+| --- | ---: |
+| pool | 138 |
+| no verification record (T1, T2) | 2 |
+| identified (known): related to a named or catalogued structure 35, split 14, same variety as another candidate 6, ledger 1 | 56 |
+| fail "works" | 3 |
+| **enter N1** | **77** |
+
+- **The top 10 shares no member with T5a's top 10.**
+- **Runs in the top 10:** N1 has X4 7, the early runs 2 and t4-prior 1. T5a has x1 3, x2 2, the early runs 2,
+  t4-prior 2 and x3 1. The preregistered expectation (X4's share larger in N1) holds: 7 against 0.
+- **All of N1's top 20 have an off-diagonal proved emergent law and no classical model.** In all, 22 of the 77 have an
+  off-diagonal law. The classical-model mark hardly separates anything: 6 of the 77 and 6 of the 56 known candidates
+  have a structured model on 3 or more elements.
+- **N1's top 3 come from runs that did not select for off-diagonal laws:**
+  - `55cb2c91` (early runs);
+  - `1d0a5211` (early runs);
+  - `a9295908` (t4-prior), whose emergent laws include the commutativity of ·.
+- **Follow-up:** dossiers `work/dossiers/n1-01…10-*.md` (`dossier write --top 10 --order n1`), and Lean
+  certificates Cand14–23 for the smallest models. `lean/check.sh` passes 25 modules, and the axiom audit passes on 272
+  declarations.
+- **Structure of the top 10** (`notes/n1_structure.py`, E 10 s per goal; output `notes/n1_structure.out`):
+  - four are idempotent with an absorption law, near the absorption family (`742cc445`, `f79a5097`, `7c476118`,
+    `a8963027`);
+  - three have almost constant smallest models, nilpotent-like (`97a7dfcf`, `7ec7f8f5`, `3b3b1176`);
+  - `a9295908` has a commutative idempotent · whose 3-element model is a chain semilattice;
+  - `55cb2c91` and `1d0a5211` have no standard law among those tested.
+- **Literature checks** of the top 10: two web-only agents, running; key claims to be rechecked with E.
+
+Caveats:
+- N1 is post hoc and descriptive. Its gate sees only our checks, our catalogue and the ledger.
+- Its first key favours X4 by construction.
+- "Not known" in the table means not identified by those; it is not "new".
+
+## X4: fusion arm, away from the diagonal (22 Nov 2026, 13:01–15:31 UTC; descriptive)
 
 Preregistered as exploratory (PREREGISTRATION.md, X4; deviation 6). Arm `fusion` with verifier V5, seeds 701–704,
 4 searchers and 4 verifiers, budget 9,000 s, its own data directory (starting corpus 4,252 found structures).
@@ -41,13 +100,29 @@ Commands:
   x·(x·x) = x·(x∘y) (86), x·(x∘y) = x·x (61) and x·(x·y) = x·x (61). A left translation sends a family of elements
   to x·x. These are two-variable laws that still pivot on the square.
 
-Pending, in the preregistered order:
-- the candidate checks: profile, hidden, split, relabel;
-- the ranking, Lean certificates and dossiers;
-- R1 on X4;
-- the "disconnected" marks against X3's baseline;
-- the off-diagonal baseline of X3;
-- the split scan.
+**Post-run checks** (17:54–18:23 UTC):
+- **Candidates.** X4's top 20 non-fragments joined the pool, which now holds 138 candidates (`dossier candidates
+  --sources t4-prior,t4-noprior,.,x1,x2,x3,x4`).
+- **Equivalence checks** (`notes/cand_checks.py x4`):
+  - `soup.hidden`: 0 definitional.
+  - `soup.relabel`: 0 relations to a named theory under the 8 relabellings.
+  - `soup.split`: 14 not split (finite certificate) and 3 undecided. It was stopped before the last 3 (deviation 7),
+    which passed V4's split screen during the run.
+- **T5a ranking** (`work/check/ranking.txt`). X4's candidates land at ranks 34, 35, 36, 110, 116, … 136 of 138, so the
+  top 10 is unchanged and needs no new Lean certificates or dossiers. T5a prefers a convergent presentation and a
+  duality; X4's theories have no duality by design.
+- **R1 on X4** (`soup.rediscover --sources x4 --jobs 6`, 534 s, 437 E jobs, 106 unknown; summary in
+  `work/check/rediscover_summary.txt`):
+  - none of the 636 theories is a fragment of, or equivalent to, a catalogue entry;
+  - 3 are subvarieties of dimonoids and 5 of doppelsemigroups;
+  - the top 20 candidates: **0 identified** (X3: 5 of 19, 26%; X2: 9 of 18, 50%).
+- **"Disconnected" marks** (preregistered, `notes/disconnected.py x4 x3`, output `notes/disconnected_x4_x3.out`): works,
+  unconnected to every check, and no classical model. **X4: 14 of 20; X3: 10 of 19.** The measure sees only our checks
+  and catalogue. One of X3's ten, `31d6d970`, is partly identified through the literature.
+- **Off-diagonal baseline** (preregistered, `notes/offdiag_baseline.py x3`, output `notes/offdiag_baseline_x3.out`, on
+  X3's final corpus). Without selection for it, 226 of X3's 833 positive theories (27.1%) prove an off-diagonal
+  emergent law, and 673 (80.8%) have a non-empty off-diagonal gain on the corpus. X4: 565 of 565, by construction.
+- **Split scan of X4's 565 non-fragments** (`soup.split --fragments 1 --jobs 4`): running, last, from 18:24 UTC.
 
 ## X3: exploratory run with verifier V4 (22 Nov 2026, 08:33–11:08 UTC; descriptive)
 
