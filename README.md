@@ -67,7 +67,10 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
   - The second is an idempotent left quasigroup with ∘ written as the division.
   - Four more are absorption-type algebras without associativity.
   - One, `10c98c4b`, has a two-operation core: (x·y)∘(y·x) = x and (x∘y)·(y∘x) = x, meaning · is orthogonal to
-    its transpose and ∘ decodes it (Schröder's second law when ∘ = ·), plus four absorption laws.
+    its transpose and ∘ decodes it (Schröder's second law when ∘ = ·), plus four absorption laws. Under the core,
+    the absorptions say that every translation of either operation is idempotent: the opposite of a self-orthogonal
+    Latin square. The core is known in substance; the whole theory has no source we could find. The draft memo is
+    `notes/10c98c4b.md`.
   - Web searches found no source for any of them, so they are candidates (`work/dossiers/`, with Lean
     certificates for their smallest models).
 - **Not yet:** no theory found so far is new. The search's filters are syntactic: they let split theories and
@@ -120,9 +123,9 @@ Disclosures from the night, all in `REPORT.md` or `PREREGISTRATION.md`:
 Next, in order:
 1. A filter for split theories and for divisions in disguise inside the search (the `soup.split` screen is cheap at
    2–4 elements), then a new preregistered run.
-2. `10c98c4b`, the one candidate with a two-operation core: a literature search beyond the web, starting with
-   Evans and Belousov on orthogonality identities; models of B alone; whether its absorptions have a natural
-   meaning.
+2. `10c98c4b`, the one candidate with a two-operation core: read the sources the draft memo lists as unread
+   (`notes/10c98c4b.md`: Belyavskaya 2005, Belousov 2005, Evans, Bennett and Zhu 1992); its spectrum to size 7–8; a
+   Lean proof that the core is exactly orthogonality to the transpose.
 3. The assisted round-2 track: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
    S10.md S12.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m soup.round2 assisted >
    ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E

@@ -2,7 +2,40 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `10c98c4b`: structure and literature memo (22 Nov 2026, morning; post hoc)
+
+Command: `podman run -i --rm soup python3 - < notes/10c98c4b_checks.py` (output `notes/10c98c4b_checks.out`; E, Mace4
+and a complete enumeration; under a minute). Memo: `notes/10c98c4b.md`.
+
+| Check | Result |
+| --- | --- |
+| B = {(x·y)∘(y·x) = x, (x∘y)·(y∘x) = x} ⟺ · orthogonal to its transpose, ∘ its decoder | hand proof; on 3 elements, 288 of the 3⁹ tables are orthogonal to their transpose, giving 62 B-models up to isomorphism (38 non-degenerate), the same as Mace4 |
+| under B, (x∘y)·x = x ⟺ x·(x·y) = x·y, and the same for the other three absorptions | E, both ways, each of the 4 |
+| found laws ⟺ B + {x·(x·y) = x·y, (x·y)·y = x·y, x∘(x∘y) = x∘y, (x∘y)∘y = x∘y} | E, both ways; idempotence follows; none of the 4 follows from B and the other 3 (E saturates) |
+| with ∘ = ·: rectangular bands are models; the laws do not imply (xy)z = xz or x(yz) = xz | E |
+| non-degenerate models on 4 / 5 elements | 2 / 14 (Mace4, complete); no law of a short list (associativity, rectangular-band laws, absorptions, Schröder) holds in all of them |
+
+So `10c98c4b` says: · is orthogonal to its transpose, and every translation of · and of its decoder is idempotent.
+This is the opposite of a self-orthogonal Latin square, where every translation is bijective.
+
+Literature, by web search, zbMATH reviews and one paper read in full (Shcherbacov, arXiv:2206.12844):
+- With ∘ = ·, B is Schröder's second law. Schröder quasigroups are well studied; the idempotent ones exist exactly
+  for n ≡ 0, 1 (mod 4), n ≠ 5, 9 (Bennett, Wei and Zhu 1996).
+- Belousov (1983, English 2005) classifies the identities that force a quasigroup to be orthogonal to a parastrophe.
+- "Self-orthogonal n-ary groupoids" exist as a notion (Syrbu 1994), and so does orthogonality of arbitrary binary
+  operations (Belyavskaya 2005).
+
+The core is therefore known in substance. We found no source for the two-operation variety for groupoids, nor for
+its idempotent-translation version. **Still a candidate:** the key papers (Belyavskaya 2005, Belousov 2005, Evans,
+Bennett and Zhu 1992) were not read in full.
+
+Caveat: post hoc, on one candidate chosen after the ranking.
+
 ## Process notes and corrections (22 Nov 2026, night)
+
+- **Model count of B (corrected 22 Nov, morning).** The `10c98c4b` literature note and dossier said that B alone has
+  40 non-degenerate models on 3 elements. It has 38 (Mace4, and an enumeration of all 3⁹ tables). The wrong number
+  was in commit `2255b8e`, which is pushed.
 
 - **Rule 1 (host commands).** Three times a `python3` ran on the Mac instead of in the container. Twice it was
   an empty `python3 -`, which did nothing (21 Nov evening, 22 Nov about 01:33 UTC). Once it was a read-only

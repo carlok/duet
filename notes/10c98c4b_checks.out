@@ -1,0 +1,27 @@
+1. under B, absorption <=> translation law (E, both directions)
+   (x∘y)·x=x      => x·(x·y)=x·y   : Theorem           <=: Theorem
+   x·(y∘x)=x      => (x·y)·y=x·y   : Theorem           <=: Theorem
+   (x·y)∘x=x      => x∘(x∘y)=x∘y   : Theorem           <=: Theorem
+   x∘(y·x)=x      => (x∘y)∘y=x∘y   : Theorem           <=: Theorem
+2. found laws <=> B + translation laws
+   found => each of B+IT: ['Theorem', 'Theorem', 'Theorem', 'Theorem', 'Theorem', 'Theorem']
+   B+IT => each found law: ['Theorem', 'Theorem', 'Theorem', 'Theorem', 'Theorem', 'Theorem']
+   B+IT => x·x = x: Theorem  x∘x = x: Theorem
+   B+IT, three translation laws => the fourth (expect countersatisfiable): ['CounterSatisfiable', 'CounterSatisfiable', 'CounterSatisfiable', 'CounterSatisfiable']
+3. one operation (x∘y := x·y)
+   S = ['(x·y)·(y·x)=x', '(x·y)·x=x·x', 'x·(y·x)=x·x']
+   S => rectangular band laws: ['Theorem', 'CounterSatisfiable', 'CounterSatisfiable']
+   rectangular band => S: ['Theorem', 'Theorem', 'Theorem']
+4. B on small sets: models = groupoids orthogonal to their transpose
+   n=2: tables orthogonal to their transpose 4; B-models up to iso 4, non-degenerate 0; non-degenerate with the translation laws 0
+   n=3: tables orthogonal to their transpose 288; B-models up to iso 62, non-degenerate 38; non-degenerate with the translation laws 0
+5. smallest non-degenerate model of the candidate (4 elements, dossier)
+   ·: idempotent True | (xy)z = xz False | x(yz) = xz True | associative False
+   ∘: idempotent True | (xy)z = xz False | x(yz) = xz True | associative False
+   B holds: True | translation laws hold: True
+6. all non-degenerate models of B + translation laws on 4 and 5 elements (Mace4, complete), laws they share
+   n=4: 77 models found, search complete: True; non-degenerate up to iso 2
+   laws holding (count of models): {'· x(yz) = xz': 1, '∘ x(yz) = xz': 1, '· (xy)z = xz': 1, '∘ (xy)z = xz': 1, '· x(yx) = x': 1, '∘ x(yx) = x': 1, '· (xy)x = x': 1, '∘ (xy)x = x': 1}
+   n=5: 1792 models found, search complete: True; non-degenerate up to iso 14
+   laws holding (count of models): {'· x(yx) = x': 7, '∘ x(yx) = x': 7, '· (xy)x = x': 7, '∘ (xy)x = x': 7}
+   laws holding in every non-degenerate model on 4 and 5 elements: []

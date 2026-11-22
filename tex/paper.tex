@@ -287,8 +287,13 @@ with $x\op(y\op x)=y\op x$ and $(x\op y)\op y=y$. Four more are absorption-type 
 The tenth is the only one with a two-operation core of its own: E proves it equivalent to
 $(x\op y)\cop(y\op x)=x$ and $(x\cop y)\op(y\cop x)=x$ plus four absorption laws. The first pair says that
 $(x,y)\mapsto(x\op y,y\op x)$ is a bijection of $A^2$ whose inverse is given by $\cop$. So $\op$ is orthogonal to
-its transpose, and $\cop$ decodes it. With $\cop=\op$ this is Schr\"oder's second law. We found none of these law
-sets in the literature (by web search). Lean~4 certificates (by \texttt{decide}, with an axiom audit) check the
+its transpose, and $\cop$ decodes it. With $\cop=\op$ this is Schr\"oder's second law. Under the first pair, each
+absorption law is equivalent to a one-operation law, $(x\cop y)\op x=x$ to $x\op(x\op y)=x\op y$ and so on (E, both
+ways), so every translation of either operation is idempotent: the opposite end from a self-orthogonal Latin
+square, where every translation is bijective. The core is known in substance: Schr\"oder quasigroups, Belousov's
+parastrophic orthogonality, and orthogonality of arbitrary binary operations. We found no source for the
+two-operation variety on groupoids, nor for its idempotent-translation version. That check used web search and
+reviews; the key papers have not yet been read in full. Lean~4 certificates (by \texttt{decide}, with an axiom audit) check the
 smallest non-degenerate model of each of the top ten. They show the theories are consistent and non-degenerate,
 not that they are new. The search's filters are syntactic: they keep out definitional theories, but not split ones
 or one-operation varieties written with a division.
