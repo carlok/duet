@@ -23,7 +23,9 @@ Setup and arm:
   no duality bonus) with three changes:
   1. **Off-diagonal gain.** The cheap score counts only laws that T implies on the corpus and that no single law of
      T implies even together with all the one-variable laws T implies. Weights by order: 1, 0.5, 0.25, 0.125 (the
-     old weights gave order-4 laws, such as associativity, weight 0).
+     old weights gave order-4 laws, such as associativity, weight 0). *Changed after a 3-minute first attempt
+     (deviation 6):* "one-variable laws" became "diagonal laws", laws in which each side has at most one variable
+     (adding x·x = y·y and its kin).
   2. **The lattice corner is skipped.** Theories that hold in the 2-element lattice are not scored. The count of
      skipped theories goes into the heartbeats.
   3. **Tradition-fusion proposals.** In the 25% slot the prior arm uses for duality closure: one law in · alone and
@@ -419,3 +421,18 @@ No random theory and no T4 theory had been profiled.
    - The VM also hosts four containers of other projects. Together they use about 120 MB.
    - Not restarted. Reported as run, with the post-run steps as planned.
    - For X4: its budget (9,000 s) is below the point where X3 stopped. The stop rule is unchanged.
+6. **X4, stopped after 3 minutes and restarted with a widened definition (22 Nov 2026, 12:58 UTC).** The first attempt
+   (`work/x4a`, started 12:55:23) verified 19 theories. 18 had a positive score, and none proved a one-variable emergent
+   law, as designed. But 10 of the 18 proved x·x = y·y, and most of the rest proved its kin: x·(x·x) = y·y,
+   x·(x·x) = x·(y·y) (`notes/diagonal_x4a.out`). These laws have two variables but speak only about squares. The fusion
+   forces the square map to be constant instead of the identity: the same diagonal attractor in another form. The
+   entry's stated intent is laws "the fusion produces without going through the diagonal", and these go through it.
+   - Change: D, the laws a single law may use, is now every diagonal law T implies: each side has at most one variable
+     (`soup.offdiag.DIAG`). The consequences of such laws, such as x·(x·x) = x·(y·y), are then covered through
+     implied({t} ∪ D).
+   - Tests: `tests/test_fusion.py` gains a mask test and a regression test on x4a's top theory `19b5765e`, where
+     x·x = y·y is emergent but no longer counts. The positive and negative controls still pass, and so does the whole
+     suite (68).
+   - Everything else is as preregistered: arm, seeds 701+, budget 9,000 s from the restart, stop rule, post-run steps.
+   - Reported: x4a as a separate 3-minute attempt, with its tally. The first form of the attractor is itself an outcome:
+     with one-variable laws excluded, the search found the next diagonal loophole within three minutes.

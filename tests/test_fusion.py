@@ -4,7 +4,7 @@ import numpy as np
 from soup.core import Corpus, LAWS
 from soup.named import law_index
 from soup.paths import data
-from soup.offdiag import ONEVAR, ONLY_F, ONLY_G, lat2, offdiag_gain, pools
+from soup.offdiag import DIAG, ONEVAR, ONLY_F, ONLY_G, lat2, offdiag_gain, pools
 from soup.verify import fusion_gain
 
 C = Corpus()          # base probes only: deterministic, independent of any run's corpus
@@ -55,7 +55,27 @@ def test_diagonal_laws_never_count():
     idem = law_index('x·x=x')
     assert idem in set(fusion_gain(C, t).tolist())          # the classical emergent law of the absorption pair ...
     g = offdiag_gain(C, t)
-    assert idem not in set(g.tolist()) and not ONEVAR[g].any()   # ... is on the diagonal, so it does not count
+    assert idem not in set(g.tolist()) and not DIAG[g].any()   # ... is on the diagonal, so it does not count
+
+
+def test_diag_mask():
+    for law in ['x·x=x', 'x·x=x∘x', 'x·x=y·y', 'x·(x·x)=y·y', 'x·x=(y·y)∘y']:
+        assert DIAG[law_index(law)], law
+    for law in ['x·y=y·x', 'x·(x·x)=x·(y·y)', '(x·y)·z=x·(y·z)']:
+        assert not DIAG[law_index(law)], law
+    assert (ONEVAR <= DIAG).all()
+
+
+def test_constant_squares_do_not_count():
+    # deviation 6: the top theory of the first X4 attempt (x4a, 19b5765e) "gained" x·x = y·y and its consequences.
+    # Its emergent laws include x·x = y·y (fusion_gain), but the widened off-diagonal gain contains no law about squares.
+    t = T(['x·y=y·x', 'x·(y·z)=(x∘z)∘z', 'x·x=y∘(y·(x·x))'])
+    CM = Corpus(store=data('corpus'))
+    sq = law_index('x·x=y·y')
+    assert sq in set(fusion_gain(CM, t).tolist())
+    g = set(offdiag_gain(CM, t).tolist())
+    for law in ['x·x=y·y', 'x·(x·x)=y·y', 'x·(x·x)=x·(y·y)']:
+        assert law_index(law) not in g, law
 
 
 def test_pools_are_one_operation_and_nonempty():

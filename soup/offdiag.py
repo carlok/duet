@@ -5,13 +5,18 @@ Up to X3, 70% of the 3,574 theories with a positive verified score proved an eme
 forces on the diagonal. The lattice absorption pair, the reference case, is itself such a case.
 
 Off-diagonal gain: laws implied by T on the corpus that no single law t of T implies even together with all
-one-variable laws D that T implies:
+diagonal laws D that T implies:
 
-    G(T) = implied(T) minus the union over t in T of implied({t} | D),   D = one-variable laws in implied(T).
+    G(T) = implied(T) minus the union over t in T of implied({t} | D),   D = diagonal laws in implied(T).
+
+A law is diagonal if each side has at most one variable: x·x = x, x·x = x∘x, x·(x·x) = x·x, and also x·x = y·y,
+x·(x·x) = y·y. Such a law speaks only about the terms in one variable, the squares and their kin. The first version
+(X4 attempt x4a, 22 Nov 2026 12:55 UTC) used one-variable laws only. In three minutes the search moved to
+x·x = y·y (10 of 18 positive results), so the definition was widened (PREREGISTRATION.md, deviation 6).
 
 So a law counts only if the fusion produces it by some route other than first forcing something about x·x and x∘x.
-Every law of D lies in each implied({t} | D), so one-variable laws never count. As for fusion_gain, non-implication
-by {t} | D is witnessed by a corpus structure, a real finite model. D is read from the corpus, so it may contain a
+Every law of D lies in each implied({t} | D), so diagonal laws never count. As for fusion_gain, non-implication by
+{t} | D is witnessed by a corpus structure, a real finite model. D is read from the corpus, so it may contain a
 claim that is false. That can only remove laws from G, never add any.
 
 LAT2 is the law vector of the 2-element lattice (· = join, ∘ = meet; the swapped pair is isomorphic to it through
@@ -33,6 +38,7 @@ def _ops(t): return set() if t[0] == 'v' else {t[0]} | _ops(t[1]) | _ops(t[2])
 
 
 ONEVAR = np.array([len(_vars(L) | _vars(R)) == 1 for L, R in TREES])
+DIAG = np.array([len(_vars(L)) <= 1 and len(_vars(R)) <= 1 for L, R in TREES])   # each side in one variable
 OPS = [_ops(L) | _ops(R) for L, R in TREES]
 ONLY_F = np.array([o == {'f'} for o in OPS])     # laws in · alone
 ONLY_G = np.array([o == {'g'} for o in OPS])     # laws in ∘ alone
@@ -62,8 +68,8 @@ def offdiag_gain(C, T, imp=None):
     T = sorted(set(T))
     if imp is None: imp = C.implied(T)
     if imp is None: return None
-    D = np.flatnonzero(imp & ONEVAR).tolist()
-    covered = imp & ONEVAR
+    D = np.flatnonzero(imp & DIAG).tolist()
+    covered = imp & DIAG
     bD, eD = C.sat(D) if D else (None, None)
     for t in T:
         b, e = C.sat([t])
