@@ -74,12 +74,15 @@ def main():
     ap.add_argument('--set', default='candidates')
     a = ap.parse_args()
     C = Corpus(store=data('corpus'))
-    res = []
+    out = ensure('check') / f'relabel_{a.set}.json'
+    res = json.load(open(out)) if out.exists() else []                   # resumable: theories already checked are kept
+    done = {json.dumps(sorted(r['T'])) for r in res}
     for r in json.load(open(data('check', 'candidates.json'))):
+        if json.dumps(sorted(r['T'])) in done: continue
         x = check(r['T'], C); res.append(dict(x, key=str(r['key']), source=r['source'], laws=r['laws'], T=r['T']))
         print(f"{str(r['key'])[:8]:8s} {r['source']:10s} implies {x['implies'] or '-'} | fragment of "
               f"{x['fragment_of'] or '-'} | equivalent {x['equivalent_to'] or '-'}", flush=True)
-    json.dump(res, open(ensure('check') / f'relabel_{a.set}.json', 'w'), ensure_ascii=False, indent=1)
+        json.dump(res, open(out, 'w'), ensure_ascii=False, indent=1)
 
 
 if __name__ == '__main__':

@@ -83,7 +83,7 @@ def write(top):
     rk = json.load(open(data('check', 'ranking.json')))
     profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
     extra = {}
-    for kind in ('hidden', 'split'):
+    for kind in ('hidden', 'split', 'relabel'):
         f = data('check', f'{kind}_candidates.json')
         if f.exists(): extra[kind] = {str(x['key']): x for x in json.load(open(f))}
     f = data('check', 'literature.json')                     # key -> markdown, written by hand after each search
@@ -127,12 +127,19 @@ def write(top):
                                                False: f"not split (certificate: the · table of one model and the ∘ table "
                                                       f"of another, both on {sp['witness']['n']} elements, fail a law).",
                                                None: f"unknown ({sp.get('why')})."}[sp['split']]]
+        rl = extra.get('relabel', {}).get(key)
+        if rl: L += ['- Named theories up to the 8 relabellings (`soup.relabel`, E proofs): implies '
+                     + (', '.join(rl['implies']) or 'none') + '; fragment of ' + (', '.join(rl['fragment_of']) or 'none')
+                     + '; equivalent to ' + (', '.join(rl['equivalent_to']) or 'none') + '.']
         lit = extra.get('literature', {}).get(key)
         L += ['', '## Literature check', '', lit or 'Not done for this candidate.', '', '## Lean', '']
-        mj = data('check', f'cand{i}_model.json')               # written by `dossier lean-json` for lean_cert
-        L += [f"`lean/Duet/Cand{i}.lean`: the smallest non-degenerate model above satisfies the laws, and the theory does "
-              f"not imply {', '.join(json.load(open(mj))['claims'])}. `decide` only; checked by `lean/check.sh` with "
-              "the axiom audit (REPORT.md)." if mj.exists() else 'No certificate yet.', '']
+        lean = None                                             # written by `dossier lean-json` for lean_cert, by rank
+        for mj in sorted(data('check').glob('cand*_model.json')):     # at the time: match on the key, not the rank
+            m = json.load(open(mj))
+            if str(m['key']) == key: lean = (mj.stem.split('_')[0].capitalize(), m); break
+        L += [f"`lean/Duet/{lean[0]}.lean`: the smallest non-degenerate model above satisfies the laws, and the theory "
+              f"does not imply {', '.join(lean[1]['claims'])}. `decide` only; checked by `lean/check.sh` with "
+              "the axiom audit (REPORT.md)." if lean else 'No certificate yet.', '']
         (d / f'{name}.md').write_text('\n'.join(L))
         print('wrote', d / f'{name}.md')
 
@@ -149,7 +156,11 @@ def lean_json(top):
     from .named import law_index
     rk = json.load(open(data('check', 'ranking.json')))
     profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
-    for i, r in enumerate(rk['candidates'][:top], 1):
+    have = {str(json.load(open(f))['key']): f for f in data('check').glob('cand*_model.json')}
+    nxt = max([int(f.stem.split('_')[0][4:]) for f in have.values()], default=0) + 1
+    for r in rk['candidates'][:top]:
+        if str(r['key']) in have: print(r['key'], 'has', have[str(r['key'])].name); continue
+        i, nxt = nxt, nxt + 1                                 # numbers stay with their theory when the ranking moves
         sm = profs[json.dumps(sorted(r['T']))].get('smallest_nondeg')
         if not sm: print(i, r['key'], 'no small model'); continue
         cl = [law_index(s.replace(' ', '')) for s in NONDEG]

@@ -67,12 +67,15 @@ def main():
     else:
         laws = [s.strip() for s in a.laws.split(';')]
         jobs = [('adhoc', 'cli', laws, [law_index(s.replace(' ', '')) for s in laws])]
-    res = []
+    out = ensure('check') / f'hidden_{a.set}.json' if a.set else None
+    res = json.load(open(out)) if out and out.exists() else []           # resumable: theories already checked are kept
+    done = {json.dumps(sorted(r['T'])) for r in res}
     for key, src, laws, T in jobs:
+        if json.dumps(sorted(T)) in done: continue
         h = hidden(T); res.append(dict(h, key=key, source=src, laws=laws, T=T))
         m = '; '.join(f"{x['op']} = {x['term']} ({x['e']})" for x in h['matches']) or '-'
         print(f"{key[:8]:8s} {src:10s} models {h['models']:4d} definitional {h['definitional']} | {m}", flush=True)
-    if a.set: json.dump(res, open(ensure('check') / f'hidden_{a.set}.json', 'w'), ensure_ascii=False, indent=1)
+        if out: json.dump(res, open(out, 'w'), ensure_ascii=False, indent=1)
 
 
 if __name__ == '__main__':
