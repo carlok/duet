@@ -83,9 +83,17 @@ This is the opposite of a self-orthogonal Latin square, where every translation 
 
 Literature. Sources: web search, zbMATH reviews, a delegated lookup, and two papers read by us (Shcherbacov,
 arXiv:2206.12844; Bonatto, Kinyon, Stanovský and Vojtěchovský, arXiv:1910.02148, §2.5).
-- **B is prior art.** A binary algebra is *Δ-bijective* when (x,y) ↦ (xy, yx) is bijective. Bonatto et al.,
-  Lemma 2.10, show that the inverse is Δ of a second, "dual" operation, which is exactly B. They credit the idea to
-  Rump (Adv. Math. 193, 2005), where it is the non-degeneracy condition for cycle sets.
+- **B is prior art.** A binary algebra is *Δ-bijective* when (x,y) ↦ (xy, yx) is bijective. That the inverse is Δ
+  of a second, "dual" operation, which is exactly B, is stated for arbitrary operations in several places:
+  - Dehornoy, Adv. Math. 282 (2015), arXiv:1403.3019, §1, the "involutivity laws" (read by us via ar5iv);
+  - Foundations of Garside Theory, Lemma XIII.1.28 (read by a delegated lookup);
+  - Bonatto et al., Lemma 2.10.
+
+  The idea comes from Rump (Adv. Math. 193, 2005). All of these work with the right-cyclic law or bijective left
+  translations.
+- **Not a Yang–Baxter solution.** None of `10c98c4b`'s 16 non-degenerate models on 4 and 5 elements makes r(x,y) =
+  (x·y, y·x) satisfy the braid relation. The 2×2 rectangular band and the flip, used as controls, do (part 7 of the
+  script).
 - With ∘ = ·, B is Schröder's second law. Schröder quasigroups are well studied; the idempotent ones exist exactly
   for n ≡ 0, 1 (mod 4), n ≠ 5, 9 (Bennett, Wei and Zhu 1996).
 - Belousov (1983, English 2005) classifies the identities that force a quasigroup to be orthogonal to a parastrophe.

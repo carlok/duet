@@ -153,6 +153,19 @@ for n in (4, 5):
     print('   laws holding (count of models):', {k: v for k, v in tally.items() if v})
     here = {k for k, v in tally.items() if v == len(seen)}
     shared = here if shared is None else shared & here
+    if n in (4, 5):
+        # 7. (added 22 Nov, after the literature lookup) is r(x,y) = (x·y, y·x) a set-theoretic YBE solution?
+        # braid relation r12 r23 r12 = r23 r12 r23 on triples
+        def braid(F):
+            r = lambda a, b: (F[a, b], F[b, a])
+            ok = True
+            for x, y, z in itertools.product(range(n), repeat=3):
+                a, b = r(x, y); b, c = r(b, z); a, b = r(a, b); lhs = (a, b, c)
+                b, c = r(y, z); a, b = r(x, b); b, c = r(b, c); rhs = (a, b, c)
+                if lhs != rhs: ok = False; break
+            return ok
+        yb = sum(braid(F) for F, G in seen.values())
+        print(f'   7. n={n}: r(x,y) = (x·y, y·x) satisfies the braid relation in {yb} of {len(seen)} models')
 print('   laws holding in every non-degenerate model on 4 and 5 elements:', sorted(shared))
 for k in sorted(shared):
     op, name = k.split(' ', 1); law = LAWS[name][0]

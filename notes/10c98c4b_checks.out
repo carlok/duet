@@ -22,6 +22,8 @@
 6. all non-degenerate models of B + translation laws on 4 and 5 elements (Mace4, complete), laws they share
    n=4: 77 models found, search complete: True; non-degenerate up to iso 2
    laws holding (count of models): {'· x(yz) = xz': 1, '∘ x(yz) = xz': 1, '· (xy)z = xz': 1, '∘ (xy)z = xz': 1, '· x(yx) = x': 1, '∘ x(yx) = x': 1, '· (xy)x = x': 1, '∘ (xy)x = x': 1}
+   7. n=4: r(x,y) = (x·y, y·x) satisfies the braid relation in 0 of 2 models
    n=5: 1792 models found, search complete: True; non-degenerate up to iso 14
    laws holding (count of models): {'· x(yx) = x': 7, '∘ x(yx) = x': 7, '· (xy)x = x': 7, '∘ (xy)x = x': 7}
+   7. n=5: r(x,y) = (x·y, y·x) satisfies the braid relation in 0 of 14 models
    laws holding in every non-degenerate model on 4 and 5 elements: []
