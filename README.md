@@ -76,6 +76,10 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
     certificates for their smallest models).
 - **Not yet:** no theory found so far is new. The search's filters are syntactic: they let split theories and
   divisions in disguise through.
+- **Scale.** All runs together verified 4,222 theories, against 2.5 × 10⁹ pairs of laws and 1.8 × 10²⁶ law sets of
+  up to six laws (`notes/coverage.py`). The duality prior keeps the search in the most-studied corner of
+  two-operation algebra, so rediscovery there is expected. "We found no source" is weak evidence: our literature
+  checks are web searches, and they have already missed one source.
 
 ## Open problems
 

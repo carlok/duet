@@ -1,0 +1,14 @@
+.           verified    354  queued   7714  evaluations   2,832,376  runs ['e10', 'fix5', 'test10']
+t4-prior    verified   1050  queued   2440  evaluations   5,842,907  runs ['t4-prior']
+t4-noprior  verified    441  queued   2503  evaluations   5,405,530  runs ['t4-noprior']
+x1          verified    521  queued   5551  evaluations   9,744,990  runs ['x1']
+x2          verified   1015  queued   5699  evaluations  14,878,548  runs ['x2']
+x3          verified    841  queued   6394  evaluations   6,446,939  runs ['x3']
+total       verified   4222  queued  30301  evaluations  45,151,290
+law sets of size 1: 7.137e+04
+law sets of size 2: 2.547e+09
+law sets of size 3: 6.058e+13
+law sets of size 4: 1.081e+18
+law sets of size 5: 1.543e+22
+law sets of size 6: 1.835e+26
+law sets of size 1..6: 1.835e+26; evaluations / sets = 2.5e-19; verified / pairs alone = 1.7e-06

@@ -169,6 +169,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       equivalence both ways, before counting two candidates as different.
   - Split scan of the T4 non-fragments: 35/668 (prior) and 4/362 (noprior) are split.
   - Lean: 11 modules (S10 plus 10 candidate models), axiom audit passes on 116 declarations.
+  - Coverage (`notes/coverage.py`, 22 Nov 10:14 UTC): 4,222 verified and 45M cheap evaluations in all runs, against
+    2.5e9 law pairs and 1.8e26 law sets of ≤ 6 laws. The prior samples the most-studied corner (lattice-like,
+    symmetric), so rediscovery there is expected and "no source found" is weak evidence. Frame every result that way.
 
 ## Pitfalls already paid for
 

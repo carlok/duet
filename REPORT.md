@@ -2,6 +2,43 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Coverage: how much of the space the searches touched (22 Nov 2026, 10:14 UTC; X3 still running)
+
+`podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - < notes/coverage.py` (output: `notes/coverage.out`).
+
+| data directory | verified | queued (seen) | cheap evaluations |
+| --- | ---: | ---: | ---: |
+| `.` (three test runs) | 354 | 7,714 | 2,832,376 |
+| `t4-prior` | 1,050 | 2,440 | 5,842,907 |
+| `t4-noprior` | 441 | 2,503 | 5,405,530 |
+| `x1` | 521 | 5,551 | 9,744,990 |
+| `x2` | 1,015 | 5,699 | 14,878,548 |
+| `x3` (running) | 841 | 6,394 | 6,446,939 |
+| **total** | **4,222** | **30,301** | **45,151,290** |
+
+The search can form law sets of 1 to 6 laws out of 71,369: 2.5 × 10⁹ pairs, 1.1 × 10¹⁸ sets of four,
+1.8 × 10²⁶ in all. Verified theories are 1.7 × 10⁻⁶ of the pairs alone; cheap evaluations are 2.5 × 10⁻¹⁹ of all
+law sets.
+
+Caveats:
+- Law sets overcount varieties: many are equivalent or trivial, and how many distinct varieties there are is not
+  known. Evaluations count repeats of one theory again. Both ratios are rough. On any count the explored part is
+  tiny.
+- The explored part is not a random sample. The duality prior (T4) steers toward symmetric, absorption-type,
+  lattice-like theories, which is where human work on two binary operations is densest. Every top candidate
+  identified so far was known (`notes/rediscovery.md`).
+
+What this means for the claims:
+- **"No source found" is weak evidence.** Human knowledge of this region is large, and our literature checks are web
+  and zbMATH searches, not a survey. They already missed one prior source (the Δ-bijective core of `10c98c4b`, on the
+  first pass). A theory counts as unnamed only after a check by someone who knows the field, not after our searches
+  alone.
+- **The rediscovery rate (R1) measures the search in a well-mapped corner.** It says nothing about how often the
+  search would find something new elsewhere.
+- **A tiny explored part is not a negative result.** Finding nothing new here does not show there is nothing new
+  to find. Runs that leave the well-mapped corner (no prior, asymmetric theories, order 5) are a different
+  experiment, still to be preregistered.
+
 ## R1: rediscovery against a fixed catalogue (22 Nov 2026, 07:56–08:31 UTC; post hoc, preregistered plan)
 
 Plan and catalogue committed before computing (`534c1af`; PREREGISTRATION.md, R1). The catalogue is 13 known
