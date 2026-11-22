@@ -2,6 +2,70 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## N1: a novelty ranking of the candidates (post hoc; written 22 Nov 2026, 15:50 UTC, before it is computed)
+
+**Why.** The preregistered T5a ranking sorts candidates by the features that separate named theories from random
+ones: a convergent presentation, then a duality. It rewards resemblance to the known, which is right for "is this
+the kind of structure algebraists name?" and wrong for the user's aim: a fusion that works but is not clearly
+connected to anything known. X4's theories have no duality by design, so T5a puts them low whatever they are. N1 is
+a second ranking, used *alongside* T5a, not instead of it. The user asked for it (22 Nov, afternoon).
+
+**Status at the time of writing.** X4's candidate checks (profile, hidden, split, relabel) are running. Two of
+their log lines were seen in passing: `d82738a2` not definitional, `94d69dd2` not split. No other X4 candidate
+check, no R1 result on X4 and no dedupe result has been read.
+
+**Input.** The candidate pool, `work/check/candidates.json`: the top 20 non-fragments by verified score of each run
+(`.`, `t4-prior`, `t4-noprior`, `x1`, `x2`, `x3`, `x4`), plus T1 and T2. It runs after the X4 post-run, R1 on X4, and
+`soup.dedupe` on the pool.
+
+**Gate.** A candidate enters N1 only if all of these hold:
+1. **It works.** Its verification record has at least one proved emergent law, and its profile shows
+   non-degenerate models on at least 2 sizes. Candidates with no verification record (T1, T2) are listed apart.
+2. **Nothing identifies it.**
+   - Not split (`soup.split` True). `None` is allowed but flagged.
+   - Not definitional (`soup.hidden`), and no V4 mark.
+   - No relation in `soup.relabel`: none of implies, fragment of, equivalent to.
+   - No R1 relation to a catalogue entry: none of fragment, subvariety, equivalent. A relation with "?" is allowed
+     but flagged.
+3. **One per variety.** From each class of `soup.dedupe` (equivalent under the 8 relabellings), only the member with
+   the highest verified score enters.
+
+**Order** among those that pass, lexicographic:
+1. A proved emergent law that is **off-diagonal**: not a diagonal law, and in `soup.offdiag.offdiag_gain` on the
+   corpus of the candidate's own run. Yes first.
+2. **No classical model**, as in the X4 entry: no non-degenerate structured probe on 3 or more elements. Yes first.
+3. **Not related** to a known structure by a partial identification in the ledger (`notes/rediscovery.md`). These
+   are `10c98c4b` (its core is Δ-bijectivity), `3e068fa6` (its finite models are Δ-bijective pairs) and `31d6d970`
+   (its associative case is the rectangular skew lattices). Unrelated first. The list is fixed now; later ledger
+   rows do not change N1.
+4. **More sizes with non-degenerate models**, from the profile spectrum.
+5. **Smaller axioms**: the sum of the orders of the laws.
+6. **Verified score**, higher first, as the last tie-break. Scores from different verifiers are not comparable, so
+   it only breaks ties.
+
+**Outputs.**
+- `work/check/novelty_ranking.json`, and the N1 top 20 with every mark.
+- `notes/candidates_table.md` (added at the user's request, 15:55 UTC, before computing), in two tables:
+  - **known:** every candidate a check identifies, with what it is and which check said so;
+  - **not known as far as our checks and searches go:** the N1 list in order, with its marks as the metric.
+
+  Below them: candidates that fail "works", and those with no verification record.
+- The gate counts: how many fail each condition.
+- The overlap of N1's and T5a's top 10.
+- The share of each run in N1's top 10. Expectation, not a test: X4 takes a larger share of N1's top 10 than of
+  T5a's.
+
+**Follow-up.**
+- New N1 top-10 entries get a dossier, a Lean certificate of the smallest model, and a literature check (a web-only
+  agent, key claims rechecked by E). Wording: no candidate is called new without a check by someone who knows the
+  field.
+- Code: `soup/novelty.py`, committed with this entry, before it is run.
+
+**Caveats.**
+- N1 is post hoc and descriptive.
+- Its gate depends on our checks and catalogue: "unconnected" means unconnected to them.
+- Its first key favours X4 by construction, since X4 selected for off-diagonal laws.
+
 ## X4: fusion arm, away from the diagonal and the lattice corner (written 22 Nov 2026, 10:40 UTC, during X3, before X4 starts)
 
 Exploratory and descriptive only: no hypothesis is tested. The user's aim (22 Nov, morning): find theories in the
