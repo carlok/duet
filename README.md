@@ -10,8 +10,8 @@ pair, which forces both operations to be idempotent. Every claim goes through fi
 provers before it is reported. No language model is used in the search or its scoring.
 
 **New to the subject?** [`intro/intro-reading.pdf`](intro/intro-reading.pdf) builds the background from sets and
-functions, in about 9 pages, up to how the search works and why it could matter. Exercises and solutions are in
-appendices, or inline at the end of each section in [`intro/intro.pdf`](intro/intro.pdf).
+functions, in 9 pages, up to how the search works and why it could matter. The same text with exercises and
+solutions is [`intro/intro.pdf`](intro/intro.pdf).
 
 ## Running it
 

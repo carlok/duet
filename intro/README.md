@@ -1,8 +1,10 @@
 An introduction to the project from scratch: sets and functions, binary operations, laws, theories and models,
-synergy, and how the search works. Two versions from one source (`intro.tex`, with the exercises in `exercises.tex`):
+synergy, and how the search works. Two versions of one text:
 
-- `intro-reading.pdf`: the text alone, for a first read; exercises and solutions in two appendices at the end.
-- `intro.pdf`: the same text with exercises at the end of each section; solutions in an appendix.
+- `intro-reading.pdf` (`intro-reading.tex`): the text alone, for a first read; no exercises, no solutions.
+- `intro.pdf` (`intro.tex`): the same text with exercises at the end of each section and solutions in an appendix.
+
+The text is in `intro.tex` and the exercises in `exercises.tex`; `intro-reading.tex` only switches the version.
 
 Build both inside Podman with the paper's image:
 
