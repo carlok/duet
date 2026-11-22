@@ -193,7 +193,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - Candidates: 138, which are 120 varieties after `soup.dedupe`. `2dc27508` = `69dfbd8e` = `31d6d970` (one variety,
     three runs).
   - N1: 56 known, 77 ranked; its top 10 is disjoint from T5a's, and X4 has 7 of it. Dossiers `work/dossiers/n1-*`.
-    Lean: 26 modules with `A9295908`.
+    Lean: 27 modules with `A9295908` and `T55cb2c91`, audit 290 declarations.
+  - `55cb2c91` (N1 rank 1): not identified, related in pieces (`notes/55cb2c91.md`).
+    - T is equivalent to x·(y·z) = x·y, x·(x∘y) = x, x·y = (y·x)∘x.
+    - The ·-parts are characterized (Lean `reduct_iff`). ∘ is a swap y·x ↦ x·y where that is forced, free elsewhere.
+    - With x·y = x∘y it has only one-element models.
   - `a9295908` (N1 rank 3) is identified as a fragment of Heyting algebras (ledger row 11; `notes/a9295908.md`).
     - T is equivalent to a commutative idempotent · (not associative) with x∘(x·y) = x·y and (x∘y)·y = y.
     - With · = ∧ and x∘y = (y→x)→y, every Heyting algebra is a model (Lean `heyting_model`).

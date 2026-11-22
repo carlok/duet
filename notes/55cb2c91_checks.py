@@ -70,3 +70,13 @@ if part == '3':
         else: disagree += 1
     print(f'· tables on 3 elements with x·(y·z) = x·y: prediction agrees on {agree}, disagrees on {disagree}; '
           f'{extendable} extend to a model of T')
+
+if part == '4':
+    # the literature check says: with x·y = x∘y, law 2 is ETP 4174, equivalent to a constant law, and with ETP 9 the
+    # pair has only one-element models. Checked with E.
+    M = sorted({law_index(LAWS[t].replace('∘', '·').replace(' ', '')) for t in T})
+    print('merged:', ' & '.join(LAWS[t] for t in M))
+    e4174 = [law_index('x·y=((y·z)·x)·x')]
+    print('  4174 alone => x·x = y·z (constant):', _proves(e4174, [law_index('x·x=y·z')], 30))
+    print('  4174 => x·y = z·w:', _proves(e4174, [law_index('x·y=z·w')], 30))
+    print('  9 & 4174 => x = y (one element):', _proves(M, [law_index('x=y')], 30))

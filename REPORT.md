@@ -2,6 +2,26 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `55cb2c91` (N1 rank 1): what the theory is (22 Nov 2026, 20:00–20:50 UTC; post hoc)
+
+Command: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/55cb2c91_checks.py`, parts 1–4
+(output `notes/55cb2c91_checks.out`). Lean: `lean/Duet/T55cb2c91.lean`. Memo: `notes/55cb2c91.md`.
+T = {x·(x∘y) = x, x·y = ((y·z)·x)∘x}.
+
+| Check | Result |
+| --- | --- |
+| short consequences (order ≤ 3, suggested by the corpus) | 30 proved by E (20 s each), 13 of them emergent, e.g. (x·y)·y = x·y and x·y = (y·x)∘x |
+| T ⟺ C: x·(y·z) = x·y, x·(x∘y) = x, x·y = (y·x)∘x | E both ways, 60 s per law; (x·y)·y = x·y is redundant in C; Lean `C_implies_T` |
+| which · occur | exactly those with x·(y·z) = x·y, (x·y)·y = x·y, every x a value of x·−, and y·x = y'·x ⇒ x·y = x·y' (Lean `reduct_iff`, for every type); the prediction matches brute force on all 63 tables on 3 elements; the first version, without (x·y)·y = x·y, failed on 6 |
+| what ∘ is | forced on pairs (y·x, x), where it is the swap y·x ↦ x·y; free elsewhere, inside {w : u·w = u} |
+| with x·y = x∘y | ETP 4174 alone gives a constant operation; with ETP 9, only one-element models (E) |
+| non-degenerate models, sizes 2 / 3 / 4 / 5 | 0 / 5 / ≥ 365 / ≥ 2,099 (`soup.profile`; 4 and 5 capped) |
+| literature (targeted web-only agent; the collapse rechecked by E) | x(yz) = xy is ETP 327 and (xy)y = xy is ETP 378; with idempotence they are a basis of Waldhauser's minimal-clone varieties (arXiv:1102.2127, excerpts); no source for the theory, the conditions on ·, or the swap |
+
+**Verdict:** not identified; related in pieces. A two-operation theory whose one-operation shadow is trivial. Its ·
+has named laws (ETP 327, 378), and its ∘ is a partial swap. Lean: `lean/check.sh` passes 27 modules, and the axiom
+audit passes on 290 declarations.
+
 ## `a9295908` (N1 rank 3): what the theory is (22 Nov 2026, 19:05–19:54 UTC; post hoc)
 
 Command: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/a9295908_checks.py`, parts 1–6

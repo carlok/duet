@@ -41,3 +41,8 @@ C => T {'x · y = ((y · z) · x) ∘ x': True}
   C minus x · y = (y · x) ∘ x    => it: False
 T = x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x
 · tables on 3 elements with x·(y·z) = x·y: prediction agrees on 63, disagrees on 0; 19 extend to a model of T
+T = x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x
+merged: x · (x · y) = x & ((x · y) · z) · z = z · x
+  4174 alone => x·x = y·z (constant): True
+  4174 => x·y = z·w: True
+  9 & 4174 => x = y (one element): True

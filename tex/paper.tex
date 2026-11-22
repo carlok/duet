@@ -419,6 +419,13 @@ $x\op y=x\cop(y\op x)$, looked like a lead and turned out to be a relative of kn
 So it is a fragment of Heyting-algebra theory under a term interpretation, without associativity. The search reached
 it with no knowledge of logic.
 
+N1's first entry, $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$, also has a plain reading. It is equivalent to
+$x\op(y\op z)=x\op y$, $x\op(x\cop y)=x$ and $x\op y=(y\op x)\cop x$ (E both ways). The groupoids that occur as its
+$\op$-part are characterized exactly (Lean). On pairs $(y\op x,x)$ the operation $\cop$ is forced to be the swap
+$y\op x\mapsto x\op y$; elsewhere it is free. With the two operations set equal, the theory has only one-element
+models, so its second operation is essential. Its $\op$-laws are named one-operation laws (ETP 327 and 378), but we
+found no source for the theory.
+
 \section{Planned experiments}
 \pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the
 other finite countermodels, the models on $\mathbb{Z}$, the term model, and the main implications (the S10 model and
