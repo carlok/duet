@@ -300,11 +300,31 @@ smallest non-degenerate model of each of the top ten. They show the theories are
 not that they are new. The search's filters are syntactic: they keep out definitional theories, but not split ones
 or one-operation varieties written with a division.
 
+\subsection{Rediscovery as calibration}
+An open-ended search that finds nothing known is suspect, and so is one whose finds are all known. We therefore
+record every case where a find turned out to be known, with the route that identified it and the time it took
+(\texttt{notes/rediscovery.md}). Six cases so far:
+\begin{itemize}
+\item two laws of McKenzie's lattice basis (identified through the literature);
+\item T4's lattice fragments (automatic);
+\item thirteen split candidates (automatic, once the split check existed);
+\item two idempotent left quasigroups written with their division (automatic, then a prover equivalence);
+\item three absorption-type subvarieties (automatic);
+\item the $\Delta$-bijective core of the tenth candidate, from the Yang--Baxter literature rather than the
+  Latin-square literature where we first looked (prover, then literature).
+\end{itemize}
+Four of the six were identified by pipeline checks, which were written only after the first candidates were in
+hand. The two found through the literature took hours, and one of them needed a second search in another field.
+A systematic measure against a catalogue of 13 known structures, fixed before the analysis, is preregistered as
+R1. \pending{R1: entries rediscovered, and the share of top candidates identified by any route.} The filters that
+now remove split theories and divisions in disguise during the search came out of this ledger
+\pending{X3: what the search finds with them}.
+
 \section{Planned experiments}
 \pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the
 other finite countermodels, the models on $\mathbb{Z}$, the term model, and the main implications (the S10 model and
-the five candidate models are done).} \pending{A filter for split theories and for divisions in disguise, inside
-the search.}
+the five candidate models are done).} \pending{X3: the search with filters for split theories and for divisions in
+disguise (verifier V4, preregistered).}
 
 \section{Limitations}
 \begin{itemize}

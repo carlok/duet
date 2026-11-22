@@ -100,8 +100,16 @@ Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`
 ## Status (22 Nov 2026, morning)
 
 Running: **X2**, a second exploratory run as X1 (`soup-x2`, 04:21 to about 07:12 UTC; PREREGISTRATION.md, X2),
-with nothing heavy alongside. All commits are local. Since the T4 tag, nothing has been pushed: `main` and
-`t4-prereg` were pushed when T4 started, and later commits wait for the user.
+with nothing heavy alongside. `main` is pushed to the private origin at each milestone (the user's choice, 22 Nov
+morning).
+
+Today's plan (until about 18:30 UTC), all preregistered (PREREGISTRATION.md, R1 and X3):
+1. X2's follow-up checks.
+2. **R1**: which of 13 catalogued known structures the search rediscovered (`soup/catalogue.py`, `soup/rediscover.py`),
+   and a ledger of every identification (`notes/rediscovery.md`).
+3. **X3**: a 3 h run with verifier V4, which scores split theories and divisions in disguise as 0, so that the
+   search spends its time on theories not yet identified.
+4. General Lean proofs for the Δ-bijective core (`lean/Duet/Delta.lean`), and the spectrum of `10c98c4b`.
 
 Finished overnight (details and commands in `REPORT.md`, newest first):
 - **T4** (preregistered, 4 h per arm at tag `t4-prereg`): H1 supported, 33% against 8% fragments.
