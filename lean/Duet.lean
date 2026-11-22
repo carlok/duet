@@ -1,6 +1,11 @@
 import Duet.Cand1
+import Duet.Cand10
 import Duet.Cand2
 import Duet.Cand3
 import Duet.Cand4
 import Duet.Cand5
+import Duet.Cand6
+import Duet.Cand7
+import Duet.Cand8
+import Duet.Cand9
 import Duet.S10

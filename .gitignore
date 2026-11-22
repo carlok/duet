@@ -11,7 +11,8 @@ work/queue/
 work/results/
 work/logs/
 work/runs/
-work/check/
+work/check/*
+!work/check/literature.json
 *.log
 tex/*.aux
 tex/*.bbl
@@ -28,3 +29,4 @@ work/t4_report.json
 work/x1/*
 !work/x1/journal/
 work/fragments.json
+work/t4_report_asrun.json

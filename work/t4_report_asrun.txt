@@ -1,0 +1,45 @@
+{
+ "prior": {
+  "positive_score": 998,
+  "fragment": 330,
+  "not_fragment": 668,
+  "undecided": 0,
+  "share_decided": 0.331,
+  "bounds": [
+   0.331,
+   0.331
+  ]
+ },
+ "noprior": {
+  "positive_score": 393,
+  "fragment": 31,
+  "not_fragment": 362,
+  "undecided": 0,
+  "share_decided": 0.079,
+  "bounds": [
+   0.079,
+   0.079
+  ]
+ },
+ "fisher_one_sided_p": 1.96200053721399e-25
+}
+0 prior 2.167 x · (y ∘ x) = y ∘ y & x · x = (y · x) ∘ y & x ∘ (x ∘ ((y · z) ∘ x)) = x & ((x · (y ∘ z)) · x) · x = x 
+1 prior 1.7728 x · (x ∘ x) = x & x ∘ (x ∘ x) = x ∘ x & (x · y) · z = y · z & (x ∘ y) ∘ z = y ∘ z 
+2 prior 1.7216 x · (x ∘ x) = x & (x · x) ∘ x = x & x ∘ ((x · y) · z) = y ∘ y & (x ∘ (y ∘ z)) · z = y · y 
+3 prior 1.6677 x · (y ∘ (x ∘ y)) = x & x ∘ (y · (x · y)) = x & x · ((y ∘ x) ∘ y) = x & x ∘ ((y · x) · y) = x & x · (((x · x)  
+4 prior 1.659 x · (x · x) = x & x · (y ∘ x) = y ∘ y & x · x = (y · x) ∘ y & x ∘ (x ∘ ((y · z) ∘ x)) = x 
+5 prior 1.5994 x · (y ∘ (x ∘ y)) = x & x ∘ ((y · x) · z) = x & x ∘ (((x ∘ x) ∘ y) · z) = x 
+6 prior 1.5854 x · (y ∘ x) = x · x & x ∘ (y · x) = x ∘ x & (x ∘ y) · x = x · x & (x · y) ∘ x = x ∘ x & x · (y · z) = y ∘ (x ∘ 
+7 prior 1.5836 x · (y ∘ (x ∘ y)) = x & x ∘ (y · (x · y)) = x & x · ((y ∘ x) ∘ y) = x & x ∘ ((y · x) · y) = x & x · (((x · x)  
+8 prior 1.5836 x · (y ∘ (x ∘ y)) = x & x ∘ (y · (x · y)) = x & x · ((y ∘ x) ∘ z) = x & x ∘ ((y · x) · z) = x & x · (((x · x)  
+9 prior 1.5554 x · (x · x) = x & (x · x) · y = y · x & ((x ∘ (y · y)) · z) ∘ y = y 
+10 noprior 1.7432 x · (y ∘ (z · x)) = x & (x ∘ x) · (x · y) = x 
+11 noprior 1.6796 (x ∘ x) · (y ∘ y) = y · x & (x · x) ∘ ((y ∘ x) ∘ z) = x 
+12 noprior 1.653 x · y = y · x & x ∘ (y ∘ x) = x & (x · x) ∘ (x · y) = x 
+13 noprior 1.5751 x · (x · x) = x & x ∘ (y · (z · x)) = x & (x ∘ x) ∘ (x · y) = y ∘ x 
+14 noprior 1.5211 x · y = y · x & x · y = y ∘ (x · y) & x · (y ∘ (z ∘ x)) = x 
+15 noprior 1.5185 x · (x ∘ y) = x & (x · y) · x = (z ∘ y) · z 
+16 noprior 1.5131 x · x = x ∘ x & x · (x ∘ x) = x & x ∘ (y · x) = x & (x · y) ∘ (y ∘ x) = y 
+17 noprior 1.4756 x · x = x & (x ∘ x) · ((y · x) · z) = x 
+18 noprior 1.4534 x · x = x & x · (y ∘ x) = x & (x · y) · x = (z · x) ∘ x 
+19 noprior 1.4008 x · y = y · x & x ∘ (y · (z ∘ x)) = x & (x · x) ∘ (x ∘ y) = x 
