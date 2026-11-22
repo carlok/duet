@@ -18,16 +18,21 @@ and a complete enumeration; under a minute). Memo: `notes/10c98c4b.md`.
 So `10c98c4b` says: · is orthogonal to its transpose, and every translation of · and of its decoder is idempotent.
 This is the opposite of a self-orthogonal Latin square, where every translation is bijective.
 
-Literature, by web search, zbMATH reviews and one paper read in full (Shcherbacov, arXiv:2206.12844):
+Literature. Sources: web search, zbMATH reviews, a delegated lookup, and two papers read by us (Shcherbacov,
+arXiv:2206.12844; Bonatto, Kinyon, Stanovský and Vojtěchovský, arXiv:1910.02148, §2.5).
+- **B is prior art.** A binary algebra is *Δ-bijective* when (x,y) ↦ (xy, yx) is bijective. Bonatto et al.,
+  Lemma 2.10, show that the inverse is Δ of a second, "dual" operation, which is exactly B. They credit the idea to
+  Rump (Adv. Math. 193, 2005), where it is the non-degeneracy condition for cycle sets.
 - With ∘ = ·, B is Schröder's second law. Schröder quasigroups are well studied; the idempotent ones exist exactly
   for n ≡ 0, 1 (mod 4), n ≠ 5, 9 (Bennett, Wei and Zhu 1996).
 - Belousov (1983, English 2005) classifies the identities that force a quasigroup to be orthogonal to a parastrophe.
-- "Self-orthogonal n-ary groupoids" exist as a notion (Syrbu 1994), and so does orthogonality of arbitrary binary
-  operations (Belyavskaya 2005).
+- Orthogonality of arbitrary binary operations is studied too (Mullen and Shcherbacov 2005), as are "self-orthogonal
+  n-ary groupoids" (Syrbu 1994).
 
-The core is therefore known in substance. We found no source for the two-operation variety for groupoids, nor for
-its idempotent-translation version. **Still a candidate:** the key papers (Belyavskaya 2005, Belousov 2005, Evans,
-Bennett and Zhu 1992) were not read in full.
+The search rediscovered B. We found no source for the full theory: Δ-bijective groupoids whose translations, and
+those of the dual, are idempotent. The Δ-bijective papers we saw are about left quasigroups, and no non-degenerate
+model here is one. **Still a candidate:** Rump 2005, Dehornoy et al. 2015 (Ch. XIII), Evans, and Bennett and Zhu
+1992 were not read.
 
 Caveat: post hoc, on one candidate chosen after the ranking.
 
@@ -36,6 +41,10 @@ Caveat: post hoc, on one candidate chosen after the ranking.
 - **Model count of B (corrected 22 Nov, morning).** The `10c98c4b` literature note and dossier said that B alone has
   40 non-degenerate models on 3 elements. It has 38 (Mace4, and an enumeration of all 3⁹ tables). The wrong number
   was in commit `2255b8e`, which is pushed.
+- **`10c98c4b` "no source found" (corrected 22 Nov, morning).** The night's note said that no source was found for
+  B. B is prior art (Δ-bijective algebras, Rump 2005; Bonatto et al.). The night's searches had looked only in the
+  Latin-square literature. The first draft of the memo also gave the wrong author (Belyavskaya) for the Mullen and
+  Shcherbacov 2005 survey.
 
 - **Rule 1 (host commands).** Three times a `python3` ran on the Mac instead of in the container. Twice it was
   an empty `python3 -`, which did nothing (21 Nov evening, 22 Nov about 01:33 UTC). Once it was a read-only
@@ -144,7 +153,9 @@ Leaving the split theories out (post hoc), the top 6 are `8a512957`, `1ca933c1`,
 condition (a groupoid orthogonal to its transpose, with the decoder as a second operation), and the search's
 absorptions sit on top of it. Web searches (22 Nov 2026) found no source for B as a variety, nor for any of the six
 law sets; the nearest named relatives are in the table. That is a literature check by web search, not a survey, so
-`10c98c4b` stays a candidate.
+`10c98c4b` stays a candidate. *Correction (22 Nov, morning):* B is prior art, the Δ-bijective algebras with their
+dual operation (see the `10c98c4b` section above). The night's searches had looked only in the Latin-square
+literature.
 
 **Lean.** `lean/Duet/Cand1.lean` … `Cand10.lean` hold the smallest non-degenerate model of 10 candidates, with
 proofs by `decide` that it satisfies the laws and refutes x·y = x, x·y = y, x∘y = x, x∘y = y, x·y = x∘y and

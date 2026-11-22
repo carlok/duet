@@ -155,6 +155,12 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     associativity. `10c98c4b` has a two-operation core: (x·y)∘(y·x) = x and (x∘y)·(y∘x) = x, meaning · is
     orthogonal to its transpose and ∘ decodes it, plus four absorption laws (E, both ways). No literature source
     was found for any of them, so all are still candidates.
+  - 22 Nov morning (`notes/10c98c4b.md`):
+    - `10c98c4b`'s core B is prior art: Δ-bijective algebras with their dual operation (Rump 2005; Bonatto,
+      Kinyon, Stanovský and Vojtěchovský, arXiv:1910.02148, Lemma 2.10).
+    - Under B the absorptions say that every translation is idempotent, so no model is a left quasigroup. No
+      source was found for that full theory.
+    - Pitfall: search the Yang–Baxter, cycle-set and rack literature as well as the Latin-square one.
   - Split scan of the T4 non-fragments: 35/668 (prior) and 4/362 (noprior) are split.
   - Lean: 11 modules (S10 plus 10 candidate models), axiom audit passes on 116 declarations.
 

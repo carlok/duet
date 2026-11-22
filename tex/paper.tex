@@ -290,10 +290,12 @@ $(x,y)\mapsto(x\op y,y\op x)$ is a bijection of $A^2$ whose inverse is given by 
 its transpose, and $\cop$ decodes it. With $\cop=\op$ this is Schr\"oder's second law. Under the first pair, each
 absorption law is equivalent to a one-operation law, $(x\cop y)\op x=x$ to $x\op(x\op y)=x\op y$ and so on (E, both
 ways), so every translation of either operation is idempotent: the opposite end from a self-orthogonal Latin
-square, where every translation is bijective. The core is known in substance: Schr\"oder quasigroups, Belousov's
-parastrophic orthogonality, and orthogonality of arbitrary binary operations. We found no source for the
-two-operation variety on groupoids, nor for its idempotent-translation version. That check used web search and
-reviews; the key papers have not yet been read in full. Lean~4 certificates (by \texttt{decide}, with an axiom audit) check the
+square, where every translation is bijective. The core is prior art, and the search rediscovered it. Its models
+are the \emph{$\Delta$-bijective} algebras, those for which $(x,y)\mapsto(xy,yx)$ is a bijection. The second
+operation is their dual: the inverse of that map is $\Delta$ of another operation \cite[Lemma~2.10]{bonatto2021},
+an idea credited to Rump~\cite{rump2005}. That literature works with left quasigroups (cycle sets), and no
+non-degenerate model here is one. We found no source for the full theory, but several key papers have not yet been
+read. Lean~4 certificates (by \texttt{decide}, with an axiom audit) check the
 smallest non-degenerate model of each of the top ten. They show the theories are consistent and non-degenerate,
 not that they are new. The search's filters are syntactic: they keep out definitional theories, but not split ones
 or one-operation varieties written with a division.
