@@ -55,8 +55,12 @@ that produced it; `PREREGISTRATION.md` has the hypotheses, fixed before each sca
   they do (E: 10 steps, Twee: 3). ETP's implication graph does not cover conjunctions. A Lean Zulip thread has
   all conjunctions of the order ≤ 2 laws, but this pair is order 3, and we found no source for it. It is recorded
   as an observation (`REPORT.md`, literature check). A separate session is building the census of such pairs.
+- **The duality prior steers toward named structure (T4, preregistered).** With the prior, 330 of 998 verified
+  theories are fragments of a named theory, nearly all of lattices. Without it, 31 of 393 are (one-sided Fisher
+  p = 2e-25). The difference holds within each number of laws, which was checked post hoc.
 - **Not yet:** no theory found so far is new. The old score saturates on idempotence, and its top two
-  theories were an artifact of z3's budget cap. T4 tests a corrected score (preregistered).
+  theories were an artifact of z3's budget cap. The top non-fragments of T4 now go through an algebraist's
+  profile (T5a, preregistered) before any is looked at as a candidate.
 
 ## Open problems
 
@@ -78,24 +82,23 @@ finite countermodel, or an infinite one with a checkable construction settles it
 Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`, `tex/`): CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/).
 
-## Status (21 Nov 2026, night)
+## Status (22 Nov 2026, night)
 
 Running (detached containers; `podman ps`; logs with `podman logs <name>`):
-- **T4**, started 21 Nov 21:19 UTC at tag `t4-prereg` (commit `a5c60aa`), 4 h. `soup-t4-prior` and `soup-t4-noprior`:
-  `SOUP_DATA=/data/t4-<arm>`, `SOUP_VERIFIER=V2`, `--searchers 2 --verifiers 3`, seeds 201 / 301, `--budget 14400`.
-  Journals: `work/t4-<arm>/journal/journal.md`.
-- The census session's `census-g3b` (2 CPUs, on its own branch).
+- **T5a**, the profile of the 130 T3 theories: `soup-t5a`, `python -m soup.profile --set t3 --jobs 8`.
 
 Finished tonight:
+- **T4**: both arms ran 4 h at tag `t4-prereg` (commit `a5c60aa`), from 21:20 to 01:20 UTC. Fragment checks and
+  the preregistered analysis are in `REPORT.md`, T4. Journals: `work/t4-<arm>/journal/journal.md`.
 - the stage-c sweep (32 of 32; `python -m soup.sweep_c --summary`);
 - round 2's clean track (stopped after 22 of 32 jobs once the S10 model made the rest moot;
   `python -m soup.round2 summary`; the model is checked with `python -m soup.round2 model`);
 - the Block 1 follow-up jobs (`work/check/b1/`);
 - the first Lean certificate (`lean/`).
 
-Next, in order (plan: T4, then T5a calibration, profiles, exploratory run, dossiers):
-1. After T4: the preregistered analysis (`fragments` per arm, `t4_report`).
-2. T5a: `python -m soup.profile --set t3 --jobs 8`, then `python -m soup.profile --t5a`.
+Next, in order (plan: T5a calibration, profiles, exploratory run X1, dossiers):
+1. T5a: `python -m soup.profile --t5a` once the profile run ends.
+2. Candidates (`python -m soup.dossier candidates`), their profiles, X1 (PREREGISTRATION.md), ranking and dossiers.
 3. The assisted round-2 track, after T4: `tar -C ~/tmp/duet-offline/survivors-external01-2026-11-21 -cf -
    S10.md S12.md | podman run -i --rm -v "$PWD/work:/data:ro" soup python -m soup.round2 assisted >
    ~/tmp/duet-offline/survivors-external01-2026-11-21/round2_assisted.jsonl`. It uses the LLM's lemmas only after E proves each one.
@@ -104,8 +107,8 @@ Next, in order (plan: T4, then T5a calibration, profiles, exploratory run, dossi
    (`work/census/`). Its next measure: which pairs that force idempotence keep a non-trivial model, and which
    collapse to x = y.
 
-Task state: T0 (repo hygiene), T1 (streaming system), T2 (provers) and T3 (calibration) are done. T4 is
-preregistered; T5–T7 have not started.
+Task state: T0 (repo hygiene), T1 (streaming system), T2 (provers), T3 (calibration) and T4 (duality prior) are
+done. T5 has started with the T5a profile; T6 has one open claim left; T7 has its first Lean certificate.
 
 Offline LLM work follows `prompts/README.md`: bundles live in `~/tmp/duet-offline/`, never in the repository or
 `work/`, and count only after `soup.check_offline` (in their own REPORT table).

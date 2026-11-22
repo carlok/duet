@@ -2,6 +2,83 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## T4: duality-prior search against a matched control (21–22 Nov 2026, night)
+
+Preregistered (PREREGISTRATION.md, T4) and run unchanged at tag `t4-prereg` (`a5c60aa`):
+- arms `prior` and `noprior`, each with its own data directory, under verifier V2, 2 searchers and 3 verifiers per
+  arm;
+- 14,400 s per arm, 21:20–01:20 UTC;
+- seeds 201+ (prior) and 301+ (noprior);
+- no crashed workers, and no supervisor died.
+
+Commands:
+- runs: `podman run -d --name soup-t4-<arm> -v "$PWD/work:/data" -e SOUP_DATA=/data/t4-<arm> -e SOUP_VERIFIER=V2
+  soup python -m soup.stream.supervisor --arm <arm> --searchers 2 --verifiers 3 --seed0 <201|301> --budget 14400
+  --run t4-<arm>`;
+- fragment check: `podman run -d -v "$PWD/work:/data" -e SOUP_DATA=/data/t4-<arm> -e FRAG_JOBS=2 soup python -m
+  soup.fragments`;
+- analysis: `podman run --rm -v "$PWD/work:/data" soup python -m soup.t4_report` (raw output `work/t4_report.txt`,
+  `work/t4_report.json`). The journals are in `work/t4-<arm>/journal/`.
+
+| | prior | noprior |
+| --- | --- | --- |
+| theories verified | 1,050 | 441 |
+| with positive score (H1 population) | 998 | 393 |
+| fragments of a named theory | **330 (33.1%)** | **31 (7.9%)** |
+| not fragments | 668 | 362 |
+| undecided | 0 | 0 |
+| fragments of lattices / skew lattices / bisemilattices | 329 / 27 / 17 | 30 / 1 / 0 |
+| fragments of absorption pairs / idempotent left / right quasigroups | 16 / 11 / 10 | 1 / 1 / 0 |
+| verified theories with a duality | 522 | 23 |
+| claims still open at the end | 79 | 57 |
+| structures added to the arm's corpus | 6,874 | 3,637 |
+
+**H1 is supported.** Among verified theories with positive score, the share of fragments of a named theory is
+higher with the prior: 330/998 against 31/393, one-sided Fisher p = 2.0e-25. No theory is undecided, so both bounds
+equal the point estimate. The pilot (first session, different verifier, a control without the definitional filter)
+had 64/97 against 6/59. The fragments are almost all lattice fragments: in the prior arm 295 of the 330 are
+fragments of lattices only.
+
+**Secondary: the top 10 non-fragment theories per arm, by V2 score.** None of the 20 is equivalent to another,
+either up to the three dualities or by E proofs both ways. Every one is a candidate, not a result (rule 4).
+
+| # | arm | score | laws |
+| --- | --- | --- | --- |
+| 0 | prior | 2.167 | x·(y∘x) = y∘y; x·x = (y·x)∘y; x∘(x∘((y·z)∘x)) = x; ((x·(y∘z))·x)·x = x |
+| 1 | prior | 1.773 | x·(x∘x) = x; x∘(x∘x) = x∘x; (x·y)·z = y·z; (x∘y)∘z = y∘z |
+| 2 | prior | 1.722 | x·(x∘x) = x; (x·x)∘x = x; x∘((x·y)·z) = y∘y; (x∘(y∘z))·z = y·y |
+| 3 | prior | 1.668 | x·(y∘(x∘y)) = x; x∘(y·(x·y)) = x; x·((y∘x)∘y) = x; x∘((y·x)·y) = x; x·(((x·x)·y)∘z) = x |
+| 4 | prior | 1.659 | x·(x·x) = x; x·(y∘x) = y∘y; x·x = (y·x)∘y; x∘(x∘((y·z)∘x)) = x |
+| 5 | prior | 1.599 | x·(y∘(x∘y)) = x; x∘((y·x)·z) = x; x∘(((x∘x)∘y)·z) = x |
+| 6 | prior | 1.585 | x·(y∘x) = x·x; x∘(y·x) = x∘x; (x∘y)·x = x·x; (x·y)∘x = x∘x; x·(y·z) = y∘(x∘z); (x·y)·z = (x∘z)∘y |
+| 7 | prior | 1.584 | the 5 laws of #3 and x∘(((x∘x)∘y)·z) = x (the swap closure of #3) |
+| 8 | prior | 1.584 | x·(y∘(x∘y)) = x; x∘(y·(x·y)) = x; x·((y∘x)∘z) = x; x∘((y·x)·z) = x; x·(((x·x)·y)∘z) = x; x∘(((x∘x)∘y)·z) = x |
+| 9 | prior | 1.555 | x·(x·x) = x; (x·x)·y = y·x; ((x∘(y·y))·z)∘y = y |
+| 10 | noprior | 1.743 | x·(y∘(z·x)) = x; (x∘x)·(x·y) = x |
+| 11 | noprior | 1.680 | (x∘x)·(y∘y) = y·x; (x·x)∘((y∘x)∘z) = x |
+| 12 | noprior | 1.653 | x·y = y·x; x∘(y∘x) = x; (x·x)∘(x·y) = x |
+| 13 | noprior | 1.575 | x·(x·x) = x; x∘(y·(z·x)) = x; (x∘x)∘(x·y) = y∘x |
+| 14 | noprior | 1.521 | x·y = y·x; x·y = y∘(x·y); x·(y∘(z∘x)) = x |
+| 15 | noprior | 1.519 | x·(x∘y) = x; (x·y)·x = (z∘y)·z |
+| 16 | noprior | 1.513 | x·x = x∘x; x·(x∘x) = x; x∘(y·x) = x; (x·y)∘(y∘x) = y |
+| 17 | noprior | 1.476 | x·x = x; (x∘x)·((y·x)·z) = x |
+| 18 | noprior | 1.453 | x·x = x; x·(y∘x) = x; (x·y)·x = (z·x)∘x |
+| 19 | noprior | 1.401 | x·y = y·x; x∘(y·(z∘x)) = x; (x·x)∘(x∘y) = x |
+
+Caveats:
+- **Throughput.** The prior arm verified 2.4 times as many theories in the same time. Its theories are often
+  lattice-like, and E proves their claims quickly. The fragment share is per verified theory, so it inherits
+  this, as it inherits the queue-top selection (preregistered limit).
+- **Length.** The prior arm's theories are longer: 399 of its 998 have 5 or 6 laws, against 1 of 393. The duality
+  closure adds the dual laws. **Post hoc**, not preregistered: the difference holds within each law count. Fragment
+  shares are 30/121 against 4/111 at 2 laws (one-sided Fisher p = 2.1e-6), 77/250 against 12/194 at 3 laws
+  (p = 1.5e-11) and 59/228 against 14/87 at 4 laws (p = 0.043).
+- **What H1 shows.** The duality prior steers the search toward self-dual, lattice-type theories, i.e. toward
+  structure people have already named. It does not show that the prior finds *unnamed* structure. The 668
+  non-fragments of the prior arm, 353 of them with a duality, are where that question goes next (T5a profile,
+  ranking and dossiers below).
+- Scores are V2 scores. The E proof length is an upper bound on proof length (preregistered limit).
+
 ## Stage-c sweep and second survivor round, clean track (21 Nov 2026, night)
 
 Neither run uses any LLM input. The sweep finished all 32 results, with no crashes. Round 2 was stopped once its

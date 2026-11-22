@@ -36,8 +36,10 @@ The scored search rediscovers fragments of lattice theory and two laws of McKenz
 basis. It also refutes four implications that finite-model search up to size~8 left open: their
 countermodels are necessarily infinite. Of 32 claims that resisted the verifier in short pilot runs, 31 are now
 refuted (one by a hand proof that is not certified). The last of them fell to a 10-element model that Mace4 did not
-reach and Vampire's finite model builder found. Whether the search finds theories that are interesting and not
-already named is the open question; a preregistered comparison is planned.
+reach and Vampire's finite model builder found. In a preregistered comparison, a prior that rewards dualities
+triples the share of verified theories that are fragments of a named theory (33\% against 8\%, mostly lattice
+fragments). It steers the search toward known structure. Whether the search finds theories that are interesting
+and not already named is still open.
 \end{abstract}
 
 \section{Question}
@@ -239,7 +241,7 @@ elements by finite model building. Both of our evaluators confirm all axioms of 
 $x\cop x=x$ and $x\op(x\op x)=x$ fail, at a single element $a$ with $a\op a=a\cop a\neq a$. Every model of S10 is a
 model of S12, so five of the six open claims are refuted, by our own tools alone. Mace4 had not finished
 size~7 in two hours. One claim is left: does S12 imply $x\op x=x\cop x$? No model of S12 with $x\op x\neq x$ has
-fewer than 7 elements. \pending{final sweep numbers; the smallest such model.}
+fewer than 7 elements. \pending{the smallest such model.}
 
 \subsection{Streaming system}
 In a 10-minute test (3 search and 8 verifier processes) the system verified 231 theories and added 1{,}897
@@ -250,12 +252,22 @@ artifacts: their claims were proved by E but not by Z3, and the difficulty was t
 cap. For T4 the difficulty is E's proof length instead (preregistered). \pending{T5: which of the top
 theories are equivalent to a known variety.}
 
+\subsection{The duality prior steers the search toward named structure}
+T4 was preregistered. Two arms ran for four hours each, with five processes per arm and their own data
+directories. One arm searched with the duality prior and the other without it, with the same filters and the
+same cap of six laws. Among verified theories with a positive score, 330 of 998 in the prior arm are fragments of
+one of the ten named theories, against 31 of 393 in the control (33\% against 8\%; one-sided Fisher
+$p=2\times10^{-25}$). No theory was left undecided. Almost all of these are lattice fragments: 295 of the 330 are
+fragments of lattices only. Two caveats apply. First, the prior arm verified 2.4 times as many theories in the
+same time. Second, its theories are longer, because the duality closure adds the dual laws: 399 of its theories
+have five or six laws, against one in the control. In a post-hoc check the difference holds within each number of
+laws: at two laws the shares are 30/121 against 4/111, at three 77/250 against 12/194, and at four 59/228 against
+14/87. The prior pulls the search toward self-dual, lattice-like theories, that is, toward structure that has
+already been named. Whether it also finds unnamed structure is a separate question. We take it up with the 668
+non-fragments of the prior arm.
+
 \section{Planned experiments}
-\pending{T4, preregistered: duality-prior arm against a matched arm without the prior, each in its own
-data directory, five processes per arm for four hours. Primary outcome: share of verified theories with a
-positive score that are fragments of one of ten named theories, per arm (one-sided Fisher test).
-Secondary: top non-fragment theories, deduplicated up to duality and logical equivalence.}
-\pending{T6: the six open claims of S10 and S12.} \pending{T7: Lean~4 certificates for finite
+\pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for finite
 countermodels, the models on $\mathbb{Z}$, the term model, and the main implications.}
 
 \section{Limitations}
