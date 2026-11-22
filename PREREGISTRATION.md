@@ -2,7 +2,7 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
-## X5: the fusion arm, restricted to rigid theories (written 22 Nov 2026, 21:40 UTC, before X5 starts)
+## X5: the fusion arm, restricted to rigid theories (written 22 Nov 2026, 21:37 UTC, before X5 starts; the first commit said 21:40, an estimate)
 
 Exploratory and descriptive. The aim is the user's: steer the search away from X4's attractor and toward fusions
 that work but are not clearly connected to known structure.
