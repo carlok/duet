@@ -54,7 +54,22 @@ identification applies to the whole dedupe class). Command: `podman run --rm -v 
   - three have almost constant smallest models, nilpotent-like (`97a7dfcf`, `7ec7f8f5`, `3b3b1176`);
   - `a9295908` has a commutative idempotent · whose 3-element model is a chain semilattice;
   - `55cb2c91` and `1d0a5211` have no standard law among those tested.
-- **Literature checks** of the top 10: two web-only agents, running; key claims to be rechecked with E.
+- **Literature checks** of the top 10, by two web-only agents. Their key claims were rechecked by machine:
+  2-element-lattice failures, model checks and E proofs. The verdicts are in `work/check/literature.json`, the N1
+  dossiers and the tables.
+  - **No source for any of the 10.** Two are related only: `742cc445` contains McKenzie's lattice law L1, and
+    `f79a5097` shares two absorption identities with Leech's skew lattices, which are associative where it is not.
+  - **Collapses with x·y = x∘y** (E): `7ec7f8f5` becomes a constant operation; `7c476118` becomes the left
+    projection; `a8963027` becomes exactly ETP Equations 9 ∧ 10, proved both ways; `f79a5097` implies Equations 9
+    and 10.
+  - **A lead for someone who knows the field: `a9295908`.** Its 3-element model is the meet of a chain together
+    with Gödel implication changed on the diagonal (x∘x = x).
+    - The same construction gives a non-degenerate model on every chain of 3 to 6 elements.
+    - It does not on the Boolean algebras of 4 and 8 elements, and the unchanged Gödel implication is never a
+      model (`law_vector`).
+    - Its emergent laws make · idempotent and commutative.
+  - Searched: the web, zbMATH, the McCune–Padmanabhan monograph's contents, Veroff's lattice-basis page, the ETP
+    equation list, and Leech 2020 (pp. 31–32). Several sources were not read in full; each note says which.
 
 Caveats:
 - N1 is post hoc and descriptive. Its gate sees only our checks, our catalogue and the ledger.

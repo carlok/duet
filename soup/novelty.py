@@ -48,6 +48,15 @@ def _match(table, key):
     return next((v for k, v in table.items() if str(key).startswith(k)), None)
 
 
+def _verdict(text):
+    """The first clause of a literature note (work/check/literature.json), for the tables; presentation only."""
+    if not text: return '-'
+    t = text.replace('**', '').strip()
+    cut = min([i for i in (t.find('. '), t.find('; '), t.find(' (')) if i > 0] or [len(t)])
+    t = t[:cut].rstrip('.')
+    return t if len(t) <= 48 else t[:47] + '…'
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser()
@@ -68,6 +77,7 @@ def main():
     t5a_rank = {r['key']: i for i, r in enumerate(rk['candidates'], 1)}
     t5a_equiv = {r['key']: r['equivalent_to'] for r in rk.get('excluded_equivalent', [])}
     classical = np.array([not re.match(r'(rand|all2)', name) for name, _ in PROBES])
+    lit = _load('literature.json', {}) or {}
 
     score = {c['key']: c.get('score') or 0 for c in cands}
     rep_of, related_of = {}, {}
@@ -86,7 +96,7 @@ def main():
         key, src = c['key'], c['source']
         row = {'key': key, 'source': src, 'laws': c['laws'], 'T': c['T'], 'score': c.get('score'),
                't5a_rank': t5a_rank.get(key), 'known': [], 'flags': [],
-               'related': related_of.get(key) or _match(RELATED, key)}
+               'related': related_of.get(key) or _match(RELATED, key), 'literature': _verdict(lit.get(key))}
         rpath = _src_path(src, 'results', f'{key}.json')
         res = json.load(open(rpath)) if src != 'pilot' and os.path.exists(rpath) else None
         prof = profs.get(json.dumps(sorted(c['T'])), {})
@@ -178,13 +188,13 @@ def _table(out):
          'Metric (lexicographic): an off-diagonal proved emergent law; no classical model (structured probes, 3+ '
          'elements); not related to a known structure by a partial identification; more sizes with non-degenerate '
          'models; smaller axioms (sum of law orders); verified score.', '',
-         '| N1 | key | run | off-diagonal law | classical model | related to | sizes | axiom size | score | T5a | '
-         'flags | laws |', '|---|---|---|---|---|---|---|---|---|---|---|---|']
+         '| N1 | key | run | off-diagonal law | classical model | related to | sizes | axiom size | score | T5a | literature | '
+         'flags | laws |', '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
     for r in out['ranked']:
         L.append(f"| {r['n1_rank']} | `{r['key'][:8]}` | {r['source']} | "
                  f"{'; '.join(r['offdiag_laws'][:2]) or 'no'}{' …' if len(r['offdiag_laws']) > 2 else ''} | "
                  f"{_yn(r['classical_models'])} | {r['related'] or '-'} | {r['nondeg_sizes']} | {r['axiom_size']} | "
-                 f"{r['score']} | {r['t5a_rank'] or '-'} | {'; '.join(r['flags']) or '-'} | {' & '.join(r['laws'])} |")
+                 f"{r['score']} | {r['t5a_rank'] or '-'} | {r['literature']} | {'; '.join(r['flags']) or '-'} | {' & '.join(r['laws'])} |")
     L += ['', f"## Known ({len(out['known'])})", '', '| key | run | what it is / how identified | laws |',
           '|---|---|---|---|']
     for r in out['known']:
@@ -231,12 +241,12 @@ def _readme(out, path):
          '6. verified score.',
          '', '"Not known" is not "new". It means our checks and catalogue found nothing. Web searches have been run only '
          'for some top entries, and they are weak evidence.', '',
-         '| N1 | theory | run | off-diagonal law | classical model | partly known as | sizes | T5a rank |',
-         '|---|---|---|---|---|---|---|---|']
+         '| N1 | theory | run | off-diagonal law | classical model | partly known as | sizes | T5a rank | literature |',
+         '|---|---|---|---|---|---|---|---|---|']
     for r in out['ranked'][:10]:
         B.append(f"| {r['n1_rank']} | `{r['key'][:8]}`: {' & '.join(r['laws'])} | {r['source']} | "
                  f"{r['offdiag_laws'][0] if r['offdiag_laws'] else 'no'} | {_yn(r['classical_models'])} | "
-                 f"{r['related'] or '-'} | {r['nondeg_sizes']} | {r['t5a_rank'] or '-'} |")
+                 f"{r['related'] or '-'} | {r['nondeg_sizes']} | {r['t5a_rank'] or '-'} | {r['literature']} |")
     B.append(END)
     text = path.read_text(encoding='utf-8')
     if START not in text or END not in text:
