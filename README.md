@@ -3,108 +3,133 @@
 > **Work in progress.** This is a research log, not a finished result. No theory found so far is claimed to be new.
 > The paper in `tex/` is a draft. `REPORT.md` gives every number with its caveats and the command behind it.
 
-Many familiar structures in algebra are two operations held together by a few laws. Take a lattice, such as `max` and
-`min` on numbers, written `x · y` and `x ∘ y`. Two *absorption laws* tie them together: `x · (x ∘ y) = x` and
-`x ∘ (x · y) = x`. Neither law alone says anything about `x · x`, yet together they force `x · x = x`. The whole
-implies something no part does: that is **synergy**. Laws that mix both operations are **bridges**, and bridges are
-where two theories fuse into one structure.
+**New to the subject?** [`intro/intro-reading.pdf`](intro/intro-reading.pdf) explains it all from sets and functions,
+in 9 pages: laws, theories and models, synergy, and how the search works. The same text with exercises and solutions
+is [`intro/intro.pdf`](intro/intro.pdf).
 
-**duet asks whether an open-ended search can find such fusions, and in particular ones nobody has named yet.** No
-language model takes part in the search. It explores small theories in two binary operations and checks every claim
-with theorem provers and finite models. It also keeps an honest ledger of what it finds, including everything that
-turns out to be already known.
+## How it started
 
-**New to the subject?** [`intro/intro-reading.pdf`](intro/intro-reading.pdf) explains it all from sets and functions, in 9
-pages: laws, theories and models, synergy, and how the search works. The same text with exercises and solutions is
-[`intro/intro.pdf`](intro/intro.pdf).
+The project began as a small experiment, a genetic search over *theories* instead of over numbers or programs. A
+theory is a handful of equational laws in two binary operations, written `x · y` and `x ∘ y`. The first sessions ran
+in the cloud on two cores, with z3 as the only prover. They verified 99 theories. Most of the ones that proved
+anything turned out to be pieces of lattice theory (64 of 97). The first find that looked new was not: it was two of
+the four laws of McKenzie's 1970 basis for lattices.
 
-## How the search works
+That set the tone for everything after. The machine is good at walking back into known mathematics, so the real work
+is telling apart what it rediscovered from what nobody has written down. The project moved to a Mac with 11 cores and
+grew to fit that job. Everything now runs in Podman, under a streaming search, with five provers built from pinned
+sources (E, Vampire, Prover9/Mace4, Twee) and Lean 4 for certificates.
+
+## Why: synergy, and the jazz aim
+
+Take a lattice, such as `max` and `min` on numbers. Two *absorption laws* tie the operations together:
+`x · (x ∘ y) = x` and `x ∘ (x · y) = x`. Neither law alone says anything about `x · x`, yet together they force
+`x · x = x`. The whole implies something no part does: that is **synergy**. Laws that mix both operations are
+**bridges**. Bridges are where two theories fuse into one structure, as absorption fuses two semilattices,
+distributivity fuses addition and multiplication into a ring, and a rack ties an operation to its inverse.
+
+The aim is the kind of jump jazz made: two traditions fused by a bridge into something that works on its own terms
+but is not clearly connected to either parent. **duet asks whether an open-ended search can find such fusions, and in
+particular ones nobody has named yet.** No language model takes part in the search or its scoring.
+
+The space is large and the human literature is larger. All runs so far have verified about 5,000 theories, against
+about 1.8 × 10²⁶ possible law sets, and most of them sit in the corner humans know best. "No source found" by our web
+searches is therefore weak evidence, and finding nothing new would not be a negative result.
+
+## The evolutionary search
 
 - **The space.** It covers every law of order at most 4 (at most four operation symbols): 71,369 up to renaming,
   61,983 of them bridges. A theory is a set of 2 to 6 such laws.
 - **A cheap guess at implication.** We record once which laws hold in each of 12,509 small structures on 2–6 elements.
   To guess what a theory implies, look at the structures that satisfy it and collect the laws true in all of them.
   This is only a guess, and every countermodel found later is added to the collection.
-- **The search.** It uses MAP-Elites, a quality-diversity algorithm. Theories are sorted into cells by a few
-  features, each cell keeps its best theory, and new theories come from mutating and combining old ones.
-- **Verification.** Every promising theory goes to verifier processes:
-  1. small models, independence of the laws, and countermodels on up to 6 elements to each guessed emergent law;
+- **MAP-Elites.** A quality-diversity algorithm sorts theories into cells by a few features. Each cell keeps its best
+  theory, and new theories come from mutating and combining old ones. Every cell win is streamed at once to verifier
+  processes:
+  1. countermodels on up to 6 elements and independence of the laws;
   2. the prover E;
   3. Vampire's finite model builder;
   4. Mace4, up to 10 elements.
 
   A prover saturation, checked independently, settles claims that only infinite models refute. Only proved laws count.
-  Lean 4 certifies the smallest models of the top candidates and proves the general statements.
 - **Discipline.** Every scaled run is preregistered before it starts (`PREREGISTRATION.md`), and deviations are listed
-  there. Every number in `REPORT.md` has the command that produced it.
+  there.
 
-## What happened
+Each round of runs taught one lesson, and the search was changed to answer it.
 
-**1. It rediscovers lattice theory.** The first runs found lattice theory in pieces:
-- two of the four laws of McKenzie's 1970 lattice basis, and 12 different lattice bases;
-- 26 axiomatizations of the absorption pair (counted per run);
-- Fried's weakly associative lattices.
+1. **It rediscovers.** Against a catalogue of 13 known two-operation structures fixed in advance, it found 7. Named
+   theories have a syntactic duality and random ones do not (8 of 10 against 0 of 120). A prior that rewards
+   dualities raises the share of verified theories that are fragments of a named theory from 8% to 33%
+   (preregistered, p = 2 × 10⁻²⁵). Rediscovery is the calibration: the search finds what humans found.
+2. **Its best candidates were disguises.** The top non-fragments turned out to be old structures in costume:
+   - split theories, a theory of `·` beside a theory of `∘`, whose bridges only look like bridges;
+   - one-operation structures with their division written as `∘`;
+   - absorption-type subvarieties.
 
-Against a catalogue of 13 known two-operation structures fixed in advance, it found 7. Named theories have a
-syntactic duality and random ones don't (8 of 10 against 0 of 120). A prior that rewards dualities raises the share of
-verified theories that are fragments of a named theory from 8% to 33% (preregistered, p = 2 × 10⁻²⁵). Rediscovery is
-the calibration: the search finds what humans found.
+   One core came from a distant field: `10c98c4b`'s is the Δ-bijectivity of the Yang–Baxter literature. Filters for
+   the first two disguises went into the verifier (run X3). After that, none of X3's 570 scored non-fragments is
+   split, against 33 of 654 before.
+3. **It had learned one trick.** 97% of all scored theories proved an emergent law in one variable, such as
+   `x · x = x ∘ x`, and none proved emergent associativity. The score was rewarding what a fusion forces on squares,
+   and the lattice reference case itself is of that kind. A new arm, *fusion* (run X4), counts only synergy off the
+   diagonal. It skips theories valid in the 2-element lattice. A quarter of its proposals are a law of `·`, a law of
+   `∘` and a bridge: two traditions and a link between them. Results:
+   - none of its 565 scored theories is a fragment of a named theory (X3: 31.6%);
+   - finite models refute 21% of its claims, against 3%, so it is on less charted ground;
+   - the attractor moved instead of disappearing (`x · (x · y) = x · x` and its kin).
 
-**2. Its best candidates were disguises.** The top candidates that were not fragments turned out to be old
-structures in disguise:
-- split theories: a theory of `·` beside a theory of `∘`, whose bridges only look like bridges;
-- one-operation structures with their division written as `∘`;
-- absorption-type subvarieties.
+## Ranking for novelty
 
-One core came from a distant field: `10c98c4b`'s is the Δ-bijectivity of the Yang–Baxter literature. Filters for the
-first two disguises went into the verifier (run X3). Afterwards none of X3's 570 scored non-fragments is split, against
-33 of 654 before. The automatic checks recognise fewer of its top candidates: 26%, against 50%.
-
-**3. It had learned one trick.** 97% of all scored theories proved an emergent law in one variable, such as
-`x · x = x ∘ x`, and none proved emergent associativity. The score was rewarding what a fusion forces on squares, and
-the lattice reference case itself is of that kind. So a new arm, *fusion* (run X4), was built:
-- **Score:** it counts only synergy that does not come from the diagonal.
-- **Lattice corner:** theories valid in the 2-element lattice are skipped.
-- **Proposals:** a quarter of them are a law of `·`, a law of `∘` and a bridge, two traditions and a link between
-  them.
-
-Its first 3-minute attempt found the next loophole (`x · x = y · y`). It was restarted with a wider definition, which
-is deviation 6. Results:
-- none of its 565 scored theories is a fragment of a named theory (X3: 31.6%);
-- finite models refute 21% of its claims, against 3%: less charted ground;
-- the attractor moved instead of disappearing (`x · (x · y) = x · x` and its kin).
-
-**4. Ranking for novelty, then looking closely.** A second, preregistered ranking, N1, ranks the candidates that work
-and that no check identifies (live, below). Several were then dug into one by one:
-1. a plain reading proved with E;
+The runs leave a pool of 138 candidates, the top 20 non-fragments of each run, which are 120 varieties up to
+equivalence. A preregistered ranking, **N1**, keeps those that work and that no automatic check identifies. It puts
+first the ones whose synergy is off the diagonal, then those with no model among the classical constructions, and so
+on (the full order is in the live table below). The ranking is mechanical. What it cannot do is look at a candidate
+and recognise it, so its top entries are then examined one by one:
+1. a plain reading, proved with E;
 2. models from known constructions;
 3. a targeted literature search;
 4. Lean proofs of the general statements.
 
-Each one examined so far turned out to be related to known mathematics, which the search reached without knowing it:
-- **`10c98c4b`:** its core is a Δ-bijective pair, from the Yang–Baxter literature (Rump; Bonatto et al.).
-- **`31d6d970`:** the same variety as `2dc27508` and `69dfbd8e`, found three times. With associativity it is exactly
-  Leech's rectangular skew lattices.
-- **`a9295908`:** a fragment of Heyting algebras. With `·` = ∧ and `x ∘ y = (y → x) → y`, every Heyting algebra is a
-  model (Lean). On chains, that `∘` is the strict-order connective of Gödel logic.
-- **`55cb2c91`:** not identified, related in pieces only (ETP Equations 327 and 378).
-  - Its one-operation shadow is trivial: with `· = ∘` it has only one-element models.
-  - Its `∘` is a partial swap `y · x ↦ x · y`.
+## The two candidates studied closely
+
+**`a9295908` (N1 rank 3): a fragment of Heyting algebras, reached from an odd angle.**
+- **The claim.** Three laws, `x · (x ∘ x) = x`, `(x ∘ y) · y = y` and `x · y = x ∘ (y · x)`. They imply
+  `x · (x · y) = x · (y · x)`, which no single law gives.
+- **Plain reading (E, both ways).** The theory is equivalent to a commutative, idempotent `·` that need not be
+  associative, together with `x ∘ (x · y) = x · y` and `(x ∘ y) · y = y`.
+- **Models.** Read `·` as ∧ and `x ∘ y` as `(y → x) → y`: every Heyting algebra is then a model (Lean, for every
+  generalized Heyting algebra). On chains this `∘` is the strict-order connective of Gödel logic (Baaz, Ciabattoni and
+  Zach, 2000).
+- **Verdict.** Identified (ledger row 11). The search knew nothing of Heyting algebras: it found a corner of
+  intuitionistic logic through a pair of laws that nobody writes that way.
+
+**`55cb2c91` (N1 rank 1): not identified, and the nearest thing to the jazz aim so far.**
+- **The claim.** Two laws, `x · (x ∘ y) = x` and `x · y = ((y · z) · x) ∘ x`. They imply `(x · y) · y = x · y`.
+- **Plain reading (E, both ways).** The theory is equivalent to three laws:
+  - `x · (y · z) = x · y`;
+  - `x · (x ∘ y) = x`;
+  - `x · y = (y · x) ∘ x`.
+- **Structure (Lean `reduct_iff`).** The `·`-parts of its models are characterized exactly. `∘` acts as a partial
+  swap `y · x ↦ x · y`: it is forced wherever the swap is defined and free elsewhere.
+- **Its one-operation shadow is trivial.** With `x · y = x ∘ y`, only one-element models are left. The theory
+  needs both operations to be different.
+- **Literature.** Related in pieces only: ETP Equations 327 and 378, and Waldhauser's idempotent case. No source was
+  found for the whole theory.
+- **Status.** A candidate, not a claim. A specialist's eye is the missing check.
+
+Other close looks are recorded in `notes/` and the ledger `notes/rediscovery.md`. `31d6d970`, for example, is one
+variety found three times, and with associativity it is exactly Leech's rectangular skew lattices.
 
 **Along the way:**
 - **Infinite countermodels.** Four early implications turned out false with only infinite countermodels, settled by
   saturating provers and an independent certificate.
 - **Survivor claims.** Of 32 claims that resisted the provers, 31 are now refuted, and one is open (S12, below). Some
-  refutations came from an LLM working offline, outside the search, and count only after our own machine check.
-
-**Where this leaves the question.** No theory is claimed new. The searches have verified about 5,000 theories,
-against about 1.8 × 10²⁶ possible law sets, mostly in the corner humans know best. "No source found" by our web
-searches is weak evidence. A specialist's eye is the missing check.
+  refutations came from an LLM working offline, outside the search. They count only after our own machine check.
 
 ## Candidates (live)
 
 <!-- candidates:start -->
-*Regenerated by `soup.novelty` after each run's checks; last update 22 Nov 2026, 21:07 UTC. Full tables: [`notes/candidates_table.md`](notes/candidates_table.md).*
+*Regenerated by `soup.novelty` after each run's checks; last update 22 Nov 2026, 21:19 UTC. Full tables: [`notes/candidates_table.md`](notes/candidates_table.md).*
 
 The candidate pool holds the top 20 non-fragments of each run: 138 theories. **56 are known**: 35 related to a named or catalogued structure, 14 split, 6 same variety as another candidate, 1 identified by hand (ledger). **77 are not known as far as our checks go**, and are ranked below. 3 fail "works" and 2 have no verification record.
 
