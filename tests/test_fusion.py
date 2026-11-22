@@ -3,6 +3,7 @@ import numpy as np
 
 from soup.core import Corpus, LAWS
 from soup.named import law_index
+from soup.paths import data
 from soup.offdiag import ONEVAR, ONLY_F, ONLY_G, lat2, offdiag_gain, pools
 from soup.verify import fusion_gain
 
@@ -31,11 +32,22 @@ def test_lat2_holds_lattice_laws_only():
 
 
 def test_mckenzie_has_offdiagonal_synergy():
-    # positive control: commutativity and associativity of both operations follow from the basis, and no single law
-    # together with the one-variable consequences (idempotence, ...) gives them on the corpus
-    g = {LAWS[e] for e in offdiag_gain(C, T(MCKENZIE))}
-    for law in ['x·y=y·x', 'x∘y=y∘x', '(x·y)·z=x·(y·z)', '(x∘y)∘z=x∘(y∘z)']:
-        assert LAWS[law_index(law)] in g, law
+    # positive control (PREREGISTRATION.md, X4): commutativity of both operations follows from the basis, and no single
+    # law together with the one-variable consequences (idempotence, ...) gives it on the corpus
+    g = set(offdiag_gain(C, T(MCKENZIE)).tolist())
+    for law in ['x·y=y·x', 'x∘y=y∘x']:
+        assert law_index(law) in g, law
+
+
+def test_mckenzie_associativity_needs_the_found_structures():
+    # Associativity also follows from the basis, but on the base probes alone it looks covered: all 61 base structures
+    # satisfying x·(y∘(x∘z)) = x plus the one-variable laws happen to be ·-associative (22 Nov 2026). The main corpus
+    # (structures found by the runs) has the witnesses. A growing corpus only removes laws from the covered sets, and
+    # associativity is a theorem of the basis, so once in the gain it stays there.
+    assert law_index('(x·y)·z=x·(y·z)') not in set(offdiag_gain(C, T(MCKENZIE)).tolist())
+    g = set(offdiag_gain(Corpus(store=data('corpus')), T(MCKENZIE)).tolist())
+    for law in ['(x·y)·z=x·(y·z)', '(x∘y)∘z=x∘(y∘z)']:
+        assert law_index(law) in g, law
 
 
 def test_diagonal_laws_never_count():
