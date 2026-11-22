@@ -172,3 +172,30 @@ No random theory and no T4 theory had been profiled.
    - Caveats: the 69 ran without memory caps, which can only turn a run that would have used more memory
      into an unknown; the shared corpus has grown since the start (stream runs), so later theories see more
      structures. Both are reported with the results.
+
+3. **T5a, provers killed by the VM's OOM killer (22 Nov 2026, ~01:50 UTC, after the T5a result was seen).**
+   - What happened: the T5a profile ran with 8 jobs, alongside the candidate profile (3 jobs) and `t4_report`,
+     which ran 10 E processes at once. The kernel log of the Podman VM shows 10 OOM kills between 01:28 and
+     01:41 UTC:
+     - `soup-t5a`: 3 profile children, reported as crashed, plus 3 E runs;
+     - `t4_report`: 3 E runs;
+     - the candidate profile: 1 E run.
+   - Why it matters: the profile recorded a killed E run as "not proved" or "did not saturate", which is a
+     feature value of 0, not a crash. Which theories were affected cannot be told from the output. The
+     analysis as run reported F3 (`convergent`) as calibrated (named 6/10, random 13/117, Holm p = 0.0022) and
+     F1, F2, F4 as not calibrated. 3 random theories crashed.
+   - Fix (commit after this entry): a prover or Mace4 killed by a signal now gives the value *unknown* for the
+     feature it feeds. Per the T5a rule for crashed profiles, an unknown value leaves that theory out of that
+     feature's test. `t4_report` takes its pool size from `T4R_JOBS` and reports equivalence checks whose E run
+     crashed as unknown.
+   - Reruns:
+     - all 130 T5a theories, with the fixed code and 4 jobs, nothing else heavy running, into
+       `check/profile_t3_rerun.json` (`python -m soup.profile --set t3 --name t3_rerun --jobs 4`), analysed with
+       `python -m soup.profile --t5a t3_rerun`;
+     - the 62 candidates, from scratch with the fixed code (the partial run is kept as
+       `check/profile_candidates_asrun.json`);
+     - `t4_report` with `T4R_JOBS=3`. Its primary outcome does not use E, so it cannot change.
+   - Reported: both T5a analyses, as run and rerun. Fixed now, before the rerun: the ranking uses only the
+     features calibrated in **both** (`soup.dossier rank`).
+   - The OOM killer also hit T4 once (searcher s302 of noprior, 00:00 UTC). The supervisor restarted it, as
+     preregistered; REPORT lists it with the T4 crashes.

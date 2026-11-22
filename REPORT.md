@@ -9,7 +9,10 @@ Preregistered (PREREGISTRATION.md, T4) and run unchanged at tag `t4-prereg` (`a5
   arm;
 - 14,400 s per arm, 21:20–01:20 UTC;
 - seeds 201+ (prior) and 301+ (noprior);
-- no crashed workers, and no supervisor died.
+- 4 workers crashed and were restarted by their supervisor, as preregistered. In prior, verifiers v1 (22:58) and
+  v0 (00:09) exited on SIGABRT. In noprior, searcher s302 was killed by the VM's OOM killer at 00:00 (kernel log),
+  and verifier v3 exited on SIGABRT at 00:11. Each verifier crash put its one claimed task back in the queue. No
+  supervisor died. (A first version of this section said there were no crashes. The journals say otherwise.)
 
 Commands:
 - runs: `podman run -d --name soup-t4-<arm> -v "$PWD/work:/data" -e SOUP_DATA=/data/t4-<arm> -e SOUP_VERIFIER=V2
