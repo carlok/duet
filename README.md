@@ -99,9 +99,16 @@ Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`
 
 ## Status (22 Nov 2026, morning)
 
-Running: **X2**, a second exploratory run as X1 (`soup-x2`, 04:21 to about 07:12 UTC; PREREGISTRATION.md, X2),
-with nothing heavy alongside. `main` is pushed to the private origin at each milestone (the user's choice, 22 Nov
+Running: **X3** (`soup-x3`, 08:33 to about 11:24 UTC; PREREGISTRATION.md, X3), the search with verifier V4, with
+nothing heavy alongside. `main` is pushed to the private origin at each milestone (the user's choice, 22 Nov
 morning).
+
+Done this morning:
+- **X2**: 1,015 verified, 31% fragments, no crashes. Its rank-3 candidate is the variety of rank 10 found again.
+- **R1**: the search rediscovered 7 of 13 catalogued structures. The exact ones are 12 lattice bases, 17 absorption
+  pairs and 3 weakly associative lattices. 44 of the 99 top candidates are identified automatically.
+- **`10c98c4b`**: its core B is prior art (Dehornoy 2015; Bonatto et al.). The full theory has no source; its small
+  models are not Yang–Baxter solutions.
 
 Today's plan (until about 18:30 UTC), all preregistered (PREREGISTRATION.md, R1 and X3):
 1. X2's follow-up checks.
