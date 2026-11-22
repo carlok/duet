@@ -115,13 +115,39 @@ def write(top):
         print('wrote', d / f'{name}.md')
 
 
+NONDEG = ['x · y = x', 'x · y = y', 'x ∘ y = x', 'x ∘ y = y', 'x · y = x ∘ y', 'x · y = y ∘ x']
+
+
+def lean_json(top):
+    """For the top candidates: the smallest non-degenerate model with the non-degeneracy laws it refutes (projections,
+    equal or opposite operations), checked by check_offline.check_finite (two evaluators), as a model JSON for
+    soup.lean_cert -> check/cand<i>_model.json."""
+    from .check_offline import check_finite
+    from .data import LAWS
+    from .named import law_index
+    rk = json.load(open(data('check', 'ranking.json')))
+    profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
+    for i, r in enumerate(rk['candidates'][:top], 1):
+        sm = profs[json.dumps(sorted(r['T']))].get('smallest_nondeg')
+        if not sm: print(i, r['key'], 'no small model'); continue
+        cl = [law_index(s.replace(' ', '')) for s in NONDEG]
+        chk = check_finite(r['T'], cl, sm['F'], sm['G'])
+        refuted = {s: {'refuted': True} for s, c in zip(NONDEG, cl) if chk['claims_fail'][LAWS[c]]}
+        assert all(chk['axioms_hold'].values()) and chk['law_vector_agrees'] and chk['nondeg'], chk
+        out = {'key': r['key'], 'laws': r['laws'], 'n': sm['n'], 'F': sm['F'], 'G': sm['G'], 'claims': refuted,
+               'source': f"work/check/profile_candidates.json (smallest non-degenerate model, candidate {i})"}
+        json.dump(out, open(ensure('check') / f'cand{i}_model.json', 'w'), ensure_ascii=False, indent=1)
+        print(i, r['key'], f"n = {sm['n']}", 'refutes', list(refuted))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['candidates', 'rank', 'write'])
+    ap.add_argument('cmd', choices=['candidates', 'rank', 'write', 'lean-json'])
     ap.add_argument('--sources', default='t4-prior,t4-noprior,.'); ap.add_argument('--top', type=int, default=20)
     a = ap.parse_args()
     if a.cmd == 'candidates': candidates(a.sources.split(','), a.top)
     elif a.cmd == 'rank': rank()
+    elif a.cmd == 'lean-json': lean_json(a.top if a.top != 20 else 5)
     else: write(a.top if a.top != 20 else 5)
 
 
