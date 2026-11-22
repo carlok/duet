@@ -315,9 +315,10 @@ def run_child(job, timeout):
 
 def jobs_for(a):
     from .named import law_index
-    if a.set == 't3':
-        return [{'T': r['T'], 'laws': r['laws'], 'kind': r.get('kind'), 'calib_name': r.get('name')}
-                for r in json.load(open(data('calib_t3.json')))]
+    if a.set == 't3':                             # the 2 theories whose T3 run crashed have no 'laws' field
+        from .data import LAWS
+        return [{'T': r['T'], 'laws': r.get('laws') or [LAWS[t] for t in r['T']], 'kind': r.get('kind'),
+                 'calib_name': r.get('name')} for r in json.load(open(data('calib_t3.json')))]
     if a.set == 'candidates':                     # soup.dossier candidates
         return [{'T': r['T'], 'laws': r['laws'], 'key': str(r['key']), 'source': r['source']}
                 for r in json.load(open(data('check', 'candidates.json')))]
