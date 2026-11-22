@@ -1,0 +1,184 @@
+== N1 1 55cb2c91 (.): x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x
+   off-diagonal emergent: (x · y) · y = x · y
+   smallest model (3 elements): · = [[0, 0, 0], [0, 0, 1], [2, 2, 2]], ∘ = [[0, 0, 2], [2, 2, 2], [0, 1, 2]]
+    x · x = x: fails in the 3-element model
+    x ∘ x = x: fails in the 3-element model
+    x · x = x ∘ x: fails in the 3-element model
+    x · y = y · x: fails in the 3-element model
+    x ∘ y = y ∘ x: fails in the 3-element model
+    (x · y) · z = x · (y · z): fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 3-element model
+    x · (x ∘ y) = x: axiom
+    x ∘ (x · y) = x: fails in the 3-element model
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (y · x) = x: fails in the 3-element model
+    x · (x · y) = x · y: fails in the 3-element model
+    (x · y) · y = x · y: proved
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    (x ∘ y) ∘ y = x ∘ y: fails in the 3-element model
+    x ∘ (y ∘ x) = x: fails in the 3-element model
+== N1 2 1d0a5211 (.): x · (x ∘ y) = y ∘ x & (x ∘ (y · z)) ∘ z = z
+   off-diagonal emergent: x · (x ∘ (y · x)) = x
+   smallest model (3 elements): · = [[0, 0, 0], [1, 0, 2], [2, 0, 2]], ∘ = [[0, 1, 2], [0, 2, 0], [0, 1, 2]]
+    x · x = x: fails in the 3-element model
+    x ∘ x = x: fails in the 3-element model
+    x · x = x ∘ x: fails in the 3-element model
+    x · y = y · x: fails in the 3-element model
+    x ∘ y = y ∘ x: fails in the 3-element model
+    (x · y) · z = x · (y · z): fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 3-element model
+    x · (x ∘ y) = x: fails in the 3-element model
+    x ∘ (x · y) = x: fails in the 3-element model
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (x · y) = x · y: fails in the 3-element model
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 3-element model
+    (x ∘ y) ∘ y = x ∘ y: fails in the 3-element model
+    x ∘ (y ∘ x) = x: fails in the 3-element model
+== N1 3 a9295908 (t4-prior): x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+   off-diagonal emergent: x · (x · y) = x · (y · x); x · y = y · x
+   smallest model (3 elements): · = [[0, 0, 0], [0, 1, 2], [0, 2, 2]], ∘ = [[0, 1, 1], [0, 1, 2], [0, 1, 2]]
+    x · x = x: proved
+    x ∘ x = x: proved
+    x · x = x ∘ x: proved
+    x · y = y · x: proved
+    x ∘ y = y ∘ x: fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 3-element model
+    x · (x ∘ y) = x: fails in the 3-element model
+    x ∘ (x · y) = x: fails in the 3-element model
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (y · x) = x: fails in the 3-element model
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    (x ∘ y) ∘ y = x ∘ y: fails in the 3-element model
+    x ∘ (y ∘ x) = x: fails in the 3-element model
+== N1 4 742cc445 (x4): x · (y ∘ (x ∘ z)) = x & x ∘ ((x ∘ y) · (z ∘ x)) = x
+   off-diagonal emergent: x · (x · x) = x ∘ (x ∘ y); x · x = x ∘ (x ∘ y); x ∘ (x ∘ y) = x
+   smallest model (3 elements): · = [[0, 0, 0], [0, 1, 1], [2, 2, 2]], ∘ = [[0, 2, 0], [1, 1, 1], [2, 2, 2]]
+    x · x = x: proved
+    x ∘ x = x: proved
+    x · x = x ∘ x: proved
+    x · y = y · x: fails in the 3-element model
+    x ∘ y = y ∘ x: fails in the 3-element model
+    (x · y) · z = x · (y · z): fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 3-element model
+    x · (x ∘ y) = x: proved
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (y · x) = x: fails in the 3-element model
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 3-element model
+    x ∘ (y ∘ x) = x: fails in the 3-element model
+== N1 5 97a7dfcf (x4): x · x = y · y & x · (y ∘ x) = x ∘ y & (x · y) · z = y ∘ (z · y)
+   off-diagonal emergent: x · (x · x) = x ∘ (x · y); x · x = x ∘ (x · y)
+   smallest model (3 elements): · = [[0, 0, 0], [0, 0, 0], [0, 1, 0]], ∘ = [[0, 0, 0], [0, 0, 0], [0, 0, 1]]
+    x · x = x: fails in the 3-element model
+    x ∘ x = x: fails in the 3-element model
+    x · x = x ∘ x: fails in the 3-element model
+    x · y = y · x: fails in the 3-element model
+    (x · y) · z = x · (y · z): fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): proved
+    x · (x ∘ y) = x: fails in the 3-element model
+    x ∘ (x · y) = x: fails in the 3-element model
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (y · x) = x: fails in the 3-element model
+    (x · y) · y = x · y: fails in the 3-element model
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 3-element model
+    (x ∘ y) ∘ y = x ∘ y: fails in the 3-element model
+    x ∘ (y ∘ x) = x: fails in the 3-element model
+== N1 6 7ec7f8f5 (x4): x · (y ∘ x) = x ∘ y & x · (y · x) = (x · x) ∘ z & (x · y) · z = (z ∘ x) ∘ x
+   off-diagonal emergent: x · (y · x) = x ∘ (x · y)
+   smallest model (3 elements): · = [[0, 0, 0], [0, 0, 0], [0, 1, 0]], ∘ = [[0, 0, 0], [0, 0, 0], [0, 0, 1]]
+    x · x = x: fails in the 3-element model
+    x ∘ x = x: fails in the 3-element model
+    x · x = x ∘ x: fails in the 3-element model
+    x · y = y · x: fails in the 3-element model
+    (x · y) · z = x · (y · z): fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): proved
+    x · (x ∘ y) = x: fails in the 3-element model
+    x ∘ (x · y) = x: fails in the 3-element model
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (y · x) = x: fails in the 3-element model
+    (x · y) · y = x · y: fails in the 3-element model
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 3-element model
+    (x ∘ y) ∘ y = x ∘ y: fails in the 3-element model
+    x ∘ (y ∘ x) = x: fails in the 3-element model
+== N1 7 f79a5097 (x4): x · (y ∘ x) = x & x ∘ ((x ∘ y) · y) = x & x ∘ ((x · y) ∘ x) = x & x · ((y ∘ y) ∘ (y · x)) = x
+   off-diagonal emergent: x · (x · x) = x · (x ∘ y); x · (x ∘ y) = x; x · (x ∘ y) = x · x
+   smallest model (3 elements): · = [[0, 0, 0], [1, 1, 2], [2, 1, 2]], ∘ = [[0, 0, 0], [1, 1, 0], [2, 0, 2]]
+    x · x = x: proved
+    x ∘ x = x: proved
+    x · x = x ∘ x: proved
+    x · y = y · x: fails in the 3-element model
+    x ∘ y = y ∘ x: fails in the 3-element model
+    (x · y) · z = x · (y · z): fails in the 3-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 3-element model
+    x · (x ∘ y) = x: proved
+    x ∘ (x · y) = x: fails in the 3-element model
+    (x · y) · z = x · z: fails in the 3-element model
+    x · (x · y) = y: fails in the 3-element model
+    (x · y) · y = x: fails in the 3-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 3-element model
+== N1 8 7c476118 (x4): x · ((y ∘ x) ∘ z) = x & (x · y) ∘ (x ∘ y) = x
+   off-diagonal emergent: x · (x · x) = x · (x · y); x · (x · y) = x; x · (x · y) = x · x
+   smallest model (4 elements): · = [[0, 0, 0, 0], [1, 1, 1, 1], [1, 2, 2, 2], [3, 3, 3, 3]], ∘ = [[0, 0, 1, 0], [1, 1, 1, 2], [3, 2, 2, 1], [1, 3, 1, 3]]
+    x · x = x: proved
+    x ∘ x = x: proved
+    x · x = x ∘ x: proved
+    x · y = y · x: fails in the 4-element model
+    x ∘ y = y ∘ x: fails in the 4-element model
+    (x · y) · z = x · (y · z): fails in the 4-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 4-element model
+    x · (x ∘ y) = x: proved
+    (x · y) · z = x · z: fails in the 4-element model
+    x · (y · x) = x: fails in the 4-element model
+    x · (x · y) = x · y: fails in the 4-element model
+    x · (x · y) = y: fails in the 4-element model
+    (x · y) · y = x: fails in the 4-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 4-element model
+    (x ∘ y) ∘ y = x ∘ y: fails in the 4-element model
+    x ∘ (y ∘ x) = x: fails in the 4-element model
+== N1 9 a8963027 (x4): x · (x · y) = x & x ∘ (y ∘ x) = x & x ∘ (y · (x · (x ∘ z))) = x
+   off-diagonal emergent: x · (x · x) = x ∘ (x · y); x · x = x ∘ (x · y); x ∘ (x · y) = x
+   smallest model (4 elements): · = [[0, 0, 0, 0], [1, 1, 0, 0], [1, 2, 2, 1], [1, 3, 1, 3]], ∘ = [[0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 2, 1], [3, 3, 1, 3]]
+    x · x = x: proved
+    x ∘ x = x: proved
+    x · x = x ∘ x: proved
+    x · y = y · x: fails in the 4-element model
+    x ∘ y = y ∘ x: fails in the 4-element model
+    (x · y) · z = x · (y · z): fails in the 4-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 4-element model
+    x ∘ (x · y) = x: proved
+    (x · y) · z = x · z: fails in the 4-element model
+    x · (y · x) = x: fails in the 4-element model
+    x · (x · y) = x · y: fails in the 4-element model
+    (x · y) · y = x · y: fails in the 4-element model
+    x · (x · y) = y: fails in the 4-element model
+    (x · y) · y = x: fails in the 4-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 4-element model
+    (x ∘ y) ∘ y = x ∘ y: proved
+    x ∘ (y ∘ x) = x: axiom
+== N1 10 3b3b1176 (x4): x · (x · y) = x ∘ x & x · x = y ∘ (x ∘ y) & x · y = (y · x) ∘ y
+   off-diagonal emergent: x · (x · x) = x ∘ (y · x); x · x = x ∘ (y · x)
+   smallest model (4 elements): · = [[0, 0, 0, 0], [0, 0, 0, 2], [0, 0, 0, 0], [0, 2, 0, 0]], ∘ = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 2, 0, 2], [0, 0, 0, 0]]
+    x · x = x: fails in the 4-element model
+    x ∘ x = x: fails in the 4-element model
+    x · x = x ∘ x: proved
+    x ∘ y = y ∘ x: fails in the 4-element model
+    (x ∘ y) ∘ z = x ∘ (y ∘ z): fails in the 4-element model
+    x · (x ∘ y) = x: fails in the 4-element model
+    x ∘ (x · y) = x: fails in the 4-element model
+    (x · y) · z = x · z: fails in the 4-element model
+    x · (y · x) = x: fails in the 4-element model
+    x · (x · y) = x · y: fails in the 4-element model
+    (x · y) · y = x · y: fails in the 4-element model
+    x · (x · y) = y: fails in the 4-element model
+    (x · y) · y = x: fails in the 4-element model
+    x ∘ (x ∘ y) = x ∘ y: fails in the 4-element model
+    x ∘ (y ∘ x) = x: fails in the 4-element model
