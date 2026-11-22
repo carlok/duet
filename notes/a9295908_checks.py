@@ -86,3 +86,40 @@ if part == '5':
                   for p in itertools.permutations(range(n)))
         seen.add(key)
     print('commutative idempotent groupoids on 3 elements up to isomorphism:', len(seen))
+
+if part == '6':
+    # the literature check (22 Nov evening) says: on chains our x∘y is Gödel logic's strict-order connective
+    # x ≺ y = (x→y) ∧ ((y→x)→x) (Baaz, Ciabattoni, Zach 2000), also written (y→x)→y; and, by hand, that in every Heyting
+    # algebra both terms with · = ∧ satisfy T. Checked here on finite Heyting algebras (= finite distributive lattices)
+    import itertools
+    import numpy as np
+    from soup.core import law_vector, is_nondeg
+
+    def heyting(elems, le):
+        n = len(elems)
+        meet = [[max((z for z in range(n) if le(z, x) and le(z, y)), key=lambda z: sum(le(w, z) for w in range(n)))
+                 for y in range(n)] for x in range(n)]
+        imp = [[max((z for z in range(n) if le(meet[z][x], y)), key=lambda z: sum(le(w, z) for w in range(n)))
+                for y in range(n)] for x in range(n)]
+        return np.array(meet), imp
+
+    algebras = {f'chain of {k}': (list(range(k)), lambda a, b: a <= b) for k in (3, 4, 5)}
+    algebras.update({f'Boolean 2^{k}': (list(range(2 ** k)), lambda a, b: a & b == a) for k in (2, 3)})
+    p23 = [(i, j) for i in range(2) for j in range(3)]                   # the product of a 2-chain and a 3-chain
+    algebras['2 x 3'] = (p23, lambda a, b: p23[a][0] <= p23[b][0] and p23[a][1] <= p23[b][1])
+    fork = [0, 1, 2, 3, 4]                                               # 1 + 2^2: a bottom below the Boolean square
+    up = {0: {0, 1, 2, 3, 4}, 1: {1, 2, 3, 4}, 2: {2, 4}, 3: {3, 4}, 4: {4}}
+    algebras['1 + 2^2'] = (fork, lambda a, b: b in up[a])
+    for name, (els, le) in algebras.items():
+        n = len(els)
+        L = (lambda a, b: le(a, b)) if name.startswith(('chain', 'Boolean', '1 +')) else (lambda a, b: le(a, b))
+        meet, imp = heyting(els, L)
+        top = max(range(n), key=lambda z: sum(L(w, z) for w in range(n)))
+        t1 = np.array([[imp[imp[y][x]][y] for y in range(n)] for x in range(n)])          # (y→x)→y
+        t2 = np.array([[meet[imp[x][y]][imp[imp[y][x]][x]] for y in range(n)] for x in range(n)])  # (x→y)∧((y→x)→x)
+        thr = np.array([[y if L(y, x) else top for y in range(n)] for x in range(n)])
+        out = []
+        for tname, G in (('(y→x)→y', t1), ('(x→y)∧((y→x)→x)', t2)):
+            lv = law_vector(meet, G, n)
+            out.append(f"{tname}: model {all(lv[t] for t in T)}, equals the threshold op {bool((G == thr).all())}")
+        print(f'{name}: ' + ' | '.join(out))

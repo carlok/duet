@@ -12,7 +12,7 @@ Metric (lexicographic): an off-diagonal proved emergent law; no classical model 
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | `55cb2c91` | . | (x · y) · y = x · y | no | - | 3 | 6 | 1.392 | 98 | Nothing found | - | x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x |
 | 2 | `1d0a5211` | . | x · (x ∘ (y · x)) = x | no | - | 3 | 6 | 1.3285 | 107 | Nothing found | - | x · (x ∘ y) = y ∘ x & (x ∘ (y · z)) ∘ z = z |
-| 3 | `a9295908` | t4-prior | x · (x · y) = x · (y · x); x · y = y · x | no | - | 3 | 7 | 1.4783 | 86 | Nothing found | - | x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x) |
+| 3 | `a9295908` | t4-prior | x · (x · y) = x · (y · x); x · y = y · x | no | - | 3 | 7 | 1.4783 | 86 | Related: a fragment of Heyting algebras | - | x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x) |
 | 4 | `742cc445` | x4 | x · (x · x) = x ∘ (x ∘ y); x · x = x ∘ (x ∘ y) … | no | - | 3 | 7 | 0.8109 | 117 | Related only | - | x · (y ∘ (x ∘ z)) = x & x ∘ ((x ∘ y) · (z ∘ x)) = x |
 | 5 | `97a7dfcf` | x4 | x · (x · x) = x ∘ (x · y); x · x = x ∘ (x · y) | no | - | 3 | 9 | 0.8133 | 116 | Nothing found | - | x · x = y · y & x · (y ∘ x) = x ∘ y & (x · y) · z = y ∘ (z · y) |
 | 6 | `7ec7f8f5` | x4 | x · (y · x) = x ∘ (x · y) | no | - | 3 | 11 | 1.2953 | 110 | Nothing found | - | x · (y ∘ x) = x ∘ y & x · (y · x) = (x · x) ∘ z & (x · y) · z = (z ∘ x) ∘ x |

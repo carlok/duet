@@ -1,5 +1,6 @@
 import Mathlib.Order.Lattice
 import Mathlib.Order.BoundedOrder.Basic
+import Mathlib.Order.Heyting.Basic
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Data.Fin.VecNotation
 
@@ -15,6 +16,8 @@ The theory T, with · = `f` and ∘ = `g`: `x · (x ∘ x) = x`, `(x ∘ y) · y
   elements below `x` and never moves an element down: `y ≤ x → x ∘ y = y` and `y ≤ x ∘ y`.
 * `threshold_model`: so on every meet-semilattice with a top, `x ∘ y = (if y ≤ x then y else ⊤)` gives a model. On a
   chain this is Gödel implication with `x ∘ x = x` instead of `⊤`.
+* `heyting_model`: every (generalized) Heyting algebra is a model with `x ∘ y = (y ⇨ x) ⇨ y`. That is the
+  strict-order connective of Gödel logic on chains, so T is valid in Heyting algebras under that interpretation.
 * `not_assoc`: T does not force · to be associative (a 3-element model, `decide`).
 -/
 
@@ -93,6 +96,14 @@ theorem threshold_model [SemilatticeInf α] [OrderTop α] [DecidableRel ((· ≤
   split_ifs
   · exact le_refl y
   · exact le_top
+
+/-- Every (generalized) Heyting algebra is a model, with · the meet and `x ∘ y = (y ⇨ x) ⇨ y`. On a chain this is the
+strict-order connective of Gödel logic (Baaz, Ciabattoni and Zach 2000); see `notes/a9295908.md`. -/
+theorem heyting_model [GeneralizedHeytingAlgebra α] :
+    T (fun a b => a ⊓ b) (fun x y : α => (y ⇨ x) ⇨ y) := by
+  rw [inf_iff]
+  refine ⟨fun x y hyx => ?_, fun x y => le_himp⟩
+  simp only [himp_eq_top_iff.mpr hyx, top_himp]
 
 /-- A 3-element model in which · is not associative (∘ is the right projection). -/
 def f3 : Fin 3 → Fin 3 → Fin 3 := fun x y => ![![0, 2, 0], ![2, 1, 0], ![0, 0, 2]] x y

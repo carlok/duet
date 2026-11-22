@@ -20,6 +20,13 @@ Boolean algebra 2^3: threshold model True, non-degenerate True
 T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
 commutative idempotent groupoids on 3 elements up to isomorphism: 7
 T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+chain of 3: (y→x)→y: model True, equals the threshold op True | (x→y)∧((y→x)→x): model True, equals the threshold op True
+chain of 4: (y→x)→y: model True, equals the threshold op True | (x→y)∧((y→x)→x): model True, equals the threshold op True
+chain of 5: (y→x)→y: model True, equals the threshold op True | (x→y)∧((y→x)→x): model True, equals the threshold op True
+Boolean 2^2: (y→x)→y: model True, equals the threshold op False | (x→y)∧((y→x)→x): model True, equals the threshold op False
+Boolean 2^3: (y→x)→y: model True, equals the threshold op False | (x→y)∧((y→x)→x): model True, equals the threshold op False
+2 x 3: (y→x)→y: model True, equals the threshold op False | (x→y)∧((y→x)→x): model True, equals the threshold op False
+1 + 2^2: (y→x)→y: model True, equals the threshold op False | (x→y)∧((y→x)→x): model True, equals the threshold op False
 n = 2: 1 models up to iso (complete True); · associative in 1; ∘ the right projection in 1; non-degenerate 0
 n = 3: 14 models up to iso (complete True); · associative in 3; ∘ the right projection in 7; non-degenerate 7
 n = 4: 2107 models up to iso (complete False); · associative in 29; ∘ the right projection in 188; non-degenerate 1919

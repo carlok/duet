@@ -193,7 +193,13 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - Candidates: 138, which are 120 varieties after `soup.dedupe`. `2dc27508` = `69dfbd8e` = `31d6d970` (one variety,
     three runs).
   - N1: 56 known, 77 ranked; its top 10 is disjoint from T5a's, and X4 has 7 of it. Dossiers `work/dossiers/n1-*`.
-    Lean: 25 modules, audit 272 declarations.
+    Lean: 26 modules with `A9295908`.
+  - `a9295908` (N1 rank 3) is identified as a fragment of Heyting algebras (ledger row 11; `notes/a9295908.md`).
+    - T is equivalent to a commutative idempotent · (not associative) with x∘(x·y) = x·y and (x∘y)·y = y.
+    - With · = ∧ and x∘y = (y→x)→y, every Heyting algebra is a model (Lean `heyting_model`).
+    - On chains, ∘ is Gödel logic's strict-order connective (Baaz, Ciabattoni, Zach 2000).
+    - The template for digging into a candidate: E for structure, a plain reading, models from order theory, a
+      targeted literature agent, then Lean for the general statements.
   - Workflow after every run: the post-run checks, then `soup.dedupe`, then
     `soup.novelty --readme /repo/README.md` (mount README.md and notes/). Then push.
 

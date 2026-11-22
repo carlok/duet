@@ -408,9 +408,16 @@ off-diagonal laws. Lean certificates check the smallest model of each. A live ve
 repository's README. Web searches, run by two web-only agents with their key claims rechecked by machine, found no
 source for any of N1's top ten. Two are related only: one contains a law of McKenzie's lattice basis, and one shares
 absorption identities with Leech's skew lattices without being associative. Three collapse to known one-operation
-laws when the two operations are set equal. One, with laws $x\op(x\cop x)=x$, $(x\cop y)\op y=y$ and
-$x\op y=x\cop(y\op x)$, has a non-degenerate model on every chain of 3 to 6 elements: $\op$ the meet and $\cop$ Gödel
-implication with $x\cop x=x$. We leave it as a lead for specialists in implicative algebras.
+laws when the two operations are set equal. One, N1's third, with laws $x\op(x\cop x)=x$, $(x\cop y)\op y=y$ and
+$x\op y=x\cop(y\op x)$, looked like a lead and turned out to be a relative of known structure:
+\begin{itemize}
+\item \textbf{The theory itself.} It is equivalent to a commutative idempotent $\op$ (not necessarily associative)
+  with $x\cop(x\op y)=x\op y$ and $(x\cop y)\op y=y$ (E both ways; Lean).
+\item \textbf{Heyting algebras.} With $\op=\wedge$ and $x\cop y=(y\to x)\to y$, every Heyting algebra is a model
+  (Lean). On chains this $\cop$ is the strict-order connective of Gödel logic~\cite{bcz2000}.
+\end{itemize}
+So it is a fragment of Heyting-algebra theory under a term interpretation, without associativity. The search reached
+it with no knowledge of logic.
 
 \section{Planned experiments}
 \pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the

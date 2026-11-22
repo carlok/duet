@@ -2,6 +2,28 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `a9295908` (N1 rank 3): what the theory is (22 Nov 2026, 19:05–19:54 UTC; post hoc)
+
+Command: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/a9295908_checks.py`, parts 1–6
+(output `notes/a9295908_checks.out`). Lean: `lean/Duet/A9295908.lean`. Memo: `notes/a9295908.md`.
+T = {x·(x∘x) = x, (x∘y)·y = y, x·y = x∘(y·x)}.
+
+| Check | Result |
+| --- | --- |
+| T ⟺ C: · commutative and idempotent, x∘(x·y) = x·y, (x∘y)·y = y | E both ways; Lean `T_iff_C`, a hand proof; T also gives x∘x = x |
+| · associative? | no: E and Vampire saturate, and Mace4 finds a 3-element model with ∘ the right projection (Lean `not_assoc`, `decide`) |
+| ·-reducts of the models | exactly the commutative idempotent groupoids (∘ = right projection gives every one) |
+| when · is a semilattice meet | T ⟺ (y ≤ x ⇒ x∘y = y) ∧ (y ≤ x∘y) (Lean `inf_iff`) |
+| models from order theory | x∘y = (y if y ≤ x, else ⊤) on every meet-semilattice with a top (Lean `threshold_model`); **every Heyting algebra, with x∘y = (y→x)→y** (Lean `heyting_model`; also (x→y)∧((y→x)→x); both checked on 7 finite Heyting algebras) |
+| models up to isomorphism, sizes 2 / 3 / 4 / 5 | 1 / 14 / ≥ 2,107 / ≥ 11,794 (4 and 5 capped); on 3 elements, 3 with · associative and 7 with ∘ the right projection, which matches the 7 commutative idempotent groupoids on 3 elements (counted independently) |
+| literature (targeted web-only agent; key claims rechecked) | on chains, ∘ is the strict-order connective of Gödel logic, (A⊃B)∧((B⊃A)⊃A) (Baaz, Ciabattoni and Zach, LPAR 2000, §2); no source for T itself |
+
+**Identification (ledger row 11).** T is valid in every Heyting algebra under a term interpretation, so it is a
+fragment of Heyting-algebra theory written in ∧ and the strict-order connective, without associativity. The
+synergy left is that three bridge laws force · to be commutative and idempotent. Open: whether T plus associativity
+of · is exactly that fragment. Lean: `lean/check.sh` passes 26 modules (with `A9295908`), audit 283 declarations
+before `heyting_model`; rerun after it below.
+
 ## N1: a novelty ranking next to T5a, and the candidates up to equivalence (22 Nov 2026, 18:09–18:24 UTC; post hoc)
 
 **Dedupe** (`soup.dedupe --set candidates --jobs 6`, 25 s for the proofs; `work/check/dedupe_candidates.json`). Since
@@ -62,12 +84,9 @@ identification applies to the whole dedupe class). Command: `podman run --rm -v 
   - **Collapses with x·y = x∘y** (E): `7ec7f8f5` becomes a constant operation; `7c476118` becomes the left
     projection; `a8963027` becomes exactly ETP Equations 9 ∧ 10, proved both ways; `f79a5097` implies Equations 9
     and 10.
-  - **A lead for someone who knows the field: `a9295908`.** Its 3-element model is the meet of a chain together
-    with Gödel implication changed on the diagonal (x∘x = x).
-    - The same construction gives a non-degenerate model on every chain of 3 to 6 elements.
-    - It does not on the Boolean algebras of 4 and 8 elements, and the unchanged Gödel implication is never a
-      model (`law_vector`).
-    - Its emergent laws make · idempotent and commutative.
+  - **`a9295908`: a lead at first, then identified** (dug into the same evening; see below). Its 3-element model is
+    the meet of a chain with Gödel implication changed on the diagonal (x∘x = x). The same construction gives a model
+    on every chain of 3 to 6 elements.
   - Searched: the web, zbMATH, the McCune–Padmanabhan monograph's contents, Veroff's lattice-basis page, the ETP
     equation list, and Leech 2020 (pp. 31–32). Several sources were not read in full; each note says which.
 
