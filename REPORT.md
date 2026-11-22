@@ -21,8 +21,8 @@ T = {x·(x∘x) = x, (x∘y)·y = y, x·y = x∘(y·x)}.
 **Identification (ledger row 11).** T is valid in every Heyting algebra under a term interpretation, so it is a
 fragment of Heyting-algebra theory written in ∧ and the strict-order connective, without associativity. The
 synergy left is that three bridge laws force · to be commutative and idempotent. Open: whether T plus associativity
-of · is exactly that fragment. Lean: `lean/check.sh` passes 26 modules (with `A9295908`), audit 283 declarations
-before `heyting_model`; rerun after it below.
+of · is exactly that fragment. Lean: `lean/check.sh` passes 26 modules (with `A9295908`), and the axiom audit passes on 284
+declarations, `heyting_model` included.
 
 ## N1: a novelty ranking next to T5a, and the candidates up to equivalence (22 Nov 2026, 18:09–18:24 UTC; post hoc)
 
