@@ -32,3 +32,7 @@ work/fragments.json
 work/t4_report_asrun.json
 work/x2/*
 !work/x2/journal/
+intro/*.aux
+intro/*.log
+intro/*.out
+intro/*.toc

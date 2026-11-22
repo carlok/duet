@@ -1,0 +1,23 @@
+Ex. 2.1  operations on 2 elements: 16 | on 3 elements: 19683
+Ex. 3.1  max on {0,1,2}: {'associative (x.y).z = x.(y.z)': True, 'commutative x.y = y.x': True, 'idempotent x.x = x': True, 'left projection x.y = x': False, 'x.(x.y) = x.y': True} | 0 is an identity: True
+Ex. 3.2  left projection on {0,1}: associative True idempotent True commutative False
+Ex. 3.3  checks needed for associativity on 3 elements: 3^3 = 27 | on 6 elements: 216
+Ex. 4.2  pairs (., o) on {0,1} satisfying both absorption laws: 9
+         they are: [('min', 'left projection'), ('min', 'max'), ('left projection', 'min'), ('left projection', 'left projection'), ('left projection', 'right projection'), ('left projection', 'max'), ('right projection', 'left projection'), ('max', 'min'), ('max', 'left projection')]
+Ex. 4.3  a model of x.(x o y) = x alone in which x.x = x fails: . = (0, 0, 1, 0) o = (0, 0, 0, 0)
+Ex. 4.4  in the corpus every idempotent table is associative: True
+         x.y = 2x+2y mod 3: idempotent True | associative False | e.g. (0.0).1 = 2 but 0.(0.1) = 1
+         smallest idempotent non-associative magma has 3 elements
+Ex. 5.1  semilattice operations on 3 elements: 9 | lattices (join, meet) on 3 labelled elements: 6
+Ex. 6.2  on 3 elements: every associative . has an associative transpose: True
+Ex. 7.1  rectangular band 2x2: associative True | idempotent True | x.(y.x) = x True | (x.y).z = x.z True
+Ex. 7.2  with x o y := y . x, the four laws of 31d6d970 hold: [True, True, True, True]
+Ex. 1.3  injective self-maps of {0,1,2} that are not surjective: 0 | injective ones: 6
+Ex. 1.1  |{0,1} x {0,1,2}| = 6
+Ex. 1.2  functions {0,1,2} -> {0,1}: 8 | injective: 0 | surjective: 6
+Ex. 2.2  idempotent operations on {0,1}: ['min', 'left projection', 'right projection', 'max']
+Ex. 5.2  the four duals of x.(x o y) = x agree with the relabelled structures on all 256 pairs: True
+Ex. 7.3  every pair on {0,1,2} with x.y = x and x o y = x satisfies x.y = x o y: True
+Ex. 7.4  on 2 elements: 4 operations with x.(x.y) = y; T and T' have the same models: True (32 models)
+Ex. 7.4  on 3 elements: 64 operations with x.(x.y) = y; T and T' have the same models: True (46656 models)
+Ex. 8.1  pairs of distinct laws among 71,369: 2,546,731,396 | sets of 4: 1.081e+18
