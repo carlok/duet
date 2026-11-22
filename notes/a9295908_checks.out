@@ -1,0 +1,26 @@
+T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+E (auto-schedule, 120 s): countersatisfiable {'processed': 25}
+Vampire (casc, 120 s): countersatisfiable
+Mace4 countermodel to associativity of ·, sizes 2-8, 300 s: size 3 | searched to None | exhausted to None (0.0 s)
+   · = [[0, 2, 0], [2, 1, 0], [0, 0, 2]]  ∘ = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
+saturation certified as a convergent rewrite system: False unorientable by size: f(X1,X2)=f(X2,X1)
+T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+C = x · x = x & x · y = y · x & (x ∘ y) · y = y & x · y = x ∘ (x · y)
+T => C {'x · x = x': 'proved', 'x · y = y · x': 'proved', 'x · y = x ∘ (x · y)': 'proved'}
+C => T {'x · (x ∘ x) = x': 'proved', 'x · y = x ∘ (y · x)': 'proved'}
+  T => x ∘ x = x              proved
+  T => x · (x ∘ y) = x · y    countersatisfiable
+  T => x ∘ (y ∘ x) = x        countersatisfiable
+  T => x ∘ (x ∘ y) = x ∘ y    countersatisfiable
+  T => (x ∘ y) ∘ y = x ∘ y    countersatisfiable
+  T => x ∘ y = y              countersatisfiable
+T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+Boolean algebra 2^2: threshold model True, non-degenerate True
+Boolean algebra 2^3: threshold model True, non-degenerate True
+T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+commutative idempotent groupoids on 3 elements up to isomorphism: 7
+T = x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x)
+n = 2: 1 models up to iso (complete True); · associative in 1; ∘ the right projection in 1; non-degenerate 0
+n = 3: 14 models up to iso (complete True); · associative in 3; ∘ the right projection in 7; non-degenerate 7
+n = 4: 2107 models up to iso (complete False); · associative in 29; ∘ the right projection in 188; non-degenerate 1919
+n = 5: 11794 models up to iso (complete False); · associative in 181; ∘ the right projection in 0; non-degenerate 11794
