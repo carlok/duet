@@ -308,7 +308,7 @@ or one-operation varieties written with a division.
 \subsection{Rediscovery as calibration}
 An open-ended search that finds nothing known is suspect, and so is one whose finds are all known. We therefore
 record every case where a find turned out to be known, with the route that identified it and the time it took
-(\texttt{notes/rediscovery.md}). Nine cases so far:
+(\texttt{notes/rediscovery.md}). Ten cases so far:
 \begin{itemize}
 \item two laws of McKenzie's lattice basis (identified through the literature);
 \item T4's lattice fragments (automatic);
@@ -325,9 +325,11 @@ record every case where a find turned out to be known, with the route that ident
   $\{x\op(x\cop y)=x,\ (x\cop y)\op y=y,\ (x\op x)\op(y\op x)=x,\ (x\op y)\op(x\op x)=x\}$ is exactly a rectangular band
   with $\cop$ its transpose, which is term-equivalent to Leech's rectangular skew lattices (Leech 2020, Prop.\
   1.3.14; E both ways). Both associativity laws fail in its 3-element model, and no source was found for the
-  full theory (a web-only literature agent, its key claims rechecked).
+  full theory (a web-only literature agent, its key claims rechecked);
+\item the same variety reached three times, from the early runs, X2 and X3 (an automatic check of equivalence up to
+  the 8 relabellings, then E both ways by hand). The previous case is one of the three.
 \end{itemize}
-Five of the nine were identified by pipeline checks, which were written only after the first candidates were in
+Six of the ten were identified by pipeline checks, which were written only after the first candidates were in
 hand. The cases found through the literature took between under an hour and several hours, and one of them needed
 a second search in another field.
 A systematic measure against a catalogue of 13 known structures, fixed before the analysis, is preregistered as
@@ -371,7 +373,6 @@ A first attempt counted only one-variable laws as diagonal. Within three minutes
 proved $x\op x=y\op y$: the same attractor in another form. It was stopped, the definition widened, and the run
 restarted (deviation 6).
 
-\emph{Preliminary results}, before the post-run checks:
 \begin{itemize}
 \item \textbf{The run.} X4 verified 636 theories in 9{,}000~s; 565 have a positive score. None is a fragment of any
   of the ten named theories (X3: 31.6\%), and only 3 were screened as split.
@@ -380,14 +381,36 @@ restarted (deviation 6).
 \item \textbf{The attractor moved.} The most frequent proved laws are now of the form $x\op(x\op y)=x\op x$ and
   $x\op(x\op x)=x\op(x\op y)$: a left translation sends a whole family of elements to $x\op x$. They are two-variable
   laws that still pivot on the square.
+\item \textbf{None of its candidates is recognised.} Of X4's 20 candidates, the automatic checks identify none: no
+  split, no hidden definition, no relation to a named theory, no catalogue relation. Across all 636 theories, R1
+  finds no fragment or equivalent of a catalogue entry, and 8 subvarieties (3 of dimonoids, 5 of doppelsemigroups).
+\item \textbf{More of them are ``disconnected''.} The preregistered marks are: works, unconnected to every check, no
+  classical model. They fit 14 of X4's 20 candidates and 10 of X3's 19. Without selection, 27\% of X3's positive
+  theories already prove an off-diagonal emergent law.
 \end{itemize}
-\pending{X4: candidate checks, ranking, rediscovery, the preregistered ``disconnected'' marks.}
+
+\subsection{A novelty ranking (N1)}
+The preregistered T5a ranking puts X4's candidates between rank 34 and rank 136 of 138. It sorts by a convergent
+presentation and a duality, the features that separate named theories from random ones, so it rewards resemblance
+to the known. N1, preregistered post hoc, is a second ranking used alongside it.
+\begin{itemize}
+\item \textbf{Gate.} A candidate enters if it works (a proved emergent law, non-degenerate models on two or more
+  sizes) and no check identifies it.
+\item \textbf{One per variety.} An equivalence check up to the 8 relabellings first merges the 138 candidates into
+  120 varieties. One variety had been reached three times, by the early runs, X2 and X3.
+\item \textbf{Order.} An off-diagonal proved emergent law, then no classical model, then no partial identification,
+  then more sizes with models, smaller axioms and score.
+\end{itemize}
+Of the 138 candidates, 56 are identified, 3 fail ``works'', 2 have no verification record, and 77 enter N1. N1's top
+10 shares no member with T5a's: seven come from X4, and the first three from earlier runs that did not select for
+off-diagonal laws. Lean certificates check the smallest model of each. A live version of the ranking is kept in the
+repository's README. \pending{Literature checks of N1's top ten.}
 
 \section{Planned experiments}
 \pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the
 other finite countermodels, the models on $\mathbb{Z}$, the term model, and the main implications (the S10 model and
-the candidate models are done).} \pending{A ranking aimed at novelty rather than at resemblance to named theories
-(the preregistered ranking prefers a convergent presentation and a duality, the features of named theories).}
+the candidate models are done).} \pending{A search that steers away from the new attractor, where a translation
+collapses a family onto $x\op x$.}
 
 \section{Limitations}
 \begin{itemize}
