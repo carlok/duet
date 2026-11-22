@@ -121,12 +121,11 @@ def write(top):
         if hd: L += [f"- Hidden definition (`soup.hidden`, terms of size ≤ 5 on {hd['models']} models of sizes 2–4, then E): "
                      + ('**definitional**: ' if hd['definitional'] else 'not definitional. ')
                      + ('; '.join(f"{m['op']} = `{m['term']}` ({m['e']})" for m in hd['matches']) or 'no term agrees on all models.')]
-        if sp: L += ['- Split (`soup.split`): ' + {True: f"**split**: E derives every law from {sp.get('one_op_consequences')} "
-                                                     "one-operation consequences, so the theory is a ·-theory plus a "
-                                                     "∘-theory and not a fusion.",
-                                               False: f"not split (certificate: the · table of one model and the ∘ table "
-                                                      f"of another, both on {sp['witness']['n']} elements, fail a law).",
-                                               None: f"unknown ({sp.get('why')})."}[sp['split']]]
+        if sp: L += ['- Split (`soup.split`): ' + (
+            f"**split**: E derives every law from {sp.get('one_op_consequences')} one-operation consequences, so the "
+            "theory is a ·-theory plus a ∘-theory and not a fusion." if sp['split'] is True else
+            f"not split (certificate: the · table of one model and the ∘ table of another, both on "
+            f"{sp['witness']['n']} elements, fail a law)." if sp['split'] is False else f"unknown ({sp.get('why')}).")]
         rl = extra.get('relabel', {}).get(key)
         if rl: L += ['- Named theories up to the 8 relabellings (`soup.relabel`, E proofs): implies '
                      + (', '.join(rl['implies']) or 'none') + '; fragment of ' + (', '.join(rl['fragment_of']) or 'none')
