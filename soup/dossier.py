@@ -82,6 +82,12 @@ def rank():
 def write(top):
     rk = json.load(open(data('check', 'ranking.json')))
     profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
+    extra = {}
+    for kind in ('hidden', 'split'):
+        f = data('check', f'{kind}_candidates.json')
+        if f.exists(): extra[kind] = {str(x['key']): x for x in json.load(open(f))}
+    f = data('check', 'literature.json')                     # key -> markdown, written by hand after each search
+    if f.exists(): extra['literature'] = json.load(open(f))
     d = ensure('dossiers')
     for i, r in enumerate(rk['candidates'][:top], 1):
         p = profs.get(json.dumps(sorted(r['T'])), {})
@@ -109,8 +115,24 @@ def write(top):
             if sm:
                 L += ['', f"Smallest non-degenerate model ({sm['n']} elements), rows x, columns y:", '', '```',
                       '·  ' + '  '.join(' '.join(map(str, row)) for row in sm['F']), '∘  ' + '  '.join(' '.join(map(str, row)) for row in sm['G']), '```']
-        L += ['', '## Literature check', '', 'To do: search for the laws and for the structure of the models.', '',
-              '## Lean', '', 'To do: certificates for the finite facts (`soup.lean_cert`).', '']
+        key = str(r['key'])
+        hd, sp = extra.get('hidden', {}).get(key), extra.get('split', {}).get(key)
+        L += ['', '## Equivalence checks beyond the standard list', '']
+        if hd: L += [f"- Hidden definition (`soup.hidden`, terms of size ≤ 5 on {hd['models']} models of sizes 2–4, then E): "
+                     + ('**definitional**: ' if hd['definitional'] else 'not definitional. ')
+                     + ('; '.join(f"{m['op']} = `{m['term']}` ({m['e']})" for m in hd['matches']) or 'no term agrees on all models.')]
+        if sp: L += ['- Split (`soup.split`): ' + {True: f"**split**: E derives every law from {sp.get('one_op_consequences')} "
+                                                     "one-operation consequences, so the theory is a ·-theory plus a "
+                                                     "∘-theory and not a fusion.",
+                                               False: f"not split (certificate: the · table of one model and the ∘ table "
+                                                      f"of another, both on {sp['witness']['n']} elements, fail a law).",
+                                               None: f"unknown ({sp.get('why')})."}[sp['split']]]
+        lit = extra.get('literature', {}).get(key)
+        L += ['', '## Literature check', '', lit or 'Not done for this candidate.', '', '## Lean', '']
+        mj = data('check', f'cand{i}_model.json')               # written by `dossier lean-json` for lean_cert
+        L += [f"`lean/Duet/Cand{i}.lean`: the smallest non-degenerate model above satisfies the laws, and the theory does "
+              f"not imply {', '.join(json.load(open(mj))['claims'])}. `decide` only; checked by `lean/check.sh` with "
+              "the axiom audit (REPORT.md)." if mj.exists() else 'No certificate yet.', '']
         (d / f'{name}.md').write_text('\n'.join(L))
         print('wrote', d / f'{name}.md')
 
