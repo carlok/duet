@@ -49,7 +49,7 @@ by the whole theory but by no single law of it.
 - Matrix (2.5 min on 11 cores): `podman run --rm -v "$PWD/work:/data" soup bash run.sh matrix`;
   `cd work && shasum -a 256 -c ../tests/matrix.sha256` must say OK for all three files.
 - Streaming search: `podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 3600`
-  (options `--searchers 3 --verifiers 8 --arm prior|noprior --seed0 101 --qmax 1500 --run <id>`;
+  (options `--searchers 3 --verifiers 8 --arm prior|noprior|fusion --seed0 101 --qmax 1500 --run <id>`;
   env `BUDGET`, `SEARCHERS`, `VERIFIERS`, `ARM`, `SEED0`, `RUN_ID`).
 - Other scripts: `podman run --rm -v "$PWD/work:/data" soup python3 -m soup.calib` (env `CALIB_NULL`);
   same for `soup.fragments`, `soup.report`.
@@ -64,7 +64,8 @@ by the whole theory but by no single law of it.
 | `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
 | `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
-| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `LEGACY` (first session) |
+| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `LEGACY` (first session) |
+| `offdiag.py` | X4: off-diagonal gain (emergent laws that no single law gives even with all one-variable consequences; certified by corpus models), `lat2()` (laws of the 2-element lattice), `pools()` (restrictive one-operation laws for the fusion proposals) |
 | `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
 | `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
 | `calib.py`, `calib_report.py` | T3: one child process per theory, resumable; Fisher test and percentiles |
@@ -81,7 +82,7 @@ by the whole theory but by no single law of it.
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
-| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones |
+| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals) |
 | `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus |
 | `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md` |
 
@@ -172,6 +173,17 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - Coverage (`notes/coverage.py`, 22 Nov 10:14 UTC): 4,222 verified and 45M cheap evaluations in all runs, against
     2.5e9 law pairs and 1.8e26 law sets of ≤ 6 laws. The prior samples the most-studied corner (lattice-like,
     symmetric), so rediscovery there is expected and "no source found" is weak evidence. Frame every result that way.
+  - Diagonal attractor (`notes/diagonal.py`): 97% of scored theories (T4–X3) prove a one-variable emergent law, and none
+    proves emergent associativity. The old score rewards what a fusion forces on x·x. X4 (arm `fusion`, V5) is the
+    response (`notes/strategies.md`); the user's aim is the "jazz" kind of jump, two traditions fused by a bridge.
+  - X3 (V4, 22 Nov 08:33–11:08): stopped by its memory rule at 91% of the budget (deviation 5).
+    - 970 verified, 31.6% fragments.
+    - V4 screened 47 split and 36 division. The split scan finds 0 split among the 570 non-fragments.
+    - The automatic checks identify 5 of the 19 top candidates (26%; X2 50%).
+  - `31d6d970` (X3, rank 3): with associativity of ·, exactly a rectangular band with ∘ its transpose, which is
+    term-equivalent to the rectangular skew lattices (Leech 2020, Prop. 1.3.14; E both ways). Associativity fails in its
+    3-element model. No source was found for the full theory.
+  - Candidates: 118, ranked. Lean: 15 modules, audit 162 declarations.
 
 ## Pitfalls already paid for
 

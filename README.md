@@ -101,11 +101,25 @@ finite countermodel, or an infinite one with a checkable construction settles it
 Code: MIT (`LICENSE`). Text, paper and tables (`REPORT.md`, `PREREGISTRATION.md`, `tex/`): CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/).
 
-## Status (22 Nov 2026, morning)
+## Status (22 Nov 2026, midday)
 
-Running: **X3** (`soup-x3`, 08:33 to about 11:24 UTC; PREREGISTRATION.md, X3), the search with verifier V4, with
-nothing heavy alongside. `main` is pushed to the private origin at each milestone (the user's choice, 22 Nov
-morning).
+Next: **X4** (PREREGISTRATION.md, X4), about 14:00 UTC, 2.5 h. A new arm `fusion` with verifier V5:
+- **Score:** it counts only emergent laws that don't come from the diagonal. 97% of all scored theories so far
+  prove a one-variable emergent law such as `x·x = x∘x`, and none proves emergent associativity (`notes/diagonal.py`).
+- **The lattice corner:** theories valid in the 2-element lattice are skipped.
+- **Jumps:** a quarter of the proposals fuse a law in · alone with a law in ∘ alone, through a bridge.
+
+The strategies behind it are in `notes/strategies.md`. `main` is pushed to the private origin at each milestone (the
+user's choice, 22 Nov morning).
+
+Done since the morning:
+- **X3** (V4): stopped by its memory rule at 91% of the budget (deviation 5).
+  - 970 verified, 31.6% fragments.
+  - V4 screened 47 split theories and 36 divisions, and the split scan finds 0 split among the non-fragments.
+  - Only 5 of X3's 19 top candidates are identified automatically (26%, against 50% for X2).
+- **`31d6d970`** (X3, rank 3): with associativity it is exactly the rectangular skew lattices (Leech 2020; E both ways).
+  The full theory is not associative and has no source found. It is a candidate.
+- **Coverage:** all runs together verified 4,222 theories, against 1.8 × 10²⁶ law sets (`notes/coverage.py`).
 
 Done this morning:
 - **X2**: 1,015 verified, 31% fragments, no crashes. Its rank-3 candidate is the variety of rank 10 found again.
@@ -114,13 +128,14 @@ Done this morning:
 - **`10c98c4b`**: its core B is prior art (Dehornoy 2015; Bonatto et al.). The full theory has no source; its small
   models are not Yang–Baxter solutions.
 
-Today's plan (until about 18:30 UTC), all preregistered (PREREGISTRATION.md, R1 and X3):
-1. X2's follow-up checks.
+Today's plan (until about 18:30 UTC), all preregistered (PREREGISTRATION.md, R1, X3, X4):
+1. X2's follow-up checks (done).
 2. **R1**: which of 13 catalogued known structures the search rediscovered (`soup/catalogue.py`, `soup/rediscover.py`),
-   and a ledger of every identification (`notes/rediscovery.md`).
+   and a ledger of every identification (`notes/rediscovery.md`) (done).
 3. **X3**: a 3 h run with verifier V4, which scores split theories and divisions in disguise as 0, so that the
-   search spends its time on theories not yet identified.
-4. General Lean proofs for the Δ-bijective core (`lean/Duet/Delta.lean`), and the spectrum of `10c98c4b`.
+   search spends its time on theories not yet identified (done).
+4. General Lean proofs for the Δ-bijective core (`lean/Duet/Delta.lean`) (done).
+5. **X4**, the fusion arm, and its follow-up checks. The spectrum of `10c98c4b` only if time is left.
 
 Finished overnight (details and commands in `REPORT.md`, newest first):
 - **T4** (preregistered, 4 h per arm at tag `t4-prereg`): H1 supported, 33% against 8% fragments.

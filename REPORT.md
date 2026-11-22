@@ -2,6 +2,79 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X3: exploratory run with verifier V4 (22 Nov 2026, 08:33–11:08 UTC; descriptive)
+
+Preregistered as exploratory (PREREGISTRATION.md, X3). It is X2 with verifier V4: split theories and divisions in
+disguise score 0 in stage a. Seeds 601–604, arm `prior`, 4 searchers and 4 verifiers, its own data directory
+(starting corpus 4,252 found structures). **Stopped by its memory rule after 9,304 of 10,200 s** (deviation 5): 975 MB
+available at 11:08:32, with the supervisor's PSS total up from 7.1 to 8.3 GB in the last 22 minutes.
+
+Commands:
+- run: `podman run -d --name soup-x3 -v "$PWD/work:/data" -e SOUP_DATA=/data/x3 -e SOUP_VERIFIER=V4 soup python3 -m
+  soup.stream.supervisor --arm prior --searchers 4 --verifiers 4 --seed0 601 --budget 10200 --run x3`;
+- fragments: `-e SOUP_DATA=/data/x3 -e FRAG_JOBS=3 soup python3 -m soup.fragments`;
+- statistics: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - x3 < notes/runstats.py` (output
+  `notes/runstats_x2_x3.out`), and `notes/diagonal.py x3`.
+
+| | X3 (V4) | X2 (V3) |
+| --- | --- | --- |
+| verified theories | 970 (375 per hour) | 1,015 (357 per hour) |
+| screened by V4 (score 0) | 83: split 47, division 36 | not screened |
+| with an emergent law | 833 | 948 |
+| fragments of a named theory | 263 (31.6%): lattice 262, skew lattice 17, absorption pair 6, idempotent left quasigroup 1 | 294 (31.0%) |
+| non-fragments | 570 | 654 |
+| claims / proved | 3,002 / 2,664 | 3,425 / 3,022 |
+| refuted by E saturation | 175 (58 uncertified) | 239 (80 uncertified) |
+| refuted by finite models (stages a and c) | 89 | 86 |
+| refuted by Vampire FMB | 15 (sizes 6 ×2, 7 ×9, 8 ×4; FMB ran on 75 claims) | 17 |
+| unknown / open | 56 / 3 | 55 / 6 |
+| scored theories proving a one-variable emergent law | 810 of 833 (97%) | (97% over T4–X3, `notes/diagonal_pre_x4.out`) |
+
+The V4 screen took a median of 0.0 s; the slowest took 434 s.
+
+**Preregistered descriptive outcomes:**
+- **Throughput:** 375 against 357 verified per hour. The early lead (about 840 per hour in the first 22 minutes,
+  when the screens removed many theories cheaply) did not last.
+- **Fragment share:** unchanged, 31.6% against 31.0%. The screens remove disguises, not lattice fragments.
+- **V4 marks:** 47 split and 36 division (8.6%). Consistency check: R1 on X3 finds exactly 36 theories that imply a
+  one-sided quasigroup pair, the 36 that V4 marked as divisions.
+- **Split scan of X3's non-fragments** (`-e SOUP_DATA=/data/x3 soup python3 -m soup.split --fragments 1 --jobs 4`, run
+  last): 570 non-fragments, **0 split**, 440 not split (finite certificate), 130 unknown. X2 had 33 split of 654.
+- **Identified share of the top-20 non-fragments** (`rediscover --summary --candidates`,
+  `work/check/rediscover_summary.txt`): **X3 5 of 19 (26%)**, all absorption-type subvarieties (`soup.relabel`). X2 had
+  9 of 18 (50%), and X1 11 of 19 (58%). With the split theories and divisions screened out, fewer of the top
+  candidates are things the automatic checks recognise.
+- **The top 20 in the ranking.** X3's top 20 non-fragments add 19 candidates (118 in all; one was already listed up to
+  duality). In the T5a ranking they land at ranks 3, 12, 31, 38, 41, … 118 (`notes/cand_checks.py x3`, output
+  `notes/cand_checks_x3.out`).
+  - `soup.split`: 0 split (16 certificates of non-split, 3 unknown).
+  - `soup.hidden`: 0 definitional.
+  - `soup.relabel`: 5 imply an absorption pair, none implies a quasigroup pair, and none is a fragment of or
+    equivalent to a named theory.
+
+**R1 on X3** (`soup.rediscover --sources x3 --jobs 6`, 6 min, 2,259 E jobs, 51 unknown). The catalogue score is
+unchanged: 7 of 13 entries rediscovered (7 of 12 without the post hoc entry).
+- Exact equivalents to the absorption pair: 9, more than any earlier run (X2 5, T4 prior 7).
+- Lattice: 262 fragments, no basis. Weakly associative lattices: 122 fragments.
+
+**Rank 3, `31d6d970` = {x·(x∘y) = x, (x∘y)·y = y, (x·x)·(y·x) = x, (x·y)·(x·x) = x}** (`notes/31d6d970_checks.py`,
+output `.out`; literature check by a web-only agent, key claims rechecked here; `work/check/literature.json`).
+- **Structure (E).** Both operations are idempotent, and x·(y·x) = x = (x·y)·x holds. Associativity of either
+  operation, commutativity and the rectangular-band law all fail in the 3-element model.
+- **The associative case is known.** With (x·y)·z = x·(y·z) added, E proves that · is a rectangular band and ∘ its
+  transpose, and the converse holds. Rectangular bands are term-equivalent to the rectangular skew lattices (Leech
+  2020, Prop. 1.3.14), and laws 1–2 are Leech's absorption identities.
+- **Without associativity,** ∘ is a connector: x·(x∘y) = x, (x∘y)·y = y. Zelinka's anticommutative conservative
+  groupoids (1994), with ∘ their transpose, are models. So is the 3-element model, where ∘ is not the transpose.
+- **No source was found for the full theory.** Two sources were not read. Candidate only. Lean: `Cand13`
+  (3-element model, 6 non-implications); `lean/check.sh` passes 15 modules, audit 162 declarations.
+
+Caveats:
+- X3 is exploratory, and the comparisons with X2 are descriptive.
+- X3 stopped at 91% of its budget.
+- V4 changes which theories reach the top, so the identified share is not a measure of the search alone: the
+  screened theories are identified too, at score 0.
+
 ## Coverage: how much of the space the searches touched (22 Nov 2026, 10:14 UTC; X3 still running)
 
 `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - < notes/coverage.py` (output: `notes/coverage.out`).
