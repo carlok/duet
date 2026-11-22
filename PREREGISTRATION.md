@@ -38,6 +38,10 @@ check, no R1 result on X4 and no dedupe result has been read.
    are `10c98c4b` (its core is Δ-bijectivity), `3e068fa6` (its finite models are Δ-bijective pairs) and `31d6d970`
    (its associative case is the rectangular skew lattices). Unrelated first. The list is fixed now; later ledger
    rows do not change N1.
+   *Clarification (22 Nov 2026, 18:15 UTC, after `soup.dedupe` and before N1 is computed).* A partial
+   identification belongs to the variety, so it applies to every member of the candidate's dedupe class. `soup.dedupe`
+   puts `2dc27508`, `69dfbd8e` and `31d6d970` in one class (E both ways under rev∘; equal model counts on 3 and 4
+   elements). Its representative, `2dc27508` (highest score), therefore carries `31d6d970`'s flag.
 4. **More sizes with non-degenerate models**, from the profile spectrum.
 5. **Smaller axioms**: the sum of the orders of the laws.
 6. **Verified score**, higher first, as the last tie-break. Scores from different verifiers are not comparable, so

@@ -70,17 +70,23 @@ def main():
     classical = np.array([not re.match(r'(rand|all2)', name) for name, _ in PROBES])
 
     score = {c['key']: c.get('score') or 0 for c in cands}
-    rep_of = {}
+    rep_of, related_of = {}, {}
     for cls in dedupe.get('classes', []):
         rep = max(cls, key=lambda k: score.get(k, 0))
         for k in cls:
             if k != rep: rep_of[k] = rep
+        # a partial identification belongs to the variety: every member of the class carries it (N1, clarification)
+        hit = next(((k, _match(RELATED, k)) for k in cls if _match(RELATED, k)), None)
+        if hit:
+            for k in cls:
+                related_of[k] = hit[1] if k == hit[0] else f'{hit[1]} (same variety as {hit[0][:8]})'
 
     rows = []
     for c in cands:
         key, src = c['key'], c['source']
         row = {'key': key, 'source': src, 'laws': c['laws'], 'T': c['T'], 'score': c.get('score'),
-               't5a_rank': t5a_rank.get(key), 'known': [], 'flags': [], 'related': _match(RELATED, key)}
+               't5a_rank': t5a_rank.get(key), 'known': [], 'flags': [],
+               'related': related_of.get(key) or _match(RELATED, key)}
         rpath = _src_path(src, 'results', f'{key}.json')
         res = json.load(open(rpath)) if src != 'pilot' and os.path.exists(rpath) else None
         prof = profs.get(json.dumps(sorted(c['T'])), {})
