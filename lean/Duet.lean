@@ -3,7 +3,17 @@ import Duet.Cand10
 import Duet.Cand11
 import Duet.Cand12
 import Duet.Cand13
+import Duet.Cand14
+import Duet.Cand15
+import Duet.Cand16
+import Duet.Cand17
+import Duet.Cand18
+import Duet.Cand19
 import Duet.Cand2
+import Duet.Cand20
+import Duet.Cand21
+import Duet.Cand22
+import Duet.Cand23
 import Duet.Cand3
 import Duet.Cand4
 import Duet.Cand5

@@ -1,0 +1,67 @@
+== x4: 20 candidates
+94d69dd2 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · x) = y ∘ y & (x ∘ y) · x = y ∘ x & (x · x) · x = (y ∘ x) ∘ x
+3b3b1176 works=True connected=- unknown=split None classical=0 
+7ec7f8f5 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ x) = x ∘ y & x · (y · x) = (x · x) ∘ z & (x · y) · z = (z ∘ x) ∘ x
+700b8f93 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = y · y & x · (y ∘ x) = x ∘ y & (x · y) · x = z · (z ∘ y)
+f79a5097 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ x) = x & x ∘ ((x ∘ y) · y) = x & x ∘ ((x · y) ∘ x) = x & x · ((y ∘ y) ∘ (y · x)) = x
+c73d174c works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · x) = y ∘ y & (x ∘ y) · x = y ∘ x & x · x = (x · (y · y)) ∘ x
+5e83bbfa works=True connected=- unknown=split None classical=0 
+fff58b83 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · x = y ∘ y & x · (y ∘ z) = x ∘ (z · y) & (x · y) ∘ y = (x ∘ z) ∘ x & x ∘ (y · (y ∘ x)) = y ∘ y
+204aea15 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · (y · x) = y ∘ y & (x · y) · z = y ∘ (x ∘ z) & (x · y) · x = (z ∘ y) ∘ y & (x ∘ y) · z = (y · x) ∘ z
+7c476118 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · ((y ∘ x) ∘ z) = x & (x · y) ∘ (x ∘ y) = x
+2c9e9108 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · z) = x ∘ x & (x ∘ y) · x = x · (x · z) & x · (x ∘ y) = (x ∘ x) ∘ z & (x · y) · z = y ∘ (x ∘ z) & (x ∘ y) · z = (y · x) ∘ z
+97a7dfcf works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = y · y & x · (y ∘ x) = x ∘ y & (x · y) · z = y ∘ (z · y)
+742cc445 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ (x ∘ z)) = x & x ∘ ((x ∘ y) · (z ∘ x)) = x
+a8963027 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = x & x ∘ (y ∘ x) = x & x ∘ (y · (x · (x ∘ z))) = x
+3301abf0 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · (y · x) = y ∘ y & (x · y) ∘ y = x ∘ (x · x) & (x · y) · z = y ∘ (x ∘ z) & (x ∘ y) · z = (y · x) ∘ z
+288d3f1b works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · (y ∘ z) = x ∘ (z · y) & x · (y · z) = (x ∘ z) ∘ y & (x ∘ y) ∘ x = (z ∘ w) ∘ w & (x · y) ∘ (y · z) = x ∘ x
+6c306a36 works=True connected=- unknown=split None classical=0 
+f1f50575 works=True connected=- unknown=R1 subvariety? dimonoid; R1 subvariety? dimonoid; R1 subvariety? dimonoid; R1 subvariety? dimonoid; R1 subvariety? doppelsemigroup; R1 subvariety? doppelsemigroup; split not run classical=0 
+33eca86a works=True connected=- unknown=split not run classical=0 
+d82738a2 works=True connected=- unknown=split not run classical=0 
+x4: 14 of 20 disconnected (works, unconnected, no classical model)
+== x3: 19 candidates
+5c6da20c works=True connected=R1 subvariety absorption pair (rev· rev∘); relabel implies absorption pair (rev· rev∘) unknown=- classical=0 
+b1e29acb works=True connected=- unknown=split None classical=0 
+31d6d970 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ y) = x & (x ∘ y) · y = y & (x · x) · (y · x) = x & (x · y) · (x · x) = x
+538b3e13 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · (x ∘ x)) = x & ((x · x) ∘ y) ∘ x = x & x ∘ ((x · (y ∘ x)) · x) = x & (x ∘ ((x · y) ∘ x)) · x = x
+fab766d9 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = x & x ∘ (x ∘ x) = x & (x ∘ x) ∘ x = x & x · (y ∘ (x ∘ z)) = y · x
+ff637819 works=True connected=R1 subvariety right absorption pair (rev· rev∘); relabel implies right absorption pair (rev· rev∘) unknown=- classical=0 
+f7565a8d works=True connected=R1 subvariety absorption pair (rev· rev∘); relabel implies absorption pair (rev· rev∘) unknown=- classical=0 
+bab3fd3c works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · (x ∘ x)) = x & ((x · x) ∘ y) ∘ x = x & x ∘ ((y · x) ∘ (x · y)) = x & ((x ∘ y) · (y ∘ x)) · y = y
+57f39f2c works=True connected=- unknown=- classical=1 e.g. F4[3,2,0]|F4[2,3,0] 
+c12f6e49 works=True connected=- unknown=split None classical=0 
+154abc19 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ y) = y ∘ x & x ∘ (y · ((z · w) · x)) = x
+07ac49a5 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = x & (x ∘ y) · z = x · (w · z)
+bf347d94 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ x) = y & x ∘ (((y · z) · x) ∘ x) = x
+f7397dad works=False connected=R1 subvariety right absorption pair (rev∘); relabel implies right absorption pair (rev∘) unknown=- classical=0 
+be7c47f1 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ y) = x · y & (x · (y · z)) · z = z
+0a3b8e48 works=True connected=- unknown=split None classical=0 
+869f3702 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = y · y & x ∘ x = y ∘ y & x · (x · y) = y ∘ (y · z) & x · (x ∘ y) = z ∘ (z ∘ x) & (x · y) · y = (z · x) ∘ x & (x ∘ y) · y = (y ∘ z) ∘ z
+1f92a593 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ x) = x · y & (((x · y) · z) · z) · z = z
+e32bd449 works=True connected=R1 subvariety right absorption pair (rev∘); relabel implies right absorption pair (rev∘) unknown=- classical=0 
+x3: 10 of 19 disconnected (works, unconnected, no classical model)

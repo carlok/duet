@@ -79,7 +79,15 @@ def rank():
               f"{r['nondeg_sizes']} | score {r['score']} | {' & '.join(r['laws'])[:120]}")
 
 
-def write(top):
+def _ordered(rk, order):
+    """The ranking rows in T5a order, or in N1 order (novelty_ranking.json), with a file-name prefix."""
+    if order != 'n1': return rk['candidates'], ''
+    by_key = {str(r['key']): r for r in rk['candidates']}
+    n1 = json.load(open(data('check', 'novelty_ranking.json')))['ranked']
+    return [by_key[str(r['key'])] for r in n1 if str(r['key']) in by_key], 'n1-'
+
+
+def write(top, order='t5a'):
     rk = json.load(open(data('check', 'ranking.json')))
     profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
     extra = {}
@@ -89,10 +97,12 @@ def write(top):
     f = data('check', 'literature.json')                     # key -> markdown, written by hand after each search
     if f.exists(): extra['literature'] = json.load(open(f))
     d = ensure('dossiers')
-    for i, r in enumerate(rk['candidates'][:top], 1):
+    rows, tag = _ordered(rk, order)
+    for i, r in enumerate(rows[:top], 1):
         p = profs.get(json.dumps(sorted(r['T'])), {})
-        name = f"{i:02d}-{str(r['key'])[:8]}"
-        L = [f"# Candidate {i}: `{str(r['key'])[:8]}` ({r['source']})", '',
+        name = f"{tag}{i:02d}-{str(r['key'])[:8]}"
+        label = f'N1 rank {i}' if tag else str(i)
+        L = [f"# Candidate {label}: `{str(r['key'])[:8]}` ({r['source']})", '',
              'Status: **candidate**, not a result (rule 4). The literature check and the equivalence checks are below.',
              '', '## Laws', '', *[f'- `{s}`' for s in r['laws']], '',
              f"Duality: {', '.join(r['dualities']) or (p.get('duality') and ', '.join(p['duality'])) or 'none'}. "
@@ -146,7 +156,7 @@ def write(top):
 NONDEG = ['x · y = x', 'x · y = y', 'x ∘ y = x', 'x ∘ y = y', 'x · y = x ∘ y', 'x · y = y ∘ x']
 
 
-def lean_json(top):
+def lean_json(top, order="t5a"):
     """For the top candidates: the smallest non-degenerate model with the non-degeneracy laws it refutes (projections,
     equal or opposite operations), checked by check_offline.check_finite (two evaluators), as a model JSON for
     soup.lean_cert -> check/cand<i>_model.json."""
@@ -157,7 +167,7 @@ def lean_json(top):
     profs = {json.dumps(sorted(p['T'])): p for p in json.load(open(data('check', 'profile_candidates.json')))}
     have = {str(json.load(open(f))['key']): f for f in data('check').glob('cand*_model.json')}
     nxt = max([int(f.stem.split('_')[0][4:]) for f in have.values()], default=0) + 1
-    for r in rk['candidates'][:top]:
+    for r in _ordered(rk, order)[0][:top]:
         if str(r['key']) in have: print(r['key'], 'has', have[str(r['key'])].name); continue
         i, nxt = nxt, nxt + 1                                 # numbers stay with their theory when the ranking moves
         sm = profs[json.dumps(sorted(r['T']))].get('smallest_nondeg')
@@ -176,11 +186,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('cmd', choices=['candidates', 'rank', 'write', 'lean-json'])
     ap.add_argument('--sources', default='t4-prior,t4-noprior,.'); ap.add_argument('--top', type=int, default=20)
+    ap.add_argument('--order', choices=['t5a', 'n1'], default='t5a', help='write and lean-json: T5a ranking or N1')
     a = ap.parse_args()
     if a.cmd == 'candidates': candidates(a.sources.split(','), a.top)
     elif a.cmd == 'rank': rank()
-    elif a.cmd == 'lean-json': lean_json(a.top if a.top != 20 else 5)
-    else: write(a.top if a.top != 20 else 5)
+    elif a.cmd == 'lean-json': lean_json(a.top if a.top != 20 else 5, a.order)
+    else: write(a.top if a.top != 20 else 5, a.order)
 
 
 if __name__ == '__main__':
