@@ -143,9 +143,9 @@ If $A$ has $n$ elements and $f$ is injective, the $n$ outputs $f(a)$ are all dif
 outputs inside a set of $n$ elements, and every element is an output.
 \end{proof}
 
-This small fact comes back later. Some laws say ``a certain map is injective''. In a finite structure that
-already makes it bijective, but in an infinite one it does not. So a statement can be true in every \emph{finite}
-structure of a kind and still not follow from the laws.
+This small fact comes back later. Some laws say ``a certain map is injective''. On a finite set that already makes
+it bijective, but on an infinite one it does not. So a statement can be true in every \emph{finite} example and still
+not follow from the laws.
 
 \inlineexercises{1}
 
@@ -153,7 +153,13 @@ structure of a kind and still not follow from the laws.
 
 \begin{definition}
 A \emph{binary operation} on a set $A$ is a function $A\times A\to A$. We write it in the middle: $x\op y$ instead of
-${\op}(x,y)$. A set with one binary operation is called a \emph{magma}.
+${\op}(x,y)$.
+\end{definition}
+
+\begin{definition}
+A \emph{magma} is a set $A$ together with one binary operation $\op$ on it, written $(A,\op)$. Nothing else is
+required: the operation need not be associative, commutative, or anything else. More generally, a \emph{structure} is
+a set with one or more operations on it. Until Section~\ref{sec:two} every structure is a magma.
 \end{definition}
 
 On a finite set we can write the operation as a table, its \emph{Cayley table}: the entry in row $x$ and column $y$
@@ -246,12 +252,14 @@ Does $\{x\op x=x\}$ imply $x\op y=y\op x$? No. The left projection on $\{0,1\}$ 
 \end{example}
 
 Birkhoff's completeness theorem (1935) says these are the only two cases: if $T\models e$, then an equational proof
-exists. The class of all models of a theory is called a \emph{variety}. Lattices, rings, and groups (with the
-identity and the inverse written as operations of their own) are all varieties.
+exists. The class of all models of a theory is called a \emph{variety}. Lattices and rings (Section~\ref{sec:two})
+are varieties. So are groups: an associative operation with an identity element and an inverse for every element,
+where the identity and the inverse are written as operations of their own.
 
 The trouble is that neither side is guaranteed to finish. A proof may be very long. A countermodel may need many
 elements, and sometimes every countermodel is infinite. In general no algorithm decides every question of this
-kind; closely related problems, like the word problem for semigroups, are undecidable. Computers help on both
+kind; closely related problems, like the word problem for semigroups (magmas whose operation is associative), are
+undecidable. Computers help on both
 sides:
 \begin{itemize}
 \item \emph{finite-model finders} (Mace4, Vampire's finite model builder) search for countermodels;
@@ -266,12 +274,13 @@ renaming), with proofs and countermodels checked in the proof assistant Lean~\ci
 
 \inlineexercises{4}
 
-\section{Two operations}
+\section{Two operations}\label{sec:two}
 
 From now on a structure is a set with \emph{two} binary operations, written $x\op y$ and $x\cop y$. Laws may use
 both. Many of the most studied structures in algebra are of this kind.
 \begin{itemize}
-\item \textbf{Lattices.} $\max$ and $\min$ on a chain such as $\{0,1,2\}$, or union and intersection of sets. The
+\item \textbf{Lattices.} $\max$ and $\min$ on a \emph{chain} (an ordered set in which any two elements are
+  comparable, such as $\{0,1,2\}$), or union and intersection of sets. The
   laws: both operations associative, commutative and idempotent, plus the two \emph{absorption laws}
   $x\op(x\cop y)=x$ and $x\cop(x\op y)=x$.
 \item \textbf{Rings.} $+$ and $\times$ on $\Z$, linked by distributivity $x\times(y+z)=(x\times y)+(x\times z)$. That
@@ -331,7 +340,8 @@ A search that rewards emergent laws will find every cheap way to produce them. T
 way. Four kinds of theory look like fusions and are not.
 \begin{itemize}
 \item \textbf{Collapse.} If a theory forces an operation to be a projection or a constant, thousands of laws become
-  true at once. The project requires a model in which both operations are essentially binary and different.
+  true at once. The project requires a model in which both operations are non-degenerate (neither a projection nor
+  a constant) and different from each other.
 \item \textbf{Definitions.} If one law says $x\cop y=y\op x$, or any other way of writing $\cop$ as a term in $\op$,
   then $\cop$ is not a second operation at all\exnote{ (Exercise~\ref{ex:defsyn})}. Such theories are filtered out.
 \item \textbf{Split theories.} Some theories are really a theory of $\op$ plus a separate theory of $\cop$; their
@@ -359,7 +369,7 @@ program gives $4{,}694$ laws, the ETP's count, as a check.
 
 \paragraph{A cheap guess at implication.} Proving $T\models e$ is expensive, so the search first guesses. It keeps a
 fixed collection of $12{,}509$ small structures on 2 to 6 elements: all pairs of operations on 2 elements, affine
-operations modulo $n$, lattices, group-derived operations, random tables. It records, once, which of the $71{,}369$
+operations modulo $n$ (such as $x\op y=2x+y\bmod 5$), lattices, operations built from small groups, random tables. It records, once, which of the $71{,}369$
 laws hold in each of them. To guess what $T$ implies, it looks at the structures that satisfy $T$ and collects the
 laws true in all of them. \either{Exercise~\ref{ex:corpus} shows why this is only a guess: a law can hold in every
 structure you happen to have and still not follow.}{This is only a guess: a law can hold in every structure you
@@ -375,7 +385,8 @@ search from collapsing onto one idea. One variant rewards theories with a dualit
 
 \paragraph{Verification.} Every theory that wins a cell goes to a queue of verifiers. They work in stages.
 \begin{enumerate}
-\item Search for small models (2 to 5 elements), check that the laws are independent, and look for countermodels
+\item Search for small models (2 to 5 elements), check that the laws are independent (none follows from the
+  others), and look for countermodels
   (up to 6 elements) to each guessed emergent law.
 \item Run the prover E with a time limit (and the solver Z3). A proof confirms the law. A saturation refutes it, and
   is then rechecked by an independent program. Vampire's finite model builder tries the claims E leaves open.
@@ -530,7 +541,8 @@ of the search's cheap guesses.
 \solution{lat3}
 Six. A lattice on three elements must be a chain, and each of the $3!=6$ orders of $\{0,1,2\}$ as a chain gives
 one pair $(\text{join},\text{meet})$. The swapped pair is the reverse chain, which is already among the six. (By
-brute force: 9 of the $19{,}683$ operations are semilattices, and 6 pairs of them satisfy the absorption laws.)
+brute force: 9 of the $19{,}683$ operations are semilattices, meaning associative, commutative and idempotent, and 6
+pairs of them satisfy the absorption laws.)
 
 \solution{dual}
 Swap: $x\cop(x\op y)=x$. Opposite of $\op$: $(x\cop y)\op x=x$. Opposite of $\cop$: $x\op(y\cop x)=x$. Both
@@ -546,7 +558,7 @@ $1\op1=0\neq1$.
 \solution{defsyn}
 $(x\cop y)\cop z=z\op(y\op x)$ and $x\cop(y\cop z)=(z\op y)\op x$, which are equal by associativity of $\op$. Neither law
 alone suffices: the definition alone allows a non-associative $\op$, and associativity alone says nothing about
-$\cop$. (By brute force on 3 elements, every associative $\op$ has an associative transpose.) It is not interesting
+$\cop$. (By brute force on 3 elements, the opposite of every associative $\op$ is associative.) It is not interesting
 because $\cop$ is defined by $\op$: the ``theory of two operations'' is a theory of one operation, written twice.
 
 \solution{rb}
