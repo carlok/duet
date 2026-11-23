@@ -147,7 +147,8 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (S2, S3, S4, S8). S5 and S6 need 13 elements; S1 and S7 are infinite-only.
   - Round 2 (night): Vampire FMB found a 10-element model of S10 (x·x = x fails at one element; checked by
     law_vector and direct evaluation; `tests/test_round2.py`). It refutes S10's three claims and S12's x·x = x and
-    x∘x = x. Only S12 ⇒ x·x = x∘x is still open. S12 has no model with x·x ≠ x on 2–6 elements.
+    x∘x = x. Only S12 ⇒ x·x = x∘x is still open. On 23 Nov, Vampire FMB, casc and casc_sat and Twee ran 7,200 s each:
+    no proof, and no model on ≤ 6 elements (size 7 unfinished). S12 has no model with x·x ≠ x on 2–6 elements.
   - Conjunctions of ETP laws: a Lean Zulip thread (Le Floch, Sep 2025) covers order ≤ 2 only (59 classes). The
     E55 + E100 pair (order 3) is not covered there. A census of such pairs is future work.
 - **22 Nov, night (details in REPORT.md):**

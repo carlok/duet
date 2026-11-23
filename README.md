@@ -166,7 +166,8 @@ infinite one with a checkable construction settles it.
   `x·x = x∘x`?
   - They do not imply `x·x = x`: a 10-element model refutes it (`tests/test_round2.py`). That model satisfies
     `x·x = x∘x`.
-  - No model on 2–6 elements has `x·x ≠ x`.
+  - No model on 2–6 elements has `x·x ≠ x`. Neither Vampire FMB nor Mace4 finds a countermodel to `x·x = x∘x` on ≤ 6
+    elements, and E, Vampire, Prover9 and Twee found no proof (the longest runs: 2 h each, 23 Nov).
   - With `x·y = x∘y` the laws become ETP Equations 437 and 3115, and whether they imply `x = x◇x` is also open.
 - **Infinite-only non-implications** (A–D, S1, S9, S11 in `REPORT.md`): candidates for the TPTP library's non-theorem
   problems, with certified but necessarily infinite countermodels.
@@ -198,7 +199,7 @@ Every claim here rests on prover proofs, finite models or Lean, never on a model
   - two filters X5 calls for: hidden definitions with a constant, and argument-ignoring laws whose variable occurs
     twice (X5's new attractor x·(x·x) = y·(x·y));
   - close looks at N1 ranks 4–6;
-  - the open claim S12 (T6, long prover runs under way) and more Lean certificates (T7).
+  - the open claim S12 (T6: 2-hour runs of four provers found neither proof nor model, so it needs a new idea) and more Lean certificates (T7).
 - Deviations and slips are disclosed in `PREREGISTRATION.md` and `REPORT.md`.
 
 ## Running it

@@ -1,0 +1,30 @@
+[
+ {
+  "job": "vampire_casc_sat",
+  "szs": "Timeout",
+  "rc": 1,
+  "secs": 7200.0,
+  "finite_model": false
+ },
+ {
+  "job": "vampire_fmb",
+  "szs": null,
+  "rc": 1,
+  "secs": 7200.0,
+  "finite_model": false
+ },
+ {
+  "job": "vampire_casc",
+  "szs": "Timeout",
+  "rc": 1,
+  "secs": 7200.1,
+  "finite_model": false
+ },
+ {
+  "job": "twee",
+  "szs": null,
+  "rc": "timeout",
+  "secs": 7320.2,
+  "finite_model": false
+ }
+]

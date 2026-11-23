@@ -2,6 +2,25 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## T6: S12 ⇒ x·x = x∘x, long prover runs (23 Nov 2026, 00:28–02:30 UTC)
+
+Command: `podman run -d --name soup-s12 -v "$PWD/work:/data" -v "$PWD/notes:/notes:ro" -e PYTHONPATH=/app soup python3
+/notes/s12_long.py`. Four jobs in parallel, 7,200 s each, which is four times round 2's 1,800 s. Every prover ran under
+2,000 MB. Full outputs are in `work/check/s12_long/`, not tracked: Twee's is 6 MB. `summary.json` and the FMB log are
+tracked.
+
+| Job | Result |
+| --- | --- |
+| Vampire FMB (`-sa fmb`) | no model on sizes 1–6; size 7 still in SAT solving at 7,200 s |
+| Vampire portfolio `casc_sat` | Timeout |
+| Vampire `casc` | Timeout (no proof) |
+| Twee 2.7.1 | killed at 7,320 s, no proof; 1.6 M critical pairs queued |
+
+**Verdict:** still open, with these budgets. No finite countermodel exists on ≤ 6 elements; that is now both Mace4's
+(round 2) and Vampire FMB's result, and size 7 is unsearched. No prover found a proof in 2 h. Caveats:
+- The run overlapped X5's post-run checks (split, dedupe, digs), so the machine was not idle.
+- S12 ⇒ x·x = x and ⇒ x∘x = x are refuted by the 10-element model of round 2. That model satisfies x·x = x∘x.
+
 ## X5: the fusion arm restricted to rigid theories (22 Nov 2026, 21:39 UTC – 23 Nov, 00:10 UTC; preregistered)
 
 Preregistration: PREREGISTRATION.md, X5 (commit `5a04726`, before the start; timestamp corrected in `e6690f2`). The
