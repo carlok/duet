@@ -39,7 +39,8 @@ Level 8: `55cb2c91`, `1d0a5211`. Not known is not new: no theory here is claimed
   "find" was two of the four laws of McKenzie's 1970 lattice basis. Since then most of the work has gone into telling
   rediscovery from novelty.
 - **[Why](docs/motivation.md).** Synergy, bridges between two theories, and the jazz aim: a fusion that works on its
-  own terms but is not clearly connected to either parent. The explored share of the space is tiny, and the
+  own terms but is not clearly connected to either parent. The explored share of the space is tiny, but the search
+  grows like a coral: outward from known mathematics, run by run, and away from the corner our checks recognise. The
   literature is large.
 - **[The evolutionary search](docs/search.md).** MAP-Elites over 71,369 laws, with streaming verification by E,
   Vampire, Mace4 and Lean. Each run taught a lesson:
