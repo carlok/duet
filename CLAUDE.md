@@ -79,6 +79,7 @@ by the whole theory but by no single law of it.
 | `dossier.py` | Candidates (`candidates --sources ...`), preregistered ranking (`rank`), dossiers (`write --top N`), model JSON for Lean (`lean-json`); certificates are matched by key, not rank |
 | `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
 | `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
+| `funnel.py` | The live funnel, level 0 (cheap evaluations) to level 8 (studied closely, unidentified), over all runs; `--readme` rewrites the README block between the funnel markers |
 | `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter on every run's corpus, then E both ways, in parallel); post hoc, the ranking is not changed |
 | `novelty.py` | N1 (preregistered): gate (works, nothing identifies it, one per dedupe class) and order (off-diagonal law, no classical model, not related, sizes, axiom size, score); writes `notes/candidates_table.md` (known / not known) and, with `--readme`, the README's live block between `<!-- candidates:start -->` and `<!-- candidates:end -->`. Rerun after every run's checks |
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
@@ -223,7 +224,10 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     local path in commit `4af0a8f`; fixed forward in `ae1aed8`. Never trace into files that get committed, and
     `git grep -E "/Users/"` on the staged files before every commit.
   - Workflow after every run: the post-run checks, then `soup.dedupe`, then
-    `soup.novelty --readme /repo/README.md` (mount README.md and notes/). Then push.
+    `soup.novelty --readme /repo/ranking.md` (mount docs/ranking.md there, and notes/), then
+    `soup.funnel --readme /repo/README.md` (mount README.md, and notes/ read-only). Then push. The README is a short
+    front page; the story lives in `docs/*.md` (history, motivation, search, ranking, candidates, open problems,
+    how-made, running).
 
 ## Pitfalls already paid for
 
