@@ -1,4 +1,3 @@
-+ podman run --rm -v /Users/carlo/Documents/varie/hacks/scratch/duet/work:/data soup python3 -m soup.dossier rank
 calibrated features: ['convergent']
 0 excluded as equivalent to a standard theory
  1 .          4dc33674 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 4.5021 | x · (x · y) = y & (x ∘ y) ∘ y = x & x ∘ (x ∘ (x · y)) = x & ((x ∘ y) · y) · y = y
