@@ -44,6 +44,6 @@ The image has two limits:
 So the claim is that the search grows outward from known mathematics and leaves the corner our checks recognise. It is
 not that the search reaches unexplored mathematics. That needs a specialist.
 
-Background from scratch, in 9 pages: [`intro/intro-reading.pdf`](../intro/intro-reading.pdf).
+Background from scratch, in 9 pages: [`intro/intro.pdf`](../intro/intro.pdf); exercises in [`intro/exercises.pdf`](../intro/exercises.pdf).
 
 Next: [the evolutionary search](search.md).

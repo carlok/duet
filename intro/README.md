@@ -1,12 +1,13 @@
-An introduction to the project from scratch: sets and functions, binary operations, laws, theories and models,
-synergy, and how the search works. Two versions of one text:
+An introduction to the project from scratch, in two documents:
 
-- `intro-reading.pdf` (`intro-reading.tex`): the text alone, for a first read; no exercises, no solutions.
-- `intro.pdf` (`intro.tex`): the same text with exercises at the end of each section and solutions in an appendix.
+- **`intro.pdf`** (`intro.tex`, 9 pages): the text. It covers sets and functions, binary operations, laws, theories
+  and models, synergy, how the search works, and what it has found. It has definitions, examples, theorems and
+  proofs, and nothing else.
+- **`exercises.pdf`** (`exercises.tex`, 4 pages): exercises arranged by the sections of the text, with solutions.
+  The exercises of Section n use only Sections 1 to n.
 
-The text is in `intro.tex` and the exercises in `exercises.tex`; `intro-reading.tex` only switches the version.
-
-Build both inside Podman with the paper's image:
+Both documents share `preamble.tex`. `exercises.tex` reads the text's labels from `intro.aux`, so `make` builds the
+text first. Build both inside Podman with the paper's image:
 
     podman build -t soup-tex tex
     podman run --rm -v "$PWD/intro:/tex" soup-tex

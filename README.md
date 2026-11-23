@@ -8,8 +8,8 @@ Many structures in algebra are two operations held together by a few laws. In a 
 two operations, `x · y` and `x ∘ y`, looking for fusions of this kind that nobody has named. Every claim is checked by
 theorem provers and finite models, and no language model takes part in the search.
 
-**New to the subject?** [`intro/intro-reading.pdf`](intro/intro-reading.pdf) explains it from sets and functions, in
-9 pages.
+**New to the subject?** [`intro/intro.pdf`](intro/intro.pdf) explains it from sets and functions, in 9 pages. Exercises
+with solutions are in [`intro/exercises.pdf`](intro/exercises.pdf).
 
 ## The funnel (live)
 

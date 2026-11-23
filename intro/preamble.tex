@@ -1,0 +1,59 @@
+% Shared preamble of intro.tex (the text) and exercises.tex (exercises and solutions).
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+% one typeface for everything: Palatino for text and mathematics, with real small caps
+\usepackage[sc]{mathpazo}
+\linespread{1.08}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+% a readable measure: about 70 characters a line
+\usepackage[a4paper,textwidth=140mm,top=32mm,bottom=34mm,headsep=10mm]{geometry}
+\usepackage{xcolor}
+\definecolor{linkblue}{rgb}{0.10,0.20,0.45}
+\usepackage[colorlinks,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue,filecolor=linkblue]{hyperref}
+% quiet running heads: the current section on the left, the page on the right, in small caps; no rules
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\makeatletter\newcommand{\topsection}{\expandafter\@leftmark\topmark\@empty\@empty}\makeatother  % the section in effect at the top of the page
+\fancyhead[L]{\small\scshape\nouppercase{\topsection}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\setlength{\parindent}{1.2em}
+
+\newcommand{\op}{\cdot}
+\newcommand{\cop}{\circ}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\proj}{\textsc{duet}}
+\newcommand{\file}[1]{\mbox{\textit{#1}}}  % file names: italic, same typeface, never hyphenated
+
+% headings: only two sizes (large for sections, normal for run-in paragraphs), all bold, same typeface
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{-3.2ex \@plus -1ex \@minus -.2ex}{1.4ex \@plus .2ex}%
+  {\normalfont\large\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{1.8ex \@plus .5ex \@minus .2ex}{-0.6em}%
+  {\normalfont\normalsize\bfseries}}
+% a part is a quiet small-caps line, not a page-sized heading
+\newcommand{\partline}[2]{\par\bigskip\addcontentsline{toc}{part}{Part #1\quad #2}%
+  {\centering\normalfont\large\scshape Part #1\quad #2\par}\nobreak\medskip}
+% table of contents: parts in small caps at normal size, sections without extra space between them
+\renewcommand*\l@part[2]{\addpenalty{-\@highpenalty}\vskip .8em \@plus\p@
+  {\parindent\z@\rightskip\@pnumwidth\parfillskip-\@pnumwidth\normalfont\scshape #1\hfil\hb@xt@\@pnumwidth{\hss #2}\par}}
+\let\intro@lsection\l@section
+\renewcommand{\l@section}[2]{\begingroup\let\addvspace\@gobble\intro@lsection{#1}{#2}\endgroup}
+% lists a little tighter than the default
+\def\@listi{\leftmargin\leftmargini \parsep\z@ \topsep 5\p@ \@plus 2\p@ \@minus 1\p@ \itemsep 3\p@ \@plus 1\p@}
+\let\@listI\@listi
+\makeatother
+
+% every statement upright, with a bold label
+\newtheoremstyle{uniform}{\medskipamount}{\medskipamount}{\normalfont}{}{\bfseries}{.}{0.5em}{}
+\theoremstyle{uniform}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}{Exercise}
+

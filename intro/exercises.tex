@@ -1,8 +1,42 @@
-% Exercises of intro.tex, one macro per section. Inline at the end of each section in intro.pdf;
-% collected in an appendix in intro-reading.pdf. Solutions are in intro.tex (appendix) in both versions.
+\documentclass[11pt,a4paper]{article}
+% Exercises for intro.pdf, arranged by its sections, with solutions. Labels of the text are read from intro.aux
+% (prefix T-), so intro.tex is compiled first (Makefile).
+\usepackage{xr-hyper}
+\externaldocument[T-]{intro}
+\input{preamble}
+\hypersetup{pdftitle={Exercises: Two operations and a machine that looks for surprises}}
+
+\newcounter{exgroup}
+\renewcommand{\theexercise}{\arabic{exgroup}.\arabic{exercise}}
+% one group per section of the text: a run-in heading with the section's number and title
+\newcommand{\exgroup}[2]{\setcounter{exgroup}{#1}\setcounter{exercise}{0}%
+  \par\bigskip\noindent{\bfseries Section #1\quad #2}\markboth{Section #1\quad #2}{}\par\nobreak}
+% an exercise points to its solution, the solution points back
+% (the TeXbook's flush-right tag: it stays on the last line if it fits, else it moves to a line of its own)
+\newcommand{\solref}[1]{{\unskip\nobreak\hfil\penalty50\hskip1em\hbox{}\nobreak\hfil
+  \mbox{\textit{(solution on p.~\pageref{sol:#1})}}\parfillskip=0pt\finalhyphendemerits=0\par}}
+\newcommand{\solution}[1]{\par\medskip\noindent\textbf{Solution~\ref{ex:#1}.}\label{sol:#1}
+  \textit{(exercise on p.~\pageref{ex:#1})}\ }
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bfseries Exercises\par}
+\medskip
+{\large for \emph{Two operations and a machine that looks for surprises}\par}
+\medskip
+23 November 2026\par
+\medskip
+\rule{0.3\textwidth}{0.4pt}
+\end{center}
+
+\medskip
+\noindent These exercises go with the text \file{intro.pdf}, section by section: the exercises of Section $n$ use only
+Sections $1$ to $n$ of the text. Each one points to its solution, and the solutions start on
+p.~\pageref{solutions}.
 
 % Section 1: Sets and functions
-\expandafter\newcommand\csname exercises@1\endcsname{%
 \exgroup{1}{Sets and functions}%
 \begin{exercise}\label{ex:prod}
 Write out $\{0,1\}\times\{0,1,2\}$. How many elements does it have? \solref{prod}
@@ -12,13 +46,11 @@ How many functions are there from $\{0,1,2\}$ to $\{0,1\}$? How many are injecti
 \solref{funcs}
 \end{exercise}
 \begin{exercise}\label{ex:inj}
-Check Proposition~\ref{prop:finite} on $A=\{0,1,2\}$ by counting: how many functions $A\to A$ are injective, and how
+Check Proposition~\ref{T-prop:finite} of the text on $A=\{0,1,2\}$ by counting: how many functions $A\to A$ are injective, and how
 many of those are not surjective? \solref{inj}
 \end{exercise}
-}
 
 % Section 2: Binary operations
-\expandafter\newcommand\csname exercises@2\endcsname{%
 \exgroup{2}{Binary operations}%
 \begin{exercise}\label{ex:count}
 Check the counts $16$ and $19{,}683$. \solref{count}
@@ -27,10 +59,8 @@ Check the counts $16$ and $19{,}683$. \solref{count}
 An operation is \emph{idempotent} if $x\op x=x$ for every $x$. How many of the 16 operations on $\{0,1\}$ are
 idempotent? Name them. \solref{idem2}
 \end{exercise}
-}
 
 % Section 3: Laws
-\expandafter\newcommand\csname exercises@3\endcsname{%
 \exgroup{3}{Laws}%
 \begin{exercise}\label{ex:max}
 Which of these laws hold for $\max$ on $\{0,1,2\}$: associativity, commutativity, idempotence, $x\op y=x$,
@@ -47,10 +77,8 @@ How many assignments must you try to check associativity on 3 elements? On 6? \s
 List the laws of order~1 in one operation, up to renaming. (One side is a variable, the other a product of two
 variables.) \solref{order1}
 \end{exercise}
-}
 
 % Section 4: Theories, models and implication
-\expandafter\newcommand\csname exercises@4\endcsname{%
 \exgroup{4}{Theories, models and implication}%
 \begin{exercise}\label{ex:abs}
 The \emph{absorption laws} for two operations are $x\op(x\cop y)=x$ and $x\cop(x\op y)=x$. Prove that together they
@@ -70,10 +98,8 @@ Suppose you only know two structures: $\max$ on $\{0,1\}$ and the left projectio
 and both are associative. Does idempotence imply associativity? Test $x\op y=2x+2y \bmod 3$ on $\{0,1,2\}$.
 \solref{corpus}
 \end{exercise}
-}
 
 % Section 5: Two operations
-\expandafter\newcommand\csname exercises@5\endcsname{%
 \exgroup{5}{Two operations}%
 \begin{exercise}\label{ex:lat3}
 How many pairs $(\op,\cop)$ on $\{0,1,2\}$ are lattices, counting tables, not shapes? Why exactly this many?
@@ -83,10 +109,8 @@ How many pairs $(\op,\cop)$ on $\{0,1,2\}$ are lattices, counting tables, not sh
 Apply each relabelling to $x\op(x\cop y)=x$: the swap, the opposite of $\op$, the opposite of $\cop$, and both
 opposites. \solref{dual}
 \end{exercise}
-}
 
 % Section 6: Synergy: when the whole does more than the parts
-\expandafter\newcommand\csname exercises@6\endcsname{%
 \exgroup{6}{Synergy: when the whole does more than the parts}%
 \begin{exercise}\label{ex:emerg}
 Using Exercises~\ref{ex:abs} and~\ref{ex:abs3} (and the mirror image of~\ref{ex:abs3}), show that $x\op x=x$ is
@@ -96,10 +120,8 @@ emergent in the absorption pair. \solref{emerg}
 Let $T=\{\,x\cop y=y\op x,\ (x\op y)\op z=x\op(y\op z)\,\}$. Show that $T\models (x\cop y)\cop z=x\cop(y\cop z)$, and that
 this is emergent. Why is it nevertheless not an interesting fusion? \solref{defsyn}
 \end{exercise}
-}
 
 % Section 7: Disguises: synergy that is not a real fusion
-\expandafter\newcommand\csname exercises@7\endcsname{%
 \exgroup{7}{Disguises: synergy that is not a real fusion}%
 \begin{exercise}\label{ex:rb}
 A \emph{rectangular band} on $I\times J$ is the operation $(i,j)\op(k,l)=(i,l)$. On $\{0,1\}\times\{0,1\}$, check that it
@@ -108,7 +130,7 @@ is associative and idempotent, and that $x\op(y\op x)=x$ and $(x\op y)\op z=x\op
 \begin{exercise}\label{ex:31}
 With $\op$ the rectangular band of Exercise~\ref{ex:rb} and $x\cop y:=y\op x$, check the four laws
 $x\op(x\cop y)=x$, $(x\cop y)\op y=y$, $(x\op x)\op(y\op x)=x$ and $(x\op y)\op(x\op x)=x$. (These four laws are a theory the
-search found; see Section~\ref{sec:found}.) \solref{31}
+search found; see Section~\ref{T-sec:found} of the text.) \solref{31}
 \end{exercise}
 \begin{exercise}\label{ex:split}
 The theory $\{x\op y=x,\ x\cop y=x\}$ has no bridge, yet it implies the bridge $x\op y=x\cop y$. Why? Which rule
@@ -118,13 +140,120 @@ excludes it? \solref{split}
 Prove the claim of the split-theory example: under $x\op(x\op y)=y$, the law $x\op(y\cop z)=x\op(z\cop y)$ holds if and only
 if $y\cop z=z\cop y$. \solref{split2}
 \end{exercise}
-}
 
 % Section 8: How the search is made
-\expandafter\newcommand\csname exercises@8\endcsname{%
 \exgroup{8}{How the search is made}%
 \begin{exercise}\label{ex:pairs}
 How many theories of exactly two laws can be formed from the $71{,}369$ laws? Compare with the $6{,}739$ theories the
 project has verified. \solref{pairs}
 \end{exercise}
-}
+
+\markboth{Solutions}{}\clearpage
+\section*{Solutions}\label{solutions}
+
+The numeric answers are computed by \file{intro/checks.py} (output in \file{intro/checks.out}).
+
+\solution{prod}
+$\{(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)\}$: $2\cdot 3=6$ elements.
+
+\solution{funcs}
+$2^3=8$ functions. None is injective: three inputs cannot have three different outputs in a two-element set. Six
+are surjective: all except the two constant functions.
+
+\solution{inj}
+There are $3!=6$ injective functions $\{0,1,2\}\to\{0,1,2\}$ (the permutations), and all six are surjective, as the
+proposition says.
+
+\solution{count}
+A table on $n$ elements has $n^2$ cells with $n$ choices each: $2^4=16$ and $3^9=19{,}683$.
+
+\solution{idem2}
+Idempotence fixes the diagonal ($0\op0=0$, $1\op1=1$) and leaves $0\op1$ and $1\op0$ free: $2^2=4$ operations. They
+are $\min$, $\max$, the left projection and the right projection.
+
+\solution{max}
+Associativity, commutativity, idempotence and $x\op(x\op y)=x\op y$ hold; $x\op y=x$ fails (for example
+$\max(0,1)=1\neq0$). The element $0$ is an identity: $\max(0,x)=x$.
+
+\solution{lp}
+$(x\op y)\op z=x\op z=x$ and $x\op(y\op z)=x$, so associativity holds; $x\op x=x$; but $0\op1=0$ while $1\op0=1$, so
+commutativity fails.
+
+\solution{cost}
+Three variables: $3^3=27$ assignments on 3 elements and $6^3=216$ on 6.
+
+\solution{order1}
+Write the product on the left. It is $x\op x$ or $x\op y$. The variable on the other side is either one already used or
+a new one: $x\op x=x$, $x\op x=y$, $x\op y=x$, $x\op y=y$, $x\op y=z$. That makes five, and the project's law table
+lists the same five. The first is idempotence. The others are degenerate: $x\op y=x$ is the left projection, and
+$x\op x=y$ and $x\op y=z$ only hold on a one-element set.
+
+\solution{abs}
+The second law with $y=x$ gives $x\cop(x\op x)=x$. The first law with $y=x\op x$ gives $x\op\bigl(x\cop(x\op x)\bigr)=x$.
+Replace the inner term using the first step: $x\op x=x$.
+
+\solution{abs2}
+Nine pairs. Writing L and R for the left and right projections, $(\op,\cop)$ is one of $(\min,\max)$, $(\max,\min)$,
+$(\min,\mathrm{L})$, $(\max,\mathrm{L})$, $(\mathrm{L},\min)$, $(\mathrm{L},\max)$, $(\mathrm{L},\mathrm{L})$,
+$(\mathrm{L},\mathrm{R})$, $(\mathrm{R},\mathrm{L})$. Only the first two are non-degenerate: the 2-element lattice, in
+its two labellings (exchanging $0$ and $1$ turns one into the other). The other seven use a projection. This is why the project demands a non-degenerate model.
+
+\solution{abs3}
+Take $x\cop y=0$ for all $x,y$, and let $\op$ have $0\op0=0$, $0\op1=0$, $1\op0=1$, $1\op1=0$. Then $x\op(x\cop y)=x\op0=x$
+for both values of $x$, but $1\op1=0\neq1$.
+
+\solution{corpus}
+No. Your two structures agree with ``idempotent implies associative'' only by accident. The operation
+$x\op y=2x+2y\bmod 3$ is idempotent ($4x\equiv x$) but not associative: $(0\op0)\op1=0\op1=2$ while
+$0\op(0\op1)=0\op2=1$. No counterexample exists on 2 elements; the smallest has 3. This is exactly the situation
+of the search's cheap guesses.
+
+\solution{lat3}
+Six. A lattice on three elements must be a chain, and each of the $3!=6$ orders of $\{0,1,2\}$ as a chain gives
+one pair $(\text{join},\text{meet})$. The swapped pair is the reverse chain, which is already among the six. (By
+brute force: 9 of the $19{,}683$ operations are semilattices, meaning associative, commutative and idempotent, and 6
+pairs of them satisfy the absorption laws.)
+
+\solution{dual}
+Swap: $x\cop(x\op y)=x$. Opposite of $\op$: $(x\cop y)\op x=x$. Opposite of $\cop$: $x\op(y\cop x)=x$. Both
+opposites: $(y\cop x)\op x=x$. (Checked by brute force: the law holds in a structure exactly when each dual form
+holds in the relabelled structure, for all 256 pairs on $\{0,1\}$.)
+
+\solution{emerg}
+$T\models x\op x=x$ by Exercise~\ref{ex:abs}. The model of Exercise~\ref{ex:abs3} satisfies the first law and not
+$x\op x=x$, so the first law alone does not imply it. For the second law alone, swap the roles: let $\op$ be the
+constant $0$ and $\cop$ the table of Exercise~\ref{ex:abs3}. Then $x\cop(x\op y)=x\cop 0=x$ holds, but
+$1\op1=0\neq1$.
+
+\solution{defsyn}
+$(x\cop y)\cop z=z\op(y\op x)$ and $x\cop(y\cop z)=(z\op y)\op x$, which are equal by associativity of $\op$. Neither law
+alone suffices: the definition alone allows a non-associative $\op$, and associativity alone says nothing about
+$\cop$. (By brute force on 3 elements, the opposite of every associative $\op$ is associative.) It is not interesting
+because $\cop$ is defined by $\op$: the ``theory of two operations'' is a theory of one operation, written twice.
+
+\solution{rb}
+With elements coded as pairs, $\bigl((i,j)\op(k,l)\bigr)\op(m,n)=(i,n)=(i,j)\op\bigl((k,l)\op(m,n)\bigr)$, and
+$(i,j)\op(i,j)=(i,j)$. Then $x\op(y\op x)$ has the row of $x$ and the column of $x$, so it equals $x$. And
+$(x\op y)\op z$ has the row of $x$ and the column of $z$, as does $x\op z$.
+
+\solution{31}
+With $x=(i,j)$, $y=(k,l)$: $x\cop y=y\op x=(k,j)$. Then $x\op(x\cop y)=(i,j)\op(k,j)=(i,j)=x$, and
+$(x\cop y)\op y=(k,j)\op(k,l)=(k,l)=y$. The last two laws hold because the band is idempotent and
+$x\op(y\op x)=x=(x\op y)\op x$. So every rectangular band with its reverse is a model. The search's theory has other,
+non-associative models as well.
+
+\solution{split}
+Both laws force projections, so both operations are the left projection and are equal: $x\op y=x=x\cop y$. The
+bridge comes from the collapse. The rule ``require a model with two different, essentially binary
+operations'' excludes the theory.
+
+\solution{split2}
+If $y\cop z=z\cop y$, the two sides of the bridge are equal. Conversely, apply the map $u\mapsto x\op u$ to both sides of
+$x\op(y\cop z)=x\op(z\cop y)$. By $x\op(x\op u)=u$ this gives back $y\cop z=z\cop y$. (By brute force, the two theories have
+the same models on 2 and on 3 elements: 32 and 46,656.)
+
+\solution{pairs}
+$\binom{71369}{2}=2{,}546{,}731{,}396$, about $2.5\times10^9$ pairs, and about $1.1\times10^{18}$ sets of four. The
+$6{,}739$ verified theories are less than three in a million of the pairs alone.
+
+\end{document}

@@ -1,18 +1,18 @@
 PDFLATEX = pdflatex -interaction=nonstopmode -halt-on-error
 
-# intro-reading.pdf: the text alone. intro.pdf: the same text with exercises at the end of each section and
-# solutions in an appendix. The text is in intro.tex, the exercises in exercises.tex; intro-reading.tex switches.
-all: intro-reading.pdf intro.pdf
+# intro.pdf: the text (definitions, examples, theorems, proofs). exercises.pdf: exercises by section of the text, with
+# solutions. Both use preamble.tex. exercises.tex reads the text's labels from intro.aux, so intro is built first.
+all: intro.pdf exercises.pdf
 
-intro-reading.pdf: intro-reading.tex intro.tex exercises.tex
-	$(PDFLATEX) intro-reading.tex
-	$(PDFLATEX) intro-reading.tex
-	$(PDFLATEX) intro-reading.tex
+intro.pdf: intro.tex preamble.tex
+	$(PDFLATEX) intro.tex
+	$(PDFLATEX) intro.tex
+	$(PDFLATEX) intro.tex
 
-intro.pdf: intro.tex exercises.tex
-	$(PDFLATEX) intro.tex
-	$(PDFLATEX) intro.tex
-	$(PDFLATEX) intro.tex
+exercises.pdf: exercises.tex preamble.tex intro.pdf
+	$(PDFLATEX) exercises.tex
+	$(PDFLATEX) exercises.tex
+	$(PDFLATEX) exercises.tex
 
 clean:
-	rm -f *.aux *.log *.out *.toc intro.pdf intro-reading.pdf
+	rm -f intro.aux intro.log intro.out intro.toc exercises.aux exercises.log exercises.out intro.pdf exercises.pdf   # not checks.out
