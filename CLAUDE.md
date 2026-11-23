@@ -214,6 +214,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
     rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
     square-free form (`notes/x5_baseline.py`).
+  - `742cc445` (N1 rank 4) and `97a7dfcf` (rank 5), close looks on 23 Nov: both not identified (`notes/742cc445.md`,
+    `notes/97a7dfcf.md`). 742cc445 = McKenzie's L1 + a non-lattice law; 8 emergent laws need both axioms; ∘ associative
+    forces · = ∘. 97a7dfcf ⟺ 0 = x·x, (x·y)·z = 0, x∘(y·z) = 0, x·(y∘x) = x∘y. Funnel level 8 is now 4.
   - X5 result (to budget, 23 Nov 00:10 UTC): 292 verified, 164 scored, 0 fragments; P1–P4 hold, P4 badly. All 20 top
     candidates have affine 𝔽₄ models, and 0 of 20 are disconnected. 19 of 20 have · a Steiner loop, and in 16, ∘ is ·
     translated by a constant, x∘y = (x·y)·(z∘z) (ledger row 12). New attractor: x·(x·x) = y·(x·y).

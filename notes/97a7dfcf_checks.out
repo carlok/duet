@@ -1,0 +1,18 @@
+T = x · x = y · y & x · (y ∘ x) = x ∘ y & (x · y) · z = y ∘ (z · y)
+  (x·y)·z=w·w        True
+  x·(y·z)=w·w        False
+  x∘(y·z)=w·w        True
+  (x·y)∘z=w·w        True
+  x·(y∘z)=x∘z        False
+  x∘x=y·y            False
+  x∘y=y∘x            False
+  x·y=y·x            False
+  x∘(y∘z)=w·w        True
+  (x∘y)∘z=w·w        True
+  x·(x·y)=z·z        False
+  x·y=z·z            False
+  x∘y=z·z            False
+  x·(y∘z)=w·w        False
+C = x · x = y · y & x · (y ∘ x) = x ∘ y & x · x = y ∘ (z · w) & (x · y) · z = w · w
+  T => C True | C => T True
+  with ∘ = ·: T + x·y = x∘y => x·y = z·z (a null semigroup): True

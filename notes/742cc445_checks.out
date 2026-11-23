@@ -1,0 +1,39 @@
+T = x · (y ∘ (x ∘ z)) = x & x ∘ ((x ∘ y) · (z ∘ x)) = x
+  McKenzie L2      x∘(y·(x·z))=x          False
+  McKenzie L3      ((y∘x)·(x∘z))·x=x      False
+  McKenzie L4      ((y·x)∘(x·z))∘x=x      False
+  absorption ·∘    x·(x∘y)=x              True
+  absorption ∘·    x∘(x·y)=x              False
+  idempotent ·     x·x=x                  True
+  idempotent ∘     x∘x=x                  True
+  · commutative    x·y=y·x                False
+  ∘ commutative    x∘y=y∘x                False
+  · associative    (x·y)·z=x·(y·z)        False
+  ∘ associative    (x∘y)∘z=x∘(y∘z)        False
+  ∘ left-zero      x∘y=x                  False
+  · left-zero      x·y=x                  False
+  x∘(x∘y)=x        x∘(x∘y)=x              True
+  x∘(y∘x)=x∘y      x∘(y∘x)=x∘y            False
+  (x∘y)∘z=x∘z      (x∘y)∘z=x∘z            False
+  x∘(y∘z)=x∘z      x∘(y∘z)=x∘z            False
+  (x·y)·z=x·z      (x·y)·z=x·z            False
+  x·(y·z)=x·z      x·(y·z)=x·z            False
+  x·(y·x)=x·y      x·(y·x)=x·y            False
+  (x∘y)·x=x∘y      (x∘y)·x=x∘y            True
+  x·(y∘y)=x·y      x·(y∘y)=x·y            True
+T = x · (y ∘ (x ∘ z)) = x & x ∘ ((x ∘ y) · (z ∘ x)) = x
+  x·(x∘y)=x        T True  A1 alone False  A2 alone False
+  x·x=x            T True  A1 alone False  A2 alone False
+  x∘x=x            T True  A1 alone False  A2 alone False
+  x∘(x∘y)=x        T True  A1 alone False  A2 alone False
+  (x∘y)·x=x∘y      T True  A1 alone False  A2 alone False
+  x·(y∘y)=x·y      T True  A1 alone False  A2 alone False
+  x∘(y·y)=x∘y      T True  A1 alone False  A2 alone False
+  x·(y∘x)=x        T True  A1 alone False  A2 alone False
+C = x · (x ∘ y) = x & x · (y ∘ x) = x & x ∘ (x ∘ y) = x & (x ∘ y) · x = x ∘ y
+  C => A1 False | C => A2 False | A1 + C => A2 False | A2 + C => A1 False
+T = x · (y ∘ (x ∘ z)) = x & x ∘ ((x ∘ y) · (z ∘ x)) = x
+  A1 holds in the 2-element lattice: (· join, ∘ meet) True, (· meet, ∘ join) True
+  A2 holds in the 2-element lattice: (· join, ∘ meet) False, (· meet, ∘ join) False
+  T + ∘ associative => x∘y = x: True | => x·y = x∘y: True
+  shadow of A1 = ETP 54 (x = x◇(y◇(x◇z))): True | shadow of A2 = ETP 828 (x = x◇((x◇y)◇(z◇x))): True

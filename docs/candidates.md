@@ -40,13 +40,27 @@ Memo: [`notes/1d0a5211.md`](../notes/1d0a5211.md).
 
 Memo: [`notes/a9295908.md`](../notes/a9295908.md).
 
-## N1 ranks 4–6: light looks
+## `742cc445` (N1 rank 4): McKenzie's L1 with a non-lattice partner
 
-- **`742cc445`.** Its first law is L1 of McKenzie's lattice basis. It proves absorption and idempotence, and its
-  shadow is the left-zero band.
-- **`97a7dfcf` and `7ec7f8f5`.** A nilpotent family: constant squares, and vanishing products.
+- **The claim.** `x · (y ∘ (x ∘ z)) = x`, which is McKenzie's lattice law L1, and `x ∘ ((x ∘ y) · (z ∘ x)) = x`, which
+  fails in the 2-element lattice.
+- **Synergy.** Together they force one absorption law, idempotence of both operations and `x ∘ (x ∘ y) = x`. Neither
+  law alone gives any of these (E).
+- **∘ is never associative.** With ∘ associative, the theory collapses to `·` = `∘` (E). That rules out every
+  band-based family: skew lattices, quasilattices, paralattices.
+- **Literature.** No source found.
 
-Memo: [`notes/n1_ranks4-6.md`](../notes/n1_ranks4-6.md).
+Memo: [`notes/742cc445.md`](../notes/742cc445.md).
+
+## `97a7dfcf` (N1 rank 5): a nilpotent pair
+
+- **Plain reading (E, both ways).** With 0 = `x · x`: `(x · y) · z = 0`, `x ∘ (y · z) = 0` and
+  `x · (y ∘ x) = x ∘ y`.
+- **Shadow.** With `·` = `∘` it is a null semigroup.
+- **Literature.** No source found.
+
+Memo: [`notes/97a7dfcf.md`](../notes/97a7dfcf.md). The light look at rank 6, `7ec7f8f5` (the same nilpotent family), is
+in [`notes/n1_ranks4-6.md`](../notes/n1_ranks4-6.md).
 
 ## Other identifications
 

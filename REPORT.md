@@ -2,6 +2,26 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `742cc445` and `97a7dfcf` (N1 ranks 4 and 5): close looks (23 Nov 2026, during X6, recorded 07:17 UTC; post hoc)
+
+Commands: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/742cc445_checks.py` (parts 1–3)
+and `notes/97a7dfcf_checks.py` (parts 1–2). Single-threaded E, 20–60 s per goal, run beside X6. Memos:
+`notes/742cc445.md`, `notes/97a7dfcf.md`.
+
+| Check | `742cc445` | `97a7dfcf` |
+| --- | --- | --- |
+| laws | x·(y∘(x∘z)) = x (McKenzie's L1); x∘((x∘y)·(z∘x)) = x | x·x = y·y; x·(y∘x) = x∘y; (x·y)·z = y∘(z·y) |
+| plain reading | not found; C (4 short consequences) does not give back either law | equivalent to 0 = x·x, (x·y)·z = 0, x∘(y·z) = 0, x·(y∘x) = x∘y (E both ways) |
+| emergent | 8 short laws, incl. x·(x∘y) = x and idempotence, each needing both axioms | all depth-2 products but x·(y·z) and x·(y∘z) vanish |
+| key structural fact | ∘ associative ⇒ · = ∘ = left projection (E), so no band-based model | – |
+| lattice? | law 1 holds in the 2-element lattice, law 2 fails under both readings | – |
+| shadow (· = ∘) | left-zero band; ETP 54 and 828 (checked by `law_index`) | null semigroup (E) |
+| literature | web-only agent: no source for T or for subsets of McKenzie's basis; Leech's families are band-based, Padmanabhan's and Fried's commutative | zeropotent algebras only (earlier search) |
+
+**Verdict:** both not identified. `742cc445` is the more interesting of the two. It is near lattices and bands without
+being either, and its synergy needs both laws. The funnel's level 8 is now 4. Still to read for `742cc445`:
+McCune–Padmanabhan, LNCS 1095, pp. 137–150.
+
 ## The two filters X5 called for (23 Nov 2026, recorded 06:28 UTC; built and measured post hoc, nothing re-ranked)
 
 Code: `soup/hidden.py` (`hidden_param`, `--param`), `soup/offdiag.py` (`IGNORE2`), arm `fusion3`
