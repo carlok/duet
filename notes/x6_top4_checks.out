@@ -1,0 +1,19 @@
+  bc43fd42 => d0e963d9: False
+  bc43fd42 => d14ced44: False
+  d0e963d9 => bc43fd42: False
+  d0e963d9 => d14ced44: False
+  d14ced44 => bc43fd42: False
+  d14ced44 => d0e963d9: False
+K = x · (y · y) = x & x · (y ∘ y) = x & x · (y · z) = x · (z ∘ y)
+  bc43fd42 => K: True | K => bc43fd42: False
+  d0e963d9 => K: True | K => d0e963d9: False
+  d14ced44 => K: True | K => d14ced44: False
+  K => x·(y∘z)=x          False
+  K => x·(y·z)=x          False
+  K => (x·y)·z=x·z        False
+  K => x·(y·z)=x·y        False
+  K => x∘(y·z)=x∘(z·y)    False
+  K => (x·y)·y=x·y        False
+  K => x·(y∘z)=x·(z·y)    True
+  K => x∘y=y·x            False
+  K => x·(x∘y)=x          False

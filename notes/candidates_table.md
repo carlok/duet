@@ -10,10 +10,10 @@ Metric (lexicographic): an off-diagonal proved emergent law; no classical model 
 
 | N1 | key | run | off-diagonal law | classical model | related to | sizes | axiom size | score | T5a | literature | flags | laws |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | `bc43fd42` | x6 | x · (x · x) = x · (y · y); x · (x ∘ (y ∘ y)) = x … | no | - | 4 | 8 | 0.7079 | 72 | - | - | x · (y · z) = x · (z ∘ y) & x · (((y ∘ y) · z) · w) = x |
-| 2 | `d0e963d9` | x6 | x · (x · x) = x · (y · y); x · (x ∘ (x · y)) = x … | no | - | 4 | 9 | 0.6868 | 73 | - | - | x · (y ∘ y) = x & x · ((x · y) · x) = x & x · (y · z) = x · (z ∘ y) |
-| 3 | `d14ced44` | x6 | x · (x · x) = x · (y · y); x · (x ∘ (y · y)) = x … | no | - | 4 | 10 | 0.7501 | 71 | - | - | x · (y ∘ y) = x & x · (y · z) = x · (z ∘ y) & x · ((x · y) ∘ y) = x · y |
-| 4 | `3818b88f` | x6 | x · (x · x) = y · (x · y); x · (y · x) = y ∘ y … | no | - | 4 | 13 | 0.7615 | 69 | - | - | x · (x · y) = y & (x · y) · y = x & x ∘ (x · y) = x ∘ y & (x · x) ∘ (x ∘ x) = x & (x · (x · x)) ∘ x = x |
+| 1 | `bc43fd42` | x6 | x · (x · x) = x · (y · y); x · (x ∘ (y ∘ y)) = x … | no | - | 4 | 8 | 0.7079 | 72 | Nothing found | - | x · (y · z) = x · (z ∘ y) & x · (((y ∘ y) · z) · w) = x |
+| 2 | `d0e963d9` | x6 | x · (x · x) = x · (y · y); x · (x ∘ (x · y)) = x … | no | - | 4 | 9 | 0.6868 | 73 | Nothing found | - | x · (y ∘ y) = x & x · ((x · y) · x) = x & x · (y · z) = x · (z ∘ y) |
+| 3 | `d14ced44` | x6 | x · (x · x) = x · (y · y); x · (x ∘ (y · y)) = x … | no | - | 4 | 10 | 0.7501 | 71 | Nothing found | - | x · (y ∘ y) = x & x · (y · z) = x · (z ∘ y) & x · ((x · y) ∘ y) = x · y |
+| 4 | `3818b88f` | x6 | x · (x · x) = y · (x · y); x · (y · x) = y ∘ y … | no | - | 4 | 13 | 0.7615 | 69 | Nothing found | - | x · (x · y) = y & (x · y) · y = x & x ∘ (x · y) = x ∘ y & (x · x) ∘ (x ∘ x) = x & (x · (x · x)) ∘ x = x |
 | 5 | `55cb2c91` | . | (x · y) · y = x · y | no | - | 3 | 6 | 1.392 | 105 | Related in pieces only | - | x · (x ∘ y) = x & x · y = ((y · z) · x) ∘ x |
 | 6 | `1d0a5211` | . | x · (x ∘ (y · x)) = x | no | - | 3 | 6 | 1.3285 | 114 | Related in pieces only | - | x · (x ∘ y) = y ∘ x & (x ∘ (y · z)) ∘ z = z |
 | 7 | `a9295908` | t4-prior | x · (x · y) = x · (y · x); x · y = y · x | no | - | 3 | 7 | 1.4783 | 92 | Related: a fragment of Heyting algebras | - | x · (x ∘ x) = x & (x ∘ y) · y = y & x · y = x ∘ (y · x) |

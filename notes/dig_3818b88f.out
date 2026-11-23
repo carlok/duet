@@ -1,0 +1,83 @@
+3818b88f x6 T = x · (x · y) = y & (x · y) · y = x & x ∘ (x · y) = x ∘ y & (x · x) ∘ (x ∘ x) = x & (x · (x · x)) ∘ x = x
+1. 73 laws of order <= 3 implied on the corpus; 73 proved by E; 69 emergent
+  * x ∘ x = x
+    (x · x) · x = x
+  * (x · x) ∘ x = x
+  * (x · y) · x = y
+  * (x ∘ x) ∘ x = x
+    x · (x · x) = x
+  * x · (y · x) = y
+  * x · y = y · x
+  * x ∘ (x · x) = x
+  * x ∘ (x ∘ x) = x
+  * ((x · x) · x) ∘ x = x
+  * ((x · x) ∘ x) ∘ x = x
+  * ((x · y) · x) ∘ y = y
+  * ((x · y) · y) ∘ x = x
+  * ((x ∘ x) · x) · x = x
+  * ((x ∘ x) · x) ∘ x = x
+  * ((x ∘ x) · y) · x = y
+  * ((x ∘ x) · y) · y = x
+  * ((x ∘ x) ∘ x) ∘ x = x
+  * (x · (x · y)) ∘ y = y
+  * (x · (x ∘ x)) · x = x
+  * (x · (x ∘ x)) ∘ x = x
+  * (x · (y · x)) ∘ y = y
+  * (x · (y ∘ y)) · x = y
+  * (x · (y ∘ y)) · y = x
+  * (x · x) · (x ∘ x) = x
+  * (x · x) · x = x ∘ x
+  * (x · x) ∘ x = x ∘ x
+  * (x · y) · (x ∘ x) = y
+  * (x · y) · (y ∘ y) = x
+  * (x · y) · x = y ∘ y
+  * (x · y) · y = x ∘ x
+  * (x ∘ (x · x)) ∘ x = x
+  * (x ∘ (x ∘ x)) ∘ x = x
+  * (x ∘ x) · (x · x) = x
+  * (x ∘ x) · (x · y) = y
+  * (x ∘ x) · (y · x) = y
+  * (x ∘ x) · x = x · x
+  * (x ∘ x) · y = x · y
+  * (x ∘ x) · y = y · x
+  * (x ∘ x) ∘ (x · x) = x
+  * (x ∘ x) ∘ (x ∘ x) = x
+  * (x ∘ x) ∘ x = x ∘ x
+  * (x ∘ x) ∘ y = x ∘ y
+  * x · ((x ∘ x) · x) = x
+  * x · ((x ∘ x) · y) = y
+  * x · ((y ∘ y) · x) = y
+  * x · (x · (x ∘ x)) = x
+  * x · (x · (y ∘ y)) = y
+  * x · (x · x) = x ∘ x
+  * x · (x · y) = y ∘ y
+  * x · (x ∘ x) = x · x
+  * x · (y · (x ∘ x)) = y
+  * x · (y · x) = y ∘ y
+  * x · (y ∘ y) = x · y
+  * x · (y ∘ y) = y · x
+  * x ∘ ((x · x) · x) = x
+  * x ∘ ((x · x) ∘ x) = x
+  * x ∘ ((x · y) · y) = x
+  * x ∘ ((x ∘ x) · x) = x
+  * x ∘ ((x ∘ x) ∘ x) = x
+  * x ∘ ((y · x) · y) = x
+  * x ∘ (x · (x · x)) = x
+  * x ∘ (x · (x ∘ x)) = x
+    x ∘ (x · x) = x ∘ x
+  * x ∘ (x ∘ (x · x)) = x
+  * x ∘ (x ∘ (x ∘ x)) = x
+  * x ∘ (x ∘ x) = x ∘ x
+  * x ∘ (y · (x · y)) = x
+  * x ∘ (y · (y · x)) = x
+  * x ∘ (y · x) = x ∘ y
+  * x ∘ (y ∘ y) = x ∘ y
+2. shadow T + (x·y = x∘y):
+   => x·y=x              True
+   => x·y=y              True
+   => x·x=x              True
+   => x·y=y·x            True
+   => (x·y)·z=x·(y·z)    True
+   => x·(x·y)=y          True
+   => (x·y)·y=x          True
+   => x·(y·z)=x·y        True

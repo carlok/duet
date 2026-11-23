@@ -1,0 +1,17 @@
+  T => x·y=y·x            True
+  T => x·x=x              False
+  T => x·x=y·y            False
+  T => x∘x=x              True
+  T => x∘y=y∘x            False
+  T => (x∘y)∘z=x∘(y∘z)    False
+  T => x∘(y∘x)=x          False
+  T => x∘(x∘y)=x∘y        False
+  T => (x·x)∘x=x          True
+  T => x∘(y·x)=x∘y        True
+  T => (x∘y)·y=x·y        False
+  T => x∘(x·x)=x          True
+  T => x∘y=x              False
+  T => (x·y)∘y=x∘y        False
+  T => x·(x∘y)=y          False
+C = x ∘ x = x & x · y = y · x & x · (x · y) = y & (x · x) ∘ x = x & x ∘ (x · y) = x ∘ y
+  T => C True | C => T True

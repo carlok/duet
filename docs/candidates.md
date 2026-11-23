@@ -5,7 +5,19 @@
 Each has a memo in [`notes/`](../notes). Identifications go into the ledger
 [`notes/rediscovery.md`](../notes/rediscovery.md). None of these theories is claimed new.
 
-## `55cb2c91` (N1 rank 1): not identified, and the nearest thing to the jazz aim so far
+## X6's top entries (N1 ranks 1–4)
+
+- **`3818b88f`: a triple system with a selector.** It is equivalent to a totally symmetric quasigroup `·`
+  (commutative, `x · (x · y) = y`) with an idempotent `∘` such that `x ∘ (x · y) = x ∘ y` and `(x · x) ∘ x = x` (E,
+  both ways). So `x ∘ y` depends only on `x` and the block `{x, y, x · y}`. No source pairs a triple system with
+  such an operation.
+- **A family of three (`bc43fd42`, `d0e963d9`, `d14ced44`).** All three strengthen a common core in different ways:
+  every square is a right identity for `·`, and left multiplication cannot tell `y · z` from `z ∘ y`. With `·` =
+  `∘` each becomes the left-zero band.
+
+None is identified. Memo: [`notes/x6_top4.md`](../notes/x6_top4.md).
+
+## `55cb2c91` (N1 rank 5): not identified, and the nearest thing to the jazz aim so far
 
 - **The claim.** Two laws, `x · (x ∘ y) = x` and `x · y = ((y · z) · x) ∘ x`. Together they imply
   `(x · y) · y = x · y`.
@@ -19,7 +31,7 @@ Each has a memo in [`notes/`](../notes). Identifications go into the ledger
 
 Memo: [`notes/55cb2c91.md`](../notes/55cb2c91.md).
 
-## `1d0a5211` (N1 rank 2): Stein's law split across two operations
+## `1d0a5211` (N1 rank 6): Stein's law split across two operations
 
 - **The claim.** `x · (x ∘ y) = y ∘ x` and `(x ∘ (y · z)) ∘ z = z`.
 - **Reading.** With one operation, the first law is Stein's first law, `x(xy) = yx` (ETP 335). The second law alone
@@ -29,7 +41,7 @@ Memo: [`notes/55cb2c91.md`](../notes/55cb2c91.md).
 
 Memo: [`notes/1d0a5211.md`](../notes/1d0a5211.md).
 
-## `a9295908` (N1 rank 3): a fragment of Heyting algebras, reached from an odd angle
+## `a9295908` (N1 rank 7): a fragment of Heyting algebras, reached from an odd angle
 
 - **The claim.** `x · (x ∘ x) = x`, `(x ∘ y) · y = y` and `x · y = x ∘ (y · x)`.
 - **Plain reading (E, both ways).** A commutative, idempotent `·` that need not be associative, with
@@ -40,7 +52,7 @@ Memo: [`notes/1d0a5211.md`](../notes/1d0a5211.md).
 
 Memo: [`notes/a9295908.md`](../notes/a9295908.md).
 
-## `742cc445` (N1 rank 4): McKenzie's L1 with a non-lattice partner
+## `742cc445` (N1 rank 8): McKenzie's L1 with a non-lattice partner
 
 - **The claim.** `x · (y ∘ (x ∘ z)) = x`, which is McKenzie's lattice law L1, and `x ∘ ((x ∘ y) · (z ∘ x)) = x`, which
   fails in the 2-element lattice.
@@ -52,7 +64,7 @@ Memo: [`notes/a9295908.md`](../notes/a9295908.md).
 
 Memo: [`notes/742cc445.md`](../notes/742cc445.md).
 
-## `97a7dfcf` (N1 rank 5): a nilpotent pair
+## `97a7dfcf` (N1 rank 9): a nilpotent pair
 
 - **Plain reading (E, both ways).** With 0 = `x · x`: `(x · y) · z = 0`, `x ∘ (y · z) = 0` and
   `x · (y ∘ x) = x ∘ y`.

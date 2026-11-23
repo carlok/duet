@@ -2,6 +2,22 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X6's N1 ranks 1–4: close looks (23 Nov 2026, recorded 14:29 UTC; post hoc)
+
+Commands: `notes/dig_light.py <key>` and `notes/x6_top4_checks.py` parts 1–2 (E, 20–60 s per goal). Memo:
+`notes/x6_top4.md`. Literature: one web-only agent; its ETP numbers were checked by `law_index`.
+
+| Check | family `bc43fd42`, `d0e963d9`, `d14ced44` | `3818b88f` |
+| --- | --- | --- |
+| structure | each implies the core K = {x·(y·y) = x, x·(y∘y) = x, x·(y·z) = x·(z∘y)}; K implies none; no implications between them (E, 60 s) | equivalent to: · commutative with x·(x·y) = y (a totally symmetric quasigroup), x∘x = x, (x·x)∘x = x, x∘(x·y) = x∘y (E both ways) |
+| reading | squares are right identities for ·; left multiplication cannot tell y·z from z∘y | a triple system with a selector: x∘y depends only on x and the block {x, y, x·y} |
+| shadow (· = ∘) | left-zero band | one-element models only |
+| ETP | x = x◇(y◇y) is 11; x◇(y◇z) = x◇(z◇y) is 4358; neither named | Equations 16, 26 and 43 (commutativity) |
+| literature | x(yz) ≈ x(zy) only in one-operation AC-spectra work (arXiv:2401.15786) | TS-quasigroups, squags and sloops, cubic curves; nothing with a second operation like ∘ |
+
+**Verdict:** none identified. Funnel level 8 now holds 8: the four above plus `55cb2c91`, `1d0a5211`, `742cc445` and
+`97a7dfcf`. The funnel also counts a memo whose title names several candidates (`soup/funnel.py`).
+
 ## X6: X5 with the parameter-definition screen (23 Nov 2026, 06:40–12:26 UTC; preregistered; stopped by its memory rule)
 
 Preregistration: PREREGISTRATION.md, X6 (commit `cc1dc25`, before the start). Single change from X5: verifier V6

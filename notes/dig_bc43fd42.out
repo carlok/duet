@@ -1,0 +1,25 @@
+bc43fd42 x6 T = x · (y · z) = x · (z ∘ y) & x · (((y ∘ y) · z) · w) = x
+1. 15 laws of order <= 3 implied on the corpus; 15 proved by E; 7 emergent
+  * x · (x · x) = x
+    x · (x ∘ x) = x
+  * x · (y · y) = x
+    x · (y ∘ y) = x
+    x · ((x ∘ x) · x) = x
+    x · ((x ∘ x) · y) = x
+    x · ((y ∘ y) · x) = x
+    x · ((y ∘ y) · y) = x
+    x · ((y ∘ y) · z) = x
+  * x · (x ∘ (x ∘ x)) = x
+  * x · (x ∘ (y ∘ y)) = x
+  * x · (y ∘ (x ∘ x)) = x
+  * x · (y ∘ (y ∘ y)) = x
+  * x · (y ∘ (z ∘ z)) = x
+2. shadow T + (x·y = x∘y):
+   => x·y=x              True
+   => x·y=y              False
+   => x·x=x              True
+   => x·y=y·x            False
+   => (x·y)·z=x·(y·z)    True
+   => x·(x·y)=y          False
+   => (x·y)·y=x          True
+   => x·(y·z)=x·y        True

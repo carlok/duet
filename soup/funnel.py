@@ -10,7 +10,7 @@ Run after soup.novelty (it reads novelty_ranking.json). With --readme, the block
   3 not a fragment of a named theory               4 candidates (top 20 non-fragments per run)
   5 distinct varieties (soup.dedupe)               6 not known to any check (N1 ranked)
   7 N1 with every automatic mark: an off-diagonal emergent law, no classical model, not related by hand
-  8 studied closely (a memo notes/<key>.md) and not identified (no row in the ledger notes/rediscovery.md)
+  8 studied closely (a memo notes/<key>.md, or a notes/*.md titled with the key) and not identified (no row in the ledger notes/rediscovery.md)
 """
 import argparse
 import glob
@@ -57,7 +57,10 @@ def compute(data='/data', notes='/notes'):
     lv[7] = len(L7)
     ledger = open(os.path.join(notes, 'rediscovery.md')).read()
     rows = '\n'.join(l for l in ledger.splitlines() if re.match(r'\| \d+ \|', l))
-    L8 = [r for r in L7 if os.path.exists(os.path.join(notes, r['key'][:8] + '.md')) and r['key'][:8] not in rows]
+    # a memo: notes/<key>.md, or a notes/*.md whose title line (first line) names the key (memos on several candidates)
+    titles = ' '.join(open(f).readline() for f in glob.glob(os.path.join(notes, '*.md')))
+    memo = lambda k: os.path.exists(os.path.join(notes, k + '.md')) or k in titles
+    L8 = [r for r in L7 if memo(r['key'][:8]) and r['key'][:8] not in rows]
     lv[8] = len(L8)
     return lv, [r['key'][:8] for r in L8]
 

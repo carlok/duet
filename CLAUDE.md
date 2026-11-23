@@ -214,6 +214,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
     rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
     square-free form (`notes/x5_baseline.py`).
+  - X6's N1 ranks 1–4 studied (`notes/x6_top4.md`): none identified. 3818b88f ⟺ TS-quasigroup · + idempotent ∘ with
+    x∘(x·y) = x∘y, (x·x)∘x = x (a selector on a triple system). bc43fd42, d0e963d9, d14ced44 strengthen the core
+    x·(y·y) = x, x·(y∘y) = x, x·(y·z) = x·(z∘y). Funnel level 8: 8.
   - X6 (23 Nov, fusion2 + V6, stopped by memory rule at 72%, deviation 9): 1,460 verified, 645 scored, 0 fragments; the
     parameter screen fired 356 times; Q1–Q3 hold, Q4 fails in the good direction (9/20 classical). 7/20 disconnected;
     its 20 are 17 varieties; X6 candidates hold N1 ranks 1–4 (`bc43fd42`, `d0e963d9`, `d14ced44`, `3818b88f`), unstudied.
