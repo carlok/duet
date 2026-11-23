@@ -1,0 +1,5 @@
+s801: evals 35110, pushed 343, lattice-skipped 513, ignore-skipped 1517
+s802: evals 71975, pushed 542, lattice-skipped 2030, ignore-skipped 3751
+s803: evals 96004, pushed 632, lattice-skipped 1499, ignore-skipped 3221
+s804: evals 2384983, pushed 1188, lattice-skipped 71292, ignore-skipped 71677
+x5: 75334 of 2588072 evaluations skipped as lattice-valid (2.9%)

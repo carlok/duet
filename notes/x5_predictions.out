@@ -1,0 +1,24 @@
+x5: 164 scored; implying an IGNORE law on the final corpus: 0; with a proved claim containing a square: 120 (73%)
+      88  x · (x · x) = y · (x · y)
+      48  x · y = y · x
+      44  x ∘ y = y ∘ x
+      17  x · (x · y) = x ∘ (x ∘ y)
+      15  x · (y · x) = y
+       9  x · (x · x) = y · (y · x)
+       6  x · (x · y) = x · (y · x)
+       6  x · (x · x) = y ∘ (x ∘ y)
+       5  x · (x · y) = y
+       4  x ∘ (x ∘ y) = y
+x4: 565 scored; implying an IGNORE law on the final corpus: 519; with a proved claim containing a square: 483 (85%)
+     104  x · (x · x) = x · (x · y)
+      86  x · (x · x) = x · (x ∘ y)
+      61  x · (x ∘ y) = x · x
+      61  x · (x · y) = x · x
+      48  x · (x · x) = x · (y ∘ x)
+      42  x · (y ∘ x) = x · x
+      37  x · (x · x) = x · (y · x)
+      35  x · (x · x) = x ∘ (x · y)
+      27  x · (x · y) = x · (x ∘ y)
+      25  x · (y · x) = x · x
+P1: holds iff the x5 IGNORE count above is 0
+P2: top-10 laws shared with X4: 0 []  -> holds
