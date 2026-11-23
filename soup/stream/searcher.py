@@ -12,6 +12,9 @@ no duality operator, no duality bonus). Elites are only shared within an arm.
      and one in ∘ alone from the pools, plus one random bridge.
 'fusion2' (X5, 23 Nov 2026): 'fusion', and theories that imply an argument-ignoring law (soup.offdiag.IGNORE) are skipped.
 'fusion3' (X6 candidate): 'fusion2' with IGNORE2, so ignored variables may occur more than once (soup.offdiag).
+'fusion4' (X7, 23 Nov 2026): 'fusion2' plus soup.known: theories that are fragments or subvarieties of a known theory, or
+  equivalent to an earlier candidate, are skipped; keys pushed or verified by earlier runs are never pushed again; a
+  one-hash bitmap counts distinct evaluated law sets.
 """
 import argparse
 import math
@@ -29,6 +32,8 @@ from .common import StopFlag, heartbeat, read_json, write_json, memory
 from .fqueue import FileQueue
 
 MAX_LAWS = 6
+BLOOM_BITS = 1 << 27        # X7: one-hash bitmap (16 MB) of evaluated law sets, for distinct level-0 counts
+LIB_REFRESH = 1800.0        # X7: seconds between rebuilds of the known library's corpus view
 W = {0: 0, 1: 1.0, 2: 0.5, 3: 0.1, 4: 0.0}
 W_FUSION = {0: 0, 1: 1.0, 2: 0.5, 3: 0.25, 4: 0.125}
 
@@ -61,11 +66,19 @@ class Searcher:
     def __init__(self, name, seed, arm, run):
         self.name, self.arm, self.run = name, arm, run
         self.prior = arm == 'prior'
-        self.fusion = arm in ('fusion', 'fusion2', 'fusion3')
-        self.rigid = arm in ('fusion2', 'fusion3')
+        self.fusion = arm in ('fusion', 'fusion2', 'fusion3', 'fusion4')
+        self.rigid = arm in ('fusion2', 'fusion3', 'fusion4')
         self.rng = random.Random(seed)
         self.C = Corpus(store=ensure('corpus'))
         self.lat_skipped = self.ign_skipped = 0
+        self.known_skipped = self.cand_skipped = self.seen_skipped = 0
+        self.lib = None; self.prior_seen = set(); self.bloom = None
+        if arm == 'fusion4':      # X7: skip what earlier runs already know (soup.known), count distinct evaluations
+            import json
+            from ..known import Library
+            self.lib = Library(self.C, data()); self.t_lib = time.time()
+            self.prior_seen = set(json.load(open(data('seen_before.json'))))
+            self.bloom = np.zeros(BLOOM_BITS // 8, np.uint8)
         if self.fusion:
             from ..offdiag import lat2, pools
             self.lat2 = lat2()
@@ -101,6 +114,10 @@ class Searcher:
         if (imp & DEFN).any(): return None       # one operation is a term in the other: not a real fusion
         if self.rigid and (imp & self.IGNORE).any():
             self.ign_skipped += 1; return None    # some derived operation of order <= 2 ignores an argument (X5)
+        if self.lib is not None:
+            c = self.lib.classify(T, imp)
+            if c == 'known': self.known_skipped += 1; return None        # fragment or subvariety of a known theory
+            if c == 'candidate': self.cand_skipped += 1; return None     # equivalent to an earlier candidate
         if self.fusion:
             from ..offdiag import offdiag_gain
             fg = offdiag_gain(self.C, T, imp)
@@ -129,6 +146,8 @@ class Searcher:
     # ---- archive
     def insert(self, s, push=True):
         key = theory_key(s['T']); s['key'] = key
+        if key in self.prior_seen:                # pushed or verified by an earlier run: not again (X7)
+            self.seen_skipped += 1; return False
         cell = self.archive.get(s['desc'])
         if cell is not None and (cell['key'] == key or self.eff(s) <= self.eff(cell)): return False
         if cell is not None: self.where.pop(cell['key'], None)
@@ -207,11 +226,15 @@ class Searcher:
         if g and g.get('arm') == self.arm: self.gate = g
         new = self.C.refresh()
         if new: self.rescore()
+        if self.lib is not None and time.time() - self.t_lib > LIB_REFRESH:
+            self.lib.refresh(); self.t_lib = time.time()       # the corpus grew: library models, every 30 min
         self.ingest_results()
         heartbeat(self.name, role='search', arm=self.arm, run=self.run, state='searching',
                   evals=self.evals, evals_per_s=round(self.evals / max(1e-9, time.time() - t_start), 1),
                   archive=len(self.archive), wins=self.wins, pushed=self.pushed, held=self.held, gate=self.gate.get('threshold'), corpus=len(self.C),
                   lat_skipped=self.lat_skipped, ign_skipped=self.ign_skipped,
+                  known_skipped=self.known_skipped, cand_skipped=self.cand_skipped, seen_skipped=self.seen_skipped,
+                  distinct=self.distinct(),
                   verified_seen=len(self.verified), k=round(self.k(), 4), mem=memory(os.getpid()))
 
     def snapshot(self):
@@ -231,14 +254,25 @@ class Searcher:
             T = self.propose()
             if not T or len(set(T)) < 2: continue
             s = self.surrogate(T); self.evals += 1
+            if self.bloom is not None:
+                h = hash(tuple(sorted(set(T)))) & (BLOOM_BITS - 1)
+                self.bloom[h >> 3] |= np.uint8(1 << (h & 7))
             if s: self.insert(s)
         self.maintenance(t_start); self.snapshot()
+        if self.bloom is not None:
+            np.save(data('runs', self.run, f'bloom_{self.name}.npy'), self.bloom)
+
+    def distinct(self):
+        """Distinct law sets evaluated by this searcher, by linear counting on the one-hash bitmap; None if off."""
+        if self.bloom is None: return None
+        fill = int(np.bitwise_count(self.bloom).sum(dtype=np.int64))
+        return int(round(-BLOOM_BITS * math.log(1 - fill / BLOOM_BITS))) if fill < BLOOM_BITS else None
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--seed', type=int, required=True)
-    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3'])
+    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4'])
     ap.add_argument('--run', required=True); ap.add_argument('--budget', type=float, default=1e9)
     a = ap.parse_args()
     s = Searcher(a.name, a.seed, a.arm, a.run)

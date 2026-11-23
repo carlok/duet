@@ -2,6 +2,60 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X7: skip what is already known, a night run (written 23 Nov 2026, 19:46 UTC, before X7 starts)
+
+Exploratory and descriptive. The user's instruction (23 Nov): "skip the already known, do not risk to do again the
+same", and a new level-0 measurement.
+
+**Design.** Arm `fusion4` is X6's `fusion2` plus three changes (`soup/known.py`, `soup/stream/searcher.py`). The
+verifier is V6, as in X6.
+
+1. **Known-library skip.**
+   - Built once before the run by `python -m soup.known build --out /data/x7`, from the shared data and the ledger.
+   - The library, each entry under all 8 relabellings:
+     - 129 known entries: the 13 catalogue entries, which include the 10 named theories, and the 15 candidates
+       identified in the ledger;
+     - 1,097 entries for the other earlier candidates.
+   - A theory is skipped if, on the corpus, it is a fragment or a subvariety of a known entry, or equivalent to an
+     earlier candidate.
+   - A strengthening of an unidentified candidate is not skipped: it is new ground.
+   - The library's corpus view is rebuilt every 30 minutes.
+2. **Seen-before skip.** The 38,701 theory keys that earlier runs pushed or verified (`seen_before.json`) are never
+   inserted or pushed again.
+3. **Distinct level 0.** A one-hash bitmap of 2^27 bits per searcher, estimated by linear counting. The bitmaps are
+   saved at the end, so the distinct count across searchers is computed post hoc from their union.
+
+**Unattended safety.** The memory rule, applied by hand in X1, X3 and X6, is now code: `--mem-stop-mb 1000` stops
+the run cleanly when MemAvailable falls below 1,000 MB, and the stop is reported in the journal. It is the same
+preregistered rule, applied automatically, so a stop is not a deviation. The budget is 28,800 s (8 h), with 4
+searchers, 4 verifiers and seeds 1101+.
+
+**Run:** `python -m soup.t4_setup --dir x7`, then `soup.known build --out /data/x7`, then `podman run -d --name
+soup-x7 -v "$PWD/work:/data" -e SOUP_DATA=/data/x7 -e SOUP_VERIFIER=V6 soup python3 -m soup.stream.supervisor --arm
+fusion4 --searchers 4 --verifiers 4 --seed0 1101 --budget 28800 --mem-stop-mb 1000 --run x7`.
+
+**Done before this entry, disclosed.**
+- `tests/test_x7.py` was added, and the whole suite passes (80 tests).
+- A 4-minute engineering smoke run (`work/x7smoke`, seeds 1991–1994, deleted afterwards) checked that nothing breaks.
+  Per evaluation it skipped about 7% as known, 0.2% as earlier candidates and 0.05% as seen before. Distinct
+  evaluations were about 88% of raw. 15 theories were verified, 5 with a positive score. Nothing else was read.
+
+**Predictions** (descriptive):
+- **Q1:** post hoc, `soup.relabel` and `soup.rediscover` find no fragment or subvariety of a named or catalogue
+  theory among X7's top 20, and `soup.dedupe` finds no top-20 candidate equivalent to an earlier one.
+- **Q2:** the union of the searchers' bitmaps counts at least 80% of raw evaluations as distinct.
+- **Q3:** X7's top 20 holds at least 10 distinct varieties, and at least 5 are "disconnected" (X6: 17 and 7).
+- **Q4:** the parameter screen fires on less than 24% of verified theories (X6: 24%).
+
+**After the run:** X6's post-run pipeline, with x7 added.
+- Fragments, statistics, candidates, profile, `soup.hidden` (plain and `--param`), relabel, rank and rediscover.
+- Split per candidate, with the results merged into `check/split_candidates.json`.
+- Disconnected marks, dedupe, N1, the funnel, and a REPORT section.
+
+**Caveats:**
+- The skips rely on the corpus, which over-approximates implication. A skipped theory may not really be a fragment
+  or subvariety: the error goes towards skipping too much.
+- The library holds only what our checks and the ledger know, not the literature.
 ## X6: X5 with the parameter-definition screen, a longer run (written 23 Nov 2026, 06:39 UTC, before X6 starts)
 
 Exploratory and descriptive. The user chose the design on 23 Nov: verifier V6, arm `fusion2` as in X5, not `fusion3`.

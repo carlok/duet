@@ -50,6 +50,13 @@ T = {x·(x·y) = y, (x·y)·y = x, x∘(x·y) = x∘y, (x·x)∘(x∘x) = x, (x�
   Padmanabhan and McCune 2006). Nothing pairs a TS-quasigroup with an idempotent second operation, and nothing was
   found for x∘(x·y) = x∘y. The agent suggests orientations or selectors on Steiner triple systems as the next place to
   look.
+- **Drápal, Griggs and Kozlik, "Triple systems and binary operations"** (Discrete Math. 325 (2014) 1–11,
+  doi:10.1016/j.disc.2014.02.007), the closest prior art found. Only the abstract was read, by a web-only agent
+  from the archived Open University page; the full text was not reachable. It builds one idempotent operation per
+  Steiner, Mendelsohn or hybrid triple system (x∗y = the third point of the block), and no second operation. Our ∘
+  is constant on each block from x's point of view, which is a different kind of operation. A remark in the full
+  text cannot be ruled out.
+  look.
 
 ## Reading
 

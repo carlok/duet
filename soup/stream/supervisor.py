@@ -30,6 +30,16 @@ from .fqueue import FileQueue
 from .journal import Journal, leaderboard, result_line, hm, ymd_hm
 
 
+def mem_available_mb(path='/proc/meminfo'):
+    """MemAvailable of the VM in MB (a container sees the VM's /proc/meminfo), or None if unreadable."""
+    try:
+        for line in open(path):
+            if line.startswith('MemAvailable:'): return int(line.split()[1]) // 1024
+    except OSError:
+        return None
+    return None
+
+
 class Proc:
     def __init__(self, name, role, cmd, log):
         self.name, self.role, self.cmd = name, role, cmd
@@ -209,7 +219,7 @@ class Supervisor:
         stop = {'set': False}
         def h(*_): stop['set'] = True
         signal.signal(signal.SIGTERM, h); signal.signal(signal.SIGINT, h)
-        t_reb = time.time()
+        t_reb = time.time(); mem_stop = None
         while not stop['set'] and time.time() - self.t_start < a.budget:
             time.sleep(a.tick)
             self.reap()
@@ -218,7 +228,13 @@ class Supervisor:
                 action = self.rebalance(); t_reb = time.time()
                 if action: self.event(f'rebalance: {action}')
             self.tick(action)
-        self.event(f"budget reached ({time.time() - self.t_start:.0f} s): stopping workers" if not stop['set'] else 'stopped by signal')
+            if a.mem_stop_mb:                      # the preregistered memory rule, applied by the supervisor (X7)
+                avail = mem_available_mb()
+                if avail is not None and avail < a.mem_stop_mb:
+                    mem_stop = avail; break
+        self.event(f"memory rule: {mem_stop} MB available < {a.mem_stop_mb} MB after {time.time() - self.t_start:.0f} s: stopping workers"
+                   if mem_stop is not None else
+                   f"budget reached ({time.time() - self.t_start:.0f} s): stopping workers" if not stop['set'] else 'stopped by signal')
         for p in self.procs.values():
             if p.p.poll() is None: p.retiring = True; p.p.send_signal(signal.SIGTERM)
         t0 = time.time()
@@ -241,13 +257,14 @@ def main():
     ap.add_argument('--budget', type=float, default=float(os.environ.get('BUDGET', 3600)))
     ap.add_argument('--searchers', type=int, default=int(os.environ.get('SEARCHERS', 3)))
     ap.add_argument('--verifiers', type=int, default=int(os.environ.get('VERIFIERS', 8)))
-    ap.add_argument('--arm', default=os.environ.get('ARM', 'prior'), choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3'])
+    ap.add_argument('--arm', default=os.environ.get('ARM', 'prior'), choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4'])
     ap.add_argument('--seed0', type=int, default=int(os.environ.get('SEED0', 101)))
     ap.add_argument('--tick', type=float, default=15.0)
     ap.add_argument('--rebalance', type=float, default=120.0)
     ap.add_argument('--qmax', type=int, default=1500)
     ap.add_argument('--gate', type=float, default=0.5, help='push only if k*priority >= gate * 20th best score')
     ap.add_argument('--run', default=os.environ.get('RUN_ID'))
+    ap.add_argument('--mem-stop-mb', type=int, default=0, help='stop cleanly when MemAvailable falls below this (0: off)')
     Supervisor(ap.parse_args()).main()
 
 
