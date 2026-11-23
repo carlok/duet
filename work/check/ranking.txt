@@ -1,0 +1,33 @@
++ podman run --rm -v /Users/carlo/Documents/varie/hacks/scratch/duet/work:/data soup python3 -m soup.dossier rank
+calibrated features: ['convergent']
+0 excluded as equivalent to a standard theory
+ 1 .          4dc33674 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 4.5021 | x · (x · y) = y & (x ∘ y) ∘ y = x & x ∘ (x ∘ (x · y)) = x & ((x ∘ y) · y) · y = y
+ 2 t4-prior   8a512957 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 2.167 | x · (y ∘ x) = y ∘ y & x · x = (y · x) ∘ y & x ∘ (x ∘ ((y · z) ∘ x)) = x & ((x · (y ∘ z)) · x) · x = x
+ 3 x3         31d6d970 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.8069 | x · (x ∘ y) = x & (x ∘ y) · y = y & (x · x) · (y · x) = x & (x · y) · (x · x) = x
+ 4 x2         69dfbd8e calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.6645 | x · x = x & (x · x) · (y ∘ x) = x & (x ∘ y) · (x · x) = x & (x · y) · ((x · z) · x) = x & (x · (y · x)) · (z · x) = x
+ 5 x2         d1e1c31f calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.6604 | x · ((y ∘ z) · x) = x & (x ∘ x) · (y ∘ x) = x & (x · y) ∘ (x · x) = x & (x ∘ (y · z)) ∘ x = x
+ 6 t4-prior   1ca933c1 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.5836 | x · (y ∘ (x ∘ y)) = x & x ∘ (y · (x · y)) = x & x · ((y ∘ x) ∘ y) = x & x ∘ ((y · x) · y) = x & x · (((x · x) · y) ∘ z) 
+ 7 x1         c8e6ca60 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.4864 | x · ((y ∘ z) · x) = x & x ∘ ((y · z) ∘ x) = x & (x · (y ∘ z)) · x = x & (x ∘ (y · z)) ∘ x = x
+ 8 x1         87137d88 calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.391 | x · (y ∘ x) = x & x ∘ (y · x) = x & x · (((x ∘ y) · z) ∘ w) = x & x ∘ (((x · y) ∘ z) · w) = x
+ 9 x1         695c2c2b calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 1.1702 | x · (x · y) = x ∘ x & x · x = x ∘ (x ∘ y) & x · ((y · (z · x)) · x) = x & x ∘ ((y ∘ (z ∘ x)) ∘ x) = x
+10 .          3078949b calib 1 | convergent spectrum3 duality | nondeg sizes 3 | score 0.945 | x · (x · (y ∘ y)) = x & x · (y ∘ (x ∘ x)) = x & x ∘ (y · (x · x)) = x & x ∘ (x ∘ (y · y)) = x
+11 .          2dc27508 calib 1 | convergent duality | nondeg sizes 2 | score 2.6966 | x · (y · (x · x)) = x & ((x · x) · y) · x = x & (x ∘ y) · x = x · (z ∘ x)
+12 x3         538b3e13 calib 1 | convergent duality | nondeg sizes 2 | score 1.7684 | x · (y · (x ∘ x)) = x & ((x · x) ∘ y) ∘ x = x & x ∘ ((x · (y ∘ x)) · x) = x & (x ∘ ((x · y) ∘ x)) · x = x
+13 x2         3e068fa6 calib 1 | convergent duality | nondeg sizes 2 | score 1.347 | (x ∘ y) · (y ∘ x) = y & (x · x) ∘ y = x ∘ (y · y)
+14 x1         f5a5150b calib 1 | convergent duality | nondeg sizes 2 | score 1.3073 | x · x = x ∘ x & x · ((y · y) · x) = y & (x · (y · y)) · x = y
+15 x1         10c98c4b calib 1 | convergent duality | nondeg sizes 2 | score 1.2587 | x · (y ∘ x) = x · x & x ∘ (y · x) = x ∘ x & (x ∘ y) · x = x · x & (x · y) ∘ x = x ∘ x & (x ∘ y) · (y ∘ x) = x & (x · y) 
+16 x1         3c197ddc calib 1 | convergent duality | nondeg sizes 2 | score 1.1638 | x · x = x & x · x = x ∘ x & (x · y) · x = z · (y · z)
+17 .          b302a8c7 calib 1 | convergent duality | nondeg sizes 2 | score 0.9693 | x · x = x ∘ x & x · (y · (x · x)) = x & x ∘ (y ∘ (x ∘ x)) = x & ((x · x) · y) · x = x & ((x ∘ x) ∘ y) ∘ x = x
+18 x1         0823fca2 calib 1 | convergent duality | nondeg sizes 1 | score 1.2476 | x · ((y · x) ∘ x) = x & (x ∘ y) ∘ (z ∘ x) = x & (x ∘ (x · y)) · x = x
+19 x1         f85b2386 calib 1 | convergent duality | nondeg sizes 1 | score 1.2065 | x · x = x ∘ x & x · (y · (x · x)) = x & ((x · x) · y) · x = x
+20 x1         9c9fc7c5 calib 1 | convergent duality | nondeg sizes 1 | score 1.1824 | x · ((y · x) ∘ x) = x & x ∘ ((y ∘ x) · x) = x & (x · y) · (z · x) = x & (x ∘ (x · y)) · x = x & (x · (x ∘ y)) ∘ x = x
+21 .          adefe707 calib 1 | convergent duality | nondeg sizes 1 | score 1.1342 | x · (y · (x · x)) = x & (x · x) ∘ (x · x) = x & ((x · x) · y) · x = x
+22 x1         0e846588 calib 1 | convergent duality | nondeg sizes 0 | score 1.5073 | (x ∘ x) · (x ∘ x) = x & (x ∘ y) ∘ z = x ∘ (w ∘ z)
+23 .          79bea529 calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.8855 | x · x = x & (x ∘ y) ∘ ((y · z) · y) = y
+24 x2         b11298e6 calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.7048 | x · (x · y) = x & x ∘ ((y · x) ∘ (z ∘ z)) = x
+25 x2         7333748d calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.6811 | x · (x · x) = x & (x ∘ x) · (y ∘ (x · z)) = x
+26 t4-prior   977c3603 calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.659 | x · (x · x) = x & x · (y ∘ x) = y ∘ y & x · x = (y · x) ∘ y & x ∘ (x ∘ ((y · z) ∘ x)) = x
+27 t4-noprior 290f9927 calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.5751 | x · (x · x) = x & x ∘ (y · (z · x)) = x & (x ∘ x) ∘ (x · y) = y ∘ x
+28 t4-prior   7baa92ae calib 1 | finite_free2 convergent spectrum3 | nondeg sizes 3 | score 1.5469 | x · (y ∘ ((x ∘ x) · z)) = x & (x · y) ∘ (z · (x · x)) = z
+29 t4-noprior 9eb87773 calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.4534 | x · x = x & x · (y ∘ x) = x & (x · y) · x = (z · x) ∘ x
+30 x2         456bd9d0 calib 1 | convergent spectrum3 | nondeg sizes 3 | score 1.4386 | x · x = x & x · (y · x) = x & (x ∘ (y · (z · z))) ∘ y = y

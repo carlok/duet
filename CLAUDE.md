@@ -212,6 +212,12 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
     rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
     square-free form (`notes/x5_baseline.py`).
+  - X5 result (to budget, 23 Nov 00:10 UTC): 292 verified, 164 scored, 0 fragments; P1–P4 hold, P4 badly. All 20 top
+    candidates have affine 𝔽₄ models, and 0 of 20 are disconnected. 19 of 20 have · a Steiner loop, and in 16, ∘ is ·
+    translated by a constant, x∘y = (x·y)·(z∘z) (ledger row 12). New attractor: x·(x·x) = y·(x·y).
+  - Pitfall: `soup.split --set candidates` works in file order and stalls on X4's unchecked candidates. For a new
+    run's candidates use `soup.split --laws` per candidate with a `timeout`. On the Mac, `xargs` has no `-d`: use `-0`.
+  - Pitfall: `soup.hidden` looks only for terms without constants, so "∘ = · translated by z∘z" passes it.
   - Workflow after every run: the post-run checks, then `soup.dedupe`, then
     `soup.novelty --readme /repo/README.md` (mount README.md and notes/). Then push.
 

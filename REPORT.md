@@ -2,6 +2,74 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X5: the fusion arm restricted to rigid theories (22 Nov 2026, 21:39 UTC – 23 Nov, 00:10 UTC; preregistered)
+
+Preregistration: PREREGISTRATION.md, X5 (commit `5a04726`, before the start; timestamp corrected in `e6690f2`). The
+single change from X4: arm `fusion2` skips every theory whose corpus-implied laws contain an argument-ignoring law
+(`soup.offdiag.IGNORE`, 53 laws). Commands:
+- run: `podman run -d --name soup-x5 -v "$PWD/work:/data" -e SOUP_DATA=/data/x5 -e SOUP_VERIFIER=V5 soup python3 -m
+  soup.stream.supervisor --arm fusion2 --searchers 4 --verifiers 4 --seed0 801 --budget 9000 --run x5`;
+- fragments: `-e SOUP_DATA=/data/x5 -e FRAG_JOBS=6 soup python3 -m soup.fragments`;
+- statistics: `notes/runstats.py x5`, `notes/diagonal.py x5`, `notes/heartbeats.py x5`, `notes/x5_predictions.py`
+  (written during the run, committed before any result was read; outputs `notes/*_x5.out`, `notes/x5_predictions.out`).
+
+| | X5 (fusion2, V5) | X4 (fusion, V5) |
+| --- | --- | --- |
+| verified theories | 292 (117 per hour) | 636 (254 per hour) |
+| positive score | 164 | 565 |
+| fragments of a named theory | **0 of 164** | 0 of 565 |
+| screened by V4 | 13 split, 0 division | 3 split, 0 division |
+| skipped: lattice-valid / argument-ignoring | 75,334 / 80,166 of 2,588,072 evaluations (2.9% / 3.1%) | 70,453 (2.2%) / not applicable |
+| claims / proved | 477 / 274 | 1,309 / 955 |
+| refuted by finite models (stages a and c, and FMB) | 114 (24% of claims) | 276 (21%) |
+| refuted by Vampire FMB | 79 (sizes 6 ×5, 7 ×10, 8 ×27, 10 ×37; FMB ran on 159 claims) | 22 |
+| refuted by E saturation | 9 (8 uncertified) | 40 (15 uncertified) |
+| unknown / open | 76 / 4 | 13 / 3 |
+| proving emergent associativity / commutativity | 0 / 92 | 0 / 7 |
+| structures added to the corpus | 437 | 3,844 |
+
+**Predictions** (`notes/x5_predictions.out`):
+- **P1 holds.** 0 of 164 scored theories imply an argument-ignoring law on X5's final corpus (X4: 519 of 565).
+- **P2 holds.** X5's ten most frequent proved emergent laws share none with X4's.
+- **P3 holds.** 120 of 164 (73%) have a proved claim with a square subterm, against 483 of 565 (85%).
+- **P4 holds, in the direction the caveat feared.** All 20 top non-fragments have the same 9 classical models, affine
+  structures over 𝔽₄ (`notes/disconnected_x5_x4.out`). "Disconnected" marks: **X5 0 of 20**, X4 14 of 20.
+
+**A new attractor.** The most frequent proved law is x·(x·x) = y·(x·y) (88 of 164). A term ignores a variable that
+occurs twice, which the IGNORE definition misses: it renames only variables that occur once. Commutativity of each
+operation is proved in 92.
+
+**Post-run checks** (23 Nov, 00:14–01:20 UTC; log `work/check/x5_post.log`):
+- **Candidates.** X5's top 20 joined the pool: 158 candidates (`dossier candidates --sources
+  t4-prior,t4-noprior,.,x1,x2,x3,x4,x5`). T5a ranks of X5's 20: 69, then 121–156 of 158.
+- **Equivalence checks** (`notes/cand_checks.py x5`, output `notes/cand_checks_x5.out`): `soup.hidden` 0
+  definitional; `soup.relabel` 0 relations.
+- **Split.** `soup.split --set candidates` (capped at 1,800 s) stalled on one of X4's three unchecked candidates and
+  checked none of X5's. It was rerun per candidate (`soup.split --laws`, 300 s each, 4 in parallel; output
+  `notes/split_x5_candidates.out`): 0 split, 1 not split (finite certificate), 19 undecided.
+- **R1** (`soup.rediscover --sources x5 --jobs 6`, 90 E jobs, 47 unknown): no theory is a fragment of, or equivalent
+  to, a catalogue entry; 6 are subvarieties of doppelsemigroups; top 20: 0 identified by the automatic checks.
+- **Dedupe** (`soup.dedupe --jobs 4`, x5 added to the corpora): 158 candidates are **125 varieties**. X5's 20 are
+  5 varieties, one of them holding 15 candidates.
+
+**What X5's candidates are (post hoc, by hand; ledger row 12).** Script: `notes/x5_top3_probe.py`, parts 1–3, E
+20–30 s per law, output `notes/x5_top3_probe.out`.
+- In 19 of 20, · is a **Steiner loop**: E proves x·y = y·x, x·(x·y) = y and x·x = y·y, and the constant square is then
+  an identity.
+- In 16 of 20, E proves x∘y = (x·y)·(z∘z) and x·y = (x∘y)∘(z·z). So ∘ is the same loop translated by ∘'s identity:
+  a one-operation structure with a parameter. `soup.hidden` misses this disguise because its terms have no constants.
+- The other 4 are undecided in that budget (one has no Steiner-loop proof).
+
+**Reading.** Restricting to rigid theories took the search out of the lattice-and-band region and away from X4's
+attractor, as intended. It landed on a classical one-operation structure in a new disguise. The run found no
+disconnected candidate. Two filters follow from it, neither applied post hoc to the ranking:
+1. extend `soup.hidden` to terms with a constant (z·z, z∘z);
+2. extend IGNORE to variables that occur more than once.
+
+The live table (N1) lists the X5 entries with this identification in its literature column. Its five X5 varieties enter at
+ranks 23–27 of 82 (a classical model each); the top 10 is unchanged. Following N1's
+preregistered gate, the gate itself is not changed.
+
 ## `1d0a5211` (N1 rank 2): what the theory is (22 Nov 2026, evening, recorded 21:45 UTC; post hoc)
 
 Command: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/1d0a5211_checks.py`, parts 1–3

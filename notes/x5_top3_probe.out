@@ -1,0 +1,83 @@
+ebb197cc 1.837 x · ((y · y) ∘ x) = z ∘ z & x ∘ ((y · (y ∘ x)) · y) = y & (x ∘ y) ∘ (y · (x · x)) = x & ((x · x) ∘ (y · x)) ∘ x = y & ((x ∘ (x · y)) · y) ∘ x = x
+   x·y=y·x                True
+   x∘y=y∘x                True
+   (x·y)·z=x·(y·z)        False
+   (x∘y)∘z=x∘(y∘z)        False
+   x·(x·y)=y              True
+   x∘(x∘y)=y              True
+   (x·y)·y=x              True
+   (x∘y)∘y=x              True
+   x·x=y·y                True
+   x∘x=y∘y                True
+   x·x=x∘x                False
+   x·(y∘z)=(x·y)∘z        False
+   x·(y∘z)=y∘(x·z)        False
+   x·y=x∘(y∘(x∘x))        False
+379c1621 1.825 x · (y · (z ∘ z)) = y ∘ x & x ∘ (y · ((y · y) ∘ x)) = y & x · ((y ∘ (y · x)) ∘ y) = y & (x ∘ y) · ((y · x) ∘ y) = y
+   x·y=y·x                True
+   x∘y=y∘x                True
+   (x·y)·z=x·(y·z)        False
+   (x∘y)∘z=x∘(y∘z)        False
+   x·(x·y)=y              True
+   x∘(x∘y)=y              True
+   (x·y)·y=x              True
+   (x∘y)∘y=x              True
+   x·x=y·y                True
+   x∘x=y∘y                True
+   x·x=x∘x                False
+   x·(y∘z)=(x·y)∘z        False
+   x·(y∘z)=y∘(x·z)        False
+   x·y=x∘(y∘(x∘x))        False
+6005984f 1.787 x · (y ∘ ((y · z) ∘ z)) = x & (x · x) ∘ (x · (x ∘ y)) = y & (x ∘ (y · (x · x))) ∘ y = x
+   x·y=y·x                True
+   x∘y=y∘x                True
+   (x·y)·z=x·(y·z)        False
+   (x∘y)∘z=x∘(y∘z)        False
+   x·(x·y)=y              True
+   x∘(x∘y)=y              True
+   (x·y)·y=x              True
+   (x∘y)∘y=x              True
+   x·x=y·y                True
+   x∘x=y∘y                True
+   x·x=x∘x                False
+   x·(y∘z)=(x·y)∘z        False
+   x·(y∘z)=y∘(x·z)        False
+   x·y=x∘(y∘(x∘x))        False
+part 2
+ebb197cc
+   x∘y=(x·y)·(z∘z)              True
+   x·y=(x∘y)∘(z·z)              True
+   x∘y=(x·y)·(x∘x)              True
+   x·(y∘z)=(x∘y)·z              False
+379c1621
+   x∘y=(x·y)·(z∘z)              True
+   x·y=(x∘y)∘(z·z)              True
+   x∘y=(x·y)·(x∘x)              True
+   x·(y∘z)=(x∘y)·z              False
+6005984f
+   x∘y=(x·y)·(z∘z)              True
+   x·y=(x∘y)∘(z·z)              True
+   x∘y=(x·y)·(x∘x)              True
+   x·(y∘z)=(x∘y)·z              False
+part 3
+   ebb197cc translate both ways True; · a Steiner loop True
+   379c1621 translate both ways True; · a Steiner loop True
+   6005984f translate both ways True; · a Steiner loop True
+   811b3500 translate both ways True; · a Steiner loop True
+   e96c7cfd translate both ways True; · a Steiner loop True
+   ba93757c translate both ways True; · a Steiner loop True
+   eb5bd76d translate both ways True; · a Steiner loop True
+   d084b4a5 translate both ways True; · a Steiner loop True
+   4a54b97e translate both ways True; · a Steiner loop True
+   be4719e3 translate both ways True; · a Steiner loop True
+   7be705c1 translate both ways False; · a Steiner loop True
+   e61b0d68 translate both ways False; · a Steiner loop False
+   39bd4af5 translate both ways True; · a Steiner loop True
+   09797ec7 translate both ways True; · a Steiner loop True
+   5b4e12f1 translate both ways True; · a Steiner loop True
+   b7c6de53 translate both ways True; · a Steiner loop True
+   eabe586f translate both ways True; · a Steiner loop True
+   e51eb8f1 translate both ways False; · a Steiner loop True
+   2035fdd3 translate both ways True; · a Steiner loop True
+   b9fb4af2 translate both ways False; · a Steiner loop True
+part 3: 16 of 20 translates both ways; 19 with · a Steiner loop (E, 30 s per law)

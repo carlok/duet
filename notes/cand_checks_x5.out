@@ -1,0 +1,5 @@
+x5: 20 candidates; checked: split 0, hidden 20, relabel 20
+ split: {}
+ hidden definitional: 0
+ relabel: imply a named theory 0 {} | fragment of one 0 | equivalent to one 0
+ ranks among 158 : [69, 121, 122, 123, 125, 130, 132, 133, 136, 137, 140, 142, 149, 150, 151, 152, 153, 154, 155, 156]
