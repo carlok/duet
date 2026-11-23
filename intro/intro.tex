@@ -89,7 +89,7 @@
 \medskip
 {\large An introduction from scratch to the \proj{} project\par}
 \medskip
-22 November 2026\par
+23 November 2026\par
 \medskip
 \rule{0.3\textwidth}{0.4pt}
 \end{center}
@@ -102,7 +102,7 @@ without help, find small sets of laws in two operations whose combination does m
 explains how that search is built, what it has found so far, and why the question could matter.
 \either{Most sections end with exercises, and the solutions are at the end; the same text without them is
 \file{intro-reading.pdf}.}{This is the reading version: the text alone. The same text with exercises and solutions is
-\file{intro.pdf}.} Numbers about the project are as of 22 November 2026; the
+\file{intro.pdf}.} Numbers about the project are as of 23 November 2026; the
 repository's \file{REPORT.md} is the authoritative record, with the command behind every number. This text, like most
 of the project, was written with an AI coding assistant under the author's direction (README, ``How this was made'').
 No language model takes part in the search or its scoring.
@@ -420,7 +420,7 @@ ideally someone who knows the field.
 
 \section{What has been found so far}\label{sec:found}
 
-As of 22 November 2026, honestly stated:
+As of 23 November 2026, honestly stated:
 \begin{itemize}
 \item \textbf{Rediscovery.} The search keeps finding lattice theory in pieces. It rediscovered two of McKenzie's four
   laws, twelve different bases for lattices, and Fried's weakly associative lattices. Against a list of 13 known
@@ -435,12 +435,24 @@ As of 22 November 2026, honestly stated:
   theory has more models, and no source for it was found. It remains a candidate.
 \item \textbf{A diagonal attractor.} 97\% of the scored theories prove an emergent law in one variable, such as
   $x\op x=x$ or $x\op x=x\cop x$, and none proves emergent associativity. The search had learned to fuse cheaply
-  through the diagonal. A new run (X4) counts only laws that do not come from the diagonal.
-\item \textbf{Scale.} All runs together verified $4{,}222$ theories. Sets of up to six of the $71{,}369$ laws number
-  about $1.8\times10^{26}$. The search has seen a speck of the space, and mostly the corner humans know best.
+  through the diagonal. A new run (X4) counts only laws that do not come from the diagonal. None of its scored
+  theories is a fragment of a named theory, but a new attractor appeared: laws like $x\op(x\op y)=x\op x$, which say
+  that a derived operation ignores one of its arguments.
+\item \textbf{Steering away, and a new disguise.} The next run (X5) skipped every theory with such a law. It left the
+  lattice region, but its best candidates turned out to be \emph{Steiner loops}, a classical one-operation structure,
+  with $\cop$ the same operation shifted by a constant: $x\cop y=(x\op y)\op c$. That disguise is now filtered too,
+  and a longer run (X6) uses the filter.
+\item \textbf{Close looks.} The top candidates of a novelty ranking were studied one by one: a plain reading proved
+  with E, models, a literature search, and Lean where possible. One turned out to be a fragment of Heyting algebras,
+  the algebras of intuitionistic logic, reached with no knowledge of logic. Four are still unidentified. The best of
+  them is $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$. Its $\cop$ acts as a partial swap of the arguments of
+  $\op$, and with the two operations set equal it has only one-element models.
+\item \textbf{Scale.} All runs together made about 57 million cheap evaluations and verified $6{,}739$ theories.
+  Sets of up to six of the $71{,}369$ laws number about $1.8\times10^{26}$. The search has seen a speck of the space,
+  and mostly the corner humans know best.
 \item \textbf{Open problems.} Four implications were shown false although every countermodel is infinite (a
-  prover's saturation settles them). One question from the early runs is still open: whether four particular laws
-  imply $x\op x=x\cop x$ (``S12'' in the README).
+  prover's saturation settles them). One question from the early runs is still open after two-hour runs of four
+  provers: whether four particular laws imply $x\op x=x\cop x$ (``S12'' in the repository).
 \end{itemize}
 No theory found so far is claimed to be new.
 
@@ -584,7 +596,7 @@ the same models on 2 and on 3 elements: 32 and 46,656.)
 
 \solution{pairs}
 $\binom{71369}{2}=2{,}546{,}731{,}396$, about $2.5\times10^9$ pairs, and about $1.1\times10^{18}$ sets of four. The
-$4{,}222$ verified theories are less than two in a million of the pairs alone.
+$6{,}739$ verified theories are less than three in a million of the pairs alone.
 \fi
 
 \begin{thebibliography}{9}
