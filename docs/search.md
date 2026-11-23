@@ -54,6 +54,8 @@ Each round taught one lesson, and the search was changed to answer it.
    constant, `x ∘ y = (x · y) · (z ∘ z)`. That is one operation plus a parameter, a disguise our checks missed. A new
    attractor appeared: `x · (x · x) = y · (x · y)`.
 
-The two lessons of X5 are the next filters: definitions with a constant, and ignored variables that occur twice.
+Both filters X5 called for now exist. A definition with a parameter (verifier V6) catches 18 of X5's 20 candidates and
+none from earlier runs. Ignored variables that repeat (arm `fusion3`) are implied by 151 of all 158 candidates, so
+that filter would confine a run to the quasigroup-like corner. Using it is a choice for the next run.
 
 Details, numbers and commands: [`REPORT.md`](../REPORT.md). Next: [the ranking](ranking.md).

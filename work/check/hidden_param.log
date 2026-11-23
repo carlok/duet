@@ -1,0 +1,158 @@
+8a512957 t4-prior   models   10 definitional False | -
+bbaf0199 t4-prior   models  295 definitional False | -
+5dbb2aa8 t4-prior   models  196 definitional False | -
+056e5cea t4-prior   models  125 definitional False | -
+977c3603 t4-prior   models   10 definitional False | -
+8418b638 t4-prior   models   98 definitional False | -
+eb217123 t4-prior   models   31 definitional False | -
+1ca933c1 t4-prior   models   17 definitional False | -
+2bcfb2dc t4-prior   models   15 definitional False | -
+43233caa t4-prior   models  178 definitional False | -
+7baa92ae t4-prior   models    8 definitional False | -
+42b641ae t4-prior   models  175 definitional False | -
+af1aa275 t4-prior   models    8 definitional False | -
+a9295908 t4-prior   models  302 definitional False | -
+50f421c7 t4-prior   models  180 definitional False | -
+a036fe41 t4-prior   models  295 definitional False | -
+842d006e t4-prior   models  296 definitional False | -
+83ee51ae t4-prior   models  245 definitional False | -
+d552e154 t4-prior   models  133 definitional False | -
+07aaa4d8 t4-prior   models    8 definitional False | -
+ef5dbff1 t4-noprior models  318 definitional False | -
+2e6502d8 t4-noprior models  201 definitional False | -
+7837bb8e t4-noprior models  187 definitional False | -
+290f9927 t4-noprior models  233 definitional False | -
+c1760e50 t4-noprior models  174 definitional False | -
+df3bbac6 t4-noprior models  281 definitional False | -
+e217ff43 t4-noprior models  309 definitional False | -
+09184a57 t4-noprior models  437 definitional False | -
+9eb87773 t4-noprior models  317 definitional False | -
+a2f1dec5 t4-noprior models  146 definitional False | -
+5345b6c2 t4-noprior models  216 definitional False | -
+8b8eb672 t4-noprior models   22 definitional False | -
+b81bf1aa t4-noprior models  195 definitional False | -
+08195cf9 t4-noprior models  292 definitional False | -
+23b83cfb t4-noprior models   22 definitional False | -
+e430cc74 t4-noprior models  303 definitional False | -
+de0ebbcb t4-noprior models  323 definitional False | -
+10badb2a t4-noprior models  286 definitional False | -
+465853cb t4-noprior models  286 definitional False | -
+1a6e664b t4-noprior models  272 definitional False | -
+7325007e .          models  357 definitional False | -
+4dc33674 .          models   85 definitional False | -
+17b2a537 .          models   82 definitional False | -
+2dc27508 .          models  139 definitional False | -
+79bea529 .          models  416 definitional False | -
+ef29638a .          models  133 definitional False | -
+b74ffe2e .          models  148 definitional False | -
+db18dd33 .          models   41 definitional False | -
+55cb2c91 .          models  254 definitional False | -
+1d0a5211 .          models  295 definitional False | -
+42713831 .          models  414 definitional False | -
+fda19a0a .          models  133 definitional False | -
+adefe707 .          models  452 definitional False | -
+72fff371 .          models  313 definitional False | -
+5d4c2644 .          models   22 definitional False | -
+0d94c35c .          models  148 definitional False | -
+f523a381 .          models   55 definitional False | -
+7ea04474 .          models  456 definitional False | -
+b302a8c7 .          models  124 definitional False | -
+3078949b .          models  249 definitional False | -
+0e846588 x1         models  365 definitional False | -
+c8e6ca60 x1         models  207 definitional False | -
+26a75ed6 x1         models  211 definitional False | -
+4331d064 x1         models  505 definitional False | -
+87137d88 x1         models   38 definitional False | -
+a1d35107 x1         models   18 definitional False | -
+6cb3dcaf x1         models  143 definitional False | -
+f5a5150b x1         models  414 definitional False | -
+f577843d x1         models   28 definitional False | -
+10c98c4b x1         models   20 definitional False | -
+0823fca2 x1         models  237 definitional False | -
+10006bad x1         models  179 definitional False | -
+f85b2386 x1         models  452 definitional False | -
+f8d1f554 x1         models  175 definitional False | -
+9c9fc7c5 x1         models  162 definitional False | -
+4caee784 x1         models  180 definitional False | -
+b7eb197e x1         models   13 definitional False | -
+695c2c2b x1         models  142 definitional False | -
+3c197ddc x1         models  414 definitional False | -
+19e0339f x2         models  266 definitional False | -
+2e73bcd0 x2         models  276 definitional False | -
+b11298e6 x2         models  315 definitional False | -
+7333748d x2         models  470 definitional False | -
+69dfbd8e x2         models  137 definitional False | -
+d1e1c31f x2         models  325 definitional False | -
+4471d7fd x2         models  123 definitional False | -
+19b6b532 x2         models   29 definitional False | -
+7e142126 x2         models  172 definitional False | -
+5358ef8f x2         models  143 definitional False | -
+154e991a x2         models  264 definitional False | -
+7790408e x2         models   59 definitional False | -
+456bd9d0 x2         models  227 definitional False | -
+e616c4a8 x2         models   59 definitional False | -
+743e49bd x2         models  318 definitional False | -
+7ad4e091 x2         models   45 definitional False | -
+b3c7d5ba x2         models  101 definitional False | -
+3e068fa6 x2         models  175 definitional False | -
+5c6da20c x3         models  276 definitional False | -
+b1e29acb x3         models  278 definitional False | -
+31d6d970 x3         models  141 definitional False | -
+538b3e13 x3         models  318 definitional False | -
+fab766d9 x3         models  185 definitional False | -
+ff637819 x3         models  127 definitional False | -
+f7565a8d x3         models  117 definitional False | -
+bab3fd3c x3         models   50 definitional False | -
+57f39f2c x3         models   53 definitional False | -
+c12f6e49 x3         models  275 definitional False | -
+154abc19 x3         models  285 definitional False | -
+07ac49a5 x3         models  384 definitional False | -
+bf347d94 x3         models   10 definitional False | -
+f7397dad x3         models   81 definitional False | -
+be7c47f1 x3         models  314 definitional False | -
+0a3b8e48 x3         models  458 definitional False | -
+869f3702 x3         models   32 definitional False | -
+1f92a593 x3         models  361 definitional False | -
+e32bd449 x3         models  166 definitional False | -
+94d69dd2 x4         models  192 definitional False | -
+3b3b1176 x4         models  104 definitional False | -
+7ec7f8f5 x4         models   34 definitional False | -
+700b8f93 x4         models  137 definitional False | -
+f79a5097 x4         models  275 definitional False | -
+c73d174c x4         models  153 definitional False | -
+5e83bbfa x4         models  556 definitional False | -
+fff58b83 x4         models  113 definitional False | -
+204aea15 x4         models   24 definitional False | -
+7c476118 x4         models  191 definitional False | -
+2c9e9108 x4         models   62 definitional False | -
+97a7dfcf x4         models   38 definitional False | -
+742cc445 x4         models  293 definitional False | -
+a8963027 x4         models  300 definitional False | -
+3301abf0 x4         models   36 definitional False | -
+288d3f1b x4         models   40 definitional False | -
+6c306a36 x4         models   23 definitional False | -
+f1f50575 x4         models   15 definitional False | -
+33eca86a x4         models   23 definitional False | -
+d82738a2 x4         models  141 definitional False | -
+ebb197cc x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+379c1621 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+6005984f x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+811b3500 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (countersatisfiable); ∘ = (y · (x · z∘z)) (countersatisfiable); ∘ = (z∘z · (x · y)) (proved); · = (x ∘ (y ∘ z·z)) (countersatisfiable); · = (y ∘ (x ∘ z·z)) (countersatisfiable); · = (z·z ∘ (x ∘ y)) (proved)
+e96c7cfd x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+ba93757c x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+eb5bd76d x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+d084b4a5 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+4a54b97e x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+be4719e3 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+7be705c1 x5         models    8 definitional False | -
+e61b0d68 x5         models   10 definitional False | -
+39bd4af5 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (countersatisfiable); ∘ = (y · (x · z∘z)) (countersatisfiable); ∘ = (z∘z · (x · y)) (proved); · = (x ∘ (y ∘ z·z)) (countersatisfiable); · = (y ∘ (x ∘ z·z)) (countersatisfiable); · = (z·z ∘ (x ∘ y)) (proved)
+09797ec7 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+5b4e12f1 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+b7c6de53 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+eabe586f x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+e51eb8f1 x5         models    6 definitional True | · = (z·z ∘ (x ∘ y)) (proved)
+2035fdd3 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+b9fb4af2 x5         models    4 definitional True | ∘ = (x · (y · z∘z)) (unknown); ∘ = (y · (x · z∘z)) (unknown); ∘ = (z∘z · (x · y)) (unknown); ∘ = ((x · y) · z∘z) (proved); · = (x ∘ (y ∘ z·z)) (proved)
+T1       pilot      models  458 definitional False | -
+T2       pilot      models   16 definitional False | -

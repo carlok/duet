@@ -241,7 +241,7 @@ def main():
     ap.add_argument('--budget', type=float, default=float(os.environ.get('BUDGET', 3600)))
     ap.add_argument('--searchers', type=int, default=int(os.environ.get('SEARCHERS', 3)))
     ap.add_argument('--verifiers', type=int, default=int(os.environ.get('VERIFIERS', 8)))
-    ap.add_argument('--arm', default=os.environ.get('ARM', 'prior'), choices=['prior', 'noprior', 'fusion', 'fusion2'])
+    ap.add_argument('--arm', default=os.environ.get('ARM', 'prior'), choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3'])
     ap.add_argument('--seed0', type=int, default=int(os.environ.get('SEED0', 101)))
     ap.add_argument('--tick', type=float, default=15.0)
     ap.add_argument('--rebalance', type=float, default=120.0)

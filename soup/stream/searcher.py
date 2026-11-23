@@ -11,6 +11,7 @@ no duality operator, no duality bonus). Elites are only shared within an arm.
   3. In place of the duality-closure mutation (25% of proposals) a tradition-fusion proposal: one law in · alone
      and one in ∘ alone from the pools, plus one random bridge.
 'fusion2' (X5, 23 Nov 2026): 'fusion', and theories that imply an argument-ignoring law (soup.offdiag.IGNORE) are skipped.
+'fusion3' (X6 candidate): 'fusion2' with IGNORE2, so ignored variables may occur more than once (soup.offdiag).
 """
 import argparse
 import math
@@ -60,16 +61,16 @@ class Searcher:
     def __init__(self, name, seed, arm, run):
         self.name, self.arm, self.run = name, arm, run
         self.prior = arm == 'prior'
-        self.fusion = arm in ('fusion', 'fusion2')
-        self.rigid = arm == 'fusion2'
+        self.fusion = arm in ('fusion', 'fusion2', 'fusion3')
+        self.rigid = arm in ('fusion2', 'fusion3')
         self.rng = random.Random(seed)
         self.C = Corpus(store=ensure('corpus'))
         self.lat_skipped = self.ign_skipped = 0
         if self.fusion:
             from ..offdiag import lat2, pools
             self.lat2 = lat2()
-            from ..offdiag import IGNORE
-            self.IGNORE = IGNORE
+            from ..offdiag import IGNORE, IGNORE2
+            self.IGNORE = IGNORE2 if arm == 'fusion3' else IGNORE
             self.pool_f, self.pool_g = pools(self.C)
             self.bridges = np.flatnonzero(BRIDGE)
         self.Q = FileQueue(data('queue'))
@@ -237,7 +238,7 @@ class Searcher:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--seed', type=int, required=True)
-    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2'])
+    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3'])
     ap.add_argument('--run', required=True); ap.add_argument('--budget', type=float, default=1e9)
     a = ap.parse_args()
     s = Searcher(a.name, a.seed, a.arm, a.run)

@@ -55,7 +55,11 @@ V4 = dict(V3, split_screen=True, split_secs=10, split_cap=60, division_screen=Tr
 # laws (soup.offdiag.offdiag_gain) instead of all emergent laws. So one-variable laws are never claimed, and the score
 # counts only laws the fusion produces without going through the diagonal.
 V5 = dict(V4, offdiag=True)
-CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4, 'V5': V5}   # the stream verifier picks one by SOUP_VERIFIER
+# V6 (X6 candidate, 23 Nov 2026): V5 plus a third screen, a definition with a parameter (soup.hidden.hidden_param on the
+# census models, then E): one operation is a term in the other and a constant square, as in X5's Steiner loops with
+# x∘y = (x·y)·(z∘z). A hit gives score 0, like the split and division screens.
+V6 = dict(V5, param_screen=True, param_secs=10)
+CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4, 'V5': V5, 'V6': V6}   # the stream verifier picks one by SOUP_VERIFIER
 DIVISION = {'left quasigroup': ['x·(x∘y) = y', 'x∘(x·y) = y'], 'right quasigroup': ['(x·y)∘y = x', '(x∘y)·y = x']}
 
 
@@ -77,6 +81,12 @@ def screens(C, T, census, cfg):
         d = relabel_check(T, C, secs=cfg['division_secs'], named=DIVISION, fragments=False)['implies']
         res['division'] = d
         if d: res['hit'] = 'division'
+    if cfg.get('param_screen') and 'hit' not in res:
+        from .hidden import hidden_param
+        try: p = hidden_param(T, models=census or None, secs=cfg['param_secs'])
+        except Exception as e: p = {'definitional': None, 'why': f'screen error: {type(e).__name__}'}
+        res['param'] = {k: p.get(k) for k in ('definitional', 'matches', 'why') if k in p}
+        if p.get('definitional'): res['hit'] = 'parameter definition'
     return res
 # The first-session verifier (countermodels only to size 4/5): kept to reproduce results-cloud/.
 LEGACY = dict(V1, indep_sizes=(2, 3, 4, 5), claim_sizes=(2, 3, 4), use_e=False)
@@ -150,7 +160,7 @@ def stage_a(C, T, cfg=DEFAULTS, tag=''):
         out.update(score=0.0, status='no small non-degenerate model', claims=[], open=[], stage='a',
                    secs_a=round(time.time() - t0, 1))
         return out
-    if cfg.get('split_screen') or cfg.get('division_screen'):
+    if cfg.get('split_screen') or cfg.get('division_screen') or cfg.get('param_screen'):
         t1 = time.time(); scr = screens(C, T, census, cfg); scr['secs'] = round(time.time() - t1, 1)
         out['screen'] = scr
         if scr.get('hit'):

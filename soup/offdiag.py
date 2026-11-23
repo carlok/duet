@@ -62,6 +62,18 @@ def _ignores(L, R):
 
 SQUARE = np.array([_sq(L) or _sq(R) for L, R in TREES])                            # a subterm s·s or s∘s
 IGNORE = np.array([_ignores(L, R) or _ignores(R, L) for L, R in TREES])            # a derived operation ignores an argument
+
+
+def _vars_of(t): return {t[1]} if t[0] == "v" else _vars_of(t[1]) | _vars_of(t[2])
+def _ignores2(L, R):
+    vl, vr = _vars_of(L), _vars_of(R)
+    return any(_ren(L, v, w) == R for v in vl - vr for w in range(6) if w != v)
+
+
+# IGNORE2 (X6 candidate filter, 23 Nov 2026): R is L with every occurrence of one variable v replaced by another variable
+# w, new or already in L. Then L does not depend on v. It contains IGNORE, and X5's attractor x·(x·x) = y·(x·y), and
+# constant squares x·x = y·y.
+IGNORE2 = np.array([_ignores2(L, R) or _ignores2(R, L) for L, R in TREES])
 OPS = [_ops(L) | _ops(R) for L, R in TREES]
 ONLY_F = np.array([o == {'f'} for o in OPS])     # laws in · alone
 ONLY_G = np.array([o == {'g'} for o in OPS])     # laws in ∘ alone

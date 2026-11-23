@@ -65,7 +65,7 @@ by the whole theory but by no single law of it.
 | `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
 | `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
-| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `LEGACY` (first session) |
+| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `V6` (V5 plus the parameter-definition screen), `LEGACY` (first session) |
 | `offdiag.py` | X4: off-diagonal gain (emergent laws that no single law gives even with all one-variable consequences; certified by corpus models), `lat2()` (laws of the 2-element lattice), `pools()` (restrictive one-operation laws for the fusion proposals); X5: `IGNORE` (argument-ignoring laws, skipped by arm `fusion2`), `SQUARE` (analysis) |
 | `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
 | `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
@@ -77,7 +77,7 @@ by the whole theory but by no single law of it.
 | `t4_setup.py`, `t4_report.py` | T4: one data directory per arm; preregistered analysis |
 | `profile.py` | T5a algebraist's profile (Mal'cev-type terms, free algebra on 1–2 generators, convergent presentation, spectrum, ETP numbers); `--t5a [name]` analysis. Killed provers give *unknown*, not 0 |
 | `dossier.py` | Candidates (`candidates --sources ...`), preregistered ranking (`rank`), dossiers (`write --top N`), model JSON for Lean (`lean-json`); certificates are matched by key, not rank |
-| `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
+| `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; with `--param`, a term plus a constant square (`hidden_param`, also the V6 screen); a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
 | `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
 | `funnel.py` | The live funnel, level 0 (cheap evaluations) to level 8 (studied closely, unidentified), over all runs; `--readme` rewrites the README block between the funnel markers |
 | `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter on every run's corpus, then E both ways, in parallel); post hoc, the ranking is not changed |
@@ -85,7 +85,7 @@ by the whole theory but by no single law of it.
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
-| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip) |
+| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip), `fusion3` (IGNORE2: ignored variables may repeat) |
 | `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus |
 | `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md` |
 
@@ -219,7 +219,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     translated by a constant, x∘y = (x·y)·(z∘z) (ledger row 12). New attractor: x·(x·x) = y·(x·y).
   - Pitfall: `soup.split --set candidates` works in file order and stalls on X4's unchecked candidates. For a new
     run's candidates use `soup.split --laws` per candidate with a `timeout`. On the Mac, `xargs` has no `-d`: use `-0`.
-  - Pitfall: `soup.hidden` looks only for terms without constants, so "∘ = · translated by z∘z" passes it.
+  - Pitfall: `soup.hidden` looks only for terms without constants, so "∘ = · translated by z∘z" passes it. Fixed: `soup.hidden
+    --param` (and V6) catches 18 of X5's 20, 0 elsewhere. IGNORE2 (arm `fusion3`) is implied by 151 of 158 candidates:
+    a design choice for X6, not a fix (REPORT, "The two filters").
   - Pitfall (public repo): a `set -x` trace redirected into a tracked file (`work/check/ranking.txt`) published the
     local path in commit `4af0a8f`; fixed forward in `ae1aed8`. Never trace into files that get committed, and
     `git grep -E "/Users/"` on the staged files before every commit.

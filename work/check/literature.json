@@ -39,7 +39,7 @@
  "5b4e12f166206425": "Identified: · is a Steiner loop and ∘ its translate by ∘'s identity, x∘y = (x·y)·(z∘z) and back (E; ledger row 12; notes/x5_top3_probe.py). A one-operation structure with a parameter.",
  "b7c6de53bdf46208": "Identified: · is a Steiner loop and ∘ its translate by ∘'s identity, x∘y = (x·y)·(z∘z) and back (E; ledger row 12; notes/x5_top3_probe.py). A one-operation structure with a parameter.",
  "eabe586f3527c953": "Identified: · is a Steiner loop and ∘ its translate by ∘'s identity, x∘y = (x·y)·(z∘z) and back (E; ledger row 12; notes/x5_top3_probe.py). A one-operation structure with a parameter.",
- "e51eb8f106578c65": "Related: · is a Steiner loop (E); ∘ not shown to be a translate in 30 s (ledger row 12; notes/x5_top3_probe.py).",
+ "e51eb8f106578c65": "Identified: · is a Steiner loop and · = (z·z ∘ (x ∘ y)), a term in the other operation and a constant square (soup.hidden --param, E; ledger row 12).",
  "2035fdd326ed6dd7": "Identified: · is a Steiner loop and ∘ its translate by ∘'s identity, x∘y = (x·y)·(z∘z) and back (E; ledger row 12; notes/x5_top3_probe.py). A one-operation structure with a parameter.",
- "b9fb4af2297ede87": "Related: · is a Steiner loop (E); ∘ not shown to be a translate in 30 s (ledger row 12; notes/x5_top3_probe.py)."
+ "b9fb4af2297ede87": "Identified: · is a Steiner loop and ∘ = ((x · y) · z∘z), a term in the other operation and a constant square (soup.hidden --param, E; ledger row 12)."
 }

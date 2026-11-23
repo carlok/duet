@@ -2,6 +2,37 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## The two filters X5 called for (23 Nov 2026, recorded 06:28 UTC; built and measured post hoc, nothing re-ranked)
+
+Code: `soup/hidden.py` (`hidden_param`, `--param`), `soup/offdiag.py` (`IGNORE2`), arm `fusion3`
+(`soup/stream/searcher.py`), verifier V6 (`soup/verify.py`). Tests: `tests/test_x6_filters.py` (4 tests; whole suite 75,
+all pass).
+
+**1. Definitions with a parameter** (`hidden_param`, the V6 screen). It searches terms in one operation over x, y and
+the constant squares z·z and z∘z (size ≤ 4) for one that agrees with the other operation on the models (Mace4 sizes
+2–4, at most 300 per size; in V6, the census). E proves the definition (30 s; 10 s in V6), and only a proof counts.
+Terms that agree on every model are merged, but up to 6 alternatives are kept: the first version tried only one, and
+missed 2 of the 16 known cases.
+- On all 158 candidates (`soup.hidden --param --set candidates`, 3 min, `work/check/hidden_param.log`): **18 of
+  X5's 20, and 0 of the other 138.** That covers the 16 found by hand (ledger row 12) and 2 more.
+- Controls: `55cb2c91` and the absorption pair are not caught (test).
+
+**2. Ignored variables that occur more than once** (`IGNORE2`, arm `fusion3`). A law L = R in which R is L with every
+occurrence of one variable replaced by another variable, new or already in L. Then L does not depend on that variable.
+- 187 laws, against IGNORE's 53. It contains IGNORE, X5's attractor x·(x·x) = y·(x·y), and constant squares x·x = y·y.
+- **On the candidates, 151 of 158 imply an IGNORE2 law** on their run's corpus. Every run is affected (X5 all 20; X3 16
+  of 19), and so are `55cb2c91` (x·(y·z) = x·y) and the absorption-type theories.
+- The 7 that pass are Latin-square-like: `f8d1f554` and `3e068fa6` (half of the Δ-bijective core), `e430cc74`,
+  `154e991a`, `fab766d9`, `57f39f2c`, `1f92a593`.
+- So `fusion3` is a strong restriction: to "fully rigid" theories, the quasigroup and Yang–Baxter corner.
+
+**Smoke run** (4 min, arm `fusion3`, V6, seeds 991–994, data deleted afterwards): 15 theories verified, 7 with a
+positive score, and 2 caught by the parameter screen (no screen errors). Skips: 4.3% lattice-valid and about 7%
+IGNORE2.
+
+**Reading:** the first filter is exact on what it was built for, with no collateral. The second redefines the
+search region. Whether X6 should use it is a design choice for its preregistration, not a fix.
+
 ## T6: S12 ⇒ x·x = x∘x, long prover runs (23 Nov 2026, 00:28–02:30 UTC)
 
 Command: `podman run -d --name soup-s12 -v "$PWD/work:/data" -v "$PWD/notes:/notes:ro" -e PYTHONPATH=/app soup python3
