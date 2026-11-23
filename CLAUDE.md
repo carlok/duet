@@ -79,6 +79,7 @@ by the whole theory but by no single law of it.
 | `dossier.py` | Candidates (`candidates --sources ...`), preregistered ranking (`rank`), dossiers (`write --top N`), model JSON for Lean (`lean-json`); certificates are matched by key, not rank |
 | `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; with `--param`, a term plus a constant square (`hidden_param`, also the V6 screen); a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
 | `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
+| `known.py` | X7: the known library (catalogue + ledger, fragments and subvarieties; earlier candidates, equivalents) and the seen-before keys, for arm `fusion4`; `build --out` before a run |
 | `funnel.py` | The live funnel, level 0 (cheap evaluations) to level 8 (studied closely, unidentified), over all runs; `--readme` rewrites the README block between the funnel markers |
 | `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter on every run's corpus, then E both ways, in parallel); post hoc, the ranking is not changed |
 | `novelty.py` | N1 (preregistered): gate (works, nothing identifies it, one per dedupe class) and order (off-diagonal law, no classical model, not related, sizes, axiom size, score); writes `notes/candidates_table.md` (known / not known) and, with `--readme`, the README's live block between `<!-- candidates:start -->` and `<!-- candidates:end -->`. Rerun after every run's checks |
@@ -214,6 +215,10 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
     rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
     square-free form (`notes/x5_baseline.py`).
+  - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
+    at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
+    Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
+    Pitfall: per-process corpus copies make memory grow with the corpus; X6 and X7 both hit the 1 GB rule early.
   - X6's N1 ranks 1–4 studied (`notes/x6_top4.md`): none identified. 3818b88f ⟺ TS-quasigroup · + idempotent ∘ with
     x∘(x·y) = x∘y, (x·x)∘x = x (a selector on a triple system). bc43fd42, d0e963d9, d14ced44 strengthen the core
     x·(y·y) = x, x·(y∘y) = x, x·(y·z) = x·(z∘y). Funnel level 8: 8.

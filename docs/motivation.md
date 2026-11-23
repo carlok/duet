@@ -15,7 +15,7 @@ Laws that mix both operations are **bridges**. Bridges are where two theories fu
 terms but is not clearly connected to either parent. duet asks whether an open-ended search can find such fusions,
 and in particular ones nobody has named yet. No language model takes part in the search or its scoring.
 
-**The caveat.** The space is large and the human literature is larger. All runs together have verified 6,739
+**The caveat.** The space is large and the human literature is larger. All runs together have verified 7,476
 theories, against about 1.8 × 10²⁶ possible law sets, and most of them sit in the corner humans know best. "No source
 found" by our web searches is therefore weak evidence, and finding nothing new would not be a negative result.
 
@@ -30,9 +30,12 @@ measurably away from the corner our checks recognise:
 | X3 (disguise filters) | 31.6% | 3% | 26% |
 | X4 (fusion arm) | 0% | 21% | 0% |
 | X5 (rigid theories) | 0% | 24% | 0% |
+| X6 (screen for disguises) | 0% | 33% | 0% |
+| X7 (skip the known) | 0% | 27% | 0% |
 
 A higher refutation rate means the corpus's guesses get worse, which is what happens on less charted ground. Sources:
-`REPORT.md`, sections T4, X2, X3, X4 and X5.
+`REPORT.md`, sections T4, X2, X3, X4, X5, X6 and X7. "Disconnected" candidates, the ones with every automatic mark,
+went from 0 of 20 in X5 to 7 in X6 and 12 in X7.
 
 The image has two limits:
 - **What is measured is the distance from our own checks and catalogue, not from human mathematics.** X5 looked

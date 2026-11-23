@@ -2,6 +2,65 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X7: skip what is already known (23 Nov 2026, 19:47–22:27 UTC; preregistered; stopped by its memory rule)
+
+Preregistration: PREREGISTRATION.md, X7 (commit `f67296f`, before the start). Arm `fusion4` = X6's `fusion2` plus three
+changes:
+- a known-library skip (`soup/known.py`);
+- a seen-before skip;
+- a distinct level-0 bitmap.
+
+The verifier is V6, as in X6. The supervisor applied the memory rule by itself (`--mem-stop-mb 1000`): 963 MB were
+available after 9,539 s (33% of the 8-hour budget), and it stopped the run cleanly. This is the preregistered rule,
+not a deviation.
+
+Commands:
+- run: as in the preregistration;
+- post-run: `work/check/x7_post.log` (fragments, statistics, candidates, profile, hidden and `--param`, relabel, rank,
+  rediscover), split per candidate (`notes/split_x7_candidates.out`, merged into `check/split_candidates.json`),
+  `notes/disconnected.py x7 x6`, `soup.dedupe`, and `notes/x7_predictions.py` (output `notes/x7_predictions.out`).
+
+| | X7 (fusion4, V6; 2.65 h) | X6 (fusion2, V6; 5.8 h) |
+| --- | --- | --- |
+| verified theories | 737 (278 per hour) | 1,460 (253 per hour) |
+| positive score | 511 (69%) | 645 (44%) |
+| fragments of a named theory | **0 of 511** | 0 of 645 |
+| screened: parameter definition / split / division | **16** / 60 / 0 | 356 / 75 / 2 |
+| skipped in the searcher: known / earlier candidate / seen before | 237,413 / 4,932 / 1,395 | – |
+| skipped: lattice-valid / argument-ignoring | 107,502 / 91,112 | 145,478 / 147,658 |
+| claims / proved | 1,369 / 877 | 1,756 / 868 |
+| refuted by finite models (stages a and c, and FMB) | 370 (27%) | 572 (33%) |
+| refuted by E saturation | 47 (33 uncertified) | 118 (58 uncertified) |
+| unknown / open | 68 / 7 | 184 / 14 |
+| structures added to the corpus | 6,703 | 8,055 |
+| cheap evaluations (stats / searcher heartbeats) | 2,188,667 / 2,403,574 | 4,004,695 / 4,228,908 |
+| distinct evaluations (union of the bitmaps) | 1,772,881 (73.8% of heartbeats) | not measured |
+
+**Predictions:**
+- **Q1 holds.** Among X7's top 20, `soup.relabel` and `soup.rediscover` find no fragment, subvariety or equivalent of
+  a named or catalogue theory: R1 had no theory to check, 0 E jobs. `soup.dedupe` finds none equivalent to an earlier
+  candidate.
+- **Q2 fails.** 73.8% of evaluations are distinct, against the predicted ≥ 80%. A quarter of the cheap evaluations
+  still repeat a law set.
+- **Q3 holds.** The top 20 are 19 varieties, and **12 of 20 are "disconnected"** (X6 7, X5 0, X4 14).
+- **Q4 holds.** The parameter screen fired on 2.2% of verified theories (X6 24%).
+
+**Other checks:**
+- Split: 20 of 20 not split (finite certificate).
+- Hidden, with and without a parameter: 0.
+- 13 of the top 20 have no classical model.
+- Over all runs, 198 candidates are 161 varieties.
+- In N1, X7's `de0c0cf3` enters at rank 2; it has not been studied.
+- Funnel: 59.5 M evaluations, 7,476 verified, 106 not known, 36 at level 7.
+
+**Reading:**
+- **Skipping the known moved the verifier's time to new ground.** Disguises went from 24% to 2%, scored theories from
+  44% to 69%, and disconnected candidates from 7 to 12.
+- **The attractor x·(x·x) = y·(x·y) and its variants still top the proved laws.**
+- **The memory rule ended both X6 and X7 early.** Every searcher and verifier holds its own copy of the corpus, which
+  grew by 6,703 structures here. A night-long run needs a memory fix: one shared corpus, or a cap on what each
+  searcher loads.
+
 ## X6's N1 ranks 1–4: close looks (23 Nov 2026, recorded 14:29 UTC; post hoc)
 
 Commands: `notes/dig_light.py <key>` and `notes/x6_top4_checks.py` parts 1–2 (E, 20–60 s per goal). Memo:

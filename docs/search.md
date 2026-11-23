@@ -60,6 +60,11 @@ Each round taught one lesson, and the search was changed to answer it.
    candidates now hold N1 ranks 1 to 4. None has been studied closely yet. X5's attractor
    `x · (x · x) = y · (x · y)` remains.
 
+6. **Skipping the already known (X7).** The searcher skipped every theory that is, on the corpus, a fragment or a
+   subvariety of a known structure, or equivalent to an earlier candidate, and every theory an earlier run had already
+   pushed. Disguises fell from 24% to 2% of verified theories, scored theories rose from 44% to 69%, and 12 of the top
+   20 carry every automatic mark. Memory stopped the run after 2.65 hours.
+
 Both filters X5 called for now exist. A definition with a parameter (verifier V6) catches 18 of X5's 20 candidates and
 none from earlier runs. Ignored variables that repeat (arm `fusion3`) are implied by 151 of all 158 candidates, so
 that filter would confine a run to the quasigroup-like corner. Using it is a choice for the next run.

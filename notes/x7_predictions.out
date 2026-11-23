@@ -1,0 +1,7 @@
+searchers 4, bitmaps 4; raw evaluations 2,403,574; distinct (union, linear counting) 1,772,881 = 73.8% -> Q2 fails (>= 80%)
+  known_skipped: 237,413
+  cand_skipped: 4,932
+  seen_skipped: 1,395
+  lat_skipped: 107,502
+  ign_skipped: 91,112
+verified 737; screened {'split': 60, 'parameter definition': 16}; parameter screen 16 = 2.2% -> Q4 holds (< 24%)
