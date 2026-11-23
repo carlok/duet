@@ -2,6 +2,53 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X6: X5 with the parameter-definition screen, a longer run (written 23 Nov 2026, 06:39 UTC, before X6 starts)
+
+Exploratory and descriptive. The user chose the design on 23 Nov: verifier V6, arm `fusion2` as in X5, not `fusion3`.
+
+**The single change from X5.** Verifier V6 = V5 plus a third stage-a screen. If one operation is a term in the other
+plus a constant square (`soup.hidden.hidden_param` on the census models, then E for 10 s), the theory scores 0. Post
+hoc, the check catches 18 of X5's 20 top candidates and none of the other 138 candidates (REPORT, "The two filters").
+
+Everything else is as in X5:
+- arm `fusion2`;
+- 4 searchers and 4 verifiers;
+- the memory stop rule (available memory below 1 GB, reported), and nothing heavy alongside.
+
+The seeds are 1001+. The budget is **28,800 s (8 h)**, against X5's 9,000 s. The user asked for more cheap
+evaluations (level 0), and a longer run also tests whether the search keeps finding new varieties over time. Counts
+are therefore not comparable with X5; shares and per-hour rates are.
+
+Setup: `python -m soup.t4_setup --dir x6`. Run: `podman run -d --name soup-x6 -v "$PWD/work:/data" -e
+SOUP_DATA=/data/x6 -e SOUP_VERIFIER=V6 soup python3 -m soup.stream.supervisor --arm fusion2 --searchers 4 --verifiers 4
+--seed0 1001 --budget 28800 --run x6`.
+
+**Tests before the start.** The whole suite passes (75 tests, including `tests/test_x6_filters.py`). An engineering
+smoke run of V6 (4 min, arm `fusion3`, deleted, REPORT) showed no screen errors.
+
+**Predictions** (descriptive, no p-values):
+- Q1: post hoc, `soup.hidden --param` catches none of X6's top 20. A hit would mean the screen leaks, for example
+  through census models too few for the term search.
+- Q2: X6's top 20 holds at least 10 distinct varieties (`soup.dedupe`). X5 had 5, one of them holding 15 candidates.
+- Q3: the attractor of X5, x·(x·x) = y·(x·y), stays among the three most frequent proved emergent laws. `fusion2`
+  does not filter it.
+- Q4: at least 15 of the top 20 have a classical model. The rigid region is dense in affine structures, and V6 removes
+  only the translate disguise.
+
+**After the run**, as for X5, with `x6` added to the sources:
+1. fragments, statistics, `notes/x5_predictions.py` extended to x6;
+2. candidates (`--sources ...,x5,x6`), profile, hidden, relabel, rank, rediscover;
+3. `notes/disconnected.py x6 x5`;
+4. split per candidate (`soup.split --laws`, 300 s each; the X5 workaround);
+5. `soup.hidden --param` on the candidates (Q1);
+6. `soup.dedupe` with `x6`, then `soup.novelty` and `soup.funnel`.
+
+The split scan of all non-fragments comes last and only if time allows.
+
+**Caveats:**
+- An 8-hour run grows the corpus more than the earlier runs did, so the cheap score drifts more within the run.
+- The census can be small. The parameter screen then works on few models, and Q1 checks for exactly that.
+
 ## X5: the fusion arm, restricted to rigid theories (written 22 Nov 2026, 21:37 UTC, before X5 starts; the first commit said 21:40, an estimate)
 
 Exploratory and descriptive. The aim is the user's: steer the search away from X4's attractor and toward fusions

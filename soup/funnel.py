@@ -21,7 +21,7 @@ import time
 from math import comb as _comb
 from pathlib import Path
 
-DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5']
+DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6']
 START, END = '<!-- funnel:start -->', '<!-- funnel:end -->'
 
 

@@ -34,7 +34,7 @@ def main():
     # every run's corpus: a candidate from a later run may have no model in the main corpus, and a theory with no
     # corpus model is never compared (first version: main corpus only)
     C = Corpus(store=data('corpus'))
-    for d in ('t4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5'):
+    for d in ('t4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6'):
         p = data(d, 'corpus')
         if p.exists(): C.store = p; C.refresh()
     C.store = None
