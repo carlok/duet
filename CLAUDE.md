@@ -218,6 +218,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - Pitfall: `soup.split --set candidates` works in file order and stalls on X4's unchecked candidates. For a new
     run's candidates use `soup.split --laws` per candidate with a `timeout`. On the Mac, `xargs` has no `-d`: use `-0`.
   - Pitfall: `soup.hidden` looks only for terms without constants, so "∘ = · translated by z∘z" passes it.
+  - Pitfall (public repo): a `set -x` trace redirected into a tracked file (`work/check/ranking.txt`) published the
+    local path in commit `4af0a8f`; fixed forward in `ae1aed8`. Never trace into files that get committed, and
+    `git grep -E "/Users/"` on the staged files before every commit.
   - Workflow after every run: the post-run checks, then `soup.dedupe`, then
     `soup.novelty --readme /repo/README.md` (mount README.md and notes/). Then push.
 
