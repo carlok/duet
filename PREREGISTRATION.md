@@ -641,3 +641,19 @@ No random theory and no T4 theory had been profiled.
    - The 3 left (`f1f50575`, `33eca86a`, `d82738a2`) passed V4's split screen during the run, like every X4 theory
      with a positive score. N1 flags them "split not run", as its gate already allows.
    - `soup.relabel` then ran on its own. Every other post-run step is unchanged.
+8. **X5 post-run: the split check of the candidates was rerun per candidate (23 Nov 2026, about 01:00 UTC).**
+   - `soup.split --set candidates` goes through the candidates in file order. Capped at 1,800 s, it stalled on one
+     of X4's three unchecked candidates (deviation 7) and checked none of X5's.
+   - It was rerun per candidate (`soup.split --laws`, 300 s each, 4 in parallel). Result: 0 split, 1 not split,
+     19 undecided (REPORT, X5).
+9. **X6 stopped by its memory rule (23 Nov 2026, 12:25 UTC, before any X6 result was analysed beyond the progress
+   counts in the journal).**
+   - X6 started at 06:40:02 UTC with a budget of 28,800 s.
+   - At 12:25 UTC the VM had 702 MB available, below the 1 GB rule. The X6 container held 11.06 GB: the workers'
+     PSS was 7.3 GB, and prover child processes are not counted in it.
+   - `podman stop -t 120` ended it cleanly at 12:26:33 UTC, after 20,790 s (72% of the budget). The kernel log shows
+     no OOM kill.
+   - Results by then: 1,460 verified, 645 with a positive score, 4,004,695 cheap evaluations, and 8,055 structures
+     added to the corpus.
+   - Every post-run step is unchanged. Counts are for the 5.8 hours that ran, and per-hour rates are computed on
+     those hours.
