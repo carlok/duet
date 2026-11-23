@@ -1,0 +1,3 @@
+n=2: 2 labelled TS-quasigroups (0 idempotent); ∘ satisfying C: 2; non-degenerate: 2; selectors (x∘y in {x, y, x·y}): 2; sampled 2 checked against T: 2 pass
+n=3: 3 labelled TS-quasigroups (1 idempotent); ∘ satisfying C: 29; non-degenerate: 28; selectors (x∘y in {x, y, x·y}): 28; sampled 28 checked against T: 28 pass
+n=4: 16 labelled TS-quasigroups (0 idempotent); ∘ satisfying C: 1024; non-degenerate: 1024; selectors (x∘y in {x, y, x·y}): 432; sampled 63 checked against T: 63 pass

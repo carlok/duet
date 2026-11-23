@@ -38,6 +38,12 @@ T = {x·(x·y) = y, (x·y)·y = x, x∘(x·y) = x∘y, (x·x)∘(x∘x) = x, (x�
   x∘(x·y) = x∘y says that x∘y depends only on x and the block through x and y. So ∘ is a selector on (point, block)
   pairs: idempotent, and returning x on the block {x, x·x}.
 - E also proves x∘(y·x) = x∘y. It does not prove x·x = x, commutativity of ∘, or associativity of ∘.
+- **Models from triple systems** (`notes/3818b88f_models.py`, labelled tables). Every TS-quasigroup on n ≤ 4 elements
+  carries ∘ operations satisfying the reading: 2, 29 and 1,024 on n = 2, 3, 4, almost all non-degenerate in our
+  sense (∘ not a projection, a constant or ·). Of these, 2, 28 and 432 are selectors, with x∘y in {x, y, x·y}. On
+  n = 4 every choice of one value per (point, block) works. So ∘ is very free: the theory is a triple system plus
+  a nearly arbitrary choice function, and that weighs against calling it a deep fusion. Sampled models pass the
+  five original laws (law_vector).
 - **Shadow:** with x·y = x∘y, only one-element models are left.
 - **ETP:** x = y◇(y◇x) is Equation 16, x = (x◇y)◇y is Equation 26, and commutativity is Equation 43 (checked).
 - **Literature:** TS-quasigroups, squags and sloops (Quackenbush 1976), and the cubic-curve TS-quasigroups (Etherington;

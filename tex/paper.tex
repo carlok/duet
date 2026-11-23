@@ -153,9 +153,9 @@ certificates can additionally be checked by certified confluence and termination
 done yet.
 
 \subsection{Score}
-For each verified emergent law $e$ with difficulty $d_e = \log_{10}(\text{effort}_e/\text{effort}_0)$,
-the gain is $\sum_e \max(d_e, 0.1)/(1+\mathrm{order}(e))$, multiplied by a log factor in the number of
-small models and halved if a law of the theory is redundant.
+For each verified emergent law $e$, let its difficulty be $d_e = \log_{10}(\text{effort}_e/\text{effort}_0)$. The
+gain is $\sum_e \max(d_e, 0.1)/(1+\mathrm{order}(e))$, multiplied by a log factor in the number of small models and
+halved if a law of the theory is redundant.
 
 \section{Results so far}
 
@@ -359,7 +359,7 @@ stage: a split screen (a finite certificate of non-split, else Mace4 on 2--4 ele
   skew lattices in the ledger above.
 \end{itemize}
 
-\subsection{A diagonal attractor, and a fusion arm (X4)}
+\subsection{A diagonal attractor, and a fusion arm (X4)}\label{sec:x4}
 Across T4, X1, X2 and X3, 3{,}478 of the 3{,}596 theories with a positive verified score (97\%) prove an emergent
 law in one variable, such as $x\op x=x$ or $x\op x=x\cop x$, and none proves emergent associativity. The score
 rewarded what a fusion forces on the diagonal, and the reference case, the absorption pair, is itself of that kind.
@@ -399,6 +399,15 @@ converse: $\cop$ is the same loop translated by a constant. That is a one-operat
 disguise our definitional check misses because it allows no constants. A new attractor, $x\op(x\op x)=y\op(x\op y)$,
 ignores a variable that occurs twice.
 
+A definition with a parameter is now searched for directly. Terms in one operation over $x$, $y$ and the squares
+$z\op z$, $z\cop z$ are checked on small models, then proved by E. Post hoc this catches 18 of X5's 20 candidates and
+none of the 138 earlier ones. The preregistered run X6 adds it as a verifier screen and changes nothing else. It ran
+5.8 of its 8 hours before its memory rule stopped it. It verified 1,460 theories, 645 with a positive score and again
+none a fragment of a named theory, and the screen fired on 356. None of its top 20 is a translate disguise. They are
+17 distinct varieties, 11 have no classical model (X5: none), and 7 carry every automatic mark of
+Section~\ref{sec:x4}. The attractor $x\op(x\op x)=y\op(x\op y)$ remains the most frequent proved law, since the arm does
+not filter it.
+
 \subsection{A novelty ranking (N1)}
 The preregistered T5a ranking puts X4's candidates between rank 34 and rank 136 of 138. It sorts by a convergent
 presentation and a duality, the features that separate named theories from random ones, so it rewards resemblance
@@ -428,17 +437,24 @@ $x\op y=x\cop(y\op x)$, looked like a lead and turned out to be a relative of kn
 So it is a fragment of Heyting-algebra theory under a term interpretation, without associativity. The search reached
 it with no knowledge of logic.
 
-N1's first entry, $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$, also has a plain reading. It is equivalent to
+Before X6, N1's first entry was $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$, also has a plain reading. It is equivalent to
 $x\op(y\op z)=x\op y$, $x\op(x\cop y)=x$ and $x\op y=(y\op x)\cop x$ (E both ways). The groupoids that occur as its
 $\op$-part are characterized exactly (Lean). On pairs $(y\op x,x)$ the operation $\cop$ is forced to be the swap
 $y\op x\mapsto x\op y$; elsewhere it is free. With the two operations set equal, the theory has only one-element
 models, so its second operation is essential. Its $\op$-laws are named one-operation laws (ETP 327 and 378), but we
 found no source for the theory.
 
-The second entry, $\{x\op(x\cop y)=y\cop x,\ (x\cop(y\op z))\cop z=z\}$, splits Stein's first law $x(xy)=yx$ (ETP 335)
+The second, $\{x\op(x\cop y)=y\cop x,\ (x\cop(y\op z))\cop z=z\}$, splits Stein's first law $x(xy)=yx$ (ETP 335)
 across the two operations. Its second law alone gives $(x\op y)\cop y=y$, and the emergent $x\op(x\cop(y\op x))=x$
 then takes two rewriting steps. With the operations set equal, it too has only one-element models. We found no source
 for the theory.
+
+X6's candidates now hold N1's first four places. One of them is equivalent (E both ways) to a totally symmetric
+quasigroup $\op$ ($x\op y=y\op x$, $x\op(x\op y)=y$) with an idempotent $\cop$ such that $x\cop(x\op y)=x\cop y$ and
+$(x\op x)\cop x=x$. A totally symmetric quasigroup is a triple system, with blocks $\{x,y,x\op y\}$. So $x\cop y$
+depends only on $x$ and the block through $x$ and $y$: $\cop$ is a selector on point--block pairs. The other three
+strengthen one core in different ways: every square is a right identity for $\op$, and $x\op(y\op z)=x\op(z\cop y)$.
+None of the four is identified (\texttt{notes/x6\_top4.md}).
 
 \section{Planned experiments}
 \pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the

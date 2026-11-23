@@ -10,7 +10,8 @@ Each has a memo in [`notes/`](../notes). Identifications go into the ledger
 - **`3818b88f`: a triple system with a selector.** It is equivalent to a totally symmetric quasigroup `·`
   (commutative, `x · (x · y) = y`) with an idempotent `∘` such that `x ∘ (x · y) = x ∘ y` and `(x · x) ∘ x = x` (E,
   both ways). So `x ∘ y` depends only on `x` and the block `{x, y, x · y}`. No source pairs a triple system with
-  such an operation.
+  such an operation. But ∘ is very free: on 4 elements, any choice of one value per (point, block) works
+  (`notes/3818b88f_models.py`), so this may be a known kind of structure, a choice function on a triple system.
 - **A family of three (`bc43fd42`, `d0e963d9`, `d14ced44`).** All three strengthen a common core in different ways:
   every square is a right identity for `·`, and left multiplication cannot tell `y · z` from `z ∘ y`. With `·` =
   `∘` each becomes the left-zero band.

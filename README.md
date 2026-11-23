@@ -50,14 +50,10 @@ Level 8: `bc43fd42`, `d0e963d9`, `d14ced44`, `3818b88f`, `55cb2c91`, `1d0a5211`,
   - steering off that trick led to Steiner loops in disguise;
   - screening that disguise moved the top candidates off classical ground (X6).
 - **[The ranking](docs/ranking.md).** A preregistered novelty ranking, N1, with its live table.
-- **[Candidates studied closely](docs/candidates.md).**
-  - `3818b88f` (X6): a triple system with a selector operation; no source found.
-  - `bc43fd42`, `d0e963d9`, `d14ced44` (X6): a family in which squares are right identities.
-  - `55cb2c91`: not identified. Its ∘ is a partial swap, and its one-operation shadow is trivial.
-  - `1d0a5211`: Stein's law split across two operations.
-  - `a9295908`: a fragment of Heyting algebras.
-  - `742cc445`: McKenzie's L1 with a non-lattice partner; ∘ is associative in no non-degenerate model.
-  - `97a7dfcf`: a nilpotent pair.
+- **[Candidates studied closely](docs/candidates.md).** Nine so far. One turned out to be known, a fragment of Heyting
+  algebras; eight are unidentified. The two to show an expert first:
+  - `55cb2c91`: ∘ is a partial swap of ·, and with · = ∘ only one-element models are left;
+  - `3818b88f`: a triple system with a selector operation, which turns out to be nearly free.
 - **[Open problems](docs/open-problems.md).** S12, still open after 2-hour prover runs; non-implications that need
   infinite countermodels; a conjunction of two ETP laws.
 - **[How this was made](docs/how-made.md).** Mostly by an AI coding assistant, directed by the author. No LLM is in

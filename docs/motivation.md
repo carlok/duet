@@ -15,7 +15,7 @@ Laws that mix both operations are **bridges**. Bridges are where two theories fu
 terms but is not clearly connected to either parent. duet asks whether an open-ended search can find such fusions,
 and in particular ones nobody has named yet. No language model takes part in the search or its scoring.
 
-**The caveat.** The space is large and the human literature is larger. All runs together have verified 5,279
+**The caveat.** The space is large and the human literature is larger. All runs together have verified 6,739
 theories, against about 1.8 × 10²⁶ possible law sets, and most of them sit in the corner humans know best. "No source
 found" by our web searches is therefore weak evidence, and finding nothing new would not be a negative result.
 

@@ -15,6 +15,11 @@ Commands: `notes/dig_light.py <key>` and `notes/x6_top4_checks.py` parts 1–2 (
 | ETP | x = x◇(y◇y) is 11; x◇(y◇z) = x◇(z◇y) is 4358; neither named | Equations 16, 26 and 43 (commutativity) |
 | literature | x(yz) ≈ x(zy) only in one-operation AC-spectra work (arXiv:2401.15786) | TS-quasigroups, squags and sloops, cubic curves; nothing with a second operation like ∘ |
 
+**Models of `3818b88f`** (`notes/3818b88f_models.py`, labelled tables, output `notes/3818b88f_models.out`). Every
+TS-quasigroup on n ≤ 4 elements carries ∘ operations satisfying the reading: 2, 29 and 1,024 of them for n = 2, 3, 4,
+of which 2, 28 and 432 are selectors (x∘y in {x, y, x·y}). On 4 elements every choice of one value per (point, block)
+works, so ∘ is nearly free. Sampled models pass the five original laws.
+
 **Verdict:** none identified. Funnel level 8 now holds 8: the four above plus `55cb2c91`, `1d0a5211`, `742cc445` and
 `97a7dfcf`. The funnel also counts a memo whose title names several candidates (`soup/funnel.py`).
 
