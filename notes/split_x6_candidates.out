@@ -1,0 +1,20 @@
+806b1c92	adhoc    cli        split False  (witness n = 2)
+e1d5daf1	adhoc    cli        split False  (witness n = 4)
+57009122	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+fa4c7a42	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+63465148	adhoc    cli        split False  (witness n = 2)
+6f1f0350	adhoc    cli        split False  (witness n = 4)
+27014ec9	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+30b14b34	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+3818b88f	adhoc    cli        split False  (witness n = 3)
+d14ced44	adhoc    cli        split False  (witness n = 2)
+e869dc72	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+301f2745	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+a35cf10e	adhoc    cli        split False  (witness n = 2)
+bc43fd42	adhoc    cli        split False  (witness n = 2)
+06820718	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+27fd4554	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+d0e963d9	adhoc    cli        split False  (witness n = 2)
+65413c0c	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+7513cfd9	adhoc    cli        split None E did not derive a bridge law from one-operation consequences 
+7847487e	timeout (300 s)

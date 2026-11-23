@@ -1,18 +1,18 @@
-| entry | post hoc | . frag / sub / eq | t4-prior frag / sub / eq | t4-noprior frag / sub / eq | x1 frag / sub / eq | x2 frag / sub / eq | x3 frag / sub / eq | x4 frag / sub / eq | x5 frag / sub / eq |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| lattice |  | 247 / 1 / 1 | 329 / 4 / 4 | 30 / 0 / 0 | 118 / 1 / 1 | 293 / 6 / 6 | 262 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| skew lattice |  | 44 / 1 / 0 | 51 / 4 / 0 | 1 / 0 / 0 | 19 / 1 / 0 | 38 / 6 / 0 | 49 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| dimonoid |  | 0 / 0 / 0 | 0 / 6 / 0 | 0 / 0 / 0 | 0 / 24 / 0 | 0 / 24 / 0 | 0 / 19 / 0 | 0 / 3 / 0 | 0 / 0 / 0 |
-| absorption pair |  | 8 / 187 / 2 | 23 / 323 / 7 | 1 / 80 / 1 | 4 / 175 / 2 | 11 / 341 / 5 | 11 / 336 / 9 | 0 / 0 / 0 | 0 / 0 / 0 |
-| left quasigroup |  | 0 / 0 / 0 | 0 / 60 / 0 | 0 / 1 / 0 | 0 / 13 / 0 | 0 / 25 / 0 | 0 / 36 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| right quasigroup |  | 0 / 0 / 0 | 0 / 60 / 0 | 0 / 1 / 0 | 0 / 13 / 0 | 0 / 25 / 0 | 0 / 36 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| bisemilattice |  | 4 / 1 / 0 | 17 / 4 / 0 | 0 / 0 / 0 | 3 / 1 / 0 | 11 / 6 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| right absorption pair |  | 0 / 202 / 0 | 0 / 254 / 0 | 0 / 39 / 0 | 0 / 160 / 0 | 0 / 305 / 0 | 0 / 308 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| idempotent left quasigroup |  | 3 / 0 / 0 | 13 / 60 / 0 | 2 / 1 / 0 | 2 / 12 / 0 | 6 / 25 / 0 | 2 / 35 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| idempotent right quasigroup |  | 3 / 0 / 0 | 13 / 60 / 0 | 2 / 1 / 0 | 2 / 12 / 0 | 6 / 25 / 0 | 2 / 35 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| doppelsemigroup |  | 0 / 0 / 0 | 0 / 6 / 0 | 0 / 0 / 0 | 0 / 25 / 0 | 0 / 24 / 0 | 0 / 19 / 0 | 0 / 5 / 0 | 0 / 6 / 0 |
-| weakly associative lattice |  | 138 / 1 / 0 | 129 / 4 / 0 | 12 / 0 / 0 | 58 / 4 / 3 | 159 / 6 / 0 | 122 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
-| Delta-bijective pair | yes | 0 / 0 / 0 | 0 / 85 / 0 | 0 / 1 / 0 | 0 / 41 / 0 | 0 / 68 / 0 | 0 / 61 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| entry | post hoc | . frag / sub / eq | t4-prior frag / sub / eq | t4-noprior frag / sub / eq | x1 frag / sub / eq | x2 frag / sub / eq | x3 frag / sub / eq | x4 frag / sub / eq | x5 frag / sub / eq | x6 frag / sub / eq |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| lattice |  | 247 / 1 / 1 | 329 / 4 / 4 | 30 / 0 / 0 | 118 / 1 / 1 | 293 / 6 / 6 | 262 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| skew lattice |  | 44 / 1 / 0 | 51 / 4 / 0 | 1 / 0 / 0 | 19 / 1 / 0 | 38 / 6 / 0 | 49 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| dimonoid |  | 0 / 0 / 0 | 0 / 6 / 0 | 0 / 0 / 0 | 0 / 24 / 0 | 0 / 24 / 0 | 0 / 19 / 0 | 0 / 3 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| absorption pair |  | 8 / 187 / 2 | 23 / 323 / 7 | 1 / 80 / 1 | 4 / 175 / 2 | 11 / 341 / 5 | 11 / 336 / 9 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| left quasigroup |  | 0 / 0 / 0 | 0 / 60 / 0 | 0 / 1 / 0 | 0 / 13 / 0 | 0 / 25 / 0 | 0 / 36 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 5 / 0 |
+| right quasigroup |  | 0 / 0 / 0 | 0 / 60 / 0 | 0 / 1 / 0 | 0 / 13 / 0 | 0 / 25 / 0 | 0 / 36 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 5 / 0 |
+| bisemilattice |  | 4 / 1 / 0 | 17 / 4 / 0 | 0 / 0 / 0 | 3 / 1 / 0 | 11 / 6 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| right absorption pair |  | 0 / 202 / 0 | 0 / 254 / 0 | 0 / 39 / 0 | 0 / 160 / 0 | 0 / 305 / 0 | 0 / 308 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| idempotent left quasigroup |  | 3 / 0 / 0 | 13 / 60 / 0 | 2 / 1 / 0 | 2 / 12 / 0 | 6 / 25 / 0 | 2 / 35 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 1 / 0 |
+| idempotent right quasigroup |  | 3 / 0 / 0 | 13 / 60 / 0 | 2 / 1 / 0 | 2 / 12 / 0 | 6 / 25 / 0 | 2 / 35 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 1 / 0 |
+| doppelsemigroup |  | 0 / 0 / 0 | 0 / 6 / 0 | 0 / 0 / 0 | 0 / 25 / 0 | 0 / 24 / 0 | 0 / 19 / 0 | 0 / 5 / 0 | 0 / 6 / 0 | 0 / 54 / 0 |
+| weakly associative lattice |  | 138 / 1 / 0 | 129 / 4 / 0 | 12 / 0 / 0 | 58 / 4 / 3 | 159 / 6 / 0 | 122 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| Delta-bijective pair | yes | 0 / 0 / 0 | 0 / 85 / 0 | 0 / 1 / 0 | 0 / 41 / 0 | 0 / 68 / 0 | 0 / 61 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 1 / 0 |
 
 Rediscovered (fragment or equivalent, at least once): 7 of 13; without post hoc entries 7 of 12
 Not rediscovered: dimonoid, left quasigroup, right quasigroup, right absorption pair, doppelsemigroup, Delta-bijective pair
@@ -24,6 +24,7 @@ x2: 1015 theories, 3181 E jobs, 51 unknown, 0 skipped at the wall cap
 x3: 970 theories, 2259 E jobs, 51 unknown, 0 skipped at the wall cap
 x4: 636 theories, 437 E jobs, 106 unknown, 0 skipped at the wall cap
 x5: 292 theories, 90 E jobs, 47 unknown, 0 skipped at the wall cap
+x6: 1460 theories, 2018 E jobs, 1328 unknown, 0 skipped at the wall cap
 
 Top non-fragment candidates identified, by source (split / division / catalogue / any):
   .: 20 candidates; split 4, division 0, catalogue 7, identified 11 (55%)
@@ -35,3 +36,4 @@ Top non-fragment candidates identified, by source (split / division / catalogue 
   x3: 19 candidates; split 0, division 0, catalogue 5, identified 5 (26%)
   x4: 20 candidates; split 0, division 0, catalogue 0, identified 0 (0%)
   x5: 20 candidates; split 0, division 0, catalogue 0, identified 0 (0%)
+  x6: 20 candidates; split 0, division 0, catalogue 0, identified 0 (0%)

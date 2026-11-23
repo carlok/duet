@@ -1,0 +1,5 @@
+s1001: evals 37495, pushed 372, lattice-skipped 896, ignore-skipped 1483
+s1002: evals 72019, pushed 543, lattice-skipped 1070, ignore-skipped 2336
+s1003: evals 114699, pushed 661, lattice-skipped 2129, ignore-skipped 4843
+s1004: evals 4004695, pushed 2595, lattice-skipped 141383, ignore-skipped 138996
+x6: 145478 of 4228908 evaluations skipped as lattice-valid (3.4%)

@@ -1,0 +1,5 @@
+x6: results 1460, score>0 645, with emergent law 645, claims 1756
+ claim outcomes: {'unknown': 184, 'proved': 868, 'E sat': 60, 'finite (stage a/c)': 429, 'E sat (uncertified)': 58, 'FMB': 143, 'open': 14}
+ FMB ran on 341 claims; refutation sizes {5: 2, 6: 29, 7: 40, 8: 45, 9: 6, 10: 20, 12: 1}
+ stage c results: 11 | verifier cfgs: {'V6': 1460}
+ V4 screens: {'split': 75, 'parameter definition': 356, 'division': 2} | screen secs median 0.2 max 359.1

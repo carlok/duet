@@ -3044,5 +3044,469 @@
    1282,
    1467
   ]
+ },
+ {
+  "models": 21,
+  "matches": [],
+  "definitional": false,
+  "key": "e1d5daf12ea621c9",
+  "source": "x6",
+  "laws": [
+   "x · (x ∘ x) = x",
+   "x · (y ∘ (x ∘ y)) = x ∘ x",
+   "(x ∘ y) · (x · y) = x · x",
+   "((x · y) · z) ∘ z = y ∘ x"
+  ],
+  "T": [
+   60,
+   11140,
+   17027,
+   24640
+  ]
+ },
+ {
+  "models": 4,
+  "matches": [
+   {
+    "op": "∘",
+    "term": "(x · (y · z∘z))",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "(y · (x · z∘z))",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "(z∘z · (x · y))",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "((x · y) · z∘z)",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "((x · z∘z) · y)",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "((y · z∘z) · x)",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "(x ∘ (y ∘ z·z))",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "(y ∘ (x ∘ z·z))",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "(z·z ∘ (x ∘ y))",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "((x ∘ y) ∘ z·z)",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "((x ∘ z·z) ∘ y)",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "((y ∘ z·z) ∘ x)",
+    "e": "unknown"
+   }
+  ],
+  "definitional": false,
+  "key": "7847487e4503b4e5",
+  "source": "x6",
+  "laws": [
+   "x · ((y ∘ z) · y) = z ∘ x",
+   "((x ∘ x) · (y ∘ x)) · x = y"
+  ],
+  "T": [
+   13665,
+   62250
+  ]
+ },
+ {
+  "models": 11,
+  "matches": [],
+  "definitional": false,
+  "key": "fa4c7a425f1b643a",
+  "source": "x6",
+  "laws": [
+   "x · (y ∘ (y ∘ x)) = z ∘ z",
+   "((x · (y · x)) · z) · y = z"
+  ],
+  "T": [
+   11175,
+   64951
+  ]
+ },
+ {
+  "models": 491,
+  "matches": [],
+  "definitional": false,
+  "key": "806b1c92f69cb1b0",
+  "source": "x6",
+  "laws": [
+   "x · (x · (y ∘ z)) = y · z",
+   "x ∘ (y · ((y · z) ∘ z)) = x"
+  ],
+  "T": [
+   10104,
+   31292
+  ]
+ },
+ {
+  "models": 4,
+  "matches": [
+   {
+    "op": "∘",
+    "term": "(x · (y · z∘z))",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "(y · (x · z∘z))",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "(z∘z · (x · y))",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "((x · y) · z∘z)",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "((x · z∘z) · y)",
+    "e": "unknown"
+   },
+   {
+    "op": "∘",
+    "term": "((y · z∘z) · x)",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "(x ∘ (y ∘ z·z))",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "(y ∘ (x ∘ z·z))",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "(z·z ∘ (x ∘ y))",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "((x ∘ y) ∘ z·z)",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "((x ∘ z·z) ∘ y)",
+    "e": "unknown"
+   },
+   {
+    "op": "·",
+    "term": "((y ∘ z·z) ∘ x)",
+    "e": "unknown"
+   }
+  ],
+  "definitional": false,
+  "key": "7513cfd9adf9e7e5",
+  "source": "x6",
+  "laws": [
+   "x · x = y · y",
+   "x · ((x ∘ x) ∘ y) = y · x",
+   "x · (y ∘ ((z · x) ∘ z)) = y",
+   "x ∘ (y · ((y · x) ∘ x)) = x"
+  ],
+  "T": [
+   14,
+   14131,
+   30498,
+   31264
+  ]
+ },
+ {
+  "models": 176,
+  "matches": [],
+  "definitional": false,
+  "key": "570091222e36af36",
+  "source": "x6",
+  "laws": [
+   "x · (x · y) = y · (z ∘ z)",
+   "(x ∘ (y ∘ y)) · y = y · x",
+   "((x · x) ∘ (x ∘ x)) · x = x"
+  ],
+  "T": [
+   3222,
+   20721,
+   62640
+  ]
+ },
+ {
+  "models": 83,
+  "matches": [],
+  "definitional": false,
+  "key": "634651483940095e",
+  "source": "x6",
+  "laws": [
+   "(x ∘ y) · z = x · (y · z)",
+   "(x · y) ∘ ((x ∘ y) · x) = x"
+  ],
+  "T": [
+   5078,
+   47274
+  ]
+ },
+ {
+  "models": 11,
+  "matches": [],
+  "definitional": false,
+  "key": "27014ec95f136214",
+  "source": "x6",
+  "laws": [
+   "x · (x · y) = y",
+   "x ∘ (y · y) = x",
+   "((x ∘ y) ∘ y) · (y ∘ y) = x",
+   "((x ∘ (x ∘ y)) ∘ y) ∘ y = y"
+  ],
+  "T": [
+   48,
+   83,
+   53404,
+   67947
+  ]
+ },
+ {
+  "models": 21,
+  "matches": [],
+  "definitional": false,
+  "key": "6f1f03501b3f9fa9",
+  "source": "x6",
+  "laws": [
+   "(x · y) · (z · x) = y · z",
+   "(x · y) ∘ (x ∘ y) = x ∘ x",
+   "(((x ∘ y) ∘ x) ∘ y) ∘ z = z"
+  ],
+  "T": [
+   16285,
+   18448,
+   71236
+  ]
+ },
+ {
+  "models": 151,
+  "matches": [],
+  "definitional": false,
+  "key": "30b14b34d87cdf62",
+  "source": "x6",
+  "laws": [
+   "x · (y ∘ y) = x",
+   "x ∘ ((x · x) · y) = y ∘ x",
+   "(x ∘ y) ∘ (x · (z ∘ z)) = y"
+  ],
+  "T": [
+   68,
+   14740,
+   44857
+  ]
+ },
+ {
+  "models": 61,
+  "matches": [],
+  "definitional": false,
+  "key": "3818b88fd08cc59b",
+  "source": "x6",
+  "laws": [
+   "x · (x · y) = y",
+   "(x · y) · y = x",
+   "x ∘ (x · y) = x ∘ y",
+   "(x · x) ∘ (x ∘ x) = x",
+   "(x · (x · x)) ∘ x = x"
+  ],
+  "T": [
+   48,
+   113,
+   431,
+   2089,
+   2453
+  ]
+ },
+ {
+  "models": 590,
+  "matches": [],
+  "definitional": false,
+  "key": "d14ced44a493fe8e",
+  "source": "x6",
+  "laws": [
+   "x · (y ∘ y) = x",
+   "x · (y · z) = x · (z ∘ y)",
+   "x · ((x · y) ∘ y) = x · y"
+  ],
+  "T": [
+   68,
+   3324,
+   13743
+  ]
+ },
+ {
+  "models": 11,
+  "matches": [],
+  "definitional": false,
+  "key": "e869dc72fc3bed29",
+  "source": "x6",
+  "laws": [
+   "x · (y · x) = y",
+   "((x ∘ y) ∘ y) · x = z ∘ z"
+  ],
+  "T": [
+   51,
+   24167
+  ]
+ },
+ {
+  "models": 11,
+  "matches": [],
+  "definitional": false,
+  "key": "301f27456dfd55e5",
+  "source": "x6",
+  "laws": [
+   "x · y = y · x",
+   "x · (x · ((y ∘ z) ∘ z)) = y",
+   "((x · y) · (y · x)) ∘ y = y"
+  ],
+  "T": [
+   17,
+   29798,
+   63342
+  ]
+ },
+ {
+  "models": 381,
+  "matches": [],
+  "definitional": false,
+  "key": "a35cf10e8e89788c",
+  "source": "x6",
+  "laws": [
+   "x · (x · y) = y ∘ y",
+   "x ∘ (x · ((x · x) ∘ y)) = x",
+   "x ∘ ((x · (x ∘ x)) · y) = x"
+  ],
+  "T": [
+   226,
+   31177,
+   37470
+  ]
+ },
+ {
+  "models": 588,
+  "matches": [],
+  "definitional": false,
+  "key": "bc43fd42ec31af5b",
+  "source": "x6",
+  "laws": [
+   "x · (y · z) = x · (z ∘ y)",
+   "x · (((y ∘ y) · z) · w) = x"
+  ],
+  "T": [
+   3324,
+   39213
+  ]
+ },
+ {
+  "models": 178,
+  "matches": [],
+  "definitional": false,
+  "key": "06820718c20a2354",
+  "source": "x6",
+  "laws": [
+   "x · (y · x) = y",
+   "x · (y · (x ∘ x)) = y · x"
+  ],
+  "T": [
+   51,
+   10118
+  ]
+ },
+ {
+  "models": 9,
+  "matches": [],
+  "definitional": false,
+  "key": "27fd4554ee0a98ee",
+  "source": "x6",
+  "laws": [
+   "x · x = y · y",
+   "x · y = y · x",
+   "x · x = x ∘ x",
+   "x · ((y ∘ y) ∘ (x · y)) = y",
+   "(x ∘ ((y ∘ x) · y)) ∘ z = z"
+  ],
+  "T": [
+   14,
+   17,
+   21,
+   33704,
+   61086
+  ]
+ },
+ {
+  "models": 9,
+  "matches": [],
+  "definitional": false,
+  "key": "65413c0c5cb37e33",
+  "source": "x6",
+  "laws": [
+   "x · (y · y) = x",
+   "x ∘ (y · (z · z)) = y ∘ x",
+   "x ∘ ((x ∘ (y · x)) · y) = x",
+   "(x ∘ (y ∘ (y · y))) ∘ x = y"
+  ],
+  "T": [
+   53,
+   11648,
+   37689,
+   58071
+  ]
+ },
+ {
+  "models": 589,
+  "matches": [],
+  "definitional": false,
+  "key": "d0e963d9e23b5555",
+  "source": "x6",
+  "laws": [
+   "x · (y ∘ y) = x",
+   "x · ((x · y) · x) = x",
+   "x · (y · z) = x · (z ∘ y)"
+  ],
+  "T": [
+   68,
+   1418,
+   3324
+  ]
  }
 ]

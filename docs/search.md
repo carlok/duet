@@ -54,6 +54,12 @@ Each round taught one lesson, and the search was changed to answer it.
    constant, `x ∘ y = (x · y) · (z ∘ z)`. That is one operation plus a parameter, a disguise our checks missed. A new
    attractor appeared: `x · (x · x) = y · (x · y)`.
 
+5. **Screening the disguise moved the search.** Run X6 added the parameter-definition screen (verifier V6). It fired on
+   356 theories, and none of X6's top 20 is a translate disguise. The top candidates left the affine region: 11 of 20
+   have no classical model (X5: 0), they are 17 distinct varieties (X5: 5), and 7 have every automatic mark. X6's
+   candidates now hold N1 ranks 1 to 4. None has been studied closely yet. X5's attractor
+   `x · (x · x) = y · (x · y)` remains.
+
 Both filters X5 called for now exist. A definition with a parameter (verifier V6) catches 18 of X5's 20 candidates and
 none from earlier runs. Ignored variables that repeat (arm `fusion3`) are implied by 151 of all 158 candidates, so
 that filter would confine a run to the quasigroup-like corner. Using it is a choice for the next run.

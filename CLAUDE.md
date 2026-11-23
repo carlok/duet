@@ -214,6 +214,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
     rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
     square-free form (`notes/x5_baseline.py`).
+  - X6 (23 Nov, fusion2 + V6, stopped by memory rule at 72%, deviation 9): 1,460 verified, 645 scored, 0 fragments; the
+    parameter screen fired 356 times; Q1–Q3 hold, Q4 fails in the good direction (9/20 classical). 7/20 disconnected;
+    its 20 are 17 varieties; X6 candidates hold N1 ranks 1–4 (`bc43fd42`, `d0e963d9`, `d14ced44`, `3818b88f`), unstudied.
+    Pitfall: per-candidate split results must be merged into `check/split_candidates.json`, or `disconnected.py` and
+    N1 read them as "split not run".
   - `742cc445` (N1 rank 4) and `97a7dfcf` (rank 5), close looks on 23 Nov: both not identified (`notes/742cc445.md`,
     `notes/97a7dfcf.md`). 742cc445 = McKenzie's L1 + a non-lattice law; 8 emergent laws need both axioms; ∘ associative
     forces · = ∘. 97a7dfcf ⟺ 0 = x·x, (x·y)·z = 0, x∘(y·z) = 0, x·(y∘x) = x∘y. Funnel level 8 is now 4.

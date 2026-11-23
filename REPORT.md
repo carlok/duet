@@ -2,6 +2,61 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X6: X5 with the parameter-definition screen (23 Nov 2026, 06:40–12:26 UTC; preregistered; stopped by its memory rule)
+
+Preregistration: PREREGISTRATION.md, X6 (commit `cc1dc25`, before the start). Single change from X5: verifier V6
+(parameter-definition screen). It stopped at 72% of its 8-hour budget by the memory rule (deviation 9). Commands:
+- run: `podman run -d --name soup-x6 -v "$PWD/work:/data" -e SOUP_DATA=/data/x6 -e SOUP_VERIFIER=V6 soup python3 -m
+  soup.stream.supervisor --arm fusion2 --searchers 4 --verifiers 4 --seed0 1001 --budget 28800 --run x6`;
+- post-run pipeline: fragments, statistics (`notes/*_x6.out`), candidates (`--sources ...,x5,x6`), profile,
+  `soup.hidden` (plain and `--param`), `soup.relabel`, rank, `soup.rediscover --sources x6`; log
+  `work/check/x6_post.log`;
+- split per candidate (`notes/split_x6_candidates.out`), `notes/disconnected.py x6 x5`, `soup.dedupe --jobs 4`.
+
+| | X6 (fusion2, V6; 5.8 h) | X5 (fusion2, V5; 2.5 h) |
+| --- | --- | --- |
+| verified theories | 1,460 (253 per hour) | 292 (117 per hour) |
+| positive score | 645 | 164 |
+| fragments of a named theory | **0 of 645** | 0 of 164 |
+| screened: parameter definition / split / division | **356** / 75 / 2 | – / 13 / 0 |
+| skipped: lattice-valid / argument-ignoring | 145,478 / 147,658 of 4,228,908 searcher evaluations (3.4% / 3.5%) | 2.9% / 3.1% |
+| claims / proved | 1,756 / 868 | 477 / 274 |
+| refuted by finite models (stages a and c, and FMB) | 572 (33% of claims) | 114 (24%) |
+| refuted by Vampire FMB | 143 (sizes 5–12; FMB ran on 341 claims) | 79 |
+| refuted by E saturation | 118 (58 uncertified) | 9 (8 uncertified) |
+| unknown / open | 184 / 14 | 76 / 4 |
+| emergent associativity / commutativity proved | 0 / 53 | 0 / 92 |
+| structures added to the corpus | 8,055 | 437 |
+| cheap evaluations (stats) | 4,004,695 | 2,384,983 |
+
+**Predictions:**
+- **Q1 holds.** `soup.hidden --param` catches 0 of X6's top 20.
+- **Q2 holds.** X6's 20 are 17 varieties (`soup.dedupe`; X5: 5). Over all runs, 178 candidates are 142 varieties.
+- **Q3 holds.** x·(x·x) = y·(x·y) is again the most frequent proved emergent law (121 of 645).
+- **Q4 fails, in the good direction.** 9 of the top 20 have a classical model, against the predicted ≥ 15 (X5: 20 of
+  20).
+
+**Post-run checks:**
+- **Candidates:** 178 in the pool.
+- **Hidden and relabel:** 0 definitional, 0 relations to a named theory.
+- **Split:** 0 split, 9 not split (finite certificate), 10 undecided, 1 timed out. The per-candidate results of X5
+  and X6 were merged into `work/check/split_candidates.json`, where the other checks read them.
+- **R1:** 2,018 E jobs, 1,328 unknown, a high share that weakens the automatic identification.
+  - No theory is a fragment of, or equivalent to, a catalogue entry.
+  - Subvarieties: 54 of doppelsemigroups, 5 each of left and right quasigroups, and 1 of Δ-bijective pairs.
+  - The top 20: 0 identified automatically.
+- **"Disconnected" marks** (`notes/disconnected_x6_x5.out`): **X6 7 of 20**, X5 0 of 20, X4 14 of 20. The seven are
+  `e1d5daf1`, `6f1f0350`, `3818b88f`, `d14ced44`, `a35cf10e`, `bc43fd42` and `d0e963d9`.
+
+**Reading:**
+- **The screen worked during the run.** It fired on 356 theories (24%), and none of the top 20 is a translate
+  disguise.
+- **The search moved.** After the screen took the Steiner-loop translates away, the top candidates left the affine
+  region: 11 of 20 have no classical model, against 0 of 20 in X5. Seven have every automatic mark. They are
+  candidates for close looks, not results.
+- **The old attractor stays.** `fusion2` does not filter x·(x·x) = y·(x·y).
+- **Caveat:** the high share of unknown R1 jobs makes "0 identified automatically" weaker for X6 than for X5.
+
 ## `742cc445` and `97a7dfcf` (N1 ranks 4 and 5): close looks (23 Nov 2026, during X6, recorded 07:17 UTC; post hoc)
 
 Commands: `podman run -i --rm -v "$PWD/work:/data:ro" soup python3 - <part> < notes/742cc445_checks.py` (parts 1–3)
