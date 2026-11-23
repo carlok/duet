@@ -14,7 +14,7 @@ import json
 import math
 import os
 
-DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3']
+DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5']
 L, MAX_LAWS = 71369, 6
 tv = tq = te = 0
 for d in DIRS:
