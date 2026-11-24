@@ -5,7 +5,8 @@
 
 Run after soup.novelty (it reads novelty_ranking.json). With --readme, the block between <!-- funnel:start --> and
 <!-- funnel:end --> is rewritten. Levels:
-  0 cheap surrogate evaluations (the largest evals_total per run in logs/stats.jsonl; repeats count again)
+  0 cheap surrogate evaluations (per run, every searcher's final count in runs/<run>/archive_s*.json, retired
+    searchers included; repeats count again; distinct counted from the bitmaps where runs keep them)
   1 verified theories (results/*.json)            2 with a positive verified score (a proved emergent law)
   3 not a fragment of a named theory               4 candidates (top 20 non-fragments per run)
   5 distinct varieties (soup.dedupe)               6 not known to any check (N1 ranked)
@@ -15,19 +16,23 @@ Run after soup.novelty (it reads novelty_ranking.json). With --readme, the block
 import argparse
 import glob
 import json
+import math
 import os
 import re
 import time
 from math import comb as _comb
 from pathlib import Path
 
-DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', 'x7']
+DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x4a', 'x5', 'x6', 'x7', 'x8']
 START, END = '<!-- funnel:start -->', '<!-- funnel:end -->'
+EVAL_ONLY = {'x4a'}       # aborted after 3 min (deviation 6): its evaluations happened, its results are not used
+MILESTONES = [(50e6, 'the dust removed'), (100e6, 'the surface scratched'), (200e6, 'digging')]
 
 
-def _evals(base):
+def _stats_evals(base):
+    """Per run, the largest evals_total in logs/stats.jsonl (the supervisor's sum over its live searchers)."""
     per_run, p = {}, os.path.join(base, 'logs', 'stats.jsonl')
-    if not os.path.exists(p): return 0
+    if not os.path.exists(p): return per_run
     for line in open(p):
         try: r = json.loads(line)
         except ValueError: continue
@@ -35,14 +40,47 @@ def _evals(base):
         for val in r.values():
             if e is None and isinstance(val, dict) and 'evals_total' in val: e = val['evals_total']
         if e is not None: per_run[r.get('run')] = max(per_run.get(r.get('run'), 0), e)
-    return sum(per_run.values())
+    return per_run
+
+
+def _evals(base):
+    """Cheap evaluations in one data directory (24 Nov 2026 correction). Per run, the sum of every searcher's final
+    count in runs/<run>/archive_s*.json, which includes searchers the rebalancer retired; stats.jsonl drops those,
+    and is used only for runs without archives (or where it is larger)."""
+    st, tot = _stats_evals(base), 0
+    runs = {os.path.basename(r) for r in glob.glob(os.path.join(base, 'runs', '*'))} | set(st)
+    for run in runs:
+        arch = sum(json.load(open(f)).get('evals', 0) for f in glob.glob(os.path.join(base, 'runs', str(run), 'archive_s*.json')))
+        tot += max(arch, st.get(run, 0))
+    return tot
+
+
+def distinct(data='/data'):
+    """Distinct law sets over every run with saved bitmaps (X7 on): linear counting on the union of all searchers'
+    one-hash bitmaps (the hash is deterministic, so the union across runs is meaningful). Returns (distinct, raw of
+    those runs), or None if no run has bitmaps."""
+    import numpy as np
+    union, raw = None, 0
+    for d in DIRS:
+        base = data if d == '.' else os.path.join(data, d)
+        for rd in glob.glob(os.path.join(base, 'runs', '*')):
+            bl = glob.glob(os.path.join(rd, 'bloom_*.npy'))
+            if not bl: continue
+            raw += sum(json.load(open(f)).get('evals', 0) for f in glob.glob(os.path.join(rd, 'archive_s*.json')))
+            for f in bl:
+                b = np.load(f); union = b.copy() if union is None else (union | b)
+    if union is None: return None
+    m = union.size * 8; fill = int(np.bitwise_count(union).sum(dtype=np.int64))
+    return (int(round(-m * math.log(1 - fill / m))) if fill < m else None), raw
 
 
 def compute(data='/data', notes='/notes'):
     lv = dict.fromkeys(range(9), 0)
     for d in DIRS:
         base = data if d == '.' else os.path.join(data, d)
-        rs = [json.load(open(f)) for f in glob.glob(os.path.join(base, 'results', '*.json'))]
+        if not os.path.isdir(base): continue
+        if d in EVAL_ONLY: lv[0] += _evals(base); continue
+        rs =[json.load(open(f)) for f in glob.glob(os.path.join(base, 'results', '*.json'))]
         lv[0] += _evals(base); lv[1] += len(rs); lv[2] += sum(1 for r in rs if r.get('score', 0) > 0)
         fp = os.path.join(base, 'fragments.json')
         if os.path.exists(fp):
@@ -78,7 +116,17 @@ ROWS = [
 ]
 
 
-def block(lv, l8):
+def milestones(raw, dist):
+    parts = [f'{v / 1e6:.0f}M, {name}: ' + ('**passed**' if raw >= v else f'{100 * raw / v:.0f}% of the way')
+             for v, name in MILESTONES]
+    d = ''
+    if dist and dist[0]:
+        d = (f' Distinct, where runs keep a bitmap (X7 on): {dist[0]:,} of their {dist[1]:,} raw evaluations '
+             f'({100 * dist[0] / dist[1]:.1f}%).')
+    return f'**Milestones** (raw level 0): {" · ".join(parts)}.{d}'
+
+
+def block(lv, l8, dist=None):
     when = time.strftime('%d %b %Y, %H:%M UTC', time.gmtime())
     out = [START, f'*Regenerated by `soup.funnel` after each run\'s checks; last update {when}.*', '',
            '| level | theories | what survives |', '|---|---:|---|']
@@ -89,6 +137,7 @@ def block(lv, l8):
     space = sum(_comb(71369, k) for k in range(1, 7))              # law sets of 1 to 6 laws (searcher.MAX_LAWS)
     out += ['', f'**The space:** {space:.2e} law sets of 1 to 6 laws. Level 0 is {lv[0] / space:.1e} of it '
             f'({100 * lv[0] / space:.1e} %), and an upper bound, since repeats count again.', '',
+            milestones(lv[0], dist), '',
             f'Level 8: {", ".join(f"`{k}`" for k in l8) or "none"}. Not known is not new: no theory here is '
             'claimed new, and our literature searches are weak evidence.', END]
     return '\n'.join(out)
@@ -98,7 +147,7 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--readme'); ap.add_argument('--notes', default='/notes')
     a = ap.parse_args()
     lv, l8 = compute(notes=a.notes)
-    b = block(lv, l8); print(b)
+    b = block(lv, l8, distinct()); print(b)
     if a.readme:
         p = Path(a.readme); t = p.read_text()
         i, j = t.index(START), t.index(END) + len(END)

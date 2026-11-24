@@ -2,6 +2,60 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## F1: families of verified theories, and emerging patterns (post hoc; written 24 Nov 2026, 07:41 UTC, before it is computed)
+
+Descriptive. The user's request (24 Nov): a statistic of families and their percentages next to the funnel, and the
+emerging patterns. Code: `soup/taxonomy.py`. Data: every verified theory (`results/*.json` with laws) in the run
+directories of the funnel. x4a's results are left out, as in the funnel. Percentages are per run directory, over all
+of its verified theories.
+
+**Primary family**, the first rule that matches, so the shares sum to 100% per run:
+1. **Disguise:** stage a screened it (`screened`: split, division or parameter definition; V4 on).
+2. **Known:** `check/rediscover.json` relates it to a catalogue entry, under some relabelling, as a fragment,
+   subvariety or equivalent, proved by E. The model-only kinds ("subvariety?") do not count. Its key is also known
+   if the ledger `notes/rediscovery.md` identifies it. The subtype is the catalogue entry, the first in catalogue
+   order.
+3. **No synergy:** no proved emergent law.
+4. **Diagonal:** a proved emergent law in one variable (`offdiag.ONEVAR`).
+5. **Argument-ignoring:** on the corpus it implies an `offdiag.IGNORE` law (X4's attractor).
+6. **Structured:** everything else, labelled by its reduct signature.
+
+A rule for square-ignoring laws (`IGNORE2`) was considered and dropped before this entry: every totally symmetric
+quasigroup satisfies x·(x·x) = y·(x·y), so the rule would file classical structure as an attractor.
+
+**Reduct signature.** Eleven properties of one operation, written for ·:
+- commutative x·y = y·x; associative; idempotent x·x = x; constant squares x·x = y·y;
+- squares are right identities x·(y·y) = x, and left identities (y·y)·x = x;
+- left involutive x·(x·y) = y, and right involutive (y·x)·x = y;
+- flexible x·(y·x) = (x·y)·x; x·(y·z) = x·y, and its mirror (x·y)·z = y·z.
+
+With the same eleven for ∘, that is 22 laws, a set closed under the 8 relabellings.
+- A theory has a property when the law holds in every model of the theory in the union of all runs' corpora.
+- The signature lists the properties of · and of ∘. "TSQ" abbreviates commutative and left involutive.
+- The family label is the least label over the 8 relabellings, so relabelled twins share a family.
+- Evidence: for structured theories, E is asked for each property the corpus gives (10 s, 200,000 processed
+  clauses). The confirmation rate is reported, and an unconfirmed property is marked model-implied.
+
+**Emerging patterns.** Runs in time order: root, t4-prior, t4-noprior, x1, …, x7.
+- A structured family is **new** in a run if no earlier run has a theory in it.
+- It is **emerging** in a run if it has at least 10 theories there and its share there is at least twice its share in
+  all earlier runs together.
+- The same two flags are applied to proved emergent laws, each taken up to the 8 relabellings.
+- **The accumulation curve:** distinct structured families against cumulative verified theories, and at each run's
+  end against cumulative level 0. Chao1 (S + f1²/(2 f2), with f1 and f2 the families seen once and twice) estimates
+  how many exist in total.
+
+**Predictions:**
+- **F1a:** in X7, "structured" is the largest primary family, and in T4 (t4-prior and t4-noprior together) its share
+  is under 10%.
+- **F1b:** at least 10% of the structured families seen up to X7 are new in X7.
+
+**Caveats.**
+- Corpus implication over-approximates real implication, so a signature can be too rich. The E confirmation
+  bounds this error.
+- A fixed list of 11 properties names only what it lists. Two theories in one family can still differ a lot.
+- The "known" rule relies on our catalogue, not on the literature.
+
 ## X7: skip what is already known, a night run (written 23 Nov 2026, 19:46 UTC, before X7 starts)
 
 Exploratory and descriptive. The user's instruction (23 Nov): "skip the already known, do not risk to do again the
