@@ -59,6 +59,22 @@ as the search grows.
 So the claim is that the search grows outward from known mathematics and leaves the corner our checks recognise. It is
 not that the search reaches unexplored mathematics. That needs a specialist.
 
-Background from scratch, in 9 pages: [`intro/intro.pdf`](../intro/intro.pdf); exercises in [`intro/exercises.pdf`](../intro/exercises.pdf).
+## Where this sits: taxonomy first, then patterns, conjectures and theorems
+
+The work so far is taxonomy: the search finds new "species", and F1 classifies them. The plan is to catalogue
+patterns across families next, then state conjectures, and perhaps prove theorems. A literature check
+([`notes/metafield.md`](../notes/metafield.md)) shows that this arc is not a new field. The ground is held by:
+- **automated theory formation:** AM in 1976, then HR, which ran our prover and model-finder loop on finite algebras;
+- **Wolfram's ruliology:** he enumerates axiom systems and calls the activity a new science that starts like natural
+  history;
+- **catalogues of one-operation varieties:** Le Floch's 456 semigroup varieties, SemiBase, and the ETP's lattice of
+  order-3 conjunctions;
+- **the catalogue-to-theorem arc:** the BSD conjecture, Graffiti, and the murmurations of elliptic curves.
+
+What the check did not find is our combination. That is an open-ended search over *sets* of laws in *two*
+operations, with synergy as the target, a taxonomy of the theories it finds, and conjectures stated across those
+families. That combination is the claim.
+
+Background from scratch, in 10 pages: [`intro/intro.pdf`](../intro/intro.pdf); exercises in [`intro/exercises.pdf`](../intro/exercises.pdf).
 
 Next: [the evolutionary search](search.md).

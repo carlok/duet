@@ -8,7 +8,14 @@ Many structures in algebra are two operations held together by a few laws. In a 
 two operations, `x · y` and `x ∘ y`, looking for fusions of this kind that nobody has named. Every claim is checked by
 theorem provers and finite models, and no language model takes part in the search.
 
-**New to the subject?** [`intro/intro.pdf`](intro/intro.pdf) explains it from sets and functions, in 9 pages. Exercises
+**What is new, and what is not.** Machine search for theories is old: AM and HR, then Wolfram's enumerations of axiom
+systems. So are exhaustive catalogues of one-operation varieties, from Ježek and Kepka to the ETP and its successors.
+A literature check found no earlier open-ended search over *sets* of laws in *two* operations with synergy as the
+target, no taxonomy of the theories such a search finds, and no conjectures stated across those families. That
+combination is what duet adds ([`notes/metafield.md`](notes/metafield.md)). The families are the first step. The plan
+is to catalogue patterns across families next, then conjectures, and perhaps theorems.
+
+**New to the subject?** [`intro/intro.pdf`](intro/intro.pdf) explains it from sets and functions, in 10 pages. Exercises
 with solutions are in [`intro/exercises.pdf`](intro/exercises.pdf).
 
 ## The funnel (live)

@@ -25,7 +25,10 @@ an open-ended search over small equational theories\\[4pt]\large Draft, 22 Novem
 
 \begin{abstract}
 We search the space of small equational theories over two binary operations $\op$ and $\cop$ for
-theories whose laws imply consequences that no single law implies. Laws are enumerated up to order~4
+theories whose laws imply consequences that no single law implies. Each ingredient has precedents: automated theory
+formation, Wolfram's enumeration of axiom systems, and catalogues of one-operation varieties. We found none for the
+combination: an open-ended search over sets of laws in two operations with synergy as the objective, together with
+a taxonomy of the theories it finds as the ground for conjectures across families. Laws are enumerated up to order~4
 (71{,}369 laws up to renaming and side swap, 61{,}983 of them mixing both operations). A satisfaction
 matrix against 12{,}509 finite structures gives a cheap surrogate for implication; a quality-diversity
 search proposes theories; each candidate is then verified by finite-model search, the SMT solver Z3 and
@@ -62,6 +65,16 @@ The lattice absorption pair $x\op(x\cop y)=x$, $x\cop(x\op y)=x$ is the referenc
 laws imply $x\op x = x$, neither does alone. We ask whether an automated search over theories, scored by
 emergent laws and checked by provers, finds structure that a mathematician would call interesting, and
 in particular theories that are not already named. No language model is used anywhere in the scoring.
+
+\paragraph{Contribution.} What is new here is the combination, not any single part. The related work below gives
+the precedents, and \texttt{notes/metafield.md} the literature check behind this claim.
+\begin{itemize}
+\item An open-ended quality-diversity search whose individuals are \emph{sets} of laws in \emph{two} operations, with
+  synergy as its objective and every claim verified by provers and finite models.
+\item A taxonomy of the verified theories: families by the one-operation properties of each operation, read up to the
+  eight relabellings and counted run by run.
+\item The ground for conjectures stated across families. These are the next step, and none is claimed yet.
+\end{itemize}
 
 \section{Related work}
 

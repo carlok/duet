@@ -828,4 +828,7 @@ No random theory and no T4 theory had been profiled.
       run ended at 10:19:37 UTC after 4,183 s (13% of the budget). Exit code 0, no OOM kill.
     - Results by then: 49 verified, 33 with a positive score, 8,453,911 cheap evaluations. The queue (1,500 pending,
       3 in stage c) is kept for the next run.
-    - Whether X8 is continued is the user's decision. The outcome is recorded here.
+    - **Decision (user, 10:29 UTC):** continue as run `x8b` in the same data directory (`SOUP_DATA=/data/x8`).
+      - Settings unchanged, except seeds 1209 onward (X8 used 1201–1208) and the remaining budget, 28,217 s.
+      - Nothing else runs beside it, not even a build.
+      - R1–R4 are judged over X8 and x8b together, and the report gives each part's counts separately.

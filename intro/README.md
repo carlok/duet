@@ -1,6 +1,6 @@
 An introduction to the project from scratch, in two documents:
 
-- **`intro.pdf`** (`intro.tex`, 9 pages): the text. It covers sets and functions, binary operations, laws, theories
+- **`intro.pdf`** (`intro.tex`, 10 pages): the text. It covers sets and functions, binary operations, laws, theories
   and models, synergy, how the search works, and what it has found. It has definitions, examples, theorems and
   proofs, and nothing else.
 - **`exercises.pdf`** (`exercises.tex`, 4 pages): exercises arranged by the sections of the text, with solutions.
