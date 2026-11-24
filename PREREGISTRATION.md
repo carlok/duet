@@ -816,3 +816,16 @@ No random theory and no T4 theory had been profiled.
      added to the corpus.
    - Every post-run step is unchanged. Counts are for the 5.8 hours that ran, and per-hour rates are computed on
      those hours.
+
+10. **X8 stopped by its memory rule after 70 minutes, because of an image rebuild next to it (24 Nov 2026, 10:19 UTC;
+    written 10:26 UTC).**
+    - X8 started at 09:09:52 UTC with a budget of 32,400 s.
+    - At 10:13 UTC a `podman build` was started next to the run, for a reporting-only change (a Chao1 caveat in
+      `soup.taxonomy`). This breaks the rule "nothing extra next to a stream run".
+    - About an hour earlier, 78 old soup images had been removed to free disk space. `podman rmi` also removed their
+      untagged parent images, which were the build cache, so the build compiled the provers from source.
+    - At 10:19:29 UTC the VM had 754 MB available, below the 1,000 MB rule. The supervisor stopped the workers, and the
+      run ended at 10:19:37 UTC after 4,183 s (13% of the budget). Exit code 0, no OOM kill.
+    - Results by then: 49 verified, 33 with a positive score, 8,453,911 cheap evaluations. The queue (1,500 pending,
+      3 in stage c) is kept for the next run.
+    - Whether X8 is continued is the user's decision. The outcome is recorded here.

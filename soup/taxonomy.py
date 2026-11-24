@@ -257,7 +257,9 @@ def readme_block(A, when):
         out.append(f'| {p} | {tot[p]:,} | {_pct(tot[p], A["total"])} | {_pct(A["prim"][last][p], nl)} |')
     fam = collections.Counter(t['family'] for t in A['S'])
     c = A['curve'][-1]
-    out += ['', f'**Structured families:** {c["families"]} distinct, Chao1 estimate {c["chao1"]:.0f}. The largest:', '']
+    out += ['', f'**Structured families:** {c["families"]} distinct, and the count is still rising. Chao1 gives '
+            f'{c["chao1"]:.0f}, but only as a descriptive index: the search skips what it has seen, so the sample is '
+            f'biased and Chao1 does not estimate the total ([notes/metafield.md](notes/metafield.md)). The largest:', '']
     for f, n in fam.most_common(5):
         fl = '; '.join(A['flags'].get(f, []))
         out.append(f'- `{f}`: {n} ({_pct(n, len(A["S"]))} of structured){" — " + fl if fl else ""}')
@@ -301,9 +303,14 @@ def docs_page(A, when, res):
                                                     sorted(flagged, key=lambda x: -lt[x[0]])[:15]) + '.']
     L += ['', '## The accumulation curve', '',
           'Distinct structured families as verified theories accumulate, run by run, with the level 0 reached at each '
-          'run\'s end. Chao1 estimates the total number of families from the ones seen once and twice. If the count '
-          'still rises steeply, the search has not exhausted what it can reach. (Level 0 here leaves out x4a\'s '
-          '0.17M evaluations, whose results are not used; the funnel counts them.)', '',
+          'run\'s end. If the count still rises steeply, the search has not exhausted what it can reach. (Level 0 here '
+          'leaves out x4a\'s 0.17M evaluations, whose results are not used; the funnel counts them.)', '',
+          'Chao1 is S + f1²/(2 f2), computed from the families seen once (f1) and twice (f2). It estimates a total only '
+          'when the sample is unbiased and drawn from a fixed population. Here neither holds. The fusion arms skip '
+          'known theories and every theory seen before, and the arms change from run to run. So the column is a '
+          'descriptive index of how many families are still singletons, not an estimate of how many exist. STADS '
+          '(Böhme 2018) raises the same problem for fuzzers, and Hajič and Moss (2025) show that the bounds stay loose '
+          'while new items keep arriving at a steady rate ([notes/metafield.md](../notes/metafield.md)).', '',
           '| after | verified | level 0 | families | Chao1 |', '|---|---:|---:|---:|---:|']
     for c in A['curve']:
         L.append(f'| {c["run"]} | {c["verified"]:,} | {c["level0"]:,} | {c["families"]} | {c["chao1"]:.0f} |')

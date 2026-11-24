@@ -229,6 +229,13 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       proper subvariety: its extra law fails on a 3-element model of de0c0cf3, and E saturates on it. On 4 elements
       ∘ is even freer: 65,536 models. Memo `notes/de0c0cf3.md`; funnel level 8: 9.
     - **The rebalancer** cut every run since X5 to 1 searcher within 30 min. `--min-searchers N` keeps N alive (X8).
+    - **X8** (fusion4, 8 searchers kept alive) made 8.45M evaluations in 70 min, about 9 times recent runs. A
+      `podman build` beside it tripped the memory rule (deviation 10), at 49 verified.
+    - **Literature check** (`notes/metafield.md`): "a new (meta)field" does not hold. Automated theory formation (AM,
+      HR), Wolfram's ruliology, the catalogues of varieties (Le Floch's 456 semigroup varieties, SemiBase) and the
+      catalogue-to-theorem arc (murmurations) came first. Not found anywhere: open-ended search over two-operation law
+      sets with synergy, a taxonomy of theories, conjectures across families. Chao1 is a descriptive index only, because
+      the search skips what it has seen.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -320,6 +327,10 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   Compare total model counts.
 - A corpus-based model filter needs models from the theory's own run: `soup.dedupe` first used the main corpus only,
   where theories of later runs have none, so they were never compared.
+- Never `podman build` next to a stream run, not even for a docs-only change. Removing old images with `podman rmi`
+  also deletes their untagged parents, which are the build cache. The next build then compiles every prover from
+  source, and X8's memory rule fired 6 minutes into such a build (deviation 10). Use `podman rmi --no-prune` for
+  cleanups.
 - Write timestamps from `date -u` at the time, not from estimates: three preregistration times had to be corrected on
   22 Nov.
 - BSD `sed` on the Mac writes a multi-line replacement as one line. Use the Edit tool for multi-line code changes.

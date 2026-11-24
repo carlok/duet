@@ -2,6 +2,51 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Literature: is this a new (meta)field? (24 Nov 2026)
+
+Memo [`notes/metafield.md`](notes/metafield.md); the source tables are in `notes/metafield_sources/`.
+
+- **Method:**
+  - Three web-research agents, one per strand: automated theory formation, catalogues and equational varieties, and
+    open-ended search and estimators. About 105 rows in all, each marked opened or snippet.
+  - Six primary pages were checked first-hand, and two more were checked for existence only. All are listed in the memo.
+  - Weak evidence in the usual sense: three web searches, partly from snippets.
+- **Verdict: not a new field.** The ground is held by four traditions:
+  - automated theory formation (AM 1976; HR 1999–2014, with our prover plus model-finder loop on finite algebras;
+    theory exploration since 2000);
+  - Wolfram's ruliology, which he calls a new science that starts like natural history (NKS 2002, ch. 12;
+    Metamathematics 2022, section 17; essay of Jan 2026);
+  - computational universal algebra and exhaustive catalogues of varieties, very active right now:
+    - Le Floch, 456 semigroup varieties (arXiv:2609.39872, Sep 2026);
+    - SemiBase, 505 semigroup varieties (arXiv:2610.02500, Oct 2026);
+    - the ETP's order-≤3 conjunction lattice, reported as nearly done;
+  - the catalogue → pattern → conjecture → theorem arc: BSD, Graffiti, murmurations and Zubrilina's proof, and Lenia's
+    natural history of search-found "species".
+- **Not found:**
+  - an open-ended quality-diversity search over sets of laws in two operations, with synergy as the objective (nearest:
+    Charnley and Colton 2008, who ranked 100 specialisations of one algebra by proof length);
+  - a taxonomy of theories counted with richness estimators;
+  - conjectures across families of varieties;
+  - any exhaustive two-operation catalogue.
+
+  This combination is the defensible claim.
+- **Consequence for F1:** Chao1 assumes unbiased sampling, and the fusion arms skip what they have seen. The 138 is
+  therefore a descriptive index, not an estimate of the total. STADS (Böhme 2018) raises the same problem for fuzzers.
+  The wording is fixed in `soup.taxonomy`, the README, `docs/families.md`, this report and the paper. The numbers are
+  unchanged.
+
+## X8: stopped by its memory rule after 70 minutes (24 Nov 2026, 10:19 UTC; deviation 10)
+
+- **When and why:**
+  - X8 started at 09:09:52 UTC with a 9-hour budget, and ended at 10:19:37 UTC after 4,183 s.
+  - The cause was a `podman build` started beside it at 10:13 UTC. An earlier cleanup had removed the build cache with
+    the old images, so the build compiled the provers from source, and the VM's free memory fell to 754 MB.
+- **What it did:**
+  - 8,453,911 cheap evaluations, about 7.3M per hour on 8 searchers; recent runs made about 0.8M per hour on 1.
+  - 49 verified, 33 with a positive score. The queue is kept (1,500 pending).
+- **Source:** `work/x8/journal/journal.md`, last record of `work/x8/logs/stats.jsonl`.
+- **Status:** R1–R4 are not evaluated. Whether X8 is continued is the user's decision (PREREGISTRATION, deviation 10).
+
 ## F1: families of verified theories, and emerging patterns (24 Nov 2026, 07:51 UTC; preregistered, post hoc)
 
 Command:
@@ -25,7 +70,8 @@ Disguise and no synergy make up the rest, as in `docs/families.md`.
   - **F1b holds:** X7 has 26 of the 124 structured families seen up to X7 (21%) for the first time.
 - **The accumulation curve:**
   - families after each run: 0, 0, 1, 3, 5, 6 (after X3), 18, 41, 98, 124;
-  - Chao1 at the end: 138.
+  - Chao1 at the end: 138. This is a descriptive index only: the sampling is adaptive and skips what it has seen, so
+    it is not an estimate of the total (literature check above).
   - Level 0 at the same points: 51.0M after X3, 63.5M after X7.
   - So the prior-arm runs made most of the volume and found 6 families; the fusion arms made 12.5M and found 118.
     Direction mattered more than volume. This is descriptive: the arms differ in their filters too.

@@ -79,7 +79,20 @@ than single laws. Reading a saturated clause set as an explicit, possibly infini
 from Vampire and E as a checkable certificate, is due to Janota, Rawson and Schulz~\cite{janota2026}; our
 check below is an independent implementation of the same idea. Kondylidou, Blanchette and
 Heule~\cite{krympa2026} shorten machine proofs from the ETP several-fold, so raw prover proof length (our
-difficulty measure) is an upper bound. The search uses MAP-Elites~\cite{mapelites2015}. Named theories used
+difficulty measure) is an upper bound. The search uses MAP-Elites~\cite{mapelites2015}.
+
+The wider enterprise is not new. Automated theory formation goes back to AM~\cite{lenat1976}. HR~\cite{colton1999}
+ran our loop on finite algebras: Otter proves, MACE refutes, and an interestingness score steers the search. Charnley
+and Colton~\cite{charnley2008} generated specialisations of one algebra and ranked them by proof length, the nearest
+precedent we found for a search over theories. Wolfram enumerated one-operator axiom systems~\cite{nks2002}, treats
+each as a possible field of mathematics~\cite{wolfram2022}, and calls the activity ruliology. Exhaustive catalogues
+of conjunctions are advancing in one operation: 456 semigroup varieties~\cite{lefloch2026sg}, and 505 certified
+semigroup varieties in SemiBase~\cite{semibase2026}. Lenia~\cite{lenia2019} gives a natural history of objects found by
+evolutionary search, and STADS~\cite{stads2018} applies ecological richness estimators to a search's output. We found no
+open-ended search over sets of laws in two operations, and no taxonomy of theories counted this way
+(\texttt{notes/metafield.md}).
+
+Named theories used
 for calibration: lattices, skew lattices~\cite{leech1989}, dimonoids~\cite{loday2001}, one-sided
 quasigroups.
 
@@ -434,7 +447,9 @@ label is read up to the eight relabellings. A property counts when it holds in e
 96.8\% of the 8{,}053 cases.
 \begin{itemize}
 \item \textbf{Shares.} Structured theories are 0--0.5\% of the early runs and 44--69\% of X5--X7.
-\item \textbf{Count.} There are 124 structured families, against a Chao1 estimate of 138. X7 alone added 26.
+\item \textbf{Count.} There are 124 structured families, and X7 alone added 26. Chao1 gives 138, but it assumes
+  unbiased sampling, and the search deliberately skips what it has seen. So the number is a descriptive index, not an
+  estimate of the total, the same problem STADS~\cite{stads2018} raises for fuzzers.
 \item \textbf{Direction against volume.} The prior-arm runs made 51 million of the 63.7 million cheap evaluations and
   found 6 families. The fusion arms made 12.5 million and found 118. So far the direction of the search mattered more
   than its volume.
