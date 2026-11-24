@@ -80,7 +80,8 @@ by the whole theory but by no single law of it.
 | `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; with `--param`, a term plus a constant square (`hidden_param`, also the V6 screen); a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
 | `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
 | `known.py` | X7: the known library (catalogue + ledger, fragments and subvarieties; earlier candidates, equivalents) and the seen-before keys, for arm `fusion4`; `build --out` before a run |
-| `funnel.py` | The live funnel, level 0 (cheap evaluations) to level 8 (studied closely, unidentified), over all runs; `--readme` rewrites the README block between the funnel markers |
+| `funnel.py` | The live funnel, level 0 (cheap evaluations) to level 8 (studied closely, unidentified), over all runs; `--readme` rewrites the README block between the funnel markers. Level 0 = every searcher's final `evals` from `runs/<run>/archive_s*.json` (retired searchers included); distinct from the union of `bloom_*.npy`; milestones 50M/100M/200M |
+| `taxonomy.py` | F1: primary family per verified theory (disguise, known, no synergy, diagonal, argument-ignoring, structured) and the reduct signature (22 relabelling-closed one-op laws, union corpus, E-confirmed); new/emerging flags, accumulation curve with Chao1. `build --confirm --jobs 8`, then `report --readme --docs` (README block between `<!-- families:start -->` and `<!-- families:end -->`, `docs/families.md`). `families.py` is the unrelated countermodel module |
 | `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter on every run's corpus, then E both ways, in parallel); post hoc, the ranking is not changed |
 | `novelty.py` | N1 (preregistered): gate (works, nothing identifies it, one per dedupe class) and order (off-diagonal law, no classical model, not related, sizes, axiom size, score); writes `notes/candidates_table.md` (known / not known) and, with `--readme`, the README's live block between `<!-- candidates:start -->` and `<!-- candidates:end -->`. Rerun after every run's checks |
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
@@ -215,6 +216,19 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     (`soup.offdiag.IGNORE`, 53 laws; X4: 519 of 565 imply one). A square-subterm exclusion was tried first and
     rejected: as background it kills McKenzie's commutativity, and without background the attractor survives in
     square-free form (`notes/x5_baseline.py`).
+  - 24 Nov morning:
+    - **Level 0** was corrected from 59.5M to 63.7M. `stats.jsonl` had dropped searchers the rebalancer retired, and
+      t4-noprior's restarted searcher.
+    - **F1 families** (preregistered, `docs/families.md`): structured theories are 0–0.5% of the early runs and 44–69%
+      of X5–X7. There are 124 structured families, against Chao1 138, and X7 added 26. E confirms 96.8% of the
+      corpus-implied properties (93 of 8,053 false).
+    - **Direction mattered more than volume:** the prior-arm runs made 51M of level 0 and found 6 families; the fusion
+      arms made 12.5M and found 118.
+    - **Emerging laws:** x·(y·x) = y, x·(x·x) = y·(x·y) and commutativity.
+    - **`de0c0cf3`** ⟺ a TSQ · plus an idempotent ∘ with (x·y)∘y = x∘y (E both ways). `3818b88f` with ∘ reversed is a
+      proper subvariety: its extra law fails on a 3-element model of de0c0cf3, and E saturates on it. On 4 elements
+      ∘ is even freer: 65,536 models. Memo `notes/de0c0cf3.md`; funnel level 8: 9.
+    - **The rebalancer** cut every run since X5 to 1 searcher within 30 min. `--min-searchers N` keeps N alive (X8).
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -244,7 +258,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     `git grep -E "/Users/"` on the staged files before every commit.
   - Workflow after every run: the post-run checks, then `soup.dedupe`, then
     `soup.novelty --readme /repo/ranking.md` (mount docs/ranking.md there, and notes/), then
-    `soup.funnel --readme /repo/README.md` (mount README.md, and notes/ read-only). Then push. The README is a short
+    `soup.funnel --readme /repo/README.md` (mount README.md, and notes/ read-only), then
+    `soup.taxonomy build --confirm` and `soup.taxonomy report --readme /repo/README.md --docs /repo/docs/families.md`
+    (add the new run to `taxonomy.RUNS` and `funnel.DIRS` first). Then push. The README is a short
     front page; the story lives in `docs/*.md` (history, motivation, search, ranking, candidates, open problems,
     how-made, running).
 

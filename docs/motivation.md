@@ -44,6 +44,18 @@ The image has two limits:
 - **Growth is not yet progress toward something new.** So far, each new branch came from naming the attractor that
   the previous one fell into.
 
+**Milestones, and what the families say about them.** The author's framing for level 0:
+- 50M, the dust removed: passed;
+- 100M, the surface scratched;
+- 200M, digging, where very unexpected things start to emerge.
+
+The families statistic ([`families.md`](families.md)) puts a number on the hope that new kinds of structure appear
+as the search grows.
+- **So far, direction mattered more than volume.** The prior-arm runs (root to X3) made 51M of the 63.7M cheap
+  evaluations and found 6 structured families. The fusion arms (X4–X7) made 12.5M and found 118.
+- **For the milestones,** this means 100M and 200M will mean "digging" only if the extra volume goes to new
+  directions. That is why X8 keeps the arm that skips the known.
+
 So the claim is that the search grows outward from known mathematics and leaves the corner our checks recognise. It is
 not that the search reaches unexplored mathematics. That needs a specialist.
 

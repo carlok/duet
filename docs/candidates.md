@@ -5,7 +5,7 @@
 Each has a memo in [`notes/`](../notes). Identifications go into the ledger
 [`notes/rediscovery.md`](../notes/rediscovery.md). None of these theories is claimed new.
 
-## X6's top entries (N1 ranks 1, 3, 4, 5)
+## X6's top entries (N1 ranks 1, 3, 4, 5), and X7's `de0c0cf3` (rank 2)
 
 - **`3818b88f`: a triple system with a selector.** It is equivalent to a totally symmetric quasigroup `·`
   (commutative, `x · (x · y) = y`) with an idempotent `∘` such that `x ∘ (x · y) = x ∘ y` and `(x · x) ∘ x = x` (E,
@@ -18,7 +18,19 @@ Each has a memo in [`notes/`](../notes). Identifications go into the ledger
 
 None is identified. Memo: [`notes/x6_top4.md`](../notes/x6_top4.md).
 
-X7's `de0c0cf3` (N1 rank 2: x·(x·y) = y, (x·y)∘y = x∘y, (((x·x)∘x)·y)·y = x) has not been studied yet.
+## `de0c0cf3` (X7, N1 rank 2): `3818b88f` with one law fewer
+
+T = {x·(x·y) = y, (x·y)∘y = x∘y, (((x·x)∘x)·y)·y = x}.
+- **Plain reading** (E both ways): `·` is a totally symmetric quasigroup, and `∘` is idempotent and, for each `y`,
+  constant on the pairs `{x, x · y}`.
+- **Against `3818b88f`:** with `∘` reversed, `3818b88f` implies T, but not the other way. `3818b88f`'s extra law
+  fails on a 3-element model of T, and E saturates on it.
+- **Models:** ∘ is even freer: 65,536 models on 4 elements, against `3818b88f`'s 1,024.
+- **Shadow:** with `·` = `∘`, only one-element models remain.
+
+So it is not identified, and weak. With `3818b88f` it forms the first two-member family of the
+[families statistic](families.md). It is not a ledger row, because neither theory is identified. Memo:
+[`notes/de0c0cf3.md`](../notes/de0c0cf3.md).
 
 ## `55cb2c91` (N1 rank 6): not identified, and the nearest thing to the jazz aim so far
 

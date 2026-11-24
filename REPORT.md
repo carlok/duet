@@ -2,6 +2,81 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## F1: families of verified theories, and emerging patterns (24 Nov 2026, 07:51 UTC; preregistered, post hoc)
+
+Command:
+- `soup.taxonomy build --confirm --jobs 8` (341 s), then `soup.taxonomy report --readme … --docs docs/families.md`.
+- Output: `work/check/families.json`, the E cache `families_e.json`, and the full tables in `docs/families.md`.
+- Coverage: 7,476 verified theories over 10 run directories, against a union corpus of 41,115 found structures.
+
+**Primary families, share of each run's verified theories:**
+
+| | root | t4-prior | t4-noprior | x1 | x2 | x3 | x4 | x5 | x6 | x7 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| known | 79.7% | 48.0% | 21.8% | 43.4% | 47.3% | 42.8% | 0.8% | 3.1% | 0.2% | 0.0% |
+| diagonal | 16.9% | 45.5% | 65.5% | 46.1% | 43.2% | 41.0% | 0.0% | 0.0% | 0.0% | 0.0% |
+| argument-ignoring | 0.0% | 1.7% | 1.4% | 1.5% | 2.8% | 1.9% | 81.0% | 0.0% | 0.0% | 0.0% |
+| structured | 0.0% | 0.0% | 0.5% | 0.4% | 0.4% | 0.2% | 7.2% | 54.1% | 44.2% | 69.3% |
+
+Disguise and no synergy make up the rest, as in `docs/families.md`.
+
+- **Predictions:**
+  - **F1a holds:** structured is X7's largest family (69.3%), and in T4 it is under 10% (0.0% and 0.5%).
+  - **F1b holds:** X7 has 26 of the 124 structured families seen up to X7 (21%) for the first time.
+- **The accumulation curve:**
+  - families after each run: 0, 0, 1, 3, 5, 6 (after X3), 18, 41, 98, 124;
+  - Chao1 at the end: 138.
+  - Level 0 at the same points: 51.0M after X3, 63.5M after X7.
+  - So the prior-arm runs made most of the volume and found 6 families; the fusion arms made 12.5M and found 118.
+    Direction mattered more than volume. This is descriptive: the arms differ in their filters too.
+- **Emerging laws**, taken up to relabelling:
+  - x·(y·x) = y, a semisymmetric-type law: 15, 50 and 68 theories in X5, X6 and X7, flagged "emerging" in each;
+  - x·(x·x) = y·(x·y), the Steiner signature: emerging in X5–X7;
+  - commutativity: emerging in X5 and X7.
+  - The early runs' laws (x·x = x∘x, x·x = x and so on) vanish from X4 on, which is the diagonal attractor screened
+    out.
+- **The largest structured families:**
+  - `·: - | ∘: comm, flex`: 138 theories, new in X6, emerging in X7;
+  - two commutative families with constant squares that are identities: 86 and 73 theories;
+  - the Steiner-loop pair (TSQ with an identity square on both sides): 69 theories, mostly X5.
+- **Evidence:**
+  - structured theories carry 8,053 corpus-implied properties, of which 1,631 are axioms;
+  - E proves 6,163 more, finds 93 false and leaves 166 unknown within 10 s;
+  - so 96.8% are confirmed.
+- **Change before the entry was written** (disclosed in it): a planned "square-ignoring" rule was dropped. Every
+  totally symmetric quasigroup satisfies x·(x·x) = y·(x·y), so the rule would have filed classical structure as an
+  attractor.
+- **Caveats:**
+  - eleven properties name only what they list;
+  - "known" is our catalogue and ledger;
+  - shares across runs compare strategies as much as regions.
+
+## Level 0 corrected (24 Nov 2026)
+
+`soup.funnel` took the largest `evals_total` per run from `logs/stats.jsonl`. That total sums only the searchers the
+supervisor still holds, so searchers the rebalancer had retired dropped out. Since X5 the rebalancer has cut 4
+searchers to 1 within 30 minutes.
+- Level 0 now sums every searcher's final count from `runs/<run>/archive_s*.json`, falling back to `stats.jsonl`.
+- It also counts x4a, the aborted run (deviation 6), for its evaluations only.
+- **Result: 59,496,998 → 63,662,919.** The largest change is t4-noprior: +2.67M, from a restarted searcher.
+- Distinct evaluations, from the union of X7's bitmaps: 1,772,881 of 2,403,574 (73.8%).
+- The README funnel shows the milestones 50M (passed), 100M (64% of the way) and 200M (32%).
+
+## `de0c0cf3` (X7, N1 rank 2): a close look (24 Nov 2026)
+
+`notes/de0c0cf3_checks.py` (E, 30–60 s per goal), output `notes/de0c0cf3_checks.out`; memo `notes/de0c0cf3.md`.
+- **Plain reading** (E both ways): T ⟺ {x·y = y·x, x·(x·y) = y, x∘x = x, (x·y)∘y = x∘y}. So · is a TS-quasigroup,
+  and for each y, ∘(−, y) is constant on the orbits {x, x·y}.
+- **Against `3818b88f`**, with ∘ reversed: `3818b88f` implies T, but not the reverse.
+  - E saturates on x∘(x·x) = x.
+  - A 3-element and a 4-element model of T violate it, checked by `law_vector`.
+- **Models** on TS-quasigroups, n = 2, 3, 4:
+  - T has 4, 81 and 65,536 of them;
+  - the ones that also satisfy the extra law number 2, 29 and 1,024, which are `3818b88f`'s counts.
+- **Shadow:** with · = ∘, only one-element models remain (E).
+- **Verdict:** not identified, and weak: a triple system plus a nearly free choice. It is not a ledger row, because
+  neither theory is identified. Funnel level 8 is now 9.
+
 ## Memory: what ended X6 and X7 early, and the fix (24 Nov 2026, recorded 05:12 UTC)
 
 Both runs hit the memory rule early: X6 at 5.8 of 8 h, X7 at 2.65 of 8 h. The suspected cause was each process's own

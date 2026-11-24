@@ -415,7 +415,35 @@ an earlier run already pushed. The supervisor stopped the run by the memory rule
 it verified 737 theories, 511 with a positive score and none a fragment of a named theory. Parameter disguises fell
 from 24\% to 2\% of verified theories. The top 20 are 19 varieties, none related to a catalogue entry or to an earlier
 candidate, and 12 carry every automatic mark. A one-hash bitmap counts 74\% of its cheap evaluations as distinct law
-sets. Both X6 and X7 ended early because every process keeps its own copy of the growing corpus.
+sets. Both X6 and X7 ended early on memory. The heartbeats show that the verifiers leak, from about 250\,MB to as much
+as 1.4\,GB each, while the searchers stay flat. The verifiers now restart themselves between tasks above a threshold.
+
+\subsection{Families, and what grows with the search}
+A preregistered post hoc statistic, F1, sorts every verified theory into one family, by the first rule that matches:
+\begin{itemize}
+\item a disguise caught by the verifier's screens;
+\item known: a proved relation to a catalogue entry, or an identification in the ledger;
+\item no proved synergy;
+\item diagonal: a one-variable emergent law;
+\item argument-ignoring;
+\item structured: the rest.
+\end{itemize}
+A structured theory is labelled by which of eleven one-operation properties hold for each operation (commutative,
+associative, idempotent, constant squares, squares as identities, involutive, flexible, and two absorbing shapes). The
+label is read up to the eight relabellings. A property counts when it holds in every corpus model, and E confirms
+96.8\% of the 8{,}053 cases.
+\begin{itemize}
+\item \textbf{Shares.} Structured theories are 0--0.5\% of the early runs and 44--69\% of X5--X7.
+\item \textbf{Count.} There are 124 structured families, against a Chao1 estimate of 138. X7 alone added 26.
+\item \textbf{Direction against volume.} The prior-arm runs made 51 million of the 63.7 million cheap evaluations and
+  found 6 families. The fusion arms made 12.5 million and found 118. So far the direction of the search mattered more
+  than its volume.
+\item \textbf{Emerging laws.} Among the proved emergent laws, the emerging ones are $x\op(y\op x)=y$,
+  $x\op(x\op x)=y\op(x\op y)$ and commutativity.
+\end{itemize}
+Two candidates studied closely, 3818b88f and X7's de0c0cf3, form one family. Each is a totally symmetric
+quasigroup with an idempotent $\cop$ that is constant on the pairs $\{x, x\op y\}$. The X7 candidate is the larger variety by
+one law, and its $\cop$ is nearly free: 65{,}536 models on four elements.
 
 \subsection{A novelty ranking (N1)}
 The preregistered T5a ranking puts X4's candidates between rank 34 and rank 136 of 138. It sorts by a convergent
