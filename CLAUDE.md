@@ -218,7 +218,8 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
-    Pitfall: per-process corpus copies make memory grow with the corpus; X6 and X7 both hit the 1 GB rule early.
+    Memory: the verifiers leak (250 MB → up to 1.4 GB private each); the searchers do not. Fix: supervisor
+    `--recycle-mb 700` (verifiers restart themselves between tasks, exit code 75) with `--mem-stop-mb 1000`.
   - X6's N1 ranks 1–4 studied (`notes/x6_top4.md`): none identified. 3818b88f ⟺ TS-quasigroup · + idempotent ∘ with
     x∘(x·y) = x∘y, (x·x)∘x = x (a selector on a triple system). bc43fd42, d0e963d9, d14ced44 strengthen the core
     x·(y·y) = x, x·(y∘y) = x, x·(y·z) = x·(z∘y). Funnel level 8: 8.

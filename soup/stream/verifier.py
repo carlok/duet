@@ -6,6 +6,7 @@ A verifier started with --prefer c takes stage-c work first (so long runs always
 """
 import argparse
 import os
+import sys
 import time
 
 from ..core import Corpus, interrupt_all, set_memory_limit
@@ -14,6 +15,8 @@ from ..paths import data, ensure
 from ..verify import stage_a, stage_b, stage_c, CONFIGS
 from .common import StopWatcher, heartbeat, read_json, write_json, memory
 from .fqueue import FileQueue
+
+RECYCLE_RC = 75       # exit code of a verifier that stops itself to free memory; the supervisor restarts it
 
 
 def main():
@@ -32,6 +35,8 @@ def main():
                                        busy_frac=round(busy / max(1e-9, time.time() - t_start), 3),
                                        corpus=len(C), mem=memory(os.getpid()), **kw)
     print(f'{a.name}: prefers {a.prefer}, corpus {len(C)} found structures', flush=True)
+    # SOUP_VERIFIER_RECYCLE_MB > 0: after a finished task, exit if private memory exceeds it (0: never; X8 on)
+    recycle_mb = int(os.environ.get('SOUP_VERIFIER_RECYCLE_MB', 0)); recycled = False
     claimed = None
     try:
         while not stop.set:
@@ -67,12 +72,18 @@ def main():
                 Q.push(key, dict(task, t_pushed=time.time()), task.get('prio', 0), lane='stage2c')
             Q.done(claimed); claimed = None; busy += time.time() - t0
             hb('wrote', key=key)
+            if recycle_mb:                 # memory grows over many verifications (X6, X7): restart between tasks
+                m = memory(os.getpid()) or {}
+                if (m.get('private_mb') or 0) > recycle_mb:
+                    print(f"{a.name}: private memory {m['private_mb']:.0f} MB > {recycle_mb} MB: recycling", flush=True)
+                    recycled = True; break
     except KeyboardInterrupt:
         pass
     finally:
         if claimed is not None: Q.release(claimed)     # unfinished: back to its lane for someone else
-        hb('stopped')
+        hb('recycled' if recycled else 'stopped')
     print(f'{a.name}: stopped, done {done}', flush=True)
+    if recycled: sys.exit(RECYCLE_RC)
 
 
 if __name__ == '__main__':

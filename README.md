@@ -66,9 +66,9 @@ Level 8: `bc43fd42`, `d0e963d9`, `d14ced44`, `3818b88f`, `55cb2c91`, `1d0a5211`,
 
 - **Latest:** X7 skipped every theory already known, already a candidate, or already seen. Disguises fell from 24% to 2%
   of verified theories, and 12 of its top 20 carry every automatic mark; its `de0c0cf3` enters N1 at rank 2, not yet
-  studied. Memory ended both X6 and X7 early, so a night-long run needs a memory fix first.
+  studied. Memory ended both X6 and X7 early: the verifiers leak, and they now restart themselves (`--recycle-mb`).
 - **Next:** a specialist's eye on the eight unidentified candidates, starting with `55cb2c91` and `3818b88f`; a
-  close look at `de0c0cf3`; a shared corpus, so runs can last the night.
+  close look at `de0c0cf3`; a night-long run with verifier recycling.
 
 ## License
 

@@ -28,6 +28,7 @@ from ..paths import data, ensure, DATA
 from .common import dumps, memory, read_json, write_json
 from .fqueue import FileQueue
 from .journal import Journal, leaderboard, result_line, hm, ymd_hm
+from .verifier import RECYCLE_RC
 
 
 def mem_available_mb(path='/proc/meminfo'):
@@ -51,7 +52,8 @@ class Proc:
 
 class Supervisor:
     def __init__(self, a):
-        self.a = a
+        self.a = a; self.recycled = 0
+        if a.recycle_mb: os.environ['SOUP_VERIFIER_RECYCLE_MB'] = str(a.recycle_mb)   # inherited by the verifiers
         self.run = a.run or time.strftime('r%Y%m%d-%H%M%S')
         for d in ('logs', 'journal', 'results', 'corpus', 'queue'): ensure(d)
         ensure('logs', self.run); ensure('runs', self.run)
@@ -91,7 +93,12 @@ class Supervisor:
                 if p.retiring and time.time() - p.t_retire > 90: p.p.kill()
                 continue
             back = self.Q.recover(name)
-            if not p.retiring:            # crashed: say so and replace it
+            if not p.retiring and p.role == 'verify' and rc == RECYCLE_RC:     # stopped itself to free memory
+                self.recycled += 1
+                self.event(f'{name} recycled (memory); {back} claimed task(s) put back; starting a fresh verifier')
+                del self.procs[name]
+                self.start_verifier(getattr(p, 'prefer', None))
+            elif not p.retiring:            # crashed: say so and replace it
                 self.event(f'**{name} ({p.role}) exited with code {rc}**; {back} claimed task(s) put back; restarting the role')
                 del self.procs[name]
                 self.start_searcher() if p.role == 'search' else self.start_verifier(getattr(p, 'prefer', None))
@@ -265,6 +272,7 @@ def main():
     ap.add_argument('--gate', type=float, default=0.5, help='push only if k*priority >= gate * 20th best score')
     ap.add_argument('--run', default=os.environ.get('RUN_ID'))
     ap.add_argument('--mem-stop-mb', type=int, default=0, help='stop cleanly when MemAvailable falls below this (0: off)')
+    ap.add_argument('--recycle-mb', type=int, default=0, help='verifiers restart themselves between tasks above this private memory (0: never)')
     Supervisor(ap.parse_args()).main()
 
 

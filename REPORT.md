@@ -2,6 +2,30 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Memory: what ended X6 and X7 early, and the fix (24 Nov 2026, recorded 05:12 UTC)
+
+Both runs hit the memory rule early: X6 at 5.8 of 8 h, X7 at 2.65 of 8 h. The suspected cause was each process's own
+copy of the growing corpus. The workers' heartbeats (`logs/stats.jsonl`, field `mem`) say otherwise:
+- **Searchers** stay flat: about 300 → 380 MB PSS each over a run, corpus copy included.
+- **Verifiers** grow: their private memory went from about 250 MB to 750–1,450 MB each, in X6 and in X7.
+- **Prover child processes** (E, Vampire, Mace4; each capped at 2,000 MB) are not in these figures. They account for
+  the rest of the gap between the workers' 7.3 GB PSS and the X6 container's 11 GB.
+
+**Fix: verifier recycling** (`soup/stream/verifier.py`, `soup/stream/supervisor.py`).
+- With `--recycle-mb N` (passed on as `SOUP_VERIFIER_RECYCLE_MB`), a verifier checks its private memory after each
+  finished task. Above N it exits with code 75.
+- The supervisor logs "recycled (memory)" and starts a fresh verifier with the same preference.
+- Tasks are never interrupted, because the check runs only between them.
+- The default is off, so earlier runs are unchanged.
+
+**Smoke test** (5 min, arm `fusion4`, `--recycle-mb 350`, deleted afterwards): one verifier recycled at 354 MB, a
+fresh one took over, no claimed task was left, and 29 theories were verified. One verifier log shows a traceback at
+shutdown: the end-of-budget SIGTERM interrupted a z3 call. Its task had been released, so this is harmless. 80 tests
+pass.
+
+**For the next long run:** `--recycle-mb 700` (a fresh verifier sits near 300 MB) together with `--mem-stop-mb 1000`
+as the safety net.
+
 ## X7: skip what is already known (23 Nov 2026, 19:47–22:27 UTC; preregistered; stopped by its memory rule)
 
 Preregistration: PREREGISTRATION.md, X7 (commit `f67296f`, before the start). Arm `fusion4` = X6's `fusion2` plus three
