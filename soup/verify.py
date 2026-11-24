@@ -59,7 +59,18 @@ V5 = dict(V4, offdiag=True)
 # census models, then E): one operation is a term in the other and a constant square, as in X5's Steiner loops with
 # x∘y = (x·y)·(z∘z). A hit gives score 0, like the split and division screens.
 V6 = dict(V5, param_screen=True, param_secs=10)
-CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4, 'V5': V5, 'V6': V6}   # the stream verifier picks one by SOUP_VERIFIER
+# V7 (X9, PREREGISTRATION.md): V6 plus two time savers measured on X8 + x8b (REPORT, 24 Nov 2026).
+# - z3_after_e=False: no z3 run on a claim E has already proved. Since V2 the difficulty is E's proof length; z3's effort
+#   was kept only for comparability. On X8 + x8b z3 hit its cap on 113 of 269 E-proved claims, and the 86 theories with
+#   such a claim took 4.2 of stage b's 11.3 hours.
+# - linear_secs: linear and affine models over Z/n and GF(q) (soup.linear) in stage b, after E's small run and before
+#   FMB, for each claim E neither proved nor saturated: rings up to 32 elements, affine models up to 9 (the cost grows as
+#   q^5 and q^7; the post-run sweep's 14 refutations of X8's 116 open claims were all linear, on 8 to 17 elements).
+#   A model counts only after check_offline.check_finite accepts it, and goes into the corpus. Stage c searches the
+#   full range again (q <= 64, affine up to 16, c_linear_secs).
+V7 = dict(V6, z3_after_e=False, linear_secs=60, linear_qmax=32, linear_affine_qmax=9, c_linear_secs=600)
+CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4, 'V5': V5, 'V6': V6,
+           'V7': V7}   # the stream verifier picks one by SOUP_VERIFIER
 DIVISION = {'left quasigroup': ['x·(x∘y) = y', 'x∘(x·y) = y'], 'right quasigroup': ['(x·y)∘y = x', '(x∘y)·y = x']}
 
 
@@ -250,6 +261,25 @@ def _fmb(C, c, T, secs, start):
     return True
 
 
+def _linear(C, c, T, secs, qmax=64, affine_qmax=16):
+    """V7: linear and affine models over finite rings (soup.linear) on claim c. True if a model refutes it and passes
+    our own check; the model then goes into the corpus."""
+    from .check_offline import check_finite
+    from .linear import claim as linear_claim
+    t0 = time.time()
+    rec = linear_claim(T, c['idx'], qmax=qmax, affine_qmax=affine_qmax, budget=secs)
+    c['linear'] = {'status': rec['status'], 'secs': round(time.time() - t0, 1), 'qmax': qmax, 'affine_qmax': affine_qmax}
+    if rec['status'] != 'refuted': return False
+    F = [[int(v) for v in row] for row in rec['F']]; G = [[int(v) for v in row] for row in rec['G']]
+    chk = check_finite(T, [c['idx']], F, G)
+    if not (chk['ok'] and chk['law_vector_agrees']):
+        c['linear']['status'] = 'model rejected by our check'; return False
+    C.add(f"cm-linear-{rec['q']}", rec['q'], np.array(F), np.array(G))
+    c['linear'].update({k: rec[k] for k in ('ring', 'q', 'family', 'params', 'check', 'witness')})
+    c['status'] = f"false (size {rec['q']}, {rec['family']} model over {rec['ring']})"
+    return True
+
+
 def stage_b(C, out, cfg=DEFAULTS):
     t0 = time.time()
     if not out.get('model_sizes') or out.get('screened'): return out
@@ -260,9 +290,15 @@ def stage_b(C, out, cfg=DEFAULTS):
         if c['status'] != 'pending': continue
         if cfg['use_e'] and _e(c, T, cfg['e_limit'], cfg['e_cpu'], cfg.get('certify_e')) == 'countersatisfiable':
             continue
+        if cfg.get('linear_secs') and c.get('e_status') != 'proved' and \
+                _linear(C, c, T, cfg['linear_secs'], cfg['linear_qmax'], cfg['linear_affine_qmax']):
+            continue
         if cfg.get('fmb_secs') and c.get('e_status') != 'proved' and \
                 _fmb(C, c, T, cfg['fmb_secs'], min(list(c.get('cm_unknown_sizes') or []) + [7])):
             continue
+        if c.get('e_status') == 'proved' and cfg.get('z3_after_e', True) is False:
+            c['status'] = 'proved'; c['z3_skipped'] = True        # V7: E's proof stands, no z3 run
+            set_difficulty(c, cfg); continue
         st, used = prove(T, c['idx'], cfg['prove_rlimit'])
         if st != 'proved' and c.get('e_status') == 'proved':
             st = 'proved'; c['z3_unproved'] = True       # E's proof stands; z3 effort is then a lower bound
@@ -297,6 +333,9 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
         lo, hi = c_size_range(c, cfg)
         budget = (f"E {cfg['c_e_limit']:.0e} processed clauses, Mace4 sizes {lo}-{hi} "
                   f"({cfg['c_mace4_secs']} s), z3 proof rlimit {cfg['c_prove_rlimit']:.0e}")
+        if c.get('e_status') != 'proved' and cfg.get('c_linear_secs') and \
+                (c.get('linear') or {}).get('status') in (None, 'unknown', 'none') and _linear(C, c, T, cfg['c_linear_secs']):
+            continue                    # V7: linear models again on the full range (stage b searched a smaller one)
         if c.get('e_status') != 'proved' and cfg.get('c_fmb_secs') and _fmb(C, c, T, cfg['c_fmb_secs'], lo):
             continue                    # V3: Vampire FMB before Mace4
         if c.get('e_status') != 'proved':      # a claim E proved has no countermodel: skip the model search
@@ -306,6 +345,9 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
                 F, Gt = (np.array(x) for x in m['tables']); C.add(f'cm-mace4-{m["size"]}{tag}', m['size'], F, Gt)
                 c['status'] = f"false (size {m['size']})"; continue
             c['mace4_searched_to'] = m['searched_to']
+        if c.get('e_status') == 'proved' and cfg.get('z3_after_e', True) is False:
+            c['status'] = 'proved'; c['z3_skipped'] = True; c['proved_in'] = 'c (E)'   # V7: no z3 after E's proof
+            set_difficulty(c, cfg); continue
         st, used = prove(T, c['idx'], cfg['c_prove_rlimit'])
         if st == 'proved' or c.get('e_status') == 'proved':        # E's proof stands even if z3 gives up
             c['status'] = 'proved'; c['effort'] = used

@@ -23,7 +23,9 @@ def claims_text(r):
     parts = []
     for c in r.get('claims', []):
         st = c['status']
-        if st == 'proved': parts.append(f"{c['law']} proved (effort {c['effort']:,}{', stage c' if c.get('proved_in') == 'c' else ''})")
+        if st == 'proved':
+            how = f"effort {c['effort']:,}" if c.get('effort') is not None else f"E steps {c.get('e_steps')}"
+            parts.append(f"{c['law']} proved ({how}{', stage c' if c.get('proved_in') == 'c' else ''})")
         elif st.startswith('false'): parts.append(f"{c['law']} {st}")
         elif st == 'open': parts.append(f"{c['law']} OPEN ({c.get('budget', '')})")
         else: parts.append(f"{c['law']} {st}")

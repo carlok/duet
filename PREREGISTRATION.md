@@ -2,6 +2,81 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X9: verifier V7 drains X8's queue (written 24 Nov 2026, 22:27 UTC, before X9 starts)
+
+Exploratory and descriptive. X8 + x8b were search-heavy (8 searchers, 3 verifiers), and verification was the bottleneck:
+444 verified in 9 hours, with 1,256 theories and 65 stage-c tasks left in the queue (REPORT, "X8 + x8b"). The user chose
+a run that works through that queue with a faster verifier, starting tonight.
+
+**Verifier V7** (`soup/verify.py`) = V6 plus two changes, both measured on X8 + x8b:
+- **No z3 after an E proof** (`z3_after_e=False`). Since V2 a claim's difficulty is E's proof length; the z3 run on a
+  claim E had proved only kept the z3 effort comparable with old runs. On X8 + x8b z3 hit its cap on 113 of 269
+  E-proved claims, and the 86 theories with such a claim took 4.2 of stage b's 11.3 hours. Scores do not change.
+- **Linear models** (`soup.linear`) for each claim E neither proves nor saturates:
+  - in stage b, after E's small run and before FMB, on rings up to 32 elements and affine models up to 9, 60 s;
+  - in stage c, before FMB and Mace4, on the full range (rings up to 64, affine up to 16), 600 s;
+  - a model counts only after `check_offline.check_finite` accepts it, and it goes into the corpus;
+  - the post-run sweep refuted 14 of X8's 116 open claims this way, all linear, on 8 to 17 elements.
+
+**Design.**
+- **Data directory:** `x9`, a fork of X8's state:
+  - `soup.t4_setup --dir x9`, then its corpus is replaced by a copy of X8's (7,708 structures);
+  - X8's `queue/pending` (1,256), `queue/stage2c` (65) and `queue/seen` (18,333) are copied in;
+  - so are the 65 stage-b results that the stage-c tasks read, and nothing else from `results/`;
+  - `soup.known build --out /data/x9` then includes X8's candidates and seen keys (62,038).
+- **Arm and verifier:** arm `fusion4`, verifier V7.
+- **Processes:** 7 verifiers and no searcher at the start.
+  - The rebalancer starts searchers only from idle verifiers, as in every run, so the search resumes once the queue
+    runs low.
+  - The pending lane is capped at 5,000 (`--qmax 5000`), so no copied task is trimmed.
+- **Memory:** `--recycle-mb 700`, `--mem-stop-mb 1000`.
+- **Budget and seeds:** 28,800 s (8 h); searchers started by the rebalancer get seeds from 1301.
+
+**Run:**
+1. the fork (`t4_setup`, copies, `soup.known build`), as above;
+2. `podman run -d --name soup-x9 -v "$PWD/work:/data" -e SOUP_DATA=/data/x9 -e SOUP_VERIFIER=V7 soup python3 -m
+   soup.stream.supervisor --arm fusion4 --searchers 0 --verifiers 7 --seed0 1301 --budget 28800 --qmax 5000
+   --recycle-mb 700 --mem-stop-mb 1000 --run x9`.
+
+**Done before this entry, disclosed.**
+- **Code:** V7, with `tests/test_v7.py`; 96 tests pass.
+- **Benchmark of stage b** (`notes/v7_bench.py`, output `notes/v7_bench.out`):
+  - V6 against V7 on 24 X8 theories with their recorded stage-a output: 12 with a z3-capped E proof, 12 with a hard
+    claim, seed 9, from theories whose stage b took at most 600 s.
+  - V7 took 600 s against V6's 1,424 (58% less). 5 claims changed outcome, all to a linear refutation: three
+    from unknown, two from an FMB refutation. No score changed.
+  - A first version searched the full range in stage b: 21% less, with up to 60 s added per hard claim. That is why
+    stage b now stops at 32 elements.
+- **Smoke runs** on forks of X8's state, 4–6 minutes each, all deleted afterwards:
+  - 10 verifiers and 1 searcher: the stage-c tasks were dropped, because their stage-b results had not been copied. Hence
+    the results copy above.
+  - With the results copied, 10 and 8 verifiers both tripped the memory rule (911 and 966 MB available) once two
+    stage-c tasks ran together, with prover processes capped at 2 GB each.
+  - 7 verifiers and no searcher (one stage-c task at a time): at least 6.4 GB stayed available; 57 verified in 6
+    minutes, and the copied pending lane fell from 1,256 to 1,199.
+  - With 1 searcher, about 200 new theories were pushed in 4 minutes, enough to crowd out the copied ones; hence no
+    searcher at the start.
+  - Nothing else was read.
+
+**Predictions** (descriptive):
+- **S1, throughput:** at least 25 theories through stages a and b per verifier-hour, 1.5 times x8b's 16.9 (397 in
+  3 × 7.85 h). Verifier-hours are the time integral of the live verifier count in `logs/stats.jsonl`.
+- **S2, stage c:** a mean of at most 35 minutes per theory through stage c, half of x8b's 70.6 (8.24 h for 7).
+- **S3, the linear screen:** it refutes at least 5% of the claims it runs on in stage b.
+- **S4, the queue:** at least 1,000 of the 1,256 copied pending theories get a result.
+
+**After the run:** X7's post-run pipeline with x9 added (`taxonomy.RUNS`, `funnel.DIRS`, `known.RUN_DIRS`), the split per
+candidate, dedupe, N1, F1, the funnel and a REPORT section. The 65 copied stage-b results are reported apart: their
+stages a and b ran in x8b under V6.
+
+**Caveats.**
+- The copied queue is what X8's verifiers had not reached, after trimming by priority. So the comparison with x8b is
+  not randomized, and the hardest stage-c tasks may be among the copied ones.
+- Seven verifiers load the machine more than three did. E's limits are CPU time, but FMB's and the linear screen's are
+  wall time.
+- The theories were found by X8's searchers but are verified in x9, so F1 counts them under x9.
+- One stage-c task at a time: most of the 65 stage-c tasks will not be reached.
+
 ## X8: search-heavy, toward 100M (written 24 Nov 2026, 08:03 UTC, before X8 starts)
 
 Exploratory and descriptive. The user's aim (24 Nov), in their words: 50M is "the dust removed", 100M "the surface
