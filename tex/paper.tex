@@ -535,6 +535,13 @@ collapses a family onto $x\op x$.}
   are never verified. Any comparison between arms inherits this selection.
 \item Corpus consequences depend on the corpus. Up to T3 all runs share one growing corpus; in T4 each arm
   grows its own from a common snapshot.
+\item The surrogate implies more than is true, because its 12{,}509 structures have at most 6 elements. Nearby
+  signatures show how large that gap can be. All quasigroups of order at most~6 leave 94 of the 1{,}958 non-implications
+  between classes of Schröder's 990 quasigroup laws (4.8\%) without a witness, and those need quasigroups of order up
+  to~9~\cite{quadratula}. Among the ETP's one-operation laws, at least 411 non-implications that Vampire left open have
+  finite counterexamples on 9 to 32 elements, which Vampire's finite model builder, Mace4 and grounded Z3 all fail to
+  find from 11 elements up~\cite{parsimagma}. This is why every claim gets a countermodel search and a proof before it
+  is scored.
 \item 26 of the survivor refutations were found by a language model outside the pipeline. They are
   reported only after our own check; one of them (the term model) is not certified.
 \item ``Not named'' needs a literature search and an equivalence check against known varieties; none of
