@@ -1,0 +1,21 @@
+20 candidates to check from ['x8']
+ce221fcd x8     split False  (witness n = 4)
+7b194f15 x8     split False  (witness n = 4)
+7e9c798d x8     split False  (witness n = 4)
+5bcfb05d x8     split False  (witness n = 4)
+6f1ce1fc x8     split False  (witness n = 2)
+be0a88a8 x8     split False  (witness n = 2)
+6a16f238 x8     split False  (witness n = 3)
+478ee5da x8     split False  (witness n = 2)
+3eecc7a6 x8     split False  (witness n = 2)
+725830a5 x8     split False  (witness n = 4)
+0075529f x8     split False  (witness n = 2)
+3e88235b x8     split False  (witness n = 2)
+6e477740 x8     split False  (witness n = 2)
+b6c57260 x8     split False  (witness n = 2)
+c21f4ebd x8     split False  (witness n = 2)
+b651ba2f x8     split False  (witness n = 4)
+1b421500 x8     split False  (witness n = 2)
+8f7c4dcf x8     split None E did not derive a bridge law from one-operation consequences 
+018aad1e x8     split None E did not derive a bridge law from one-operation consequences 
+a2f5abc9 x8     split None E did not derive a bridge law from one-operation consequences 

@@ -457,15 +457,18 @@ A preregistered post hoc statistic, F1, sorts every verified theory into one fam
 A structured theory is labelled by which of eleven one-operation properties hold for each operation (commutative,
 associative, idempotent, constant squares, squares as identities, involutive, flexible, and two absorbing shapes). The
 label is read up to the eight relabellings. A property counts when it holds in every corpus model, and E confirms
-96.8\% of the 8{,}053 cases.
+96.5\% of the 8{,}912 cases.
 \begin{itemize}
 \item \textbf{Shares.} Structured theories are 0--0.5\% of the early runs and 44--69\% of X5--X7.
-\item \textbf{Count.} There are 124 structured families, and X7 alone added 26. Chao1 gives 138, but it assumes
+\item \textbf{Count.} There are 135 structured families; X7 alone added 26, and X8 11. Chao1 gives 152, but it assumes
   unbiased sampling, and the search deliberately skips what it has seen. So the number is a descriptive index, not an
   estimate of the total, the same problem STADS~\cite{stads2018} raises for fuzzers.
 \item \textbf{Direction against volume.} The prior-arm runs made 51 million of the 63.7 million cheap evaluations and
-  found 6 families. The fusion arms made 12.5 million and found 118. So far the direction of the search mattered more
-  than its volume.
+  found 6 families. The fusion arms X4--X7 made 12.5 million and found 118. So far the direction of the search mattered
+  more than its volume.
+\item \textbf{Volume in the same direction.} The preregistered run X8 kept 8 searchers of the X7 arm alive for 9 hours.
+  It made 51.5 million evaluations, taking level~0 to 115 million, and found 11 new families, the largest holding
+  0.9\% of its 444 verified theories (the preregistered threshold was 2\%).
 \item \textbf{Emerging laws.} Among the proved emergent laws, the emerging ones are $x\op(y\op x)=y$,
   $x\op(x\op x)=y\op(x\op y)$ and commutativity.
 \end{itemize}
@@ -552,11 +555,12 @@ collapses a family onto $x\op x$.}
   top ten twice, with different axioms.
 \item The rediscovery catalogue was written by us after seeing results. It covers only structures with axioms of
   order at most~4.
-\item The searches touched a tiny part of the space. All runs together verified 4{,}222 theories and scored about
-  $4.5\times10^{7}$ cheaply, against $2.5\times10^{9}$ pairs of laws and $1.8\times10^{26}$ law sets of up to six
-  laws (law sets overcount varieties; the number of varieties is not known). The explored part is also not a random
-  sample: the duality prior steers toward symmetric, lattice-like theories, the region of two-operation algebra that
-  humans have studied most. Rediscovery there is expected. It does not tell how often the search would find
+\item The searches touched a tiny part of the space. All runs together verified 7{,}920 theories and scored about
+  $1.15\times10^{8}$ cheaply (repeats counted again; \texttt{soup.funnel}, 24~Nov), against $2.5\times10^{9}$ pairs
+  of laws and $1.8\times10^{26}$ law sets of up to six laws (law sets overcount varieties; the number of varieties is
+  not known). The explored part is also not a random sample: the duality prior steers toward symmetric, lattice-like
+  theories, the region of two-operation algebra that humans have studied most, and the later fusion arms start from
+  that region and skip what they recognise. Rediscovery there is expected. It does not tell how often the search would find
   something new elsewhere, and finding nothing new there is not evidence that nothing new exists.
 \end{itemize}
 

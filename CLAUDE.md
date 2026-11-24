@@ -237,6 +237,22 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       catalogue-to-theorem arc (murmurations) came first. Not found anywhere: open-ended search over two-operation law
       sets with synergy, a taxonomy of theories, conjectures across families. Chao1 is a descriptive index only, because
       the search skips what it has seen.
+  - 24 Nov evening (REPORT "X8 + x8b"):
+    - **x8b** (X8 continued, same dir, seeds 1209+) ran its whole 28,217 s. The VM froze about 2 h while the Mac slept
+      (pitfall below).
+    - **Totals:** X8 + x8b made 51.5M evaluations and level 0 is now 115.1M. 444 verified, 192 scored, 1,256 still
+      queued.
+    - **Predictions:** R1 holds (100M) and R3 holds (parameter screen 4.5%). R2 fails (66.2% distinct). R4 fails: 11
+      new structured families, the largest at 0.9%. Families now 135, Chao1 index 152.
+    - **Candidates:** the top two scores, `ce221fcd` and `7b194f15`, are one variety. `7e9c798d` is a parameter
+      disguise that V6's screen missed. 9 of 20 are disconnected. X8's best at N1 is `3eecc7a6`, rank 10. Over all
+      runs, 218 candidates are 180 varieties; funnel level 7 is 43.
+    - **Verifier time:** 23.4 h in all, 8.2 h of it in stage c for 7 theories. z3 re-proving claims E had already
+      proved took up to 4.2 h of stage b's 11.3 h; one theory took 75 min. Candidate V7: skip z3 after an E proof, and
+      the linear screen before stage c.
+    - **`soup.linear`** (new post-run step, after stage c): refuted 14 of X8's 116 open claims on 8–17 elements. All 14
+      pass check_finite; written as `false (size q, linear model over R)`. The first session's 17 open claims, S12
+      among them: none. Packed Lean tables are now the default.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -335,6 +351,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - Write timestamps from `date -u` at the time, not from estimates: three preregistration times had to be corrected on
   22 Nov.
 - BSD `sed` on the Mac writes a multi-line replacement as one line. Use the Edit tool for multi-line code changes.
+- The podman VM freezes while the Mac sleeps, and its clock falls behind; chrony later steps it forward in one jump.
+  On 24 Nov the VM was 7,137 s behind after x8b, whose budget and journal ran on the frozen clock: it ended at
+  18:22 UTC VM time, which was 20:22 UTC real time. The jump came 8 minutes later, at 20:30 UTC, and every
+  wall-time deadline then running fired at once: the first linear sweep called 10 claims "unknown" after a minute.
+  Before timing anything after a long run, compare `date -u` with `podman machine ssh date -u`.
 
 ## Tasks, in order
 

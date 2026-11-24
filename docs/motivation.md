@@ -46,7 +46,7 @@ The image has two limits:
 
 **Milestones, and what the families say about them.** The author's framing for level 0:
 - 50M, the dust removed: passed;
-- 100M, the surface scratched;
+- 100M, the surface scratched: passed on 24 Nov, in X8 + x8b (115.1M at its end);
 - 200M, digging, where very unexpected things start to emerge.
 
 The families statistic ([`families.md`](families.md)) puts a number on the hope that new kinds of structure appear
@@ -55,6 +55,9 @@ as the search grows.
   evaluations and found 6 structured families. The fusion arms (X4–X7) made 12.5M and found 118.
 - **For the milestones,** this means 100M and 200M will mean "digging" only if the extra volume goes to new
   directions. That is why X8 keeps the arm that skips the known.
+- **X8 + x8b tested volume in the same direction.** In 9 hours it made 51.5M evaluations, four fifths of what all
+  earlier runs made together, and found 11 new families, none larger than 0.9% of the run. Volume alone, in the same direction, added
+  little. With only 3 verifiers, most of what the searchers found is still unverified (1,256 theories queued).
 
 So the claim is that the search grows outward from known mathematics and leaves the corner our checks recognise. It is
 not that the search reaches unexplored mathematics. That needs a specialist.

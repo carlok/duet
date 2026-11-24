@@ -1,0 +1,17 @@
+s1201: evals 1086815, pushed 1435, lattice-skipped 36296, ignore-skipped 45054
+s1202: evals 1115218, pushed 1548, lattice-skipped 50249, ignore-skipped 48247
+s1203: evals 1042674, pushed 1448, lattice-skipped 39547, ignore-skipped 41944
+s1204: evals 1028154, pushed 1563, lattice-skipped 40984, ignore-skipped 39237
+s1205: evals 1096642, pushed 1635, lattice-skipped 41236, ignore-skipped 49322
+s1206: evals 1066601, pushed 1640, lattice-skipped 38803, ignore-skipped 47509
+s1207: evals 1015896, pushed 1524, lattice-skipped 39760, ignore-skipped 38812
+s1208: evals 1001911, pushed 1455, lattice-skipped 36525, ignore-skipped 38073
+s1209: evals 5434919, pushed 763, lattice-skipped 200561, ignore-skipped 225667
+s1210: evals 5271613, pushed 808, lattice-skipped 237363, ignore-skipped 211551
+s1211: evals 5541729, pushed 822, lattice-skipped 205354, ignore-skipped 230722
+s1212: evals 5308892, pushed 672, lattice-skipped 204477, ignore-skipped 209991
+s1213: evals 5287144, pushed 838, lattice-skipped 217585, ignore-skipped 221782
+s1214: evals 5412285, pushed 810, lattice-skipped 201451, ignore-skipped 246857
+s1215: evals 5440246, pushed 653, lattice-skipped 252064, ignore-skipped 220655
+s1216: evals 5319657, pushed 719, lattice-skipped 193810, ignore-skipped 240942
+x8: 2036065 of 51470396 evaluations skipped as lattice-valid (4.0%)

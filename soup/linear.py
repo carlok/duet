@@ -238,27 +238,39 @@ def claim(T, goal, qmax=64, affine_qmax=16, budget=None):
 
 # ---- the pipeline step
 
-def sweep(qmax, affine_qmax, budget, write):
+def _job(args):
+    path, i, T, idx, qmax, affine_qmax, budget = args
+    return path, i, claim(T, idx, qmax, affine_qmax, budget)
+
+
+def sweep(qmax, affine_qmax, budget, write, jobs=1):
+    from concurrent.futures import ProcessPoolExecutor, as_completed
     from .paths import data, ensure
     from .stream.common import write_json
-    out, n_open = [], 0
-    for path in sorted(glob.glob(str(data('results', '*.json')))):
-        r = json.load(open(path)); changed = False
-        for c in r.get('claims', []):
-            if c.get('status') not in ('unknown', 'open'): continue
-            n_open += 1
-            rec = claim(r['T'], c['idx'], qmax, affine_qmax, budget)
+    files = {p: json.load(open(p)) for p in sorted(glob.glob(str(data('results', '*.json'))))}
+    todo = [(p, i, r['T'], c['idx'], qmax, affine_qmax, budget) for p, r in files.items()
+            for i, c in enumerate(r.get('claims', [])) if c.get('status') in ('unknown', 'open')]
+    n_open = len(todo); out = []; hits = {}
+    print(f'{n_open} open claims in {len({t[0] for t in todo})} results, {jobs} jobs', flush=True)
+    with ProcessPoolExecutor(jobs) as ex:
+        for fut in as_completed([ex.submit(_job, t) for t in todo]):
+            path, i, rec = fut.result(); r = files[path]; c = r['claims'][i]
             row = {'key': r['key'], 'run': r.get('run'), 'law': c['law'], 'idx': c['idx'],
                    **{k: v for k, v in rec.items() if k not in ('F', 'G')}}
             out.append(row); print(json.dumps(row, ensure_ascii=False), flush=True)
-            if write and rec['status'] == 'refuted':
-                c['status'] = 'refuted'
-                c['certificate'] = {'kind': 'linear', **{k: rec[k] for k in ('ring', 'q', 'family', 'params', 'check',
-                                                                            'witness')}}
-                c['linear_sweep'] = time.strftime('%Y-%m-%d %H:%M:%S')
-                if c['law'] in r.get('open', []): r['open'].remove(c['law'])
-                changed = True
-        if changed: write_json(path, r)
+            if rec['status'] == 'refuted': hits.setdefault(path, []).append((i, rec))
+    for path, recs in hits.items() if write else ():
+        r = json.load(open(path))            # re-read: write only the claims this sweep refuted
+        for i, rec in recs:
+            c = r['claims'][i]
+            c['status'] = f"false (size {rec['q']}, {rec['family']} model over {rec['ring']})"   # the verify.py convention
+            r['n_refuted'] = r.get('n_refuted', 0) + 1
+            c['certificate'] = {'kind': 'linear', **{k: rec[k] for k in ('ring', 'q', 'family', 'params', 'check',
+                                                                        'witness')}}
+            c['linear_sweep'] = time.strftime('%Y-%m-%d %H:%M:%S')
+            if c['law'] in r.get('open', []): r['open'].remove(c['law'])
+        write_json(path, r)
+    out.sort(key=lambda x: (x['key'], x['idx']))
     json.dump(out, open(ensure('check') / 'linear_sweep.json', 'w'), ensure_ascii=False, indent=1)
     ref = sum(1 for x in out if x['status'] == 'refuted')
     print(f'{n_open} open claims, {ref} refuted by a linear or affine model', flush=True)
@@ -271,9 +283,10 @@ def main():
     ap.add_argument('--laws'); ap.add_argument('--goal')
     ap.add_argument('--qmax', type=int, default=64); ap.add_argument('--affine-qmax', type=int, default=16)
     ap.add_argument('--budget', type=float, default=600); ap.add_argument('--write', action='store_true')
+    ap.add_argument('--jobs', type=int, default=1)
     a = ap.parse_args()
     if a.cmd == 'sweep':
-        sweep(a.qmax, a.affine_qmax, a.budget, a.write); return
+        sweep(a.qmax, a.affine_qmax, a.budget, a.write, a.jobs); return
     T = [law_index(s.strip().replace(' ', '')) for s in a.laws.split(';')]
     goal = law_index(a.goal.replace(' ', ''))
     if None in T or goal is None: raise SystemExit('a law is not in the enumeration (order <= 4)')

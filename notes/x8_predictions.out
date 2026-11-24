@@ -1,0 +1,15 @@
+R2: distinct evaluations (union of the bitmaps, linear counting) against raw (searchers' final evals)
+  x8: raw 8,453,911; distinct 6,147,974 = 72.7% (bitmap fill 4.5%)
+  x8b: raw 43,016,485; distinct 28,228,101 = 65.6% (bitmap fill 19.0%)
+  x8 + x8b: raw 51,470,396; distinct 34,072,603 = 66.2% (bitmap fill 22.4%)
+  -> R2 fails (>= 70%)
+  known_skipped: 5,228,449
+  cand_skipped: 111,458
+  seen_skipped: 77,760
+  lat_skipped: 2,036,065
+  ign_skipped: 2,156,365
+R3: parameter screen among verified theories
+  x8: verified 47, positive 33, screened {'split': 2, 'parameter definition': 4}, parameter 4 = 8.5%
+  x8b: verified 397, positive 159, screened {'parameter definition': 16}, parameter 16 = 4.0%
+  x8 + x8b: verified 444, parameter 20 = 4.5% -> R3 holds (< 5%)
+claims 771: {'finite model': 349, 'proved': 269, 'unknown': 103, 'open': 13, 'E saturation': 37}; stage c: 7

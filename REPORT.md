@@ -2,6 +2,106 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X8 + x8b: search-heavy, past 100M (24 Nov 2026; preregistered; x8b ran to its budget)
+
+Preregistration: PREREGISTRATION.md, X8 (commit `041912c`, before the start), and deviation 10 for the continuation.
+Arm `fusion4`, verifier V6, 8 searchers kept alive (`--min-searchers 8`), 3 verifiers, recycling at 700 MB, memory stop
+at 1,000 MB.
+- **X8:** 09:09:52–10:19:37 UTC, 4,183 s, stopped by its memory rule (deviation 10).
+- **x8b:** started 10:31:53 UTC, ran its whole remaining budget of 28,217 s and ended normally (exit 0, no OOM
+  kill). Same data directory and settings; seeds 1209–1216.
+  - **The VM froze for about 2 hours**, probably while the Mac slept. Budget and journal run on the VM's clock, so x8b
+    ended at 18:22:48 UTC VM time, which was 20:22 UTC real time. chrony stepped the VM clock forward by 7,137 s at
+    20:30 UTC. Counts are unaffected; journal times after the freeze are about 2 hours behind real time.
+  - One verifier died at x8b's start with a z3 `out_of_memory_error` and was replaced; 12 verifier processes ran in all
+    (`work/x8/logs/x8b/v*.log`).
+
+Commands:
+- run: as in the preregistration and deviation 10;
+- post-run: `work/check/x8_post.log` (fragments, statistics `notes/{runstats,diagonal,heartbeats}_x8.out`, candidates,
+  profile, hidden and `--param`, relabel, rank, rediscover), split per candidate (`notes/split_new.py`, output
+  `notes/split_x8_candidates.out`, merged into `check/split_candidates.json`), `notes/disconnected.py x8 x7`,
+  `soup.dedupe --jobs 6`, `soup.novelty`, `soup.funnel`, `soup.taxonomy build --confirm` and `report`;
+- predictions: `notes/x8_predictions.py` (output `notes/x8_predictions.out`);
+- linear sweep: `soup.linear sweep --jobs 10`, then `--write` (below).
+
+| | X8 (1.16 h) | x8b (7.85 h) | together | X7 (fusion4, V6; 2.65 h) |
+| --- | --- | --- | --- | --- |
+| cheap evaluations (searchers' final counts) | 8,453,911 | 43,016,485 | **51,470,396** | 2,403,574 |
+| distinct (union of the bitmaps) | 6,147,974 (72.7%) | 28,228,101 (65.6%) | 34,072,603 (66.2%) | 1,772,881 (73.8%) |
+| verified theories | 47 (+2 finished in x8b) | 397 | 444 | 737 |
+| positive score | 33 | 159 | 192 (43%) | 511 (69%) |
+| screened: parameter definition / split | 4 / 2 | 16 / 0 | 20 / 2 (4.5%) | 16 / 60 |
+| claims / proved | 89 / 55 | 682 / 214 | 771 / 269 | 1,369 / 877 |
+| refuted by finite models (stages a and c, FMB) | 32 | 317 | 349 | 370 |
+| refuted by a linear model (post-run sweep) | 2 | 12 | 14 | – |
+| refuted by E saturation | 0 | 37 | 37 | 47 |
+| unknown / open | 0 / 0 | 89 / 13 | 89 / 13 | 68 / 7 |
+| structures added to the corpus | 564 | 2,892 | 3,456 | 6,703 |
+
+Searcher skips over both parts (heartbeats of all 16 searchers): known 5,228,449, earlier candidate 111,458, seen
+before 77,760, lattice-valid 2,036,065, argument-ignoring 2,156,365. The queue still holds 1,256 theories and 65 stage-c
+tasks.
+
+**Predictions** (over X8 and x8b together, deviation 10):
+- **R1 holds.** Level 0 is 115,133,315 (`soup.funnel`); X8 and x8b added 51.5M, against the 36.4M needed.
+- **R2 fails.** 66.2% of the evaluations are distinct, against ≥ 70%. X8's first 70 minutes reached 72.7%; the share fell
+  as the run went on, since 8 searchers in one region keep meeting the same law sets.
+- **R3 holds, narrowly.** The parameter screen fired on 20 of 444 verified theories (4.5%, limit 5%): X8 4 of 47
+  (8.5%), x8b 16 of 397 (4.0%). One more disguise of this kind got through: `7e9c798d`, third by score, has
+  x∘y = (x·y)·((z·z)·(z∘z)) by `soup.hidden --param` (E), which V6's 10-second screen missed.
+- **R4 fails.** F1, recomputed (`soup.taxonomy build --confirm`, 723 new E checks; 96.5% of corpus-implied properties
+  confirmed), gives X8 + x8b 11 new structured families with 16 theories in all. The largest holds 4 of the 444 verified
+  theories (0.9%), against the predicted ≥ 2%. All 11 come from x8b. Structured theories are 43.2% of the run (X7 69%
+  of scored); the structured families now number 135, against 124 before, with the descriptive Chao1 index at 152.
+  Six families first seen in X4–X6 are flagged as emerging in X8, the largest being `·: - | ∘: comm, flex` (38 of
+  X8's theories). Accumulation: X7 added 26 families with 737 verified theories, X8 + x8b 11 with 444
+  (`docs/families.md`).
+
+**The candidates:**
+- **Split:** 17 of 20 not split (finite certificate, 2–4 elements); 3 undecided (E derived no bridge law within its cap).
+- **Identification:** hidden 0, relabel 0, rediscover 0. No X8 theory is a fragment, subvariety or equivalent of a
+  catalogue entry, and the model filter left no E job.
+- **Dedupe:** the two top scores, `ce221fcd` (2.38) and `7b194f15` (2.07), are one variety. Over all runs, 218
+  candidates are 180 varieties.
+- **Disconnected:** 9 of 20 (X7 12, X6 7). The top two are not, because all their census models have 4 elements and
+  the mark asks for two sizes.
+- **N1:** 116 enter (76 identified as known, 24 fail "works", 2 without a record). X8's best is `3eecc7a6` at rank 10,
+  with x·(x∘x) = x, x·x = y∘(y∘x) and x·((x∘y)∘z) = x, models on 3, 4 and 5 elements. `1b421500` and `b651ba2f` enter
+  at ranks 11 and 13. The top 9 are unchanged.
+- **Funnel:** level 7 rises from 36 to 43; level 8 stays at 9.
+
+**Where the verifier time went** (444 theories, 23.4 verifier-hours):
+- stage a 3.9 h, stage b 11.3 h, stage c 8.2 h. Stage c covered 7 theories.
+- In stage b, z3 runs after E has already proved a claim, only to keep the z3 difficulty measure comparable with old
+  runs; the score has used E's proof length since V2. z3 hit its cap on 113 of the 269 E-proved claims. The 86 theories
+  with such a claim took 4.2 h of stage b (median 106 s, against 0.1 s for the rest), one of them 75 minutes. That is an
+  upper bound, since their stage b also holds E and FMB runs on other claims.
+- The cheap search ran at 700–2,400 evaluations per second on 8 searchers (`logs/stats.jsonl`, 17-minute windows). In
+  x8b the rate was about 2,100 for the first 3 hours, about 1,500 until 4.6 hours, about 800 until 6.3 hours, then about
+  1,250 to the end. The corpus grew steadily throughout (4,816 to 7,708 models), so the dip does not follow corpus size;
+  verifier load is the likely cause, not established.
+
+**Linear and affine models (post-run sweep, new step; `soup/linear.py`).** x·y = ax + by + c and x∘y = dx + ey + f over
+ℤ/n and GF(q), q ≤ 64 (affine part up to 16); a law's truth is decided exactly from the coefficients.
+- X8 + x8b: 116 open claims, **14 refuted** in 8 theories, all linear, on rings of 8, 9, 11 and 17 elements, each one
+  re-checked on all assignments of its tables and again by `soup.check_offline.check_finite` (14 of 14 pass;
+  `notes/linear_x8_check.py`, output `notes/linear_x8_check.out`). One of the 14 models is degenerate, which does not
+  matter for a refutation. Written to the result files with `--write`, as `false (size q, linear model over R)`.
+- The 17 open claims of the first session (`work/results`), S12's x·x = x∘x among them: no linear or affine model up to
+  64 elements.
+- 9 minutes on 10 cores for the 116; the slowest claim took 7 s. As a stage-c screen it would have settled 12% of the
+  claims left open after stage b.
+
+**Reading:**
+- **The search part worked as planned:** 8 searchers stayed alive for 9 hours and level 0 passed 100M.
+- **With 3 verifiers, verification was the bottleneck:** 49 per hour, against 278 in X7, and 1,256 pushed theories are
+  still waiting. The waiting theories are below the trimmed queue's top, so the verified ones are the searchers' best.
+- **The new ground is thin:** 43% positive scores (X7 69%), no new theory at N1's top 9, and the run's best two scores are
+  one variety. The attractor x·(x·x) = y·(x·y) and its variants still top the proved laws (`notes/diagonal_x8.out`).
+- **A V7 verifier is suggested by the numbers, not yet preregistered:** skip z3 after an E proof (about 4 h of 23 here),
+  and run the linear screen before stage c (12% of the claims left open, in seconds).
+
 ## Literature: is this a new (meta)field? (24 Nov 2026)
 
 Memo [`notes/metafield.md`](notes/metafield.md); the source tables are in `notes/metafield_sources/`.
@@ -45,7 +145,8 @@ Memo [`notes/metafield.md`](notes/metafield.md); the source tables are in `notes
   - 8,453,911 cheap evaluations, about 7.3M per hour on 8 searchers; recent runs made about 0.8M per hour on 1.
   - 49 verified, 33 with a positive score. The queue is kept (1,500 pending).
 - **Source:** `work/x8/journal/journal.md`, last record of `work/x8/logs/stats.jsonl`.
-- **Status:** R1–R4 are not evaluated. Whether X8 is continued is the user's decision (PREREGISTRATION, deviation 10).
+- **Status:** continued as x8b (user's decision, deviation 10). R1–R4 are judged over both parts in the section
+  "X8 + x8b" above.
 
 ## F1: families of verified theories, and emerging patterns (24 Nov 2026, 07:51 UTC; preregistered, post hoc)
 

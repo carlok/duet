@@ -1,0 +1,65 @@
+== x8: 20 candidates
+ce221fcd works=False connected=- unknown=- classical=0 
+7b194f15 works=False connected=- unknown=- classical=0 
+7e9c798d works=True connected=- unknown=- classical=9 e.g. Z6.x^-1y^-1|Z6.xy 
+5bcfb05d works=False connected=- unknown=- classical=0 
+6f1ce1fc works=True connected=- unknown=- classical=8 e.g. aff6[3,3,0]|aff6[3,1,0] 
+be0a88a8 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · x) = y ∘ y & x ∘ (((y ∘ x) · z) ∘ y) = x
+6a16f238 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · (x · y) = y · y & (x ∘ (y · (z ∘ x))) ∘ z = z
+478ee5da works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · (y · x) = y ∘ y & x ∘ ((x · (y · z)) ∘ w) = x
+3eecc7a6 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = x & x · x = y ∘ (y ∘ x) & x · ((x ∘ y) ∘ z) = x
+725830a5 works=True connected=- unknown=- classical=9 e.g. Z6.x^-1y^-1|Z6.xy 
+0075529f works=True connected=- unknown=- classical=2 e.g. aff6[2,2,2]|aff6[3,1,0] 
+3e88235b works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · x) = y · y & ((x · y) · z) ∘ x = x
+6e477740 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y · y & ((x ∘ (x ∘ y)) · z) ∘ x = x
+b6c57260 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · x) = y ∘ y & x ∘ ((y · x) · z) = x
+c21f4ebd works=False connected=- unknown=- classical=1 e.g. aff6[1,5,2]|aff6[3,1,0] 
+018aad1e works=True connected=- unknown=split None classical=0 
+a2f5abc9 works=True connected=- unknown=split None classical=0 
+8f7c4dcf works=True connected=- unknown=split None classical=0 
+b651ba2f works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y & x · x = (y ∘ z) ∘ (z ∘ y) & (x · (x ∘ y)) · x = y · x
+1b421500 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = y ∘ (y · x) & (x · ((y · x) ∘ z)) ∘ y = y
+x8: 9 of 20 disconnected (works, unconnected, no classical model)
+== x7: 20 candidates
+6f829371 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · x) = (x · y) ∘ x & x · ((y ∘ y) · y) = y · x & x · y = y ∘ ((x · y) ∘ x) & x · y = (x · x) ∘ (x ∘ y)
+d1f7c325 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y · x & (x · y) · z = x · (z ∘ y)
+8df5461f works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ y) = x · y & (x ∘ y) · z = z · (y · x) & x · ((x ∘ x) ∘ y) = y · x
+6cf88feb works=True connected=- unknown=- classical=2 e.g. F4[1,1,0]|aff4[3,1,0] 
+b8f7ebec works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = x · (y ∘ y) & x ∘ (y · (x · x)) = y ∘ x & (x ∘ (y · z)) · x = y · z & (x ∘ (y ∘ x)) · x = y · x & x · x = (x · (x · x)) ∘ x
+21684a72 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x · (x · y) = y ∘ (x · y) & (x · y) · z = z · (y ∘ x) & (x · (x · y)) · y = y · x
+c7c7afc2 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ y) = x · y & (x · y) · z = z · (y ∘ x)
+daafc02b works=True connected=- unknown=- classical=1 e.g. aff6[3,3,2]|aff6[3,3,0] 
+86341e9b works=False connected=- unknown=- classical=1 e.g. F4[1,1,0]|aff4[1,3,0] 
+8a73db2b works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · (y · x)) = x · x & x · ((y · z) ∘ x) = y · z & x · x = ((y ∘ x) · x) ∘ y & ((x ∘ y) · z) ∘ z = y ∘ x
+9bd6dcbf works=True connected=- unknown=- classical=1 e.g. Z6.x^-1y^-1|Z6.yx^-1y 
+a4902fe6 works=True connected=- unknown=- classical=1 e.g. Z6.x^-1y^-1|Z6.yx^-1y 
+de0c0cf3 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y & (x · y) ∘ y = x ∘ y & (((x · x) ∘ x) · y) · y = x
+39e5f5d0 works=False connected=- unknown=- classical=0 
+4ce437a9 works=True connected=- unknown=- classical=0 DISCONNECTED
+    (x · y) · z = x · (y · z) & (x ∘ y) · (x ∘ y) = x · y & (x · x) ∘ (y · y) = y ∘ x
+4eb53095 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = x & x ∘ (y ∘ x) = y ∘ x & x · ((y ∘ x) · y) = y ∘ x & (x ∘ x) · (x · y) = x ∘ y
+72247621 works=False connected=- unknown=- classical=3 e.g. aff6[2,2,4]|aff6[2,5,1] 
+ec877ad6 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · z) = x · (z ∘ y) & (x · y) ∘ z = x ∘ (y · z) & x · y = (y · x) ∘ (y · x)
+c8ec4d7a works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = x · x & (x · y) · z = z · (y ∘ x) & x · (y ∘ y) = (x · y) ∘ x & (x · (x · y)) · y = y · x
+b6ae6952 works=True connected=- unknown=- classical=1 e.g. Z6.x^-1y^-1|Z6.yx^-1y 
+x7: 12 of 20 disconnected (works, unconnected, no classical model)

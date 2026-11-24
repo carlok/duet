@@ -1,0 +1,15 @@
+1ef3541b GF(9)   linear x · (x · x) = y ∘ (y ∘ x)        ok True nondeg False law_vector_agrees True
+24e6b56a Z/9     linear x · y = y · x                    ok True nondeg True law_vector_agrees True
+24e6b56a Z/9     linear x · (x · y) = x · (y · x)        ok True nondeg True law_vector_agrees True
+5b476178 GF(9)   linear x ∘ y = y ∘ x                    ok True nondeg True law_vector_agrees True
+5b476178 GF(9)   linear x ∘ (y · y) = y ∘ x              ok True nondeg True law_vector_agrees True
+5b476178 GF(9)   linear x · (x · x) = y ∘ (x ∘ y)        ok True nondeg True law_vector_agrees True
+7405990d Z/9     linear x · (x · x) = y · (x · y)        ok True nondeg True law_vector_agrees True
+c829454f GF(17)  linear x · (y ∘ y) = x                  ok True nondeg True law_vector_agrees True
+c829454f GF(17)  linear x · (x · x) = x · (y ∘ y)        ok True nondeg True law_vector_agrees True
+c9a2013e GF(8)   linear x ∘ (x ∘ y) = y                  ok True nondeg True law_vector_agrees True
+e32c128a Z/9     linear x ∘ (x ∘ y) = y                  ok True nondeg True law_vector_agrees True
+e32c128a Z/9     linear x · (x · x) = y ∘ (y ∘ x)        ok True nondeg True law_vector_agrees True
+fc3da08a GF(11)  linear x · y = y · x                    ok True nondeg True law_vector_agrees True
+fc3da08a GF(11)  linear x · (x · x) = y · (x · y)        ok True nondeg True law_vector_agrees True
+14 of 14 refutations pass check_finite
