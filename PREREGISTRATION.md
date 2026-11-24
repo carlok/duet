@@ -2,6 +2,57 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X8: search-heavy, toward 100M (written 24 Nov 2026, 08:03 UTC, before X8 starts)
+
+Exploratory and descriptive. The user's aim (24 Nov), in their words: 50M is "the dust removed", 100M "the surface
+scratched", 200M "digging". They chose a search-heavy run.
+- **Level 0:** the corrected funnel count, raw, with distinct beside it: 63,662,919 before X8.
+- **Why search-heavy:** in X5–X7 the rebalancer cut 4 searchers to 1 within 30 minutes.
+
+**Design.**
+- **Arm and verifier:** arm `fusion4` with verifier V6, as in X7.
+- **Library:** the known library and the seen-before keys are rebuilt with `soup.known build --out /data/x8`, so
+  they include X7.
+- **Processes:** 8 searchers and 3 verifiers. `--min-searchers 8` means the rebalancer never retires a searcher.
+  It can still turn an idle verifier into a searcher, keeping at least 2 verifiers.
+- **Memory:** verifiers recycle above 700 MB private (`--recycle-mb 700`), and the run stops below 1,000 MB available
+  (`--mem-stop-mb 1000`).
+- **Budget and seeds:** 32,400 s (9 h), seeds 1201–1208.
+
+**Run:**
+1. `python -m soup.t4_setup --dir x8`;
+2. `soup.known build --out /data/x8`;
+3. `podman run -d --name soup-x8 -v "$PWD/work:/data" -e SOUP_DATA=/data/x8 -e SOUP_VERIFIER=V6 soup python3 -m
+   soup.stream.supervisor --arm fusion4 --searchers 8 --verifiers 3 --min-searchers 8 --seed0 1201 --budget 32400
+   --recycle-mb 700 --mem-stop-mb 1000 --run x8`.
+
+**Done before this entry, disclosed.**
+- `--min-searchers` was added to the supervisor, with a test. 86 tests pass.
+- `soup.known` now also reads x4a and X7 for the seen-before keys, which number 43,705 (X7 had 38,701). Before this
+  fix, X7's own theories would not have been skipped.
+- A 4-minute engineering smoke run (`work/x8smoke`, seeds 1991–1998, deleted afterwards):
+  - the 8 searchers stayed alive with no rebalancing;
+  - they made 719,100 evaluations (about 10.8M per hour at the start, on the small starting corpus), of which each
+    searcher counted about 83% as distinct;
+  - 309–356 MB PSS per searcher, and 10.4 GB still available at the end;
+  - 15 theories verified. Nothing else was read.
+
+**Predictions** (descriptive):
+- **R1:** the raw funnel level 0 passes 100M, so X8 adds at least 36.4M.
+- **R2:** distinct evaluations are at least 70% of X8's raw ones (X7: 73.8%).
+- **R3:** the parameter screen fires on less than 5% of X8's verified theories (X7: 2.2%).
+- **R4:** F1, recomputed with X8, gives X8 at least one new structured family that holds at least 2% of X8's
+  verified theories.
+
+**After the run:** X7's post-run pipeline with x8 added (split per candidate, merged into
+`check/split_candidates.json`). Then F1 (`soup.taxonomy build --confirm`, `report`), the funnel and a REPORT section.
+
+**Caveats.**
+- With 3 verifiers, most pushed theories are never verified. The queue is trimmed to 1,500 by priority, so the
+  verified ones are the searchers' best.
+- Evaluations get slower as the corpus grows. With fewer verifiers the corpus grows more slowly, which works the
+  other way.
+
 ## F1: families of verified theories, and emerging patterns (post hoc; written 24 Nov 2026, 07:41 UTC, before it is computed)
 
 Descriptive. The user's request (24 Nov): a statistic of families and their percentages next to the funnel, and the

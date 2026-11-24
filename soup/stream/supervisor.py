@@ -124,7 +124,7 @@ class Supervisor:
         q = self.Q.counts(); s, v = self.active('search'), self.active('verify')
         comp, th = self.competitive()
         high, low = 4 * len(v), len(v)
-        if comp > high and len(s) > 1:
+        if comp > high and len(s) > searcher_floor(self.a):
             victim = min(s, key=lambda p: p.t0); self.retire(victim); new = self.start_verifier()
             return f'{comp} competitive pending (priority >= {th:.3f}) > {high}: retired searcher {victim.name}, started verifier {new}'
         idle = [p for p in v if (read_json(data('logs', 'workers', f'{p.name}.json')) or {}).get('state') == 'idle'
@@ -208,7 +208,8 @@ class Supervisor:
         a = self.a
         self.initial = True; self.scan_results(); self.initial = False
         cfg = {'run': self.run, 'budget_s': a.budget, 'searchers': a.searchers, 'verifiers': a.verifiers, 'arm': a.arm,
-               'seed0': a.seed0, 'gate': a.gate, 'qmax': a.qmax, 'tick_s': a.tick, 'rebalance_s': a.rebalance, 'z3': z3.get_version_string(),
+               'seed0': a.seed0, 'gate': a.gate, 'qmax': a.qmax, 'tick_s': a.tick, 'rebalance_s': a.rebalance,
+               'min_searchers': searcher_floor(a), 'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
                'data': str(DATA), 'cores': os.cpu_count(), 'results_before': len(self.results),
                'corpus_before': sum(1 for e in os.listdir(data('corpus')) if e.endswith('.npz')),
                'queue_before': self.Q.counts(), 'started': ymd_hm()}
@@ -259,6 +260,11 @@ class Supervisor:
                      f"- top score overall {r['top_score']:.3f}; see leaderboard.md\n")
 
 
+def searcher_floor(a):
+    """The rebalancer never retires a searcher below this many (--min-searchers; X8, 24 Nov 2026). Default 1."""
+    return max(1, getattr(a, 'min_searchers', 1) or 1)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--budget', type=float, default=float(os.environ.get('BUDGET', 3600)))
@@ -273,6 +279,7 @@ def main():
     ap.add_argument('--run', default=os.environ.get('RUN_ID'))
     ap.add_argument('--mem-stop-mb', type=int, default=0, help='stop cleanly when MemAvailable falls below this (0: off)')
     ap.add_argument('--recycle-mb', type=int, default=0, help='verifiers restart themselves between tasks above this private memory (0: never)')
+    ap.add_argument('--min-searchers', type=int, default=1, help='the rebalancer never retires searchers below this many')
     Supervisor(ap.parse_args()).main()
 
 

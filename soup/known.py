@@ -28,7 +28,8 @@ import numpy as np
 
 from .paths import data
 
-RUN_DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6']   # earlier runs only
+# earlier runs; the output directory itself and missing directories are skipped (X8 added x4a and x7, 24 Nov 2026)
+RUN_DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x4a', 'x5', 'x6', 'x7', 'x8']
 
 
 def _relabelled(T):
@@ -65,6 +66,7 @@ def build(out, notes='/notes', root=None):
     seen = set()
     for d in RUN_DIRS:
         base = root if d == '.' else os.path.join(root, d)
+        if not os.path.isdir(base) or os.path.realpath(base) == os.path.realpath(out): continue
         seen |= {os.path.basename(p) for p in glob.glob(os.path.join(base, 'queue', 'seen', '*'))}
         seen |= {os.path.basename(p)[:-5] for p in glob.glob(os.path.join(base, 'results', '*.json'))}
     os.makedirs(out, exist_ok=True)

@@ -68,3 +68,11 @@ def test_memory_stop_reader():
         f.write('MemTotal: 12000000 kB\nMemAvailable:     700000 kB\n')
     assert mem_available_mb(f.name) == 683
     assert mem_available_mb('/nonexistent') is None
+
+
+def test_searcher_floor():
+    from types import SimpleNamespace
+    from soup.stream.supervisor import searcher_floor
+    assert searcher_floor(SimpleNamespace()) == 1                     # old runs: retire down to one searcher
+    assert searcher_floor(SimpleNamespace(min_searchers=0)) == 1
+    assert searcher_floor(SimpleNamespace(min_searchers=8)) == 8      # X8: 8 searchers stay
