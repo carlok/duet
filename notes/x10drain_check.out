@@ -1,0 +1,20 @@
+18 ticks, 2026-11-25 13:41:28 to 2026-11-25 13:46:30 (319 s)
+    16 s  avail  8680 MB  search 6  verify 4  stage c 0  pending 1 stage2c 156  evals 0  s1401:- s1402:- s1403:- s1404:- s1405:- s1406:- v0:- v1:- v2:- v3:-
+    32 s  avail  8044 MB  search 6  verify 4  stage c 0  pending 1 stage2c 156  evals 0  s1401:- s1402:- s1403:- s1404:- s1405:- s1406:- v0:- v1:- v2:- v3:-
+    49 s  avail  6921 MB  search 6  verify 4  stage c 2  pending 0 stage2c 154  evals 0  s1401:- s1402:- s1403:- s1404:- s1405:- s1406:- v0:stagea v1:idle v2:stagec v3:stagec
+    65 s  avail  5037 MB  search 6  verify 4  stage c 2  pending 175 stage2c 154  evals 0  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+    84 s  avail  4857 MB  search 6  verify 4  stage c 2  pending 725 stage2c 154  evals 0  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:wrote v2:stagec v3:stagec
+   101 s  avail  4188 MB  search 6  verify 4  stage c 2  pending 1035 stage2c 154  evals 51,419  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   118 s  avail  3746 MB  search 6  verify 4  stage c 2  pending 1206 stage2c 154  evals 84,054  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   136 s  avail  3306 MB  search 6  verify 4  stage c 2  pending 1404 stage2c 154  evals 109,070  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   154 s  avail  3189 MB  search 6  verify 4  stage c 2  pending 1500 stage2c 154  evals 130,619  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   175 s  avail  3115 MB  search 6  verify 4  stage c 2  pending 1507 stage2c 154  evals 130,619  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   193 s  avail  2948 MB  search 6  verify 4  stage c 2  pending 1503 stage2c 154  evals 148,654  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   211 s  avail  2943 MB  search 6  verify 4  stage c 2  pending 1503 stage2c 154  evals 165,769  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   229 s  avail  2831 MB  search 6  verify 4  stage c 2  pending 1506 stage2c 154  evals 182,614  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   246 s  avail  2747 MB  search 6  verify 4  stage c 2  pending 1506 stage2c 154  evals 202,983  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   269 s  avail  2993 MB  search 6  verify 4  stage c 2  pending 1500 stage2c 154  evals 218,073  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   294 s  avail  2578 MB  search 6  verify 4  stage c 2  pending 1504 stage2c 154  evals 218,073  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   312 s  avail  2576 MB  search 6  verify 4  stage c 2  pending 1502 stage2c 154  evals 228,477  s1401:searching s1402:searching s1403:searching s1404:searching s1405:searching s1406:searching v0:stageb v1:stagea v2:stagec v3:stagec
+   319 s  avail 10106 MB  search 0  verify 0  stage c 0  pending 1500 stage2c 156  evals 239,015  
+peak stage-c tasks at a tick: 2; at the last live tick: 6 searchers, 4 verifiers, 228,477 evaluations; PSS max 4533 MB; MemAvailable min 2,576 MB

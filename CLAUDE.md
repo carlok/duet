@@ -51,7 +51,8 @@ by the whole theory but by no single law of it.
   `cd work && shasum -a 256 -c ../tests/matrix.sha256` must say OK for all three files.
 - Streaming search: `podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 3600`
   (options `--searchers 3 --verifiers 8 --arm prior|noprior|fusion --seed0 101 --qmax 1500 --run <id>`, plus
-  `--recycle-mb 700 --mem-stop-mb 1000` (X7), `--min-searchers N` (X8) and `--cap-c N` (after X9);
+  `--recycle-mb 700 --mem-stop-mb 1000` (X7), `--min-searchers N` (X8), `--cap-c N` (after X9) and `--drain-c S`
+  (runs in blocks, X10);
   env `BUDGET`, `SEARCHERS`, `VERIFIERS`, `ARM`, `SEED0`, `RUN_ID`).
 - Other scripts: `podman run --rm -v "$PWD/work:/data" soup python3 -m soup.calib` (env `CALIB_NULL`);
   same for `soup.fragments`, `soup.report`.
@@ -90,8 +91,8 @@ by the whole theory but by no single law of it.
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}`; `claim(..., caps={lane: n})` counts and claims under an O_EXCL lock file (`queue/.lock_<lane>`) |
 | `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip), `fusion3` (IGNORE2: ignored variables may repeat) |
-| `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus; `--cap-c N` (from the supervisor) caps stage-c tasks over all verifiers |
-| `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md`. `--min-searchers N` (X8); `--cap-c N` (after X9): at most N stage-c tasks at once, and the verifier floor becomes N + 1, so a run that drains its queue turns its idle verifiers into searchers |
+| `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus; `--cap-c N` (from the supervisor) caps stage-c tasks over all verifiers; after `--c-until T` (from `--drain-c`) it starts no stage-c task. On SIGTERM it puts its own claimed task back |
+| `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md`. `--min-searchers N` (X8); `--cap-c N` (after X9): at most N stage-c tasks at once, and the verifier floor becomes N + 1, so a run that drains its queue turns its idle verifiers into searchers; `--drain-c S` (X10, runs in blocks): no new stage-c task in the last S seconds, and the journal's end entry counts the stage-c tasks the stop cut (counted before SIGTERM) |
 
 Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `journal/`, `logs/<run>/<worker>.log`,
 `logs/stats.jsonl`, `logs/workers/*.json` (heartbeats), `runs/<run>/` (config, archive snapshots).

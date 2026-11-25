@@ -2,6 +2,21 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## The stage-c drain, for runs in blocks (25 Nov 2026; code change, tests and a check run, no scaled run)
+
+The user asked to run X10 in blocks of a few hours, not in one 8-hour block, so the Mac only has to stay awake for one
+block at a time. A run continued in the same data directory keeps its corpus, queue and results (x8b did this), but a
+stop cuts the stage-c tasks then running, and they start over in the next block (40-80 minutes each under load).
+- **Code:** `--drain-c S` on the supervisor: in the last S seconds of the budget no verifier starts a stage-c task
+  (`verifier.pick_lanes`; each verifier gets `--c-until`), and works on stages a and b instead. The journal's end entry
+  now counts the stage-c tasks the stop cut. Verifiers put their own claimed task back on SIGTERM, so the supervisor
+  counts them before it signals.
+- **Tests:** `tests/test_stage_c_cap.py::test_drain_window_offers_no_stage_c`; 103 tests pass.
+- **Check run** (300 s on a copy of the X10 fork with `--drain-c 200`, deleted afterwards; `notes/x10drain_check.out`,
+  from `notes/capsmoke.py`): the drain began at 101 s with 2 stage-c tasks running, no stage-c task started after it,
+  and the end entry reads "stage-c tasks cut by the stop and put back: 2". No stage-c task finished inside the window,
+  so the refusal itself is covered by the test only.
+
 ## Why the searchers slowed down, and a column cache (25 Nov 2026; profiling, no run)
 
 X10's smoke run made 0.28M evaluations per searcher-hour on X9's corpus, against about 0.72M in X8 + x8b.

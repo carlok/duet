@@ -15,6 +15,9 @@ Non-c verifiers take stage c first while fewer than --max-c (default verifiers/4
 pending they all take stage c (X9: six at once tripped the memory rule, and no verifier ever went idle, so a run
 that drained its queue never turned back into a search). --cap-c N caps the stage-c tasks over all verifiers; a
 verifier it turns away with nothing pending goes idle, and the second rule then makes it a searcher.
+--drain-c S (25 Nov 2026, for runs done in blocks): in the last S seconds of the budget no verifier starts a stage-c
+task (each verifier gets --c-until), so the stop cuts only stage-c tasks longer than S. The journal's end entry
+counts the stage-c tasks the stop cut; they go back to the lane and start over in the next run on the directory.
 The pending lane is trimmed to --qmax tasks (lowest priority moved to queue/dropped/). Searchers push only
 theories with k x priority >= --gate x (20th best score); the supervisor publishes k and that bar in
 queue/gate.json every tick. Workers get SIGTERM at the budget; verifiers interrupt z3 at once.
@@ -67,6 +70,7 @@ class Supervisor:
         self.results = {}; self.mtimes = {}
         self.top_key = None; self.t_start = time.time(); self.events = []
         self.ticks = 0; self.journaled = 0; self.quiet = 0
+        self.c_until = c_until(a, self.t_start); self.drain_logged = False
 
     # ---- processes
     def start_searcher(self):
@@ -81,7 +85,8 @@ class Supervisor:
         if prefer is None:     # keep exactly one verifier that prefers stage c
             prefer = 'ab' if any(getattr(p, 'prefer', None) == 'c' for p in self.active('verify')) else 'c'
         cmd = [sys.executable, '-m', 'soup.stream.verifier', '--name', name, '--run', self.run, '--prefer', prefer,
-               '--max-c', str(stage_c_floor(self.a)), '--cap-c', str(getattr(self.a, 'cap_c', 0) or 0)]
+               '--max-c', str(stage_c_floor(self.a)), '--cap-c', str(getattr(self.a, 'cap_c', 0) or 0),
+               '--c-until', f"{getattr(self, 'c_until', 0.0):.1f}"]
         self.procs[name] = Proc(name, 'verify', cmd, data('logs', self.run, f'{name}.log'))
         self.procs[name].prefer = prefer
         return name
@@ -216,7 +221,8 @@ class Supervisor:
         self.initial = True; self.scan_results(); self.initial = False
         cfg = {'run': self.run, 'budget_s': a.budget, 'searchers': a.searchers, 'verifiers': a.verifiers, 'arm': a.arm,
                'seed0': a.seed0, 'gate': a.gate, 'qmax': a.qmax, 'tick_s': a.tick, 'rebalance_s': a.rebalance,
-               'min_searchers': searcher_floor(a), 'cap_c': a.cap_c, 'max_c': stage_c_floor(a), 'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
+               'min_searchers': searcher_floor(a), 'cap_c': a.cap_c, 'max_c': stage_c_floor(a), 'drain_c': a.drain_c,
+               'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
                'data': str(DATA), 'cores': os.cpu_count(), 'results_before': len(self.results),
                'corpus_before': sum(1 for e in os.listdir(data('corpus')) if e.endswith('.npz')),
                'queue_before': self.Q.counts(), 'started': ymd_hm()}
@@ -224,7 +230,8 @@ class Supervisor:
         self.J.write(f"\n## {ymd_hm()} · run {self.run} started\n\n"
                      f"- budget {a.budget:.0f} s · {a.searchers} searchers (seeds {a.seed0}–{a.seed0 + a.searchers - 1}, arm {a.arm}) · "
                      f"{a.verifiers} verifiers (v0 prefers stage c"
-                     f"{f', at most {a.cap_c} stage-c tasks at once' if a.cap_c else ''}) · z3 {cfg['z3']} · {cfg['cores']} cores\n"
+                     f"{f', at most {a.cap_c} stage-c tasks at once' if a.cap_c else ''}"
+                     f"{f', none started in the last {a.drain_c:.0f} s' if a.drain_c else ''}) · z3 {cfg['z3']} · {cfg['cores']} cores\n"
                      f"- before: {cfg['results_before']} verified theories, {cfg['corpus_before']} found structures, "
                      f"queue {cfg['queue_before']['pending']} pending / {cfg['queue_before']['stage2c']} stage c\n")
         for name in os.listdir(data('queue', 'claimed')):         # leftovers of a killed earlier run
@@ -244,6 +251,9 @@ class Supervisor:
                 action = self.rebalance(); t_reb = time.time()
                 if action: self.event(f'rebalance: {action}')
             self.tick(action)
+            if self.c_until and not self.drain_logged and time.time() >= self.c_until:
+                self.drain_logged = True
+                self.event(f'drain: no new stage-c task from now on ({self.Q.running("stage2c")} running)')
             if a.mem_stop_mb:                      # the preregistered memory rule, applied by the supervisor (X7)
                 avail = mem_available_mb()
                 if avail is not None and avail < a.mem_stop_mb:
@@ -251,6 +261,7 @@ class Supervisor:
         self.event(f"memory rule: {mem_stop} MB available < {a.mem_stop_mb} MB after {time.time() - self.t_start:.0f} s: stopping workers"
                    if mem_stop is not None else
                    f"budget reached ({time.time() - self.t_start:.0f} s): stopping workers" if not stop['set'] else 'stopped by signal')
+        cut_c = self.Q.running('stage2c')     # stage-c tasks the stop cuts; the verifiers put them back as they exit
         for p in self.procs.values():
             if p.p.poll() is None: p.retiring = True; p.p.send_signal(signal.SIGTERM)
         t0 = time.time()
@@ -263,6 +274,7 @@ class Supervisor:
         self.J.write(f"\n### {ymd_hm()} · run {self.run} ended\n\n"
                      f"- {r['this_run']} theories verified ({r['positive_this_run']} positive score, {r['stage_c_this_run']} through stage c), "
                      f"{r['open_claims_this_run']} claims still open\n"
+                     f"- stage-c tasks cut by the stop and put back: {cut_c}\n"
                      f"- {line['evals_total']:,} surrogate evaluations; {line['corpus_files'] - cfg['corpus_before']} structures added to the corpus\n"
                      f"- queue left: {q['pending']} pending, {q['stage2c']} stage c (kept for the next run)\n"
                      f"- top score overall {r['top_score']:.3f}; see leaderboard.md\n")
@@ -278,6 +290,13 @@ def stage_c_floor(a):
     With searchers keeping pending full, this is how many stage-c tasks actually run, so a run that wants --cap-c N
     stage-c tasks sets --max-c N too (X10)."""
     return getattr(a, 'max_c', 0) or max(1, a.verifiers // 4)
+
+
+def c_until(a, t_start):
+    """The Unix time after which no verifier starts a stage-c task: the end of the budget minus --drain-c, or 0
+    (no limit) without it (25 Nov 2026)."""
+    drain = getattr(a, 'drain_c', 0) or 0
+    return t_start + a.budget - drain if drain > 0 else 0.0
 
 
 def verifier_floor(a, running_c):
@@ -310,6 +329,7 @@ def main():
     ap.add_argument('--min-searchers', type=int, default=1, help='the rebalancer never retires searchers below this many')
     ap.add_argument('--cap-c', type=int, default=0, help='at most this many stage-c tasks at once over all verifiers (0: no cap)')
     ap.add_argument('--max-c', type=int, default=0, help='verifiers take stage c first while fewer than this many run it (0: verifiers/4)')
+    ap.add_argument('--drain-c', type=float, default=0, help='start no stage-c task in the last this many seconds of the budget (0: off)')
     Supervisor(ap.parse_args()).main()
 
 

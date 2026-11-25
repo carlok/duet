@@ -99,3 +99,19 @@ def _drain(tmp_path, monkeypatch, cap_c):
 def test_drain_turns_back_into_search(tmp_path, monkeypatch):
     assert _drain(tmp_path / 'x9', monkeypatch, 0) == (0, 7, 7)         # X9: all on stage c, no searcher
     assert _drain(tmp_path / 'cap', monkeypatch, 3) == (3, 4, 3)        # cap 3: 3 searchers, 4 verifiers
+
+
+def test_drain_window_offers_no_stage_c(tmp_path):
+    """--drain-c (25 Nov 2026): in a block's last S seconds no verifier starts a stage-c task."""
+    from soup.stream.verifier import pick_lanes, C_FIRST
+    from soup.stream.supervisor import c_until
+    assert c_until(SimpleNamespace(budget=10800), 100.0) == 0.0                     # no --drain-c: no limit
+    assert c_until(SimpleNamespace(budget=10800, drain_c=3600), 100.0) == 7300.0    # 3 h block, last hour drained
+    assert pick_lanes('c', 0, 2) == C_FIRST and pick_lanes('ab', 2, 2) == AB_FIRST  # as before without a limit
+    assert pick_lanes('ab', 0, 2, c_until=50.0, now=49.0) == C_FIRST              # before the window: unchanged
+    assert pick_lanes('c', 0, 2, c_until=50.0, now=50.0) == ('pending',)           # in it: stage c is not offered
+    Q = FileQueue(tmp_path)
+    Q.push('c0', {'T': [0]}, 1.0, lane='stage2c')
+    assert Q.claim('v0', pick_lanes('c', 0, 2, c_until=50.0, now=60.0), CAP) is None   # idle, not stage c
+    Q.push('p0', {'T': [1]}, 0.1)
+    _, t = Q.claim('v0', pick_lanes('c', 0, 2, c_until=50.0, now=60.0), CAP); assert t['key'] == 'p0'
