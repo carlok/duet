@@ -8,6 +8,7 @@ import hashlib
 import itertools
 import os
 import weakref
+from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
@@ -63,6 +64,7 @@ class Corpus:
         self.XP = np.zeros((0, NLB), np.uint8)  # packed law vectors of found structures
         self.keys = set()
         self._seen_files = set()
+        self._cols = OrderedDict()            # law -> (rows covered, packed bits of column law of XP); see has()
         if self.store is not None:
             self.store.mkdir(parents=True, exist_ok=True)
             self.refresh()
@@ -122,12 +124,38 @@ class Corpus:
             self.keys.add(k); self._append(name, n, F, G, packed, nd); new += 1
         return new
 
+    COL_CACHE = 8192
+
+    def has(self, t):
+        """Packed bits (one per found structure) of the structures that satisfy law t: column t of XP.
+
+        Cached by law, least recently used out first (COL_CACHE laws). Reading a column of XP touches one cache
+        line per structure, since rows are 8.9 KB apart, and the searcher asks for the same few columns over and
+        over: T's laws in stats, implied and offdiag_gain, an elite's laws in all its mutations, and the diagonal
+        laws. On X9's corpus that read was 70% of the surrogate's time (25 Nov 2026, notes/profile_searcher.py).
+        Rows never change once appended, so a cached column only has to be extended by the rows added since.
+        Not thread-safe: the thread pools in dedupe, rediscover and taxonomy run E only, never the corpus."""
+        t = int(t); n = len(self.tables)
+        c = self._cols.get(t)
+        if c is None:
+            col = np.packbits(_bits_have(self.XP, t))
+        elif c[0] == n:
+            self._cols.move_to_end(t); return c[1]
+        else:
+            m, old = c
+            col = np.packbits(np.concatenate([np.unpackbits(old, count=m).astype(bool), _bits_have(self.XP[m:], t)]))
+        self._cols[t] = (n, col); self._cols.move_to_end(t)
+        if len(self._cols) > self.COL_CACHE: self._cols.popitem(last=False)
+        return col
+
     def sat(self, T):
         T = list(T)
         base = unpack_probes(sat_base(T))
-        ext = np.ones(len(self.tables), bool)
-        for t in T: ext &= _bits_have(self.XP, t)
-        return base, ext
+        n = len(self.tables)
+        if not T: return base, np.ones(n, bool)
+        acc = self.has(T[0]).copy()
+        for t in T[1:]: acc &= self.has(t)
+        return base, np.unpackbits(acc, count=n).astype(bool)
 
     def stats(self, T):
         base, ext = self.sat(T)

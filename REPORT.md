@@ -2,6 +2,25 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Why the searchers slowed down, and a column cache (25 Nov 2026; profiling, no run)
+
+X10's smoke run made 0.28M evaluations per searcher-hour on X9's corpus, against about 0.72M in X8 + x8b.
+- **Method** (`notes/profile_searcher.py`): one fusion4 searcher, seed 1401, 40,000 proposals on X9's corpus; the last
+  3,000, with a full archive, are replayed on X8's corpus (7,708 structures) and on X9's (16,826), the same known
+  library in both. Outputs: `notes/profile_searcher_{x8,x9}.out`, and `_cache.out` after the change.
+- **Cause:** reading one law's column of the packed corpus matrix (`core._bits_have`) took 70% of the surrogate's time on
+  X9's corpus and 61% on X8's. Rows are 8.9 KB apart, so each read touches one cache line per structure, and an
+  evaluation reads about 20 columns. Most of them repeat: T's laws in `stats`, `implied` and `offdiag_gain`, an elite's
+  laws in its mutations, the diagonal laws. The cost grows with the corpus: 2.97 ms per evaluation on X8's corpus,
+  6.08 ms on X9's.
+- **Fix:** `Corpus.has(t)` caches each column, packed, least recently used out first (8,192 laws, about 17 MB on X9's
+  corpus). It is extended by the new rows when the corpus grows, so it stays exact. `Corpus.sat` uses it.
+- **Result:** 1.21 ms per evaluation on X8's corpus (2.5 times faster), 1.89 ms on X9's (3.2 times). On the 3,000
+  replayed proposals the outputs are byte-identical before and after, on both corpora (scores, cells, gains, skips).
+  `tests/test_corpus_cache.py` checks exactness through appends and evictions; 102 tests pass.
+- **Not measured yet:** the rate under load. The smoke run's 12.8 ms per evaluation had 10 processes sharing memory
+  bandwidth, against 6.1 ms alone. A smoke run with X10's command is needed before X10's U4 can be restated.
+
 ## The stage-c cap and the drain rule (25 Nov 2026; code change, tests and a smoke run, no scaled run)
 
 X9 showed two gaps (deviation 11): `max_c` was a floor, not a cap, so six stage-c tasks ran at once and tripped the

@@ -1,0 +1,21 @@
+/data/prof_x8: corpus 7708 structures, searcher ready in 11 s
+replayed 3000 proposals in 8.9 s: 2.97 ms per evaluation
+         186885 function calls (160515 primitive calls) in 2.669 seconds
+   Ordered by: internal time
+   List reduced from 60 to 14 due to restriction <14>
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    19771    1.636    0.000    1.636    0.000 /app/soup/core.py:50(_bits_have)
+     2992    0.361    0.000    0.370    0.000 /usr/local/lib/python3.13/site-packages/numpy/_core/memmap.py:358(__getitem__)
+      610    0.310    0.001    0.573    0.001 /app/soup/offdiag.py:92(_implied_from)
+     9794    0.173    0.000    0.173    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+      287    0.033    0.000    0.180    0.001 /app/soup/core.py:138(implied)
+     2095    0.029    0.000    1.884    0.001 /app/soup/core.py:125(sat)
+     1000    0.013    0.000    2.669    0.003 /app/soup/stream/searcher.py:106(surrogate)
+      967    0.012    0.000    0.348    0.000 /app/soup/core.py:132(stats)
+      231    0.011    0.000    2.081    0.009 /app/soup/offdiag.py:101(offdiag_gain)
+     2992    0.006    0.000    0.008    0.000 /usr/local/lib/python3.13/site-packages/numpy/_core/memmap.py:311(__array_finalize__)
+      241    0.006    0.000    0.011    0.000 /app/soup/known.py:104(classify)
+     3474    0.006    0.000    0.006    0.000 {method 'astype' of 'numpy.ndarray' objects}
+      897    0.005    0.000    0.008    0.000 /app/soup/data.py:42(unpack_laws)
+23316/5736    0.005    0.000    0.006    0.000 /app/soup/laws.py:31(walk)
+implied() of T, first 300: 94 calls; base models median 85, corpus models median 51, mean 187, max 1589
