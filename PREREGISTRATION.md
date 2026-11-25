@@ -1049,3 +1049,23 @@ No random theory and no T4 theory had been profiled.
     - S1–S4 are judged on the 2 hours that ran, and per-hour rates use those hours. Nothing else changes.
     - The VM also holds the user's other containers, idle, with about 0.7 GB between them. They have been running since
       before X9 and its smoke runs.
+
+12. **X10's first block, x10a, stopped by its memory rule after 39 minutes (25 Nov 2026, 14:30 UTC; written 14:33 UTC,
+    before anything was computed from the block beyond its journal and stats lines).**
+    - x10a started at 13:52:25 UTC with a budget of 7,200 s (`--drain-c 3600`, seeds 1401–1406), as in the second
+      amendment.
+    - At 14:30:57 UTC the VM had 642 MB available, below the 1,000 MB rule. The supervisor stopped the workers, and the
+      block ended at 14:31:16 UTC after 2,313 s. Exit code 0, and the kernel log shows no OOM kill.
+    - **What happened:** between the ticks at 2,289 s and 2,311 s two verifiers grew at once, v0 (stage b) from 574 to
+      1,739 MB and v2 (stage c) from 852 to 1,552 MB, so the workers' total PSS went from 5,872 to 7,678 MB. Each
+      prover is capped at 2,000 MB, but nothing stops two from peaking together.
+    - **What was different from the smokes:** a five-container web stack of the user's, which was not running during
+      the smoke runs, started beside the block (its database at 13:45:38 UTC, the other four at 13:53:58 UTC). At the
+      stop it held about 1.1 GB, and its frontend used about a quarter of a core. Without it the low point would have
+      been near 1.7 GB, above the rule; that is an estimate, not a measurement.
+    - Results by then: 24 verified (6 with a positive score), none through stage c, 2 stage-c tasks cut by the stop,
+      1,684,503 cheap evaluations, 38 structures added to the corpus. The queue (1,500 pending, 157 stage c) is kept.
+    - The searchers made about 0.45M evaluations per searcher-hour (from the stats ticks), against 0.60M in the second
+      smoke. That stack's CPU may explain part of that; it was not measured.
+    - As the second amendment says, the 2,313 s count toward the 28,800 s (26,487 s left), U1 fails, and the next block
+      may still run. Whether something changes before it is the user's decision, recorded here when it is made.
