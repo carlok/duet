@@ -84,6 +84,33 @@ The user chose an 8-hour night run with the search beside stage c over a full dr
   run: U5 is less likely to hold than when it was written.
 - Nothing else changes.
 
+**Second amendment: X10 in blocks (written 25 Nov 2026, 13:48 UTC, before X10 starts).** The user asked to run X10 in
+shorter blocks instead of one 8-hour run, so the Mac has to stay awake for one block at a time.
+- **Code since the first amendment:** `--drain-c S` (`921f19e`; REPORT, "The stage-c drain"). In a block's last S
+  seconds no verifier starts a stage-c task, and the journal's end entry counts the stage-c tasks the stop cut. 103 tests
+  pass. A 300 s check run on a copy of the fork (`notes/x10drain_check.out`) drained at 101 s and reported 2 cut.
+- **Blocks:** X10 is a sequence of blocks in `work/x10` whose budgets add up to the preregistered 28,800 s.
+  - Each block is at least 2 hours and at most 4, chosen at its start; the last block takes what is left, however short.
+  - Block k runs X10's command with `--run x10<letter>` (x10a, x10b, ...), `--seed0` 1401 + 50(k - 1), `--budget` the
+    block's length and `--drain-c 3600`. Everything else is as above.
+  - Before each block: compare the clocks, check that no other soup container is running, and keep the Mac awake for
+    the block.
+  - Between blocks nothing in `work/x10` is changed by hand: no known-library rebuild and no new image. The image is
+    the one built from `921f19e`.
+  - If the blocks have not used the 28,800 s by the end of 28 Nov 2026 (UTC), X10 ends with what has run, and the
+    predictions are judged on that.
+- **What a block boundary costs:**
+  - Each block's searchers start from empty archives, so the search does not build on the elites of the block before.
+  - Stage-c tasks still running at a stop start over in the next block. The drain limits this to tasks longer than an
+    hour. Since X5, stage-c tasks took a median of 33 minutes and at most 61 without much load, and a median of 79 under
+    X8's load (`notes/stagec_history.out`), so some will be cut. Each block's journal gives the count.
+- **The predictions** U1-U5 are judged on the sum over all blocks, with U4 as restated. Stage c starts tasks only in
+  the first B - 1 hours of a block of B hours, so U2 is less likely to hold than in one 8-hour run.
+- **A memory stop or a sleeping Mac** in a block is a deviation. The block's elapsed time counts toward the 28,800 s,
+  and the next block may still run.
+- **After the run:** the post-run steps treat every x10* run in `work/x10` as X10. The funnel sums per run inside a
+  directory, and the families are assigned per directory.
+
 **After the run:**
 - X9's post-run pipeline with x10 added (`taxonomy.RUNS`, `funnel.DIRS`, `known.RUN_DIRS`): the split per candidate,
   dedupe, N1, F1, the funnel, the linear sweep and a REPORT section.
