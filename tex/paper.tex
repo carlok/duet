@@ -13,10 +13,9 @@
 \newcommand{\op}{\cdot}
 \newcommand{\cop}{\circ}
 \newtheorem{definition}{Definition}
-\newtheorem{proposition}{Proposition}
 
 \title{Searching for synergy between two binary operations:\\
-an open-ended search over small equational theories\\[4pt]\large Draft, 22 November 2026}
+an open-ended search over small equational theories\\[4pt]\large Draft, 25 November 2026}
 \author{}
 \date{}
 
@@ -24,570 +23,263 @@ an open-ended search over small equational theories\\[4pt]\large Draft, 22 Novem
 \maketitle
 
 \begin{abstract}
-We search the space of small equational theories over two binary operations $\op$ and $\cop$ for
-theories whose laws imply consequences that no single law implies. Each ingredient has precedents: automated theory
-formation, Wolfram's enumeration of axiom systems, and catalogues of one-operation varieties. We found none for the
-combination: an open-ended search over sets of laws in two operations with synergy as the objective, together with
-a taxonomy of the theories it finds as the ground for conjectures across families. Laws are enumerated up to order~4
-(71{,}369 laws up to renaming and side swap, 61{,}983 of them mixing both operations). A satisfaction
-matrix against 12{,}509 finite structures gives a cheap surrogate for implication; a quality-diversity
-search proposes theories; each candidate is then verified by finite-model search, the SMT solver Z3 and
-the saturation prover E. Every implication reported here carries a prover proof, and every
-non-implication a finite countermodel, a checked convergent rewrite system or a model on $\mathbb{Z}$
-proved by Z3; claims the verifier cannot settle are reported as open with their budget.
-The scored search rediscovers fragments of lattice theory and two laws of McKenzie's 1970 lattice
-basis. It also refutes four implications that finite-model search up to size~8 left open: their
-countermodels are necessarily infinite. Of 32 claims that resisted the verifier in short pilot runs, 31 are now
-refuted (one by a hand proof that is not certified). The last of them fell to a 10-element model that Mace4 did not
-reach and Vampire's finite model builder found. In a preregistered comparison, a prior that rewards dualities
-raises the share of verified theories that are fragments of a named theory from 8\% to 33\% (mostly lattice
-fragments). It steers the search toward known structure. Among the non-fragments, the best-ranked candidates
-are not fusions after all. Some are split into a theory of each operation, and some are one-operation varieties
-with the division written as a second operation. We treat rediscovery as calibration and measure it. Against a
-catalogue of 13 known structures fixed in advance, the search rediscovered 7, among them twelve different lattice
-bases and Fried's weakly associative lattices. The core of the best remaining candidate turned out to be the
-$\Delta$-bijectivity of the Yang--Baxter literature. Nearly all scored theories owe their synergy to the diagonal (97\% prove an emergent law in one variable); a run that counts only off-diagonal synergy leaves the named corner entirely (no fragment of a named theory among 565 scored theories). Whether the search finds theories that are interesting and not
-already named is still open.
+We search small equational theories in two binary operations $\op$ and $\cop$ for \emph{synergy}: laws that a theory
+implies but none of its laws implies alone. Laws of order at most~4 are enumerated (71{,}369 up to renaming and side
+swap). A satisfaction matrix over 12{,}509 finite structures gives a cheap surrogate for implication, a
+quality-diversity search proposes theories, and finite-model search, the provers E and Vampire, Mace4 and Z3 verify
+them. Every implication reported has a prover proof, and every non-implication a finite model, a checked convergent
+rewrite system or a model on~$\mathbb{Z}$. Over 115 million cheap evaluations and 9{,}240 verified theories, the
+search rediscovers lattice bases, absorption pairs, a fragment of Heyting algebras and Steiner loops in disguise, and
+most of the work has gone into telling rediscovery from novelty. A preregistered duality prior steers the search
+toward named structure; arms that score only off-diagonal synergy and skip what is already known leave that corner.
+We sort the verified theories into families (151 so far, still rising) and rank the candidates for novelty: 54 pass
+every automatic check, and 9 of them also resisted a close look by hand. None is claimed new.
 \end{abstract}
 
 \section{Question}
 
-A law that mentions both operations is a \emph{bridge}. Bridges are where two theories fuse: absorption
-in lattices, distributivity in rings, the left-division operation of a quasigroup. We measure a fusion by
-\emph{synergy}.
+A law that mentions both operations is a \emph{bridge}. Bridges are where two theories fuse: absorption in lattices,
+distributivity in rings, the division of a quasigroup. We measure a fusion by synergy.
 
 \begin{definition}
-Let $T$ be a finite set of laws. A law $e$ is \emph{emergent} in $T$ if $T \models e$ and
-$\{t\} \not\models e$ for every $t \in T$.
+Let $T$ be a finite set of laws. A law $e$ is \emph{emergent} in $T$ if $T \models e$ and $\{t\} \not\models e$ for
+every $t \in T$.
 \end{definition}
 
-The lattice absorption pair $x\op(x\cop y)=x$, $x\cop(x\op y)=x$ is the reference case: together the two
-laws imply $x\op x = x$, neither does alone. We ask whether an automated search over theories, scored by
-emergent laws and checked by provers, finds structure that a mathematician would call interesting, and
-in particular theories that are not already named. No language model is used anywhere in the scoring.
+The reference case is the absorption pair $x\op(x\cop y)=x$, $x\cop(x\op y)=x$: together the two laws imply
+$x\op x=x$, and neither does alone. We ask whether an automated search over theories, scored by emergent laws and
+checked by provers, finds structure that a mathematician would call interesting, and in particular theories that are
+not already named. No language model takes part in the search or its scoring.
 
-\paragraph{Contribution.} What is new here is the combination, not any single part. The related work below gives
-the precedents, and \texttt{notes/metafield.md} the literature check behind this claim.
-\begin{itemize}
-\item An open-ended quality-diversity search whose individuals are \emph{sets} of laws in \emph{two} operations, with
-  synergy as its objective and every claim verified by provers and finite models.
-\item A taxonomy of the verified theories: families by the one-operation properties of each operation, read up to the
-  eight relabellings and counted run by run.
-\item The ground for conjectures stated across families. These are the next step, and none is claimed yet.
-\end{itemize}
+What is new is the combination, not any single part (Section~\ref{sec:related}, and \texttt{notes/metafield.md} in
+the repository): an open-ended quality-diversity search whose individuals are \emph{sets} of laws in \emph{two}
+operations, with synergy as its objective and every claim verified, and a taxonomy of the verified theories into
+families, counted run by run. Conjectures across families would be the next step; none is stated here.
 
-\section{Related work}
+\section{Related work}\label{sec:related}
 
-McCune and Padmanabhan~\cite{mccune1996} enumerated identities, filtered them through finite
-non-models and proved the survivors with Otter, finding single axioms for lattices and other varieties;
-McCune, Padmanabhan and Veroff~\cite{mpv2003} continued this for lattices. Our pipeline has the same
-shape (enumerate, filter on finite structures, prove) but searches over \emph{sets} of laws and scores
-synergy rather than looking for bases of a fixed variety. The Equational Theories Project~\cite{etp}
-settled all 22 million implications between the 4694 one-operation laws of order at most~4, with
-Lean-checked proofs and countermodels; our enumeration reproduces that count. Its methods for
-countermodels (linear, translation-invariant and greedily built magmas) are the ones we use when finite
-search fails. Le Floch~\cite{lefloch2026} determined all implications between conjunctions of 990
-quasigroup laws in three operations, the closest published analogue to a search over theories rather
-than single laws. Reading a saturated clause set as an explicit, possibly infinite model, and emitting it
-from Vampire and E as a checkable certificate, is due to Janota, Rawson and Schulz~\cite{janota2026}; our
-check below is an independent implementation of the same idea. Kondylidou, Blanchette and
-Heule~\cite{krympa2026} shorten machine proofs from the ETP several-fold, so raw prover proof length (our
-difficulty measure) is an upper bound. The search uses MAP-Elites~\cite{mapelites2015}.
+McCune and Padmanabhan~\cite{mccune1996} enumerated identities, filtered them through finite non-models and proved
+the survivors, finding single axioms for lattices and other varieties, and McCune, Padmanabhan and Veroff continued
+this for lattices~\cite{mpv2003}. Our pipeline has the same shape, but it searches over sets of laws and scores
+synergy instead of looking for bases of a fixed variety. The Equational Theories Project (ETP)~\cite{etp} settled
+all 22 million implications between the 4{,}694 one-operation laws of order at most~4. Our enumeration reproduces
+that count, and we use its countermodel families when finite search fails. Le Floch~\cite{lefloch2026} settled the
+implications between conjunctions of 990 quasigroup laws, and catalogues of one-operation varieties are
+growing~\cite{lefloch2026sg,semibase2026}. Reading a saturated clause set as a checkable, possibly infinite model is
+due to Janota, Rawson and Schulz~\cite{janota2026}. Automated theory formation goes back to AM~\cite{lenat1976}.
+HR~\cite{colton1999} ran a loop like ours on finite algebras, and Charnley and Colton~\cite{charnley2008} ranked
+specialisations of one algebra by proof length. Wolfram treats each enumerated axiom system as a possible field of
+mathematics~\cite{wolfram2022}. The search itself is MAP-Elites~\cite{mapelites2015}. We found no open-ended search
+over sets of laws in two operations, and no taxonomy of theories counted this way.
 
-The wider enterprise is not new. Automated theory formation goes back to AM~\cite{lenat1976}. HR~\cite{colton1999}
-ran our loop on finite algebras: Otter proves, MACE refutes, and an interestingness score steers the search. Charnley
-and Colton~\cite{charnley2008} generated specialisations of one algebra and ranked them by proof length, the nearest
-precedent we found for a search over theories. Wolfram enumerated one-operator axiom systems~\cite{nks2002}, treats
-each as a possible field of mathematics~\cite{wolfram2022}, and calls the activity ruliology. Exhaustive catalogues
-of conjunctions are advancing in one operation: 456 semigroup varieties~\cite{lefloch2026sg}, and 505 certified
-semigroup varieties in SemiBase~\cite{semibase2026}. Lenia~\cite{lenia2019} gives a natural history of objects found by
-evolutionary search, and STADS~\cite{stads2018} applies ecological richness estimators to a search's output. We found no
-open-ended search over sets of laws in two operations, and no taxonomy of theories counted this way
-(\texttt{notes/metafield.md}).
+\section{Setting and method}
 
-Named theories used
-for calibration: lattices, skew lattices~\cite{leech1989}, dimonoids~\cite{loday2001}, one-sided
-quasigroups.
+Terms are built from variables and the two operations, and the order of a law is its number of operation symbols.
+Laws are identified up to renaming of variables and exchange of sides (Table~\ref{tab:counts}). Swapping the two
+operations and taking the opposite ($x\op y\mapsto y\op x$) of either one generate eight relabellings, under which
+theories are compared. Three of them (swapping, taking both opposites, and both) are the \emph{dualities}, and a
+theory \emph{has a duality} if one of them maps it onto itself.
 
-\section{Setting}
-
-Terms are built from variables and the two operations. The order of a law is its number of operation
-symbols. Laws are identified up to variable renaming and exchange of sides
-(Table~\ref{tab:counts}).
-
-\begin{table}[h]\centering
+\begin{table}[h]\centering\small
 \begin{tabular}{lr}\toprule
 Laws of order $\le 4$, one operation & 4{,}694 \\
 Laws of order $\le 4$, two operations & 71{,}369 \\
 \quad of which bridges & 61{,}983 \\
 Base structures (carriers 2--6) & 12{,}509 \\
 \bottomrule\end{tabular}
-\caption{Search space. The one-operation count matches~\cite{etp}.}\label{tab:counts}
+\caption{The search space. The one-operation count matches the ETP's~\cite{etp}.}\label{tab:counts}
 \end{table}
 
-Three syntactic dualities act on laws: swapping the operations, taking opposites ($x\op y \mapsto
-y\op x$), and both. A theory \emph{has a duality} if one of them maps it onto itself.
+\paragraph{Surrogate.} A bit matrix records which laws hold in which base structures: all pairs of operations on two
+elements, affine operations over $\mathbb{Z}/n$ and $\mathbb{F}_4$, group-derived operations, small lattices, the
+rings $\mathbb{Z}/n$ and random tables, on up to six elements. Every model the verifier finds joins this corpus. A
+theory's corpus consequences are the laws true in every corpus structure that satisfies it, and the surrogate counts
+the corpus-emergent laws. Corpus consequences over-approximate the true ones, so every claim is verified.
 
-\section{Method}
+\paragraph{Search.} Each searcher runs MAP-Elites over theories of 2--6 laws. Cells are indexed by the number of
+laws, dualities and bridges, a model-count bucket and the order of the shortest emergent law. Mutations replace, add
+or remove a law, cross two elites, or, in the \emph{prior} arm, close a theory under a duality. Filters reject
+theories with no corpus model in which both operations are distinct and essentially binary, and theories in which one
+operation is a term in the other.
 
-\subsection{Surrogate}
-For every law and base structure we record whether the law holds (a bit matrix, 2$\times$111\,MB, built
-in 155\,s on 11 cores). The base structures include all pairs of operations on 2 elements, affine
-operations over $\mathbb{Z}/n$ and $\mathbb{F}_4$, group-derived operations on the Klein group, $S_3$ and
-$\mathbb{Z}/6$, the lattices $M_3$, $N_5$, $2^2$, rings $\mathbb{Z}/n$, and random tables. The corpus
-grows during the search: every model and countermodel the verifier finds is added and shared by all
-processes. A theory's \emph{corpus consequences} are the laws true in every corpus structure satisfying
-it; the surrogate score counts corpus-emergent laws, weighted by order. Corpus consequences
-over-approximate true consequences, so every surrogate claim must be verified.
+\paragraph{Verification.} Every theory that wins or improves a cell enters a priority queue, deduplicated up to the
+dualities, and verifier processes take it through three stages. Stage~a counts small models and searches for
+countermodels, to the independence of each law and to the emergent claims, up to six elements. Stage~b runs
+E~\cite{eprover2019} with a bounded budget and Z3~\cite{z3} on what E leaves. Stage~c, for the claims still open,
+runs E for longer, Mace4~\cite{mace4} up to ten elements and Z3 for longer. Later verifiers add Vampire's finite model
+builder~\cite{vampire} and linear models over finite rings. Each claim ends proved, refuted, or open with its budget
+stated. Screens added during the project give a theory score~0 if it is a disguise: \emph{split} (E derives
+every law from consequences in one operation each), a one-operation variety with its \emph{division} written as
+$\cop$, or $\cop$ a term in $\op$ with a square as a \emph{parameter}.
 
-\subsection{Search}
-Each search process runs MAP-Elites over theories of 2--6 laws. Cells are indexed by number of laws,
-number of dualities, number of bridges, a model-count bucket and the order of the shortest emergent law.
-Mutations replace, add or remove a law, cross two elites, or (in the \emph{prior} arm) close a theory
-under a duality. Two filters reject degenerate cases: theories with no corpus model in which both
-operations are distinct and essentially binary, and theories that make one operation a term in the other
-(definitional extensions are not fusions).
+\paragraph{Refutation without a finite model.} When E saturates, independent code checks that the saturated
+equations orient into size-decreasing rules whose critical pairs and axioms are all joinable. The rules then form a
+convergent system whose term algebra is a model of the axioms~\cite{birkhoff1935,knuthbendix1970}, and if the two
+sides of the goal have different normal forms, the goal fails there. This is the construction
+of~\cite{janota2026}, implemented independently.
 
-\subsection{Streaming verification}
-Every theory that wins or improves a cell is pushed to a priority queue, deduplicated up to the three
-dualities, if its calibrated priority could reach the current top~20. Verifier processes take theories
-in three stages.
-\begin{enumerate}
-\item[a.] Model census (non-isomorphic non-degenerate models, up to 8 per size on 2--4 elements, one on
-  5); independence of each law (countermodel up to size~6, else a bounded proof of redundancy); for the
-  shortest corpus-emergent laws, a countermodel search up to size~6. Finite models are found by grounding
-  the axioms over the domain and solving with Z3.
-\item[b.] E~\cite{eprover2019} with a budget of 20{,}000 processed clauses. If E saturates without a
-  proof the claim is false, and the saturation is checked independently (below); otherwise Z3~\cite{z3}
-  attempts a proof with a fixed resource limit.
-\item[c.] Only for claims still open: E with $2\cdot 10^6$ processed clauses, Mace4~\cite{mace4} from the
-  smallest size stage~a could not finish up to 10 elements, a long Z3 run. Each claim ends as proved,
-  refuted, or open with its budget stated.
-\end{enumerate}
-A supervisor moves processes between search and verification by the number of competitive queued
-theories. Z3 and E budgets are counted in resource units and processed clauses; E's CPU limit and Mace4's
-time limit are the only budgets that depend on machine speed.
+\paragraph{Score.} Each verified emergent law adds its difficulty (the logarithm of the prover's effort, later of E's
+proof length) divided by one plus its order, and a model-count factor and a redundancy penalty follow. The
+\emph{fusion} arms count only off-diagonal gain: a law counts only if no single axiom implies it, even together with
+all the diagonal laws the theory implies (those with at most one variable on each side).
 
-\subsection{Refutation without a finite countermodel}
-When E saturates, we do not take its word. From E's saturated clause set we check in a few hundred
-lines of independent code that (i) every equation orients as a size-decreasing rule satisfying the
-variable condition, (ii) every critical pair is joinable, (iii) every axiom is joinable. Then the rules
-form a convergent system whose term algebra, with fresh constants, is a model of the axioms
-(Birkhoff~\cite{birkhoff1935}, Knuth--Bendix~\cite{knuthbendix1970}). If the two sides of the goal reach
-different normal forms, the goal fails in that model. This is the construction of~\cite{janota2026}; their
-certificates can additionally be checked by certified confluence and termination tools, which we have not
-done yet.
+\section{Results}
 
-\subsection{Score}
-For each verified emergent law $e$, let its difficulty be $d_e = \log_{10}(\text{effort}_e/\text{effort}_0)$. The
-gain is $\sum_e \max(d_e, 0.1)/(1+\mathrm{order}(e))$, multiplied by a log factor in the number of small models and
-halved if a law of the theory is redundant.
+\subsection{The funnel}
+Table~\ref{tab:funnel} follows every theory the search has looked at, over all runs up to 25 November 2026. Each
+level keeps what survives a stricter test.
 
-\section{Results so far}
+\begin{table}[h]\centering\small
+\begin{tabular}{rrl}\toprule
+level & theories & what survives \\\midrule
+0 & 115{,}133{,}315 & cheap evaluations on the corpus (repeats counted again) \\
+1 & 9{,}240 & verified by provers and finite-model search \\
+2 & 6{,}872 & with a proved emergent law \\
+3 & 5{,}589 & not a fragment of one of ten named theories \\
+4 & 238 & candidates: the top 20 non-fragments of each run \\
+5 & 200 & distinct varieties (equivalence by E, both ways) \\
+6 & 127 & identified by no check (split, definition, relabelling, catalogue) \\
+7 & 54 & every automatic mark: off-diagonal synergy, no classical model, nothing related \\
+8 & 9 & studied closely by hand, still unidentified \\\bottomrule
+\end{tabular}
+\caption{The funnel (\texttt{soup.funnel}). Level~0 is $6.3\times10^{-19}$ of the $1.8\times10^{26}$ sets of up to
+six laws.}\label{tab:funnel}
+\end{table}
 
 \subsection{Calibration}
-On Z3 5.4.1 the absorption pair implies $x\op x=x$ with effort 494, reproduced on two machines. The
-census gives 1, 1, 2 lattices on 2, 3, 4 elements, and the absorption-pair result is a special case of the
-classification of order-2 absorption pairs attributed to Laslo and Cozac in~\cite{leech2020}.
+On Z3 5.4.1 the absorption pair implies $x\op x=x$ with effort 494, and the model census gives 1, 1, 2 lattices on
+2, 3, 4 elements. A preregistered comparison of 10 named theories of order at most~4 (lattices, skew lattices,
+bisemilattices, dimonoids, absorption pairs, one-sided quasigroups and idempotent variants) with 120 random theories
+of the same sizes found a duality in 8 of the named theories and in none of the random ones (one-sided Fisher
+$p=2.8\times10^{-11}$). On gain, difficulty and score every named theory lies at or below the random median: symmetry
+separates named from random theories, and synergy as scored does not. Of four features that algebraists use (a
+Mal'cev-type term, a finite free algebra, a convergent presentation, models on three sizes), only a convergent
+presentation separates them (6 of 10 against 13 of 120, Holm-corrected $p=0.002$).
 
-The preregistered calibration compares 10 named theories of order at most~4 (lattice, skew lattice,
-bisemilattice, dimonoid, absorption pair and its right-hand variant, left and right quasigroups, and their
-idempotent versions) with 30 random theories at each size present among them ($k=2,3,5,6$; at $k=6$ drawn
-from the laws of a random structure, since uniform sampling accepts none). Eight of the ten named theories
-have a duality, against 0 of 120 random theories (one-sided Fisher exact test $p=2.8\cdot10^{-11}$;
-$p=2.4\cdot10^{-10}$ on the 90 uniformly sampled ones). The two exceptions are the idempotent one-sided
-quasigroups, where $x\op x=x$ without $x\cop x=x$ breaks the swap symmetry. On gain, difficulty, model counts
-and score every named theory lies between the 10th and 82nd percentile of the random theories of its size,
-and on gain, difficulty and score all ten lie at or below the median. Symmetry separates named from random
-theories; synergy, as scored here, does not, and if anything ranks the named theories low. Two random
-theories reached the one-hour limit and are reported as crashed.
+\subsection{Claims that finite search cannot refute}
+The first runs left four implications with goal $x\op x=x$ unproved and without countermodels in searches up to seven
+or eight elements, for instance $\{x\op(x\cop x)=x,\ x\cop(x\cop y)=y,\ ((x\cop y)\cop x)\op y=x\}$. E saturates each
+within ten processed clauses, and the independent check certifies convergent systems of 3 to 5 rules in which
+$x\op x$ and $x$ have different normal forms: every countermodel is infinite.
 
-\subsection{Pilot search}
-A first batch-mode search with the duality prior (9 rounds, 2 cores) verified 99 theories. Of the 97 with
-a proved emergent law, 64 are fragments of lattice theory and 8 of skew-lattice theory; an earlier run
-without the prior found 6 lattice fragments among 59. The search rediscovered two laws of McKenzie's
-four-law lattice basis~\cite{mckenzie1970}, $x\op(y\cop(x\cop z))=x$ and $x\cop(y\op(x\op z))=x$. E
-proves commutativity from McKenzie's basis in 21 inference steps; Z3 needs $8.5\cdot 10^6$ resource
-units (328\,s).
+Later, 32 emergent claims in 12 theories survived the verifier. We gave them to a language model outside the pipeline
+and checked what came back with our own code: 16 fail in finite models of 5, 7 or 13 elements, 9 in models on
+$\mathbb{Z}$ that Z3 verifies, and 1 in a term model whose proof was read but not certified. Our own stage~c, once a
+gap in it was fixed, finds 10 of the 16 finite refutations with no outside help. Vampire's finite model builder then
+found a 10-element model of one of the two remaining theories, where Mace4 had not finished size~7 in two hours, and
+it refutes five of the last six claims. One is open: whether the four laws
+\[ x\op(y\cop(y\cop(x\cop y)))=x,\ \ x\cop(y\op(y\op(x\op y)))=x,\ \ (((x\cop y)\cop x)\cop x)\op y=y,\ \
+(((x\op y)\op x)\op x)\cop y=y \]
+imply $x\op x=x\cop x$. With the two operations equal they become ETP Equations 437 and 3115, and they have no model
+with $x\op x\ne x$ on fewer than 7 elements. Linear models over finite rings are now the cheapest refuter: in run X9
+they refuted 60 of the 354 claims they were tried on (16.9\%), in about a second each. The lesson for the pipeline:
+surviving a countermodel search to size~8 is no evidence of truth.
 
-Among the top non-fragment theories of the pilot, $\text{T2}=\{x\cop(y\op(y\cop x))=x,\ x\op((x\cop x)\op y)=x\}$
-forces $x\op x=x$. Identifying the two operations maps T2 onto Equations 55, $x=x\diamond(y\diamond(y\diamond x))$,
-and 100, $x=x\diamond((x\diamond x)\diamond y)$, of~\cite{etp}. By the ETP data neither implies
-$x=x\diamond x$; since every magma satisfying both is a model of T2 with equal operations, together they do
-(E finds a 10-step proof, Twee a 3-step one). The ETP settled implications between single laws only. Conjunctions
-were discussed on the project's forum, where all conjunctions of the laws of order at most~2 were classified (59
-classes)~\cite{zulipconj}. Equations 55 and 100 have order~3, so this pair lies outside both, and we found no
-source for it.
+\subsection{Rediscovery, and the disguises it exposed}
+The search's first find was two laws of McKenzie's 1970 lattice basis~\cite{mckenzie1970}, $x\op(y\cop(x\cop z))=x$
+and $x\cop(y\op(x\op z))=x$. In the preregistered comparison T4, the duality prior raised the share of scored theories
+that are fragments of a named theory from 31 of 393 to 330 of 998 (one-sided Fisher $p=2\times10^{-25}$), almost all
+of them lattice fragments. The prior arm verified 2.4 times as many theories, and longer ones, but the difference
+holds at each number of laws. Against a catalogue of 13 known structures fixed in advance (R1), the search
+rediscovered 7 as fragments or exact equivalents, among them 12 different bases for lattices and three of Fried and
+Gr\"atzer's weakly associative lattices, which were not on our named list.
 
-\subsection{Four open implications are false}
-The pilot left four implications with goal $x\op x=x$ unproved by Z3 and without countermodels up to
-size~8 (for A) or~7 (for C):
-\begin{align*}
-\text{A}&: x\op(x\cop x)=x,\ x\cop(x\cop y)=y,\ ((x\cop y)\cop x)\op y=x\\
-\text{B}&: (x\op y)\op y=x,\ (x\op x)\cop x=x,\ x\cop(y\op(x\op y))=y\\
-\text{C}&: x\op(x\op x)=x,\ (x\op y)\op y=x,\ (x\cop y)\op(y\cop x)=y\\
-\text{D}&: x\op(x\cop x)=x,\ (x\cop y)\op x=y,\ x\op((y\cop y)\cop x)=x
-\end{align*}
-E saturates each of them after at most 10 processed clauses, under three term orderings; Vampire 5.1.0
-reports the same under two saturation algorithms. The independent
-check certifies convergent systems of 5, 5, 5 and 3 rules (10, 10, 11 and 5 critical pairs, all
-joinable) in which $x\op x$ and $x$ have different normal forms. So none of A--D implies $x\op x=x$.
-Every countermodel is infinite, which explains the failure of finite-model search. The general lesson
-for the pipeline: an emergent claim that survives countermodel search to size 8 is not evidence of
-truth.
+Among the non-fragments, the best-ranked candidates were at first not fusions at all. Of 81 candidates, 13 are split,
+the top-ranked one among them, and another is an idempotent left quasigroup with its division written as $\cop$. The
+core of a third, $(x\op y)\cop(y\op x)=x$ and $(x\cop y)\op(y\cop x)=x$, says that $(x,y)\mapsto(x\op y,y\op x)$ is a
+bijection whose inverse is given by $\cop$. These are the $\Delta$-bijective algebras of the Yang--Baxter
+literature~\cite{rump2005,bonatto2021}, which we found only after searching the Latin-square literature in vain. A
+later arm found Steiner loops whose $\cop$ is the same loop translated by a constant, $x\cop y=(x\op y)\op(z\cop z)$.
+Each disguise became a screen in the verifier. A ledger of every identification, with its route and the time it
+took, is kept in the repository (\texttt{notes/rediscovery.md}).
 
-\subsection{Survivor claims}
-After the streaming runs, 59 emergent claims were neither proved nor refuted. A sweep with E ($2\cdot10^6$
-processed clauses) and Vampire proved 25 and refuted 2 by certified saturation, leaving 32 claims in 12
-theories. Every one of them is a small law such as $x\op x=x$, $x\cop x=x$ or $x\op x=x\cop x$. They come
-from three short test runs (about 25 minutes of streaming, 354 verified theories), and only from theories the
-queue ranked highest, so they are a small, selected sample: the proportions below describe these claims, not
-the search in general. We gave these
-32 claims, as a self-contained prompt, to a language model outside the pipeline, and checked what came back
-with our own code. Axioms and claims were taken from our records; only the proposed models and lemmas came
-from the model's output, and none of it entered the search, the corpus or the scores.
+\subsection{Attractors, and arms that leave the known corner}
+In the runs up to X3, 97\% of the theories with a positive score (3{,}478 of 3{,}596) owed their synergy to a
+one-variable law such as $x\op x=x$ or $x\op x=x\cop x$, and none proved emergent associativity. The score rewarded
+what a fusion forces on the diagonal. The fusion arm (X4) counts only off-diagonal gain, skips theories that hold in
+the 2-element lattice, and draws a quarter of its proposals as one law in each operation plus a bridge. None of its
+565 scored theories is a fragment of a named theory, against 31.6\% in X3, and finite models refute 21\% of its claims
+against 3\%: the corpus knows that region less well. The attractor moved to laws like $x\op(x\op y)=x\op x$, in which
+a derived operation ignores an argument. Skipping those (X5) led to the Steiner-loop disguise above, and screening it
+(X6) moved the top candidates off classical ground: 11 of X6's top 20 have no classical model, against none in X5. X7
+also skips every theory that the corpus relates to a known structure or to an earlier candidate, and 12 of its top 20
+carry every automatic mark. X8 then kept eight searchers of that arm running for about nine hours, in two parts
+(51.5 million evaluations), and X9 verified the 1{,}256 theories X8 had left in its queue with a faster verifier
+(88.8 theories per verifier-hour against 16.9, on leftovers, so not a randomized comparison). Every run from X4 on was
+preregistered, with its deviations recorded; four of them (X6--X9) were stopped early by their memory rule.
+
+\subsection{Families}
+A preregistered post hoc statistic, F1, puts each verified theory in one family, by the first rule that matches: a
+disguise, known (a proved relation to a catalogue entry or to the ledger), no proved synergy, diagonal,
+argument-ignoring, or \emph{structured}. A structured theory is labelled by which of eleven one-operation properties
+each operation has (commutative, associative, idempotent, constant squares, and so on), up to the eight relabellings.
+A property counts when it holds in every corpus model, and E confirms 96.9\% of the 12{,}627 cases. Structured
+theories are 0--0.5\% of the early runs and 44--69\% of X5--X7. There are 151 structured families, and the count
+still rises: X9 added 18, all small. Chao1 gives 167, but the search skips what it has seen, so the sample is biased
+and the number is a descriptive index, the problem STADS~\cite{stads2018} raises for fuzzers. Direction mattered more
+than volume: the prior-arm runs made 51 of the first 63.7 million cheap evaluations and found 6 families, the fusion
+arms X4--X7 made 12.5 million and found 118, and X8 added 51.5 million and 11 families. Among proved emergent laws,
+the ones on the rise are $x\op(y\op x)=y$, $x\op(x\op x)=y\op(x\op y)$ and commutativity.
+
+\subsection{Candidates}
+A second ranking, N1 (preregistered post hoc), admits a candidate if it works (a proved emergent law, non-degenerate
+models on two or more sizes) and no check identifies it, keeps one per variety, and orders by an off-diagonal emergent
+law, then no classical model, no partial identification, model sizes, axiom size and score. Lean~4 certificates (by
+\texttt{decide}, with an axiom audit) check the smallest model of each top candidate; they show consistency and
+non-degeneracy, not novelty. Ten candidates were studied closely, with E for structure, models from known
+constructions and targeted literature searches. One is known: $\{x\op(x\cop x)=x,\ (x\cop y)\op y=y,\
+x\op y=x\cop(y\op x)\}$ is equivalent to a commutative idempotent $\op$ with $x\cop(x\op y)=x\op y$ and
+$(x\cop y)\op y=y$, and with $\op=\wedge$ and $x\cop y=(y\to x)\to y$ every Heyting algebra is a model (Lean). On
+chains this $\cop$ is the strict-order connective of G\"odel logic~\cite{bcz2000}. Nine are not identified, for
+example:
 \begin{itemize}
-\item 16 claims fail in finite models of 5, 7 or 13 elements; the 13-element model is translation-invariant
-  on $\mathbb{Z}/13$ with both operations commutative. Each table was checked against all axioms and claims.
-\item 9 claims fail in models on $\mathbb{Z}$, e.g.\ $x\op y=\max(x,y)$, $x\cop y=\min(x,y)$ off the diagonal
-  with $x\op x=x+1$, $x\cop x=x-1$. Z3 proves every axiom for all integers (linear integer arithmetic).
-\item 1 claim fails in an infinite term model; the proof was read and the model sampled, not certified.
+\item $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$, equivalent to $x\op(y\op z)=x\op y$, $x\op(x\cop y)=x$ and
+  $x\op y=(y\op x)\cop x$. Its $\op$-parts are characterized (Lean), and $\cop$ is forced to swap $y\op x\mapsto
+  x\op y$ and is free elsewhere. With the two operations equal it has only one-element models.
+\item $\{x\op(x\cop y)=y\cop x,\ (x\cop(y\op z))\cop z=z\}$, which splits Stein's first law $x(xy)=yx$ (ETP 335)
+  across the two operations. With the operations equal, again only one-element models are left.
+\item Two candidates from different runs: a totally symmetric quasigroup $\op$, that is a triple system with blocks
+  $\{x,y,x\op y\}$, with an idempotent $\cop$ that depends only on one argument and the block through both, a
+  selector on point--block pairs. The one with a law fewer is nearly free: 65{,}536 models on four elements.
 \end{itemize}
-The language model left six claims open, in two theories:
-\begin{align*}
-\text{S12}&: x\op(y\cop(y\cop(x\cop y)))=x,\quad x\cop(y\op(y\op(x\op y)))=x,\\
-&\phantom{:}\ (((x\cop y)\cop x)\cop x)\op y=y,\quad (((x\op y)\op x)\op x)\cop y=y;\\
-\text{S10}&: \text{S12}\ \text{and}\ x\op x=x\cop x.
-\end{align*}
-With $x\op y=x\cop y$ the axioms of S12 become Equations 437 and 3115 of the Equational Theories
-Project~\cite{etp}; neither implies $x=x\diamond x$ there, but the pair is not covered. The survivors also
-exposed a gap in our pipeline: for 9 of the 12 theories the finite search had run out of budget at size 5 or 6,
-and the claims never reached the stage that searches larger models. With that fixed, our own stage~c, with no
-input from the language model, finds 10 of the 16 finite refutations: models of 5 and 7 elements for four of the
-theories. The other six need 13 elements, beyond its Mace4 bound of~10. In a second round on S10 and S12, Twee
-\cite{twee}, E's auto-schedule, Vampire's portfolios~\cite{vampire} and Prover9 found nothing on S12 in 30--60
-minutes each. Mace4 completed size~6 without a countermodel, and translation-invariant models on
-$\mathbb{Z}/n$ were excluded for $n\le 8$. Vampire's satisfiability schedule then found a model of S10 on 10
-elements by finite model building. Both of our evaluators confirm all axioms of S10 in it, and in it $x\op x=x$,
-$x\cop x=x$ and $x\op(x\op x)=x$ fail, at a single element $a$ with $a\op a=a\cop a\neq a$. Every model of S10 is a
-model of S12, so five of the six open claims are refuted, by our own tools alone. Mace4 had not finished
-size~7 in two hours. One claim is left: does S12 imply $x\op x=x\cop x$? No model of S12 with $x\op x\neq x$ has
-fewer than 7 elements. \pending{the smallest such model.}
-
-\subsection{Streaming system}
-In a 10-minute test (3 search and 8 verifier processes) the system verified 231 theories and added 1{,}897
-structures to the corpus. The surrogate proposes theories about 30 times faster than they can be
-verified. The highest-scoring theories so far all have the same three emergent laws, $x\op x=x$,
-$x\cop x=x$ and $x\op x=x\cop x$; the score saturates on idempotence. The two highest scores were
-artifacts: their claims were proved by E but not by Z3, and the difficulty was then read off Z3's budget
-cap. For T4 the difficulty is E's proof length instead (preregistered). \pending{T5: which of the top
-theories are equivalent to a known variety.}
-
-\subsection{The duality prior steers the search toward named structure}
-T4 was preregistered. Two arms ran for four hours each, with five processes per arm and their own data
-directories. One arm searched with the duality prior and the other without it, with the same filters and the
-same cap of six laws. Among verified theories with a positive score, 330 of 998 in the prior arm are fragments of
-one of the ten named theories, against 31 of 393 in the control (33\% against 8\%; one-sided Fisher
-$p=2\times10^{-25}$). No theory was left undecided. Almost all of these are lattice fragments: 295 of the 330 are
-fragments of lattices only. Two caveats apply. First, the prior arm verified 2.4 times as many theories in the
-same time. Second, its theories are longer, because the duality closure adds the dual laws: 399 of its theories
-have five or six laws, against one in the control. In a post-hoc check the difference holds within each number of
-laws: at two laws the shares are 30/121 against 4/111, at three 77/250 against 12/194, and at four 59/228 against
-14/87. The prior pulls the search toward self-dual, lattice-like theories, that is, toward structure that has
-already been named. Whether it also finds unnamed structure is a separate question. We take it up with the 668
-non-fragments of the prior arm.
-
-\subsection{Structural features, and what the top candidates turn out to be}
-The synergy score does not prefer named theories, so before ranking candidates we tested four features that
-algebraists use on the T3 calibration set (preregistered as T5a): a Mal'cev-type term proved by E, a finite free
-algebra on two generators, a convergent presentation (an E saturation checked for confluence), and non-degenerate
-models on at least three sizes. Only the convergent presentation separates named from random theories (6 of 10
-against 13 of 120, Holm-corrected $p=0.002$). The named theories that have one are the absorption pairs and the
-one-sided quasigroups. The preregistered ranking of 62 candidates (top non-fragments of both T4 arms and of earlier
-runs) puts first the theories with a convergent presentation.
-
-Post-hoc equivalence checks then show how a theory can be old without being a fragment of a named theory. With
-19 candidates from a shorter exploratory run added, 13 of the 81 are \emph{split}: E derives every law from
-consequences in one operation, so the theory is a $\op$-theory and a $\cop$-theory side by side, and its bridges
-only look like bridges. The 68 others have a finite certificate against this: the $\op$ table of one model and the
-$\cop$ table of another, on at most four elements, together violate a law. Four of the top ten are split, the first
-among them. The second is an idempotent left quasigroup in disguise: E proves it equivalent to $y\cop x=x\backslash y$
-with $x\op(y\op x)=y\op x$ and $(x\op y)\op y=y$. Four more are absorption-type algebras without associativity.
-The tenth is the only one with a two-operation core of its own: E proves it equivalent to
-$(x\op y)\cop(y\op x)=x$ and $(x\cop y)\op(y\cop x)=x$ plus four absorption laws. The first pair says that
-$(x,y)\mapsto(x\op y,y\op x)$ is a bijection of $A^2$ whose inverse is given by $\cop$. So $\op$ is orthogonal to
-its transpose, and $\cop$ decodes it. With $\cop=\op$ this is Schr\"oder's second law. Under the first pair, each
-absorption law is equivalent to a one-operation law, $(x\cop y)\op x=x$ to $x\op(x\op y)=x\op y$ and so on (E, both
-ways), so every translation of either operation is idempotent: the opposite end from a self-orthogonal Latin
-square, where every translation is bijective. The core is prior art, and the search rediscovered it. Its models
-are the \emph{$\Delta$-bijective} algebras, those for which $(x,y)\mapsto(xy,yx)$ is a bijection. The second
-operation is their dual: the inverse of that map is $\Delta$ of another operation. This is stated for arbitrary
-operations by Dehornoy~\cite[\S1]{dehornoy2015} and by Bonatto et al.~\cite[Lemma~2.10]{bonatto2021}, after Rump~\cite{rump2005}.
-That literature works with the right-cyclic law or bijective left translations. No non-degenerate model here is a
-left quasigroup, and none of the 16 on four and five elements is a set-theoretic solution of the Yang--Baxter
-equation through $(x,y)\mapsto(x\op y,y\op x)$. We found no source for the full theory, but several key papers have not yet been
-read. Lean~4 certificates (by \texttt{decide}, with an axiom audit) check the
-smallest non-degenerate model of each of the top ten. They show the theories are consistent and non-degenerate,
-not that they are new. The search's filters are syntactic: they keep out definitional theories, but not split ones
-or one-operation varieties written with a division.
-
-\subsection{Rediscovery as calibration}
-An open-ended search that finds nothing known is suspect, and so is one whose finds are all known. We therefore
-record every case where a find turned out to be known, with the route that identified it and the time it took
-(\texttt{notes/rediscovery.md}). Ten cases so far:
-\begin{itemize}
-\item two laws of McKenzie's lattice basis (identified through the literature);
-\item T4's lattice fragments (automatic);
-\item thirteen split candidates (automatic, once the split check existed);
-\item two idempotent left quasigroups written with their division (automatic, then a prover equivalence);
-\item three absorption-type subvarieties (automatic);
-\item the $\Delta$-bijective core of the tenth candidate, from the Yang--Baxter literature rather than the
-  Latin-square literature where we first looked (prover, then literature);
-\item one variety reached twice from different axioms (two convergent presentations with the same rules, then E
-  both ways);
-\item half of the $\Delta$-bijective core with both operations idempotent, whose finite models are $\Delta$-bijective
-  pairs because an injective self-map of a finite set is bijective (prover, then that argument);
-\item a non-associative relative of the rectangular skew lattices: with associativity added, the theory
-  $\{x\op(x\cop y)=x,\ (x\cop y)\op y=y,\ (x\op x)\op(y\op x)=x,\ (x\op y)\op(x\op x)=x\}$ is exactly a rectangular band
-  with $\cop$ its transpose, which is term-equivalent to Leech's rectangular skew lattices (Leech 2020, Prop.\
-  1.3.14; E both ways). Both associativity laws fail in its 3-element model, and no source was found for the
-  full theory (a web-only literature agent, its key claims rechecked);
-\item the same variety reached three times, from the early runs, X2 and X3 (an automatic check of equivalence up to
-  the 8 relabellings, then E both ways by hand). The previous case is one of the three.
-\end{itemize}
-Six of the ten were identified by pipeline checks, which were written only after the first candidates were in
-hand. The cases found through the literature took between under an hour and several hours, and one of them needed
-a second search in another field.
-A systematic measure against a catalogue of 13 known structures, fixed before the analysis, is preregistered as
-R1. Over 3,381 verified theories, the search rediscovered 7 of the 13 entries as a fragment or an exact
-equivalent (7 of the 12 entries that were not added after the fact). The exact equivalents are 12 different bases
-for lattices, 17 axiomatizations of absorption pairs (26 with the later run X3), and three of Fried and Gr\"atzer's weakly associative
-lattices, a structure that was not on our named list. Dimonoids, doppelsemigroups, the one-sided quasigroups, the
-right absorption pair and the $\Delta$-bijective pair occur only as consequences of found theories. Of the 99 top
-candidates, 44 are identified by an automatic route (split, a division, or a catalogue relation); the cases in the
-ledger needed a prover by hand or the literature. The filters that
-now remove split theories and divisions in disguise during the search came out of this ledger.
-
-\subsection{Filtering the disguises during the search (X3)}
-The exploratory run X3 (preregistered as descriptive) uses verifier V4. That is V3 with two screens in the first
-stage: a split screen (a finite certificate of non-split, else Mace4 on 2--4 elements, else E) and a division screen
-(implication of a one-sided quasigroup pair under the 8 relabellings, E). Either one sets the verified score to 0.
-\begin{itemize}
-\item \textbf{The run.} It verified 970 theories in 9{,}304~s, when its memory rule stopped it at 91\% of the budget
-  (deviation 5). Of these, 83 were screened: 47 split and 36 divisions. Consistently, R1's method finds exactly 36
-  theories of X3 that imply a one-sided quasigroup pair.
-\item \textbf{The screens worked.} The split scan of X3's 570 non-fragments finds none split, against 33 of 654 in
-  the unfiltered run X2.
-\item \textbf{The fragment share did not change:} 31.6\%, against 31.0\% for X2, nearly all of lattices.
-\item \textbf{Fewer of the top candidates are recognised.} Of X3's 19 new candidates, the automatic checks
-  identify 5 (all absorption-type subvarieties), against 9 of 18 for X2 and 11 of 19 for X1.
-\item \textbf{One new top-ranked candidate.} The highest new one is the non-associative relative of the rectangular
-  skew lattices in the ledger above.
-\end{itemize}
-
-\subsection{A diagonal attractor, and a fusion arm (X4)}\label{sec:x4}
-Across T4, X1, X2 and X3, 3{,}478 of the 3{,}596 theories with a positive verified score (97\%) prove an emergent
-law in one variable, such as $x\op x=x$ or $x\op x=x\cop x$, and none proves emergent associativity. The score
-rewarded what a fusion forces on the diagonal, and the reference case, the absorption pair, is itself of that kind.
-
-The exploratory run X4 (preregistered) is a new arm, \emph{fusion}. It counts a law as gained only if no single
-axiom implies it even together with all the \emph{diagonal} laws the theory implies, those whose sides each have at
-most one variable. The arm also skips theories that hold in the 2-element lattice, and draws a quarter of its
-proposals as one law in $\op$ alone, one in $\cop$ alone and a bridge. Its verifier V5 claims only such laws.
-
-A first attempt counted only one-variable laws as diagonal. Within three minutes, 10 of its 18 positive theories
-proved $x\op x=y\op y$: the same attractor in another form. It was stopped, the definition widened, and the run
-restarted (deviation 6).
-
-\begin{itemize}
-\item \textbf{The run.} X4 verified 636 theories in 9{,}000~s; 565 have a positive score. None is a fragment of any
-  of the ten named theories (X3: 31.6\%), and only 3 were screened as split. The split scan of the 565 finds none
-  split (408 with a finite certificate, 157 undecided).
-\item \textbf{Less charted ground.} Finite models refute 21\% of its claims, against 3\% in X3. The cheap
-  implication guesses are much weaker there, and the run added 3{,}844 structures to its corpus.
-\item \textbf{The attractor moved.} The most frequent proved laws are now of the form $x\op(x\op y)=x\op x$ and
-  $x\op(x\op x)=x\op(x\op y)$: a left translation sends a whole family of elements to $x\op x$. They are two-variable
-  laws that still pivot on the square.
-\item \textbf{None of its candidates is recognised.} Of X4's 20 candidates, the automatic checks identify none: no
-  split, no hidden definition, no relation to a named theory, no catalogue relation. Across all 636 theories, R1
-  finds no fragment or equivalent of a catalogue entry, and 8 subvarieties (3 of dimonoids, 5 of doppelsemigroups).
-\item \textbf{More of them are ``disconnected''.} The preregistered marks are: works, unconnected to every check, no
-  classical model. They fit 14 of X4's 20 candidates and 10 of X3's 19. Without selection, 27\% of X3's positive
-  theories already prove an off-diagonal emergent law.
-\end{itemize}
-
-X4's attractor, $x\op(x\op y)=x\op x$ and its kin, says that a derived operation ignores an argument. The
-preregistered run X5 changes one thing: it skips every theory that implies such a law, keeping the \emph{rigid}
-theories, where every derived operation of order at most 2 depends on all its arguments. It verified 292 theories,
-164 with a positive score and none a fragment of a named theory. All 20 of its candidates have affine models over
-$\mathbb{F}_4$. In 19 of them $\op$ is a Steiner loop, and in 16 E proves $x\cop y=(x\op y)\op(z\cop z)$ and its
-converse: $\cop$ is the same loop translated by a constant. That is a one-operation structure with a parameter, a
-disguise our definitional check misses because it allows no constants. A new attractor, $x\op(x\op x)=y\op(x\op y)$,
-ignores a variable that occurs twice.
-
-A definition with a parameter is now searched for directly. Terms in one operation over $x$, $y$ and the squares
-$z\op z$, $z\cop z$ are checked on small models, then proved by E. Post hoc this catches 18 of X5's 20 candidates and
-none of the 138 earlier ones. The preregistered run X6 adds it as a verifier screen and changes nothing else. It ran
-5.8 of its 8 hours before its memory rule stopped it. It verified 1,460 theories, 645 with a positive score and again
-none a fragment of a named theory, and the screen fired on 356. None of its top 20 is a translate disguise. They are
-17 distinct varieties, 11 have no classical model (X5: none), and 7 carry every automatic mark of
-Section~\ref{sec:x4}. The attractor $x\op(x\op x)=y\op(x\op y)$ remains the most frequent proved law, since the arm does
-not filter it.
-
-The preregistered run X7 asks the searcher itself to stay away from what is known. Before scoring, it skips a theory
-if the corpus makes it a fragment or a subvariety of a known structure, meaning the catalogue and the identifications
-in the ledger, under all eight relabellings. It also skips a theory equivalent to an earlier candidate, and one that
-an earlier run already pushed. The supervisor stopped the run by the memory rule after 2.65 of 8 hours. In that time
-it verified 737 theories, 511 with a positive score and none a fragment of a named theory. Parameter disguises fell
-from 24\% to 2\% of verified theories. The top 20 are 19 varieties, none related to a catalogue entry or to an earlier
-candidate, and 12 carry every automatic mark. A one-hash bitmap counts 74\% of its cheap evaluations as distinct law
-sets. Both X6 and X7 ended early on memory. The heartbeats show that the verifiers leak, from about 250\,MB to as much
-as 1.4\,GB each, while the searchers stay flat. The verifiers now restart themselves between tasks above a threshold.
-
-\subsection{Families, and what grows with the search}
-A preregistered post hoc statistic, F1, sorts every verified theory into one family, by the first rule that matches:
-\begin{itemize}
-\item a disguise caught by the verifier's screens;
-\item known: a proved relation to a catalogue entry, or an identification in the ledger;
-\item no proved synergy;
-\item diagonal: a one-variable emergent law;
-\item argument-ignoring;
-\item structured: the rest.
-\end{itemize}
-A structured theory is labelled by which of eleven one-operation properties hold for each operation (commutative,
-associative, idempotent, constant squares, squares as identities, involutive, flexible, and two absorbing shapes). The
-label is read up to the eight relabellings. A property counts when it holds in every corpus model, and E confirms
-96.9\% of the 12{,}627 cases.
-\begin{itemize}
-\item \textbf{Shares.} Structured theories are 0--0.5\% of the early runs and 44--69\% of X5--X7.
-\item \textbf{Count.} There are 151 structured families; X7 alone added 26, X8 11, and X9, which verified X8's queue, 18. Chao1 gives 167, but it assumes
-  unbiased sampling, and the search deliberately skips what it has seen. So the number is a descriptive index, not an
-  estimate of the total, the same problem STADS~\cite{stads2018} raises for fuzzers.
-\item \textbf{Direction against volume.} The prior-arm runs made 51 million of the 63.7 million cheap evaluations and
-  found 6 families. The fusion arms X4--X7 made 12.5 million and found 118. So far the direction of the search mattered
-  more than its volume.
-\item \textbf{Volume in the same direction.} The preregistered run X8 kept 8 searchers of the X7 arm alive for 9 hours.
-  It made 51.5 million evaluations, taking level~0 to 115 million, and found 11 new families, the largest holding
-  0.9\% of its 444 verified theories (the preregistered threshold was 2\%).
-\item \textbf{Verification.} The preregistered run X9 verified the 1{,}256 theories X8 had left in its queue, with a
-  verifier V7 that skips z3 once E has proved a claim and tries linear models over finite rings first. It ran at 88.8
-  theories per verifier-hour, against 16.9 in X8, on X8's leftovers, so not a randomized comparison. It added 18
-  families, the largest holding 0.7\% of the run.
-\item \textbf{Emerging laws.} Among the proved emergent laws, the emerging ones are $x\op(y\op x)=y$,
-  $x\op(x\op x)=y\op(x\op y)$ and commutativity.
-\end{itemize}
-Two candidates studied closely, 3818b88f and X7's de0c0cf3, form one family. Each is a totally symmetric
-quasigroup with an idempotent $\cop$ that is constant on the pairs $\{x, x\op y\}$. The X7 candidate is the larger variety by
-one law, and its $\cop$ is nearly free: 65{,}536 models on four elements.
-
-\subsection{A novelty ranking (N1)}
-The preregistered T5a ranking puts X4's candidates between rank 34 and rank 136 of 138. It sorts by a convergent
-presentation and a duality, the features that separate named theories from random ones, so it rewards resemblance
-to the known. N1, preregistered post hoc, is a second ranking used alongside it.
-\begin{itemize}
-\item \textbf{Gate.} A candidate enters if it works (a proved emergent law, non-degenerate models on two or more
-  sizes) and no check identifies it.
-\item \textbf{One per variety.} An equivalence check up to the 8 relabellings first merges the 138 candidates into
-  120 varieties. One variety had been reached three times, by the early runs, X2 and X3.
-\item \textbf{Order.} An off-diagonal proved emergent law, then no classical model, then no partial identification,
-  then more sizes with models, smaller axioms and score.
-\end{itemize}
-Of the 138 candidates, 56 are identified, 3 fail ``works'', 2 have no verification record, and 77 enter N1. N1's top
-10 shares no member with T5a's: seven come from X4, and the first three from earlier runs that did not select for
-off-diagonal laws. Lean certificates check the smallest model of each. A live version of the ranking is kept in the
-repository's README. Web searches, run by two web-only agents with their key claims rechecked by machine, found no
-source for any of N1's top ten. Two are related only: one contains a law of McKenzie's lattice basis, and one shares
-absorption identities with Leech's skew lattices without being associative. Three collapse to known one-operation
-laws when the two operations are set equal. One, N1's third, with laws $x\op(x\cop x)=x$, $(x\cop y)\op y=y$ and
-$x\op y=x\cop(y\op x)$, looked like a lead and turned out to be a relative of known structure:
-\begin{itemize}
-\item \textbf{The theory itself.} It is equivalent to a commutative idempotent $\op$ (not necessarily associative)
-  with $x\cop(x\op y)=x\op y$ and $(x\cop y)\op y=y$ (E both ways; Lean).
-\item \textbf{Heyting algebras.} With $\op=\wedge$ and $x\cop y=(y\to x)\to y$, every Heyting algebra is a model
-  (Lean). On chains this $\cop$ is the strict-order connective of Gödel logic~\cite{bcz2000}.
-\end{itemize}
-So it is a fragment of Heyting-algebra theory under a term interpretation, without associativity. The search reached
-it with no knowledge of logic.
-
-Before X6, N1's first entry was $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$, also has a plain reading. It is equivalent to
-$x\op(y\op z)=x\op y$, $x\op(x\cop y)=x$ and $x\op y=(y\op x)\cop x$ (E both ways). The groupoids that occur as its
-$\op$-part are characterized exactly (Lean). On pairs $(y\op x,x)$ the operation $\cop$ is forced to be the swap
-$y\op x\mapsto x\op y$; elsewhere it is free. With the two operations set equal, the theory has only one-element
-models, so its second operation is essential. Its $\op$-laws are named one-operation laws (ETP 327 and 378), but we
-found no source for the theory.
-
-The second, $\{x\op(x\cop y)=y\cop x,\ (x\cop(y\op z))\cop z=z\}$, splits Stein's first law $x(xy)=yx$ (ETP 335)
-across the two operations. Its second law alone gives $(x\op y)\cop y=y$, and the emergent $x\op(x\cop(y\op x))=x$
-then takes two rewriting steps. With the operations set equal, it too has only one-element models. We found no source
-for the theory.
-
-X6's candidates now hold N1's first four places. One of them is equivalent (E both ways) to a totally symmetric
-quasigroup $\op$ ($x\op y=y\op x$, $x\op(x\op y)=y$) with an idempotent $\cop$ such that $x\cop(x\op y)=x\cop y$ and
-$(x\op x)\cop x=x$. A totally symmetric quasigroup is a triple system, with blocks $\{x,y,x\op y\}$. So $x\cop y$
-depends only on $x$ and the block through $x$ and $y$: $\cop$ is a selector on point--block pairs. The other three
-strengthen one core in different ways: every square is a right identity for $\op$, and $x\op(y\op z)=x\op(z\cop y)$.
-None of the four is identified (\texttt{notes/x6\_top4.md}).
-
-\section{Planned experiments}
-\pending{T6: the last open claim, S12 $\Rightarrow x\op x=x\cop x$.} \pending{T7: Lean~4 certificates for the
-other finite countermodels, the models on $\mathbb{Z}$, the term model, and the main implications (the S10 model and
-the candidate models are done).} \pending{A search that steers away from the new attractor, where a translation
-collapses a family onto $x\op x$.}
+Web searches, by us and by web-only agents whose key claims were rechecked by machine, found no source for any of the
+nine. That is weak evidence: recognising candidates takes specialists.
 
 \section{Limitations}
 \begin{itemize}
-\item Z3 effort measures instantiation search, not proof depth: one substitution can cost $10^5$ units.
-  E's proof length correlates with Z3 effort only weakly (Spearman 0.37 over 640 claims both proved).
-\item The queue keeps the theories with the highest surrogate priority; theories the surrogate ranks low
-  are never verified. Any comparison between arms inherits this selection.
-\item Corpus consequences depend on the corpus. Up to T3 all runs share one growing corpus; in T4 each arm
-  grows its own from a common snapshot.
-\item The surrogate implies more than is true, because its 12{,}509 structures have at most 6 elements. Nearby
-  signatures show how large that gap can be. All quasigroups of order at most~6 leave 94 of the 1{,}958 non-implications
-  between classes of Schröder's 990 quasigroup laws (4.8\%) without a witness, and those need quasigroups of order up
-  to~9~\cite{quadratula}. Among the ETP's one-operation laws, at least 411 non-implications that Vampire left open have
-  finite counterexamples on 9 to 32 elements, which Vampire's finite model builder, Mace4 and grounded Z3 all fail to
-  find from 11 elements up~\cite{parsimagma}. This is why every claim gets a countermodel search and a proof before it
-  is scored.
-\item 26 of the survivor refutations were found by a language model outside the pipeline. They are
-  reported only after our own check; one of them (the term model) is not certified.
-\item ``Not named'' needs a literature search and an equivalence check against known varieties; none of
-  the theories found so far has been claimed as new. Our equivalence checks cover ten named theories under all
-  relabellings, hidden definitions, and splits. Our literature checks are web searches, not a survey. They missed
-  the Yang--Baxter source of one core on the first pass, because we looked only in the Latin-square literature.
-\item Candidates are deduplicated up to the three dualities, not up to logical equivalence: one variety reached the
-  top ten twice, with different axioms.
-\item The rediscovery catalogue was written by us after seeing results. It covers only structures with axioms of
-  order at most~4.
-\item The searches touched a tiny part of the space. All runs together verified 7{,}920 theories and scored about
-  $1.15\times10^{8}$ cheaply (repeats counted again; \texttt{soup.funnel}, 24~Nov), against $2.5\times10^{9}$ pairs
-  of laws and $1.8\times10^{26}$ law sets of up to six laws (law sets overcount varieties; the number of varieties is
-  not known). The explored part is also not a random sample: the duality prior steers toward symmetric, lattice-like
-  theories, the region of two-operation algebra that humans have studied most, and the later fusion arms start from
-  that region and skip what they recognise. Rediscovery there is expected. It does not tell how often the search would find
-  something new elsewhere, and finding nothing new there is not evidence that nothing new exists.
+\item The surrogate implies more than is true, because its structures have at most six elements. Nearby signatures
+  show the size of the gap: 4.8\% of the non-implications between Schr\"oder's quasigroup laws have no witness among
+  quasigroups of order at most~6 and need order up to~9~\cite{quadratula}, and at least 411 ETP non-implications that
+  Vampire left open have counterexamples only on 9 to 32 elements~\cite{parsimagma}. Hence the countermodel search and
+  the proof before any claim is scored.
+\item The queue verifies only what the surrogate ranks high, and every comparison between arms inherits that
+  selection.
+\item Prover effort is a weak measure of difficulty: Z3's effort counts instantiation search, and E's proof length
+  correlates with it only weakly (Spearman 0.37 over 640 claims).
+\item 26 survivor refutations came from a language model outside the pipeline. They count only after our own check,
+  and one of them is not certified.
+\item ``Not named'' rests on equivalence checks against ten named theories and a catalogue of 13, and on web searches,
+  not a survey. They missed the Yang--Baxter source on the first pass.
+\item The explored share is tiny: $1.15\times10^{8}$ cheap evaluations and 9{,}240 verified theories, against
+  $2.5\times10^{9}$ pairs of laws and $1.8\times10^{26}$ law sets. It is not a random sample either: the search
+  started in the most-studied corner of two-operation algebra, so rediscovery there is expected, and finding nothing
+  new would not show that nothing new exists.
 \end{itemize}
 
-\section*{Reproducibility}
-All runs use a container (Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1; E 3.2.5, Vampire 5.1.0,
-Prover9/Mace4 LADR-2026-8A and Twee 2.7.1 built from pinned sources). The matrix rebuild is byte-identical
-across runs (SHA-256 checked). Code, data and records are at \url{https://github.com/carlok/duet}. Every number above is in \texttt{REPORT.md}
-there, with the command that produced it. An introduction for readers without a background in algebra is in
-\texttt{intro/}.
+\section*{Status and reproducibility}
+A run that works through the stage-c backlog beside the search (X10) is under way. The open claim above and a
+specialist's look at the nine unidentified candidates come next. All runs use a container with pinned versions
+(Python 3.13.18, NumPy 2.5.3, Numba 0.68.1, Z3 5.4.1; E 3.2.5, Vampire 5.1.0, Prover9/Mace4 LADR-2026-8A and Twee
+2.7.1, built from source). Code, data, the preregistrations and every number with the command behind it are at
+\url{https://github.com/carlok/duet} (\texttt{REPORT.md}, \texttt{PREREGISTRATION.md}), and \texttt{intro/}
+introduces the subject from scratch.
 
 \section*{How this work was made}
 An AI coding assistant (Claude Code, by Anthropic) designed, coded, ran and wrote most of this project, directed and
-reviewed by the author. The repository's commits carry \texttt{Co-Authored-By} trailers, and its \texttt{CLAUDE.md} is
-the assistant's working memory. No language model takes part in the search or its scoring. Language models were used
-outside it in two ways:
-\begin{itemize}
-\item an external model worked offline on 32 survivor claims, as described above;
-\item web-only AI agents did literature lookups.
-\end{itemize}
-Neither counts on its own. Every refutation from the offline work was checked by our own code, and every key
-literature claim was rechecked by machine: prover proofs, finite models or Lean. The claims in this paper rest on
-those checks, not on any model's word.
+reviewed by the author; the commits carry \texttt{Co-Authored-By} trailers. No language model takes part in the search
+or its scoring. Outside it, an external model worked offline on the 32 survivor claims, and web-only agents did
+literature lookups. Neither counts on its own: every refutation was checked by our own code, and every key literature
+claim by prover proofs, finite models or Lean.
 
-\bibliographystyle{plain}
-\bibliography{refs}
+{\small\bibliographystyle{abbrv}\bibliography{refs}}
 \end{document}
