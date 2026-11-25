@@ -64,9 +64,25 @@ The user chose an 8-hour night run with the search beside stage c over a full dr
 - **U3, stage-c yield:** stage c settles at least 5% of the claims it runs on, and proves at most one. Since T4 it has
   settled 7.3% and proved none.
 - **U4, the search:** level 0 rises by at least 10M, to at least 125.1M. The smoke rate gives about 13M for 48
-  searcher-hours.
+  searcher-hours. Restated in the amendment below.
 - **U5, verification beside stage c:** at least 400 new theories get through stages a and b (the smoke rate gives about
   700).
+
+**Amendment (written 25 Nov 2026, 08:02 UTC, before X10 starts).**
+- **Code since this entry:** the column cache in `Corpus.has` (`74a07ff`; REPORT, "Why the searchers slowed down"). It
+  changes the searchers' speed only: on 3,000 replayed proposals their outputs are byte-identical. X10 runs with it.
+- **A second smoke run** with X10's exact command, 900 s on a fresh copy of the fork, deleted afterwards
+  (`notes/smoke_rate.py` and `notes/capsmoke.py`, output `notes/x10smoke_cache.out`):
+  - 0.60M evaluations per searcher-hour, against 0.28M in the cap-2 smoke, measured the same way (from the first tick
+    with evaluations to the last live tick);
+  - stage c peaked at 2 tasks, and MemAvailable fell to 2,133 MB at 333 s (the cap-2 smoke: 2,516 MB);
+  - only 7 theories got through stages a and b (the cap-2 smoke: 22). One of the two stage-a/b verifiers spent 850 s on
+    one theory in stage b, and two parameter screens took about 170 s each with E unknown.
+- **U4, restated:** level 0 rises by at least 22M, to at least 137.1M. The new rate gives about 29M for 48
+  searcher-hours, and the threshold keeps the old margin (10M of 13M). The rate will fall as the corpus grows.
+- **U5 is kept at 400.** The two smokes give 14 and 44 theories per stage-a/b verifier-hour, so 220 to 700 over the
+  run: U5 is less likely to hold than when it was written.
+- Nothing else changes.
 
 **After the run:**
 - X9's post-run pipeline with x10 added (`taxonomy.RUNS`, `funnel.DIRS`, `known.RUN_DIRS`): the split per candidate,

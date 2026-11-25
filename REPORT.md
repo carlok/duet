@@ -18,8 +18,10 @@ X10's smoke run made 0.28M evaluations per searcher-hour on X9's corpus, against
 - **Result:** 1.21 ms per evaluation on X8's corpus (2.5 times faster), 1.89 ms on X9's (3.2 times). On the 3,000
   replayed proposals the outputs are byte-identical before and after, on both corpora (scores, cells, gains, skips).
   `tests/test_corpus_cache.py` checks exactness through appends and evictions; 102 tests pass.
-- **Not measured yet:** the rate under load. The smoke run's 12.8 ms per evaluation had 10 processes sharing memory
-  bandwidth, against 6.1 ms alone. A smoke run with X10's command is needed before X10's U4 can be restated.
+- **Under load:** the first smoke run's 12.8 ms per evaluation had 10 processes sharing memory bandwidth, against
+  6.1 ms alone. A second smoke run with X10's command (900 s, 6 searchers and 4 verifiers on a fresh copy of the fork;
+  `notes/smoke_rate.py`, output `notes/x10smoke_cache.out`) made 0.60M evaluations per searcher-hour, against 0.28M
+  before the cache: 2.1 times, against 3.2 times alone. X10's U4 is restated from it (PREREGISTRATION, X10 amendment).
 
 ## The stage-c cap and the drain rule (25 Nov 2026; code change, tests and a smoke run, no scaled run)
 

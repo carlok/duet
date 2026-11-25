@@ -65,7 +65,7 @@ by the whole theory but by no single law of it.
 | `probes.py` | Deterministic corpus of 12,509 two-op structures on 2–6 elements (all on 2; affine pairs over ℤ/3–ℤ/6; 𝔽₄; Klein, S₃, ℤ/6 group-derived ops; lattices M₃, N₅, 2²; ℤ/n with +,×; random tables) |
 | `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
-| `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
+| `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`; `has(t)` caches each law's packed column for `sat`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
 | `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `V6` (V5 plus the parameter-definition screen), `V7` (X9: V6, no z3 after an E proof, linear-model screen in stages b and c), `LEGACY` (first session) |
 | `offdiag.py` | X4: off-diagonal gain (emergent laws that no single law gives even with all one-variable consequences; certified by corpus models), `lat2()` (laws of the 2-element lattice), `pools()` (restrictive one-operation laws for the fusion proposals); X5: `IGNORE` (argument-ignoring laws, skipped by arm `fusion2`), `SQUARE` (analysis) |
 | `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
@@ -385,7 +385,8 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   MemAvailable bottomed at 2.5 GB, then recovered to 5.6 GB. With `--cap-c`, set `--max-c` to the same N, or with
   pending full only `verifiers/4` stage-c tasks run.
 - The searchers slow down as the corpus grows: 0.28M evaluations per searcher-hour on X9's corpus, against about 0.72M
-  in X8 + x8b. Project level 0 from a smoke run on the actual corpus, not from an earlier run's rate.
+  in X8 + x8b. The column cache in `Corpus.has` (74a07ff) brings X9's corpus to 0.60M under load. Project level 0 from a
+  smoke run on the actual corpus, not from an earlier run's rate.
 
 ## Tasks, in order
 
