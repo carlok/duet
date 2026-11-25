@@ -135,6 +135,24 @@ give up the memory the stack takes.
 - **U4 is kept as written** (at least 22M) and is now expected to fail: x10a's 1.68M plus 29.4 searcher-hours at
   0.45-0.60M per searcher-hour gives about 15-19M. U1 failed in x10a (deviation 12). U2, U3 and U5 are unchanged.
 
+**Fourth amendment: the rest of X10 as one block (written 25 Nov 2026, 18:42 UTC, before x10b starts).** The user
+chose to run what is left of X10 as one block instead of two.
+- **x10b** gets `--budget 26487`, the 28,800 s less x10a's 2,313 s. This lifts the second amendment's 4-hour cap for
+  this block only. Everything else is as in the second and third amendments: run id `x10b`, `--seed0 1451`,
+  `--drain-c 3600`, 4 searchers.
+- **Why:** one block boundary fewer.
+  - Stage c can start tasks for 22,887 s, against 19,287 s in a 4-hour block followed by a 3.4-hour one.
+  - The searchers keep their archives for the whole block.
+  - No stage-c task is cut at a boundary in between.
+- **Cost:** the Mac stays awake for about 7.4 h with the user's stack beside the run, so the memory rule has a longer
+  window to fire in. A stop is a deviation. The time that ran counts, and if any budget is left, one more block may run
+  before the end of 28 Nov 2026 (UTC) with what is left.
+- **Clocks:** at 18:41 UTC the VM was 2,691 s behind the Mac, after the Mac had slept. x10b starts only once the two
+  clocks agree, so that no wall-time deadline is caught by a later jump of the VM's clock.
+- **Command:** `podman run -d --name soup-x10b -v "$PWD/work:/data" -e SOUP_DATA=/data/x10 -e SOUP_VERIFIER=V7 soup
+  python3 -m soup.stream.supervisor --arm fusion4 --searchers 4 --verifiers 4 --min-searchers 4 --max-c 2 --cap-c 2
+  --drain-c 3600 --seed0 1451 --budget 26487 --recycle-mb 700 --mem-stop-mb 1000 --run x10b`.
+
 **After the run:**
 - X9's post-run pipeline with x10 added (`taxonomy.RUNS`, `funnel.DIRS`, `known.RUN_DIRS`): the split per candidate,
   dedupe, N1, F1, the funnel, the linear sweep and a REPORT section.
