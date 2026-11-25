@@ -121,7 +121,7 @@ x9 added 18 new structured families. Properties are corpus-implied; E confirmed 
   them into searchers, so a run that drains its queue goes back to searching.
 - **Next:**
   - X10, preregistered: 8 hours in blocks of 2 to 4 hours, with two stage-c tasks at a time working on the 156 waiting
-    tasks, and 6 searchers beside them;
+    tasks, and 4 searchers beside them (6 in the first block, which its memory rule stopped after 39 minutes);
   - a specialist's eye on the unidentified candidates, starting with `55cb2c91` and `3818b88f`.
 
 ## License

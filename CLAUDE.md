@@ -388,6 +388,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - The searchers slow down as the corpus grows: 0.28M evaluations per searcher-hour on X9's corpus, against about 0.72M
   in X8 + x8b. The column cache in `Corpus.has` (74a07ff) brings X9's corpus to 0.60M under load. Project level 0 from a
   smoke run on the actual corpus, not from an earlier run's rate.
+- The user's other containers share the VM's memory with a run. A web stack of theirs started beside x10a held 1.2 GB,
+  and the memory rule fired after 39 minutes (deviation 12). Check `podman stats --no-stream` before a run and size the
+  searchers to what is left (about 0.5 GB each); X10 dropped from 6 to 4 (third amendment). The `pss_mb` of a worker in
+  `stats.jsonl` counts its own process only: E, Vampire and Mace4 children are outside it, and swing the rest by up to
+  3.5 GB.
 
 ## Tasks, in order
 

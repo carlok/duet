@@ -111,6 +111,30 @@ shorter blocks instead of one 8-hour run, so the Mac has to stay awake for one b
 - **After the run:** the post-run steps treat every x10* run in `work/x10` as X10. The funnel sums per run inside a
   directory, and the families are assigned per directory.
 
+**Third amendment: 4 searchers while the user's stack runs (written 25 Nov 2026, 16:23 UTC, before X10's second block
+starts).** After deviation 12 the user chose to keep their web stack running during the blocks, so the blocks have to
+give up the memory the stack takes.
+- **Measured** (x10a's `logs/stats.jsonl`, and the VM at 16:21 UTC with no soup container running):
+  - a searcher's PSS had a median of 476 MB and a maximum of 589 MB;
+  - the stack holds about 1.2 GB (`podman stats`), and its frontend uses a fifth to a quarter of a core;
+  - with every container of the user's running and no soup container, the VM has 10,040 MB available of 11,917.
+- **The change:** from x10b on, blocks run with `--searchers 4 --min-searchers 4`. Two searchers free about 1.0-1.2 GB,
+  about what the stack takes, and two cores. Everything else stays as in the second amendment: 4 verifiers,
+  `--max-c 2 --cap-c 2`, the prover and z3 memory caps, the image, the seed rule. Verification is unchanged; only the
+  search gets fewer hours.
+- **Why not the alternatives:**
+  - A lower prover or z3 cap would change which claims get settled, so stage c's yield (U3) would no longer be
+    measured with V7 as in X9 and x10a.
+  - One stage-c slot instead of two would halve U2's throughput.
+  - A lower memory rule would let the VM come closer to killing processes, the user's among them.
+- **What it does not fix:** worker PSS counts each worker's own process only; E, Vampire and Mace4 run as child
+  processes outside it. In x10a the memory outside the workers ranged from about 2.0 to 5.6 GB as those children came
+  and went. With 4 searchers the low point at x10a's stop would have been about 1.5 GB (an estimate). A z3 peak in a
+  stage-a/b verifier together with E peaks in both stage-c verifiers could still trip the rule; that would be a
+  deviation, as before.
+- **U4 is kept as written** (at least 22M) and is now expected to fail: x10a's 1.68M plus 29.4 searcher-hours at
+  0.45-0.60M per searcher-hour gives about 15-19M. U1 failed in x10a (deviation 12). U2, U3 and U5 are unchanged.
+
 **After the run:**
 - X9's post-run pipeline with x10 added (`taxonomy.RUNS`, `funnel.DIRS`, `known.RUN_DIRS`): the split per candidate,
   dedupe, N1, F1, the funnel, the linear sweep and a REPORT section.
@@ -1068,4 +1092,10 @@ No random theory and no T4 theory had been profiled.
     - The searchers made about 0.45M evaluations per searcher-hour (from the stats ticks), against 0.60M in the second
       smoke. That stack's CPU may explain part of that; it was not measured.
     - As the second amendment says, the 2,313 s count toward the 28,800 s (26,487 s left), U1 fails, and the next block
-      may still run. Whether something changes before it is the user's decision, recorded here when it is made.
+      may still run.
+    - **Two details from the stats** (read at 16:20 UTC): the last tick, at 14:30:56 UTC, logged 599 MB available, and
+      the rule read 642 MB a second later. Between the ticks at 2,270 s and 2,289 s available memory fell by 1,535 MB
+      while the workers' PSS rose by 384 MB. The rest was outside the workers, most likely a stage-c prover's child
+      process, which a worker's PSS does not count.
+    - **The user's decision** (recorded at 16:23 UTC): the stack keeps running during the blocks. From x10b on, blocks
+      run with 4 searchers instead of 6 (third amendment, written before x10b starts).
