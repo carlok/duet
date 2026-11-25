@@ -1,0 +1,27 @@
+25 ticks, 2026-11-25 05:04:22 to 2026-11-25 05:10:14 (367 s)
+    15 s  search 0  verify 5  stage c 2  pending 0 stage2c 4  evals 0  v0:stagec v1:stagec v2:idle v3:idle v4:idle
+    30 s  search 1  verify 4  stage c 2  pending 0 stage2c 4  evals 0  s9901:- v0:stagec v1:stagec v2:idle v3:idle v4:stopped  | 0 competitive pending (priority >= 0.000) < 5: retired verifier v4, started searcher s9901
+    45 s  search 1  verify 4  stage c 2  pending 46 stage2c 4  evals 0  s9901:searching v0:stagec v1:stagec v2:stagea v3:wrote
+    60 s  search 1  verify 4  stage c 2  pending 73 stage2c 4  evals 0  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+    76 s  search 1  verify 4  stage c 2  pending 200 stage2c 4  evals 27,197  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+    91 s  search 1  verify 4  stage c 2  pending 243 stage2c 4  evals 41,601  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   106 s  search 1  verify 4  stage c 2  pending 290 stage2c 4  evals 55,489  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   121 s  search 1  verify 4  stage c 2  pending 324 stage2c 4  evals 55,489  s9901:searching v0:stagec v1:stagec v2:stageb v3:stagea
+   136 s  search 1  verify 4  stage c 2  pending 346 stage2c 4  evals 69,200  s9901:searching v0:stagec v1:stagec v2:stageb v3:stagea
+   151 s  search 1  verify 4  stage c 2  pending 353 stage2c 4  evals 82,609  s9901:searching v0:stagec v1:stagec v2:stageb v3:stagea
+   166 s  search 1  verify 4  stage c 2  pending 366 stage2c 4  evals 82,609  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   182 s  search 1  verify 4  stage c 2  pending 371 stage2c 4  evals 96,186  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   197 s  search 1  verify 4  stage c 2  pending 383 stage2c 4  evals 96,186  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   212 s  search 1  verify 4  stage c 2  pending 407 stage2c 4  evals 109,900  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   227 s  search 1  verify 4  stage c 2  pending 426 stage2c 4  evals 122,276  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   242 s  search 1  verify 4  stage c 2  pending 446 stage2c 4  evals 135,179  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   257 s  search 1  verify 4  stage c 2  pending 462 stage2c 4  evals 135,179  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   272 s  search 1  verify 4  stage c 2  pending 472 stage2c 4  evals 147,997  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   287 s  search 1  verify 4  stage c 2  pending 486 stage2c 4  evals 160,743  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   303 s  search 1  verify 4  stage c 2  pending 503 stage2c 4  evals 173,749  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   318 s  search 1  verify 4  stage c 2  pending 520 stage2c 4  evals 173,749  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   333 s  search 1  verify 4  stage c 2  pending 534 stage2c 4  evals 186,935  s9901:searching v0:stagec v1:stagec v2:stageb v3:stagea
+   348 s  search 1  verify 4  stage c 2  pending 539 stage2c 4  evals 199,726  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   363 s  search 1  verify 4  stage c 2  pending 557 stage2c 4  evals 199,726  s9901:searching v0:stagec v1:stagec v2:stagea v3:stagea
+   367 s  search 0  verify 0  stage c 0  pending 560 stage2c 6  evals 211,856  
+peak stage-c tasks at a tick: 2; searchers at the end: 0; verifiers at the end: 0; PSS max 1904 MB

@@ -50,7 +50,8 @@ by the whole theory but by no single law of it.
 - Matrix (2.5 min on 11 cores): `podman run --rm -v "$PWD/work:/data" soup bash run.sh matrix`;
   `cd work && shasum -a 256 -c ../tests/matrix.sha256` must say OK for all three files.
 - Streaming search: `podman run --rm -v "$PWD/work:/data" soup bash run.sh stream --budget 3600`
-  (options `--searchers 3 --verifiers 8 --arm prior|noprior|fusion --seed0 101 --qmax 1500 --run <id>`;
+  (options `--searchers 3 --verifiers 8 --arm prior|noprior|fusion --seed0 101 --qmax 1500 --run <id>`, plus
+  `--recycle-mb 700 --mem-stop-mb 1000` (X7), `--min-searchers N` (X8) and `--cap-c N` (after X9);
   env `BUDGET`, `SEARCHERS`, `VERIFIERS`, `ARM`, `SEED0`, `RUN_ID`).
 - Other scripts: `podman run --rm -v "$PWD/work:/data" soup python3 -m soup.calib` (env `CALIB_NULL`);
   same for `soup.fragments`, `soup.report`.
@@ -87,10 +88,10 @@ by the whole theory but by no single law of it.
 | `novelty.py` | N1 (preregistered): gate (works, nothing identifies it, one per dedupe class) and order (off-diagonal law, no classical model, not related, sizes, axiom size, score); writes `notes/candidates_table.md` (known / not known) and, with `--readme`, the README's live block between `<!-- candidates:start -->` and `<!-- candidates:end -->`. Rerun after every run's checks |
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
-| `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}` |
+| `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}`; `claim(..., caps={lane: n})` counts and claims under an O_EXCL lock file (`queue/.lock_<lane>`) |
 | `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip), `fusion3` (IGNORE2: ignored variables may repeat) |
-| `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus |
-| `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md` |
+| `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus; `--cap-c N` (from the supervisor) caps stage-c tasks over all verifiers |
+| `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md`. `--min-searchers N` (X8); `--cap-c N` (after X9): at most N stage-c tasks at once, and the verifier floor becomes N + 1, so a run that drains its queue turns its idle verifiers into searchers |
 
 Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `journal/`, `logs/<run>/<worker>.log`,
 `logs/stats.jsonl`, `logs/workers/*.json` (heartbeats), `runs/<run>/` (config, archive snapshots).
@@ -373,7 +374,10 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - The rebalancer starts a searcher only in place of an idle verifier, and a verifier with nothing pending takes stage-c
   work instead of going idle. With a stage-c backlog, a run with `--searchers 0` never starts searching (X9). `max_c`
   is a floor for stage c, not a cap: once pending is empty, every verifier can be in stage c, which tripped X9's
-  memory rule with six at once.
+  memory rule with six at once. Fixed on 25 Nov by `--cap-c N` (default 0 = off, as before): the verifiers it turns
+  away go idle and the rebalancer makes them searchers. Pass it to every run from now on.
+- A rebalancer that reads heartbeats must check they are fresh: worker names restart at v0 each run, so a verifier
+  still loading its corpus has only the heartbeat an earlier run's worker left, which may say idle (`is_idle`).
 - `soup.profile --jobs 8` right after a large run got two children OOM-killed (1.1–1.3 GB each; the VM also holds the
   user's other containers). A crashed theory is redone by the next call, so rerun it with `--jobs 2`, then `rank` again.
 

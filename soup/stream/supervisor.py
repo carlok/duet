@@ -7,9 +7,14 @@ Rebalancing (every --rebalance seconds, one move at a time, total process count 
 number of *competitive* pending theories: priority (cheap score x (1 + novelty), times k = sum verified /
 sum cheap over verified theories of the arm) at least the score
 of the 20th best theory verified so far in this arm (0 until there are 20).
-  competitive > HIGH (= 4 x verifiers) and searchers > 1   -> retire a searcher, start a verifier
-  competitive < LOW  (= verifiers), verifiers > 2, one idle -> retire that verifier, start a searcher
-At most verifiers/4 verifiers (at least 1) work on stage c at the same time.
+  competitive > HIGH (= 4 x verifiers) and searchers > floor     -> retire a searcher, start a verifier
+  competitive < LOW  (= verifiers), verifiers > floor, one idle  -> retire that verifier, start a searcher
+The searcher floor is --min-searchers (default 1). The verifier floor is 2; with --cap-c it is also at least the
+stage-c tasks running plus one, so one verifier stays free for new pending theories.
+Non-c verifiers take stage c first while fewer than verifiers/4 (at least 1) run it. That is a floor: with nothing
+pending they all take stage c (X9: six at once tripped the memory rule, and no verifier ever went idle, so a run
+that drained its queue never turned back into a search). --cap-c N caps the stage-c tasks over all verifiers; a
+verifier it turns away with nothing pending goes idle, and the second rule then makes it a searcher.
 The pending lane is trimmed to --qmax tasks (lowest priority moved to queue/dropped/). Searchers push only
 theories with k x priority >= --gate x (20th best score); the supervisor publishes k and that bar in
 queue/gate.json every tick. Workers get SIGTERM at the budget; verifiers interrupt z3 at once.
@@ -76,7 +81,7 @@ class Supervisor:
         if prefer is None:     # keep exactly one verifier that prefers stage c
             prefer = 'ab' if any(getattr(p, 'prefer', None) == 'c' for p in self.active('verify')) else 'c'
         cmd = [sys.executable, '-m', 'soup.stream.verifier', '--name', name, '--run', self.run, '--prefer', prefer,
-               '--max-c', str(max(1, self.a.verifiers // 4))]
+               '--max-c', str(max(1, self.a.verifiers // 4)), '--cap-c', str(getattr(self.a, 'cap_c', 0) or 0)]
         self.procs[name] = Proc(name, 'verify', cmd, data('logs', self.run, f'{name}.log'))
         self.procs[name].prefer = prefer
         return name
@@ -127,9 +132,10 @@ class Supervisor:
         if comp > high and len(s) > searcher_floor(self.a):
             victim = min(s, key=lambda p: p.t0); self.retire(victim); new = self.start_verifier()
             return f'{comp} competitive pending (priority >= {th:.3f}) > {high}: retired searcher {victim.name}, started verifier {new}'
-        idle = [p for p in v if (read_json(data('logs', 'workers', f'{p.name}.json')) or {}).get('state') == 'idle'
+        idle = [p for p in v if is_idle(read_json(data('logs', 'workers', f'{p.name}.json')), p.t0)
                 and getattr(p, 'prefer', '') != 'c']
-        if comp < low and len(v) > 2 and idle:      # only a verifier with nothing to do is surplus
+        floor = verifier_floor(self.a, self.Q.running('stage2c'))
+        if comp < low and len(v) > floor and idle:  # only a verifier with nothing to do is surplus
             victim = idle[-1]
             self.retire(victim); new = self.start_searcher()
             return f'{comp} competitive pending (priority >= {th:.3f}) < {low}: retired verifier {victim.name}, started searcher {new}'
@@ -209,14 +215,15 @@ class Supervisor:
         self.initial = True; self.scan_results(); self.initial = False
         cfg = {'run': self.run, 'budget_s': a.budget, 'searchers': a.searchers, 'verifiers': a.verifiers, 'arm': a.arm,
                'seed0': a.seed0, 'gate': a.gate, 'qmax': a.qmax, 'tick_s': a.tick, 'rebalance_s': a.rebalance,
-               'min_searchers': searcher_floor(a), 'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
+               'min_searchers': searcher_floor(a), 'cap_c': a.cap_c, 'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
                'data': str(DATA), 'cores': os.cpu_count(), 'results_before': len(self.results),
                'corpus_before': sum(1 for e in os.listdir(data('corpus')) if e.endswith('.npz')),
                'queue_before': self.Q.counts(), 'started': ymd_hm()}
         write_json(data('runs', self.run, 'config.json'), cfg)
         self.J.write(f"\n## {ymd_hm()} · run {self.run} started\n\n"
                      f"- budget {a.budget:.0f} s · {a.searchers} searchers (seeds {a.seed0}–{a.seed0 + a.searchers - 1}, arm {a.arm}) · "
-                     f"{a.verifiers} verifiers (v0 prefers stage c) · z3 {cfg['z3']} · {cfg['cores']} cores\n"
+                     f"{a.verifiers} verifiers (v0 prefers stage c"
+                     f"{f', at most {a.cap_c} stage-c tasks at once' if a.cap_c else ''}) · z3 {cfg['z3']} · {cfg['cores']} cores\n"
                      f"- before: {cfg['results_before']} verified theories, {cfg['corpus_before']} found structures, "
                      f"queue {cfg['queue_before']['pending']} pending / {cfg['queue_before']['stage2c']} stage c\n")
         for name in os.listdir(data('queue', 'claimed')):         # leftovers of a killed earlier run
@@ -265,6 +272,19 @@ def searcher_floor(a):
     return max(1, getattr(a, 'min_searchers', 1) or 1)
 
 
+def verifier_floor(a, running_c):
+    """The rebalancer never retires a verifier below this many: 2, as before X9. With --cap-c (25 Nov 2026) also
+    the stage-c tasks running plus one, so that new pending theories do not wait behind stage c (~44 min each)."""
+    cap = getattr(a, 'cap_c', 0) or 0
+    return max(2, running_c + 1) if cap > 0 else 2
+
+
+def is_idle(hb, t0):
+    """A heartbeat says idle, and it was written by this process: a verifier still loading its corpus has only
+    the heartbeat an earlier run's worker of the same name left, and that one may say idle."""
+    return bool(hb) and hb.get('state') == 'idle' and hb.get('t', 0) >= t0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--budget', type=float, default=float(os.environ.get('BUDGET', 3600)))
@@ -280,6 +300,7 @@ def main():
     ap.add_argument('--mem-stop-mb', type=int, default=0, help='stop cleanly when MemAvailable falls below this (0: off)')
     ap.add_argument('--recycle-mb', type=int, default=0, help='verifiers restart themselves between tasks above this private memory (0: never)')
     ap.add_argument('--min-searchers', type=int, default=1, help='the rebalancer never retires searchers below this many')
+    ap.add_argument('--cap-c', type=int, default=0, help='at most this many stage-c tasks at once over all verifiers (0: no cap)')
     Supervisor(ap.parse_args()).main()
 
 

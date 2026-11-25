@@ -117,9 +117,10 @@ x9 added 18 new structured families. Properties are corpus-implied; E confirmed 
     move, since no searcher ran.
 - **Before that:** X8 + x8b took level 0 past 100M ("the surface scratched"): 115.1M.
 - **Also:** 151 structured families (F1), rising; X9 added 18, all small (the largest holds 0.7% of the run).
+- **Fixed since:** stage c now has a cap (`--cap-c`). The verifiers it turns away go idle, and the rebalancer turns
+  them into searchers, so a run that drains its queue goes back to searching.
 - **Next:**
-  - stage c: a cap on concurrent stage-c tasks, then a run for the 156 waiting tasks;
-  - searchers started by queue length, so that a run which drains the queue turns back into a search;
+  - a run for the 156 waiting stage-c tasks, searching beside them;
   - a specialist's eye on the unidentified candidates, starting with `55cb2c91` and `3818b88f`.
 
 ## License

@@ -4,11 +4,13 @@
   queue/stage2c/p<inv>_<key>.json     lexicographically first file is the highest priority
   queue/claimed/<worker>__<lane>__<file>   taken by a worker (atomic rename; one winner)
   queue/dropped/<file>               trimmed from pending (lowest priority) when it exceeds its cap
+  queue/.lock_<lane>                  held for the count-and-claim of a lane with a cap on running tasks
   queue/seen/<key>                    dedup marker, created with O_EXCL: each theory (up to the three
                                       dualities) enters the queue once, ever
 """
 import json
 import os
+import time
 from pathlib import Path
 
 from .common import write_json
@@ -39,17 +41,50 @@ class FileQueue:
         task = dict(task, key=key, prio=prio, lane=lane)
         write_json(self.root / lane / _fname(key, prio), task)
 
-    def claim(self, worker, lanes=LANES):
-        """Take the highest-priority task of the first non-empty lane. Returns (claimed path, task) or None."""
+    def claim(self, worker, lanes=LANES, caps=None):
+        """Take the highest-priority task of the first non-empty lane. Returns (claimed path, task) or None.
+
+        caps = {lane: n}: a capped lane is skipped while n of its tasks are claimed. The count and the claim
+        happen under a lock file, so concurrent workers never take more than n (after X9, 25 Nov 2026)."""
+        caps = caps or {}
         for lane in lanes:
-            d = self.root / lane
-            for f in sorted(e for e in os.listdir(d) if e.startswith('p')):
-                dst = self.root / 'claimed' / f'{worker}__{lane}__{f}'
-                try: os.rename(d / f, dst)
-                except FileNotFoundError: continue          # another worker was faster
-                try: return dst, json.loads(dst.read_text())
-                except json.JSONDecodeError: dst.unlink(); continue
+            cap = caps.get(lane)
+            if not cap:
+                got = self._claim_lane(worker, lane)
+            elif not self._lock(lane):
+                continue                                    # another worker is claiming from this lane
+            else:
+                try: got = self._claim_lane(worker, lane) if self.running(lane) < cap else None
+                finally: self._unlock(lane)
+            if got: return got
         return None
+
+    def _claim_lane(self, worker, lane):
+        d = self.root / lane
+        for f in sorted(e for e in os.listdir(d) if e.startswith('p')):
+            dst = self.root / 'claimed' / f'{worker}__{lane}__{f}'
+            try: os.rename(d / f, dst)
+            except FileNotFoundError: continue              # another worker was faster
+            try: return dst, json.loads(dst.read_text())
+            except json.JSONDecodeError: dst.unlink(); continue
+        return None
+
+    def _lock(self, lane, stale_s=60):
+        """O_EXCL lock file for a capped lane. It is held for milliseconds; one left by a killed worker is
+        removed after stale_s seconds."""
+        p = self.root / f'.lock_{lane}'
+        for _ in range(2):
+            try:
+                os.close(os.open(p, os.O_CREAT | os.O_EXCL | os.O_WRONLY)); return True
+            except FileExistsError:
+                try:
+                    if time.time() - p.stat().st_mtime > stale_s: p.unlink(missing_ok=True); continue
+                except FileNotFoundError:
+                    continue
+                return False
+        return False
+
+    def _unlock(self, lane): (self.root / f'.lock_{lane}').unlink(missing_ok=True)
 
     def running(self, lane):
         return sum(f'__{lane}__' in e for e in os.listdir(self.root / 'claimed'))

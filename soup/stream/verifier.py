@@ -3,6 +3,7 @@
 Lane 'pending' -> stages a and b, result written to results/<key>.json; claims still open after b
 go to lane 'stage2c'. Lane 'stage2c' -> stage c, the result file is rewritten.
 A verifier started with --prefer c takes stage-c work first (so long runs always progress).
+--cap-c N: at most N stage-c tasks run at once over all verifiers (FileQueue.claim with caps).
 """
 import argparse
 import os
@@ -23,8 +24,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--run', required=True)
     ap.add_argument('--prefer', default='ab', choices=['ab', 'c'])
-    ap.add_argument('--max-c', type=int, default=2, help='at most this many verifiers on stage c at once')
+    ap.add_argument('--max-c', type=int, default=2,
+                    help='non-c verifiers take stage c first while fewer than this many run it (a floor, not a cap)')
+    ap.add_argument('--cap-c', type=int, default=0,
+                    help='never more than this many stage-c tasks at once, over all verifiers (0: no cap, as before X9)')
     a = ap.parse_args()
+    caps = {'stage2c': a.cap_c} if a.cap_c > 0 else None
     cfg_name = os.environ.get('SOUP_VERIFIER', 'DEFAULTS'); cfg = CONFIGS[cfg_name]
     stop = StopWatcher(interrupt_all)
     set_memory_limit(int(os.environ.get('SOUP_Z3_MEMORY_MB', 1500)))
@@ -41,10 +46,12 @@ def main():
     try:
         while not stop.set:
             C.refresh()
-            # stage c first for the c verifier; the others help with the stage-c backlog only while fewer
-            # than --max-c verifiers are on stage c (stage c runs for minutes per theory)
+            # stage c first for the c verifier; the others help with the stage-c backlog first only while fewer
+            # than --max-c verifiers are on stage c (stage c runs for minutes per theory). With nothing pending
+            # they fall through to stage c, and only --cap-c stops them: six at once tripped X9's memory rule.
+            # A verifier the cap turns away with nothing pending goes idle, and the rebalancer can make it a searcher.
             lanes = c_first if a.prefer == 'c' or Q.running('stage2c') < a.max_c else ab_first
-            got = Q.claim(a.name, lanes)
+            got = Q.claim(a.name, lanes, caps)
             if got is None:
                 hb('idle'); time.sleep(2); continue
             claimed, task = got; key = task['key']; t0 = time.time()

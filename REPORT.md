@@ -2,6 +2,35 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## The stage-c cap and the drain rule (25 Nov 2026; code change, tests and a smoke run, no scaled run)
+
+X9 showed two gaps (deviation 11): `max_c` was a floor, not a cap, so six stage-c tasks ran at once and tripped the
+memory rule. And no verifier went idle while stage-c work was queued, so a run that drained its queue never started a
+searcher.
+- **The fix:** `--cap-c N` (supervisor, passed to every verifier; default 0, the old behaviour). Over all verifiers,
+  at most N stage-c tasks are claimed at once. `FileQueue.claim(..., caps=...)` counts and claims under an O_EXCL lock
+  file, so concurrent verifiers cannot overshoot. A verifier the cap turns away, with nothing pending, goes idle. The
+  rebalancer's existing rule then makes it a searcher. With the cap, the verifier floor is also the stage-c tasks
+  running plus one, so new pending theories do not wait behind stage c. No queue-length rule was needed beyond the
+  existing one: the gap was that verifiers never went idle.
+- **A second fix found on the way:** the rebalancer took "idle" from heartbeat files. Worker names restart at v0 each
+  run, so a verifier still loading its corpus could be judged by an earlier run's heartbeat. Heartbeats now count only
+  if written after the process started.
+- **Tests** (`tests/test_stage_c_cap.py`, 101 tests pass in all):
+  - the cap turns a fourth verifier away;
+  - a stale lock is removed after 60 s;
+  - 8 processes claiming at once win exactly 3 of 12 tasks (also run 5 times on the `/data` mount);
+  - X9's end state, simulated: without the cap all 7 verifiers stay on stage c and no searcher starts. With cap 3 the
+    rebalancer moves 3 verifiers to search and keeps 4.
+- **Smoke run** (`work/capsmoke`, deleted afterwards; `notes/capsmoke.py`, output `notes/capsmoke.out`): six of X9's
+  stage-c tasks, 5 verifiers, no searcher, `--cap-c 2`, 367 s.
+  - Stage c held at 2 at every tick. After 30 s, the rebalancer moved one idle verifier to search.
+  - That searcher pushed 539 pending theories in 5 minutes and made 199,726 cheap evaluations. This kept the other
+    two verifiers busy, so the rebalancer moved no more, as its rule says.
+  - 41 theories were verified, with no tracebacks, no lock file left behind and a peak PSS of 1.9 GB.
+- **Not tested:** a long run. The 156 stage-c tasks waiting in `work/x9/queue/stage2c` are the next run, to be
+  preregistered with `--cap-c`.
+
 ## X9: verifier V7 drains X8's queue (24–25 Nov 2026; preregistered; stopped by its memory rule after 2 hours)
 
 Preregistration: PREREGISTRATION.md, X9 (commit `924bb28`, 22:27:52 UTC, before the start), and deviation 11.
