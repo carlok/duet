@@ -11,7 +11,7 @@ of the 20th best theory verified so far in this arm (0 until there are 20).
   competitive < LOW  (= verifiers), verifiers > floor, one idle  -> retire that verifier, start a searcher
 The searcher floor is --min-searchers (default 1). The verifier floor is 2; with --cap-c it is also at least the
 stage-c tasks running plus one, so one verifier stays free for new pending theories.
-Non-c verifiers take stage c first while fewer than verifiers/4 (at least 1) run it. That is a floor: with nothing
+Non-c verifiers take stage c first while fewer than --max-c (default verifiers/4, at least 1) run it. That is a floor: with nothing
 pending they all take stage c (X9: six at once tripped the memory rule, and no verifier ever went idle, so a run
 that drained its queue never turned back into a search). --cap-c N caps the stage-c tasks over all verifiers; a
 verifier it turns away with nothing pending goes idle, and the second rule then makes it a searcher.
@@ -81,7 +81,7 @@ class Supervisor:
         if prefer is None:     # keep exactly one verifier that prefers stage c
             prefer = 'ab' if any(getattr(p, 'prefer', None) == 'c' for p in self.active('verify')) else 'c'
         cmd = [sys.executable, '-m', 'soup.stream.verifier', '--name', name, '--run', self.run, '--prefer', prefer,
-               '--max-c', str(max(1, self.a.verifiers // 4)), '--cap-c', str(getattr(self.a, 'cap_c', 0) or 0)]
+               '--max-c', str(stage_c_floor(self.a)), '--cap-c', str(getattr(self.a, 'cap_c', 0) or 0)]
         self.procs[name] = Proc(name, 'verify', cmd, data('logs', self.run, f'{name}.log'))
         self.procs[name].prefer = prefer
         return name
@@ -197,6 +197,7 @@ class Supervisor:
             'n_search': len(self.active('search')), 'n_verify': len(self.active('verify')),
             'evals_total': sum(w.get('evals', 0) for w in workers if w['role'] == 'search'),
             'mem_total': {'rss_mb': round(sum(m['rss_mb'] for m in mems), 1), 'pss_mb': round(sum(m['pss_mb'] for m in mems), 1)},
+            'mem_available_mb': mem_available_mb(),          # the VM's, as the memory rule reads it (X10 on)
             'workers': workers,
         }
         if action: line['rebalance'] = action
@@ -215,7 +216,7 @@ class Supervisor:
         self.initial = True; self.scan_results(); self.initial = False
         cfg = {'run': self.run, 'budget_s': a.budget, 'searchers': a.searchers, 'verifiers': a.verifiers, 'arm': a.arm,
                'seed0': a.seed0, 'gate': a.gate, 'qmax': a.qmax, 'tick_s': a.tick, 'rebalance_s': a.rebalance,
-               'min_searchers': searcher_floor(a), 'cap_c': a.cap_c, 'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
+               'min_searchers': searcher_floor(a), 'cap_c': a.cap_c, 'max_c': stage_c_floor(a), 'recycle_mb': a.recycle_mb, 'mem_stop_mb': a.mem_stop_mb, 'z3': z3.get_version_string(),
                'data': str(DATA), 'cores': os.cpu_count(), 'results_before': len(self.results),
                'corpus_before': sum(1 for e in os.listdir(data('corpus')) if e.endswith('.npz')),
                'queue_before': self.Q.counts(), 'started': ymd_hm()}
@@ -272,6 +273,13 @@ def searcher_floor(a):
     return max(1, getattr(a, 'min_searchers', 1) or 1)
 
 
+def stage_c_floor(a):
+    """Non-c verifiers take stage c first while fewer than this many run it: --max-c, else verifiers/4 (at least 1).
+    With searchers keeping pending full, this is how many stage-c tasks actually run, so a run that wants --cap-c N
+    stage-c tasks sets --max-c N too (X10)."""
+    return getattr(a, 'max_c', 0) or max(1, a.verifiers // 4)
+
+
 def verifier_floor(a, running_c):
     """The rebalancer never retires a verifier below this many: 2, as before X9. With --cap-c (25 Nov 2026) also
     the stage-c tasks running plus one, so that new pending theories do not wait behind stage c (~44 min each)."""
@@ -301,6 +309,7 @@ def main():
     ap.add_argument('--recycle-mb', type=int, default=0, help='verifiers restart themselves between tasks above this private memory (0: never)')
     ap.add_argument('--min-searchers', type=int, default=1, help='the rebalancer never retires searchers below this many')
     ap.add_argument('--cap-c', type=int, default=0, help='at most this many stage-c tasks at once over all verifiers (0: no cap)')
+    ap.add_argument('--max-c', type=int, default=0, help='verifiers take stage c first while fewer than this many run it (0: verifiers/4)')
     Supervisor(ap.parse_args()).main()
 
 

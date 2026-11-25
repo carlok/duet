@@ -1,0 +1,31 @@
+14 ticks, 2026-11-25 05:40:13 to 2026-11-25 05:43:38 (222 s)
+    16 s  search 6  verify 5  stage c 0  pending 1 stage2c 156  evals 0  s9801:- s9802:- s9803:- s9804:- s9805:- s9806:- v0:- v1:- v2:- v3:- v4:-
+    32 s  search 6  verify 5  stage c 0  pending 1 stage2c 156  evals 0  s9801:- s9802:- s9803:- s9804:- s9805:- s9806:- v0:- v1:- v2:- v3:- v4:-
+    49 s  search 6  verify 5  stage c 3  pending 0 stage2c 153  evals 0  s9801:- s9802:- s9803:- s9804:- s9805:- s9806:- v0:stagea v1:stagec v2:stagec v3:idle v4:stagec
+    65 s  search 6  verify 5  stage c 3  pending 179 stage2c 153  evals 0  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+    82 s  search 6  verify 5  stage c 3  pending 453 stage2c 153  evals 5,676  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+    98 s  search 6  verify 5  stage c 3  pending 650 stage2c 153  evals 29,130  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   115 s  search 6  verify 5  stage c 3  pending 773 stage2c 153  evals 43,102  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   132 s  search 6  verify 5  stage c 3  pending 917 stage2c 153  evals 56,598  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   150 s  search 6  verify 5  stage c 3  pending 1038 stage2c 153  evals 63,117  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   167 s  search 6  verify 5  stage c 3  pending 1148 stage2c 153  evals 68,862  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   184 s  search 6  verify 5  stage c 3  pending 1247 stage2c 153  evals 80,878  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   200 s  search 6  verify 5  stage c 3  pending 1330 stage2c 153  evals 92,765  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   217 s  search 6  verify 5  stage c 3  pending 1417 stage2c 153  evals 105,343  s9801:searching s9802:searching s9803:searching s9804:searching s9805:searching s9806:searching v0:stageb v1:stagec v2:stagec v3:stagea v4:stagec
+   222 s  search 0  verify 0  stage c 0  pending 1428 stage2c 156  evals 108,219  
+peak stage-c tasks at a tick: 3; at the last live tick: 6 searchers, 5 verifiers, 105,343 evaluations; PSS max 4527 MB; MemAvailable min 861 MB
+
+MemAvailable (MB) per tick, with the worker PSS by role (MB), from logs/stats.jsonl before the directory was deleted:
+16 avail 8340 pss search 1154 verify 970
+32 avail 7516 pss search 1622 verify 1360
+49 avail 6263 pss search 2043 verify 1670   three stage-c tasks start together
+65 avail 4162 pss search 2680 verify 1751
+82 avail 3982 pss search 2667 verify 1785
+98 avail 3198 pss search 2677 verify 1785
+115 avail 2561 pss search 2670 verify 1785
+132 avail 2016 pss search 2697 verify 1784
+150 avail 2172 pss search 2684 verify 1818
+167 avail 1663 pss search 2710 verify 1816
+184 avail 1229 pss search 2631 verify 1786
+200 avail 1071 pss search 2633 verify 1786
+217 avail 861 pss search 2619 verify 1786     memory rule (860 MB < 1000 MB): workers stopped

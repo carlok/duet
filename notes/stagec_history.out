@@ -1,0 +1,22 @@
+Part 1: stage c per data directory
+  .           theories   33  stage c min mean  20.3 median  10.7 max  84.9  claims in c ~52: open 17, settled 35 (Mace4 10, proved 25)
+  t4-prior    theories    5  stage c min mean  64.6 median  66.4 max  90.0  claims in c ~20: open 20, settled 0 ()
+  t4-noprior  theories    3  stage c min mean  66.7 median  67.5 max 114.9  claims in c ~10: open 10, settled 0 ()
+  x1          theories    1  stage c min mean  41.2 median  41.2 max  41.2  claims in c ~2: open 2, settled 0 ()
+  x2          theories    2  stage c min mean  82.7 median  82.7 max 102.2  claims in c ~6: open 6, settled 0 ()
+  x3          theories    2  stage c min mean  41.6 median  41.6 max  56.8  claims in c ~3: open 3, settled 0 ()
+  x4          theories    1  stage c min mean  74.3 median  74.3 max  74.3  claims in c ~3: open 3, settled 0 ()
+  x5          theories    4  stage c min mean  32.8 median  33.1 max  55.4  claims in c ~6: open 4, settled 2 (FMB 2)
+  x6          theories   11  stage c min mean  35.7 median  27.9 max  60.7  claims in c ~15: open 14, settled 1 (FMB 1)
+  x7          theories    5  stage c min mean  37.2 median  32.5 max  56.4  claims in c ~7: open 7, settled 0 ()
+  x8          theories    7  stage c min mean  70.6 median  78.5 max 120.6  claims in c ~14: open 13, settled 1 (FMB 1)
+  x9          theories    7  stage c min mean  31.5 median  36.6 max  56.8  claims in c ~10: open 7, settled 3 (FMB 3)
+  all: 79 theories with time > 0, mean 37.7 min, median 30.8 min; claims ~148, settled 42 (28.4%)
+  streaming runs, T4 to X9: claims ~96, settled 7 (7.3%): FMB 7
+  with FMB in stage c, X5 to X9: claims ~52, settled 7 (13.5%): FMB 7
+
+Part 2: x9 stage-c lane
+  tasks 156; unknown claims per task: total 221, mean 1.42, distribution [(0, 6), (1, 85), (2, 59), (3, 6)]
+  priority: max 25.021, median 15.042, min 12.803
+  verified in run: {'x8b': 57, 'x8': 1, 'x9': 98}
+  candidates among them: 0; in an N1 table: 0

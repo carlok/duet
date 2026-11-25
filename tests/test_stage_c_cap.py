@@ -56,7 +56,10 @@ def test_cap_holds_under_concurrent_claims(tmp_path):
 
 
 def test_floors_and_idle():
-    from soup.stream.supervisor import verifier_floor, is_idle
+    from soup.stream.supervisor import verifier_floor, is_idle, stage_c_floor
+    assert stage_c_floor(SimpleNamespace(verifiers=7)) == 1                          # as before: verifiers/4
+    assert stage_c_floor(SimpleNamespace(verifiers=5, max_c=0)) == 1
+    assert stage_c_floor(SimpleNamespace(verifiers=5, max_c=3)) == 3                 # X10: floor = cap = 3
     assert verifier_floor(SimpleNamespace(), 5) == 2                    # no cap: as before X9
     assert verifier_floor(SimpleNamespace(cap_c=3), 0) == 2
     assert verifier_floor(SimpleNamespace(cap_c=3), 3) == 4             # three on stage c and one free
