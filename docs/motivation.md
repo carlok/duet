@@ -57,7 +57,10 @@ as the search grows.
   directions. That is why X8 keeps the arm that skips the known.
 - **X8 + x8b tested volume in the same direction.** In 9 hours it made 51.5M evaluations, four fifths of what all
   earlier runs made together, and found 11 new families, none larger than 0.9% of the run. Volume alone, in the same direction, added
-  little. With only 3 verifiers, most of what the searchers found is still unverified (1,256 theories queued).
+  little. With only 3 verifiers, most of what the searchers found was left unverified (1,256 theories queued).
+- **X9 verified that queue** with a faster verifier (V7), at 5 times x8b's rate per verifier-hour. It found 18 more
+  families, all small, the largest at 0.7% of the run. So the part of X8's finds that X8 had not verified held no
+  large new family either.
 
 So the claim is that the search grows outward from known mathematics and leaves the corner our checks recognise. It is
 not that the search reaches unexplored mathematics. That needs a specialist.

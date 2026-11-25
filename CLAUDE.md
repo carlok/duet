@@ -253,6 +253,20 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - **`soup.linear`** (new post-run step, after stage c): refuted 14 of X8's 116 open claims on 8–17 elements. All 14
       pass check_finite; written as `false (size q, linear model over R)`. The first session's 17 open claims, S12
       among them: none. Packed Lean tables are now the default.
+  - 25 Nov, night (REPORT "X9"):
+    - **X9** (V7: no z3 after an E proof, plus the linear screen; 7 verifiers, no searcher, a fork of X8's corpus and
+      queue in `work/x9`) drained X8's queue: 1,255 of 1,256 copied theories got a result.
+    - **Throughput:** 88.8 theories through stages a and b per verifier-hour, against x8b's 16.9. The queue was X8's
+      leftovers, so this is not a randomized comparison.
+    - **Early stop:** the memory rule stopped it after 2.0 h (deviation 11). Once pending was empty, six verifiers took
+      stage-c tasks at once.
+    - S1–S4 hold. S2 holds only as written: two of the seven stage-c tasks had nothing left, and the other five took
+      44 min each.
+    - The stage-b linear screen refuted 60 of 354 claims (16.9%) in about 1 s each. The post-run sweep found nothing
+      more.
+    - **Candidates:** X9's 20 are 20 new varieties (238 candidates, 200 varieties), 14 disconnected; 12 of the 20 have a
+      square as a one-sided identity. Best at N1 is `3b20fedd`, rank 12. Funnel level 7 is 54, level 8 still 9.
+    - **156 stage-c tasks** wait in `work/x9/queue/stage2c`.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -356,6 +370,12 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   18:22 UTC VM time, which was 20:22 UTC real time. The jump came 8 minutes later, at 20:30 UTC, and every
   wall-time deadline then running fired at once: the first linear sweep called 10 claims "unknown" after a minute.
   Before timing anything after a long run, compare `date -u` with `podman machine ssh date -u`.
+- The rebalancer starts a searcher only in place of an idle verifier, and a verifier with nothing pending takes stage-c
+  work instead of going idle. With a stage-c backlog, a run with `--searchers 0` never starts searching (X9). `max_c`
+  is a floor for stage c, not a cap: once pending is empty, every verifier can be in stage c, which tripped X9's
+  memory rule with six at once.
+- `soup.profile --jobs 8` right after a large run got two children OOM-killed (1.1–1.3 GB each; the VM also holds the
+  user's other containers). A crashed theory is redone by the next call, so rerun it with `--jobs 2`, then `rank` again.
 
 ## Tasks, in order
 

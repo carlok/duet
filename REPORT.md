@@ -2,6 +2,115 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X9: verifier V7 drains X8's queue (24–25 Nov 2026; preregistered; stopped by its memory rule after 2 hours)
+
+Preregistration: PREREGISTRATION.md, X9 (commit `924bb28`, 22:27:52 UTC, before the start), and deviation 11.
+Data directory `x9`, a fork of X8's corpus and queue. Arm `fusion4`, verifier V7, 7 verifiers and no searcher at the
+start, recycling at 700 MB, memory stop at 1,000 MB.
+- **Run:** 22:28:27–00:29:58 UTC, 7,291 s of the 28,800 s budget. The VM clock matched the Mac's at the end.
+- **Why it stopped:** the copied pending lane was empty at 00:28:24 UTC. The verifiers then all turned to stage c, and
+  six stage-c tasks at once brought available memory down to 362 MB (deviation 11). The kernel log shows no OOM kill
+  during the run.
+- **No searcher ever started.** The design expected the rebalancer to start searchers once the queue ran low. It
+  starts one only in place of an idle verifier, and a verifier with nothing pending takes stage-c work instead of going
+  idle. So X9 made no cheap evaluations, and level 0 is unchanged.
+
+Commands:
+- run: as in the preregistration;
+- post-run: `work/check/x9_post.log` (fragments, statistics `notes/{runstats,diagonal,heartbeats}_x9.out`, candidates,
+  profile, hidden and `--param`, relabel, rank, rediscover), split per candidate (`notes/split_new.py`, output
+  `notes/split_x9_candidates.out`), `notes/disconnected.py x9 x8`, `soup.dedupe --jobs 6`, `soup.novelty`,
+  `soup.funnel`, `soup.taxonomy build --confirm` and `report`;
+- predictions: `notes/x9_predictions.py` (output `notes/x9_predictions.out`);
+- linear sweep of the claims left open: `soup.linear sweep --jobs 10` (below).
+
+| | X9 (V7, 7 verifiers, 2.02 h) | x8b (V6, 3 verifiers, 7.85 h) |
+| --- | --- | --- |
+| verifier-hours (time integral of live verifiers) | 14.1 | 23.6 |
+| theories through stages a and b | 1,255 | 397 |
+| per verifier-hour | **88.8** | 16.9 |
+| stage a / stage b, hours | 3.51 / 5.53 | 3.9 / 11.3 (X8 + x8b) |
+| mean stage b per theory | 16 s | 92 s (X8 + x8b) |
+| theories through stage c | 7 (all copied from x8b) | 7 |
+| positive score | 808 (64%) | 159 (40%) |
+| screened: parameter definition / split | 25 / 2 | 16 / 0 |
+| claims / proved | 2,171 / 1,193 | 682 / 214 |
+| proved by E with no z3 run (V7) | 1,192 | – |
+| refuted by finite models (stage a, FMB) | 554 / 154 | 317 in all |
+| refuted by a linear model in stage b (V7) | 60 | – |
+| refuted by E saturation | 57 | 37 |
+| unknown / open | 142 / 7 | 89 / 13 |
+| structures added to the corpus | 9,118 | 2,892 |
+
+Counts are over X9's own results (1,262). The 65 results copied from x8b, whose stages a and b ran there under V6,
+are counted apart: 58 are unchanged, 7 went through stage c in X9. Four claims refuted by X8's post-run linear sweep
+came with the copied results and are not counted as X9's.
+
+**Predictions** (descriptive; on the 2 hours that ran, deviation 11):
+- **S1 holds.** 88.8 theories through stages a and b per verifier-hour, against ≥ 25 and x8b's 16.9. Not a randomized
+  comparison: the copied queue is what X8's verifiers had not reached, the lower end by priority, and these may be easier
+  theories. The paired benchmark before the run (24 theories, same inputs) gave 58% less stage-b time; here the mean
+  stage b fell by 83%.
+- **S2 holds as written, but not in substance.** Seven theories went through stage c, at 0, 0, 22.9, 36.6, 50.9, 53.1
+  and 56.8 minutes: mean 31.5, against ≤ 35. The two zeros had no claim left open: X8's post-run linear sweep had already
+  refuted their open claims in the copied results. The other five took 44.0 minutes on average. Two or three stage-c
+  tasks ran at a time beside stage b, so the times are wall times under load. The stage-c linear screen (rings up to 64)
+  refuted none of its 10 claims, and 7 claims are still open.
+- **S3 holds.** The linear screen ran on 354 stage-b claims (those E neither proved nor saturated) and refuted 60
+  (16.9%), against ≥ 5%. All are linear (no affine one), on 7, 8, 9, 11, 13 and 17 elements. It took 0.10 hours in
+  all, about 1 second per claim. Each model passed `check_finite` and went into the corpus.
+- **S4 holds.** 1,255 of the 1,256 copied pending theories have a result; the last one is still queued.
+
+**Families (F1, `soup.taxonomy build --confirm`, 2,936 new E checks; 96.9% of corpus-implied properties confirmed):**
+- **What F1 counts:** the 1,320 results in X9's directory. The theories were found by X8's searchers and verified in
+  X9, so F1 counts them under X9, as the preregistration said. The count includes the 65 copied from x8b.
+- **Shares:** structured 810 (61.4%), no synergy 483 (36.6%), disguise 27 (2.0%). None is known, diagonal or
+  argument-ignoring. In X8 + x8b, structured theories were 43.2%.
+- **New families:** 18 new structured families with 48 theories. The largest, `·: const-sq, sq-left-id | ∘: const-sq,
+  sq-left-id`, holds 9 (0.7%).
+- **The larger corpus relabels earlier theories.** The union corpus is now 52,421 structures, up from 44,042. That
+  relabels 113 of the 7,920 earlier theories: X9's models refute some properties that the corpus had implied. The
+  count through X8 is therefore 133, against 135 reported. There are 151 structured families in all, with a
+  descriptive Chao1 index of 167.
+- **Emerging flags:** many families are flagged as emerging in X9. Its 1,320 theories are X8's leftovers, so the flags
+  describe X8's search more than X9.
+- **Double counting:** level 1 and F1 count verifications per run directory, so the 65 copied results appear under
+  both x8 and x9. Theories found again in later runs were already counted that way: the 9,240 verifications cover
+  8,576 distinct theories.
+
+**The candidates** (the top 20 of X9's non-fragments):
+- **Split:** 18 of 20 not split (finite certificate on 2–4 elements). 2 undecided, `65117a47` and `25e459ad`: E derived
+  no bridge law within its cap.
+- **Identification:** hidden 0, parameter definition 0, relabel 0, rediscover 0. The model filter left no E job over
+  X9's 1,320 results, so no X9 theory is a fragment, subvariety or equivalent of a catalogue entry.
+- **Profile:** none has a convergent presentation (T5a's one calibrated feature). Five have a Mal'cev term; all five are
+  quasigroup-like (x·(x·y) = y or a variant) and fail "works".
+- **One pattern dominates:** 12 of 20 have a square as a one-sided identity, x·(y·y) = x or a variant, as an axiom or a
+  proved law. That is the square-ignoring shape of the IGNORE2 filter, which arm `fusion4` does not apply. The top
+  score, `cbc2f02d` (3.33), is one of them: x·x = x∘x, x·(y∘(z∘y)) = z∘x and x·((x·(y∘x))∘y) = x prove x·(y·y) = x.
+- **Dedupe:** 20 distinct varieties, none equal to an earlier candidate. Over all runs, 238 candidates are 200 varieties.
+- **Disconnected:** 14 of 20 (X8 9, X7 12).
+- **N1:** 127 enter (76 identified as known, 33 fail "works", 2 without a record). The top 11 are unchanged. X9's best
+  is `3b20fedd` at rank 12 (x·(x∘x) = x, x·x = y∘(x∘y), x·(((y·x)∘z)·y) = x), then `cbc2f02d` at 14, `8854c705` at 15
+  and `2376df7b` at 17.
+- **Funnel:** level 1 is 9,240 verified; level 7 rises from 43 to 54; level 8 stays at 9. Level 0 is unchanged at
+  115,133,315.
+
+**Linear sweep after the run** (`soup.linear sweep --jobs 10`, q ≤ 64, affine ≤ 16): 228 open claims, 149 of X9's and
+79 from the copied x8b results, and **none refuted**. 15 minutes on 10 cores; the slowest claim took 69 s. The wider
+range found nothing beyond V7's stage-b screen (q ≤ 32, affine ≤ 9), and the copied claims had already been swept after
+X8. For a V7 run the sweep added nothing here.
+
+**Reading:**
+- **V7 does what the benchmark said, and more.** Verification ran at 5 times x8b's rate per verifier-hour. Dropping z3
+  after an E proof saved 1,192 z3 runs, and the linear screen settled 60 claims in 6 minutes in all, claims that would
+  otherwise have gone to FMB.
+- **Stage c is still slow,** and its lane grows: 62 tasks at the start, 156 at the end. Two or three stage-c tasks at a
+  time held for two hours with 7 verifiers; six at once did not. A stage-c lane needs its own run, or a cap on
+  concurrent stage-c tasks that also holds when nothing is pending.
+- **The rebalancer's rule has a gap:** with a stage-c backlog no verifier ever goes idle, so a drain run never turns
+  back into a search. A drain-then-search run needs searchers started by queue length, not by idle verifiers.
+
 ## X8 + x8b: search-heavy, past 100M (24 Nov 2026; preregistered; x8b ran to its budget)
 
 Preregistration: PREREGISTRATION.md, X8 (commit `041912c`, before the start), and deviation 10 for the continuation.

@@ -907,3 +907,22 @@ No random theory and no T4 theory had been profiled.
       - Settings unchanged, except seeds 1209 onward (X8 used 1201–1208) and the remaining budget, 28,217 s.
       - Nothing else runs beside it, not even a build.
       - R1–R4 are judged over X8 and x8b together, and the report gives each part's counts separately.
+
+11. **X9 stopped by its memory rule after 2 hours, once X8's copied queue was empty (25 Nov 2026, 00:29 UTC; written
+    00:38 UTC, after S1–S4 were computed but before anything else).**
+    - X9 started at 22:28:27 UTC with a budget of 28,800 s.
+    - The pending lane was empty at 00:28:24 UTC. 1,255 of the 1,256 copied theories had a result, and the last one
+      was still claimed.
+    - With nothing pending, the verifiers took stage-c tasks: six of the seven were in stage c at 00:29:29 UTC. Until
+      then two or three had been in stage c at a time, and memory had held.
+    - At 00:29:45 UTC the VM had 362 MB available, below the 1,000 MB rule. The supervisor stopped the workers, and the
+      run ended at 00:29:58 UTC after 7,291 s (25% of the budget). Exit code 0, and the kernel log shows no OOM kill
+      during the run.
+    - **The design was wrong on one point.** It said searchers would start once the queue ran low, and none did. The
+      rebalancer starts a searcher only in place of an idle verifier, and a verifier with nothing pending takes
+      stage-c work instead of going idle. So X9 made no cheap evaluations.
+    - Results by then: 1,262 verified, 808 with a positive score, 9,118 structures added to the corpus. The queue
+      left (1 pending, 156 in stage c) is kept for the next run.
+    - S1–S4 are judged on the 2 hours that ran, and per-hour rates use those hours. Nothing else changes.
+    - The VM also holds the user's other containers, idle, with about 0.7 GB between them. They have been running since
+      before X9 and its smoke runs.

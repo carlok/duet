@@ -457,10 +457,10 @@ A preregistered post hoc statistic, F1, sorts every verified theory into one fam
 A structured theory is labelled by which of eleven one-operation properties hold for each operation (commutative,
 associative, idempotent, constant squares, squares as identities, involutive, flexible, and two absorbing shapes). The
 label is read up to the eight relabellings. A property counts when it holds in every corpus model, and E confirms
-96.5\% of the 8{,}912 cases.
+96.9\% of the 12{,}627 cases.
 \begin{itemize}
 \item \textbf{Shares.} Structured theories are 0--0.5\% of the early runs and 44--69\% of X5--X7.
-\item \textbf{Count.} There are 135 structured families; X7 alone added 26, and X8 11. Chao1 gives 152, but it assumes
+\item \textbf{Count.} There are 151 structured families; X7 alone added 26, X8 11, and X9, which verified X8's queue, 18. Chao1 gives 167, but it assumes
   unbiased sampling, and the search deliberately skips what it has seen. So the number is a descriptive index, not an
   estimate of the total, the same problem STADS~\cite{stads2018} raises for fuzzers.
 \item \textbf{Direction against volume.} The prior-arm runs made 51 million of the 63.7 million cheap evaluations and
@@ -469,6 +469,10 @@ label is read up to the eight relabellings. A property counts when it holds in e
 \item \textbf{Volume in the same direction.} The preregistered run X8 kept 8 searchers of the X7 arm alive for 9 hours.
   It made 51.5 million evaluations, taking level~0 to 115 million, and found 11 new families, the largest holding
   0.9\% of its 444 verified theories (the preregistered threshold was 2\%).
+\item \textbf{Verification.} The preregistered run X9 verified the 1{,}256 theories X8 had left in its queue, with a
+  verifier V7 that skips z3 once E has proved a claim and tries linear models over finite rings first. It ran at 88.8
+  theories per verifier-hour, against 16.9 in X8, on X8's leftovers, so not a randomized comparison. It added 18
+  families, the largest holding 0.7\% of the run.
 \item \textbf{Emerging laws.} Among the proved emergent laws, the emerging ones are $x\op(y\op x)=y$,
   $x\op(x\op x)=y\op(x\op y)$ and commutativity.
 \end{itemize}
