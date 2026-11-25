@@ -380,6 +380,12 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   still loading its corpus has only the heartbeat an earlier run's worker left, which may say idle (`is_idle`).
 - `soup.profile --jobs 8` right after a large run got two children OOM-killed (1.1–1.3 GB each; the VM also holds the
   user's other containers). A crashed theory is redone by the next call, so rerun it with `--jobs 2`, then `rank` again.
+- Stage-c tasks that start together run their long E (300 s CPU, up to 2 GB) at the same time, and every run with a
+  stage-c backlog starts that way. Three at once beside 6 searchers tripped the memory rule in 217 s. With two,
+  MemAvailable bottomed at 2.5 GB, then recovered to 5.6 GB. With `--cap-c`, set `--max-c` to the same N, or with
+  pending full only `verifiers/4` stage-c tasks run.
+- The searchers slow down as the corpus grows: 0.28M evaluations per searcher-hour on X9's corpus, against about 0.72M
+  in X8 + x8b. Project level 0 from a smoke run on the actual corpus, not from an earlier run's rate.
 
 ## Tasks, in order
 

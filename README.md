@@ -120,7 +120,8 @@ x9 added 18 new structured families. Properties are corpus-implied; E confirmed 
 - **Fixed since:** stage c now has a cap (`--cap-c`). The verifiers it turns away go idle, and the rebalancer turns
   them into searchers, so a run that drains its queue goes back to searching.
 - **Next:**
-  - a run for the 156 waiting stage-c tasks, searching beside them;
+  - X10, preregistered for tonight: 8 hours with two stage-c tasks at a time, working on the 156 waiting tasks, and 6
+    searchers beside them;
   - a specialist's eye on the unidentified candidates, starting with `55cb2c91` and `3818b88f`.
 
 ## License

@@ -2,6 +2,86 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X10: stage c under a cap, with the search beside it (written 25 Nov 2026, 06:03 UTC, before X10 starts)
+
+Exploratory and descriptive. X9 left 156 stage-c tasks and showed two gaps (deviation 11). Both are fixed:
+`--cap-c` and the drain rule (`f9a774e`), and `--max-c` (`3e7394b`); see REPORT, "The stage-c cap and the drain rule".
+The user chose an 8-hour night run with the search beside stage c over a full drain, which would take about 33 hours.
+
+**What stage c has done so far** (`notes/stagec_history.py`, output `notes/stagec_history.out`):
+- Since T4 it settled about 7 of the 96 claims it ran on (7.3%), all by Vampire FMB, and proved none. Since X5, when FMB
+  entered stage c, the figure is 7 of 52 (13.5%). The mean is 37.7 minutes per theory over all runs.
+- The 156 tasks hold 221 unknown claims: 6 tasks have none left, 85 have one, 59 two and 6 three. Their priorities run
+  from 12.8 to 25.0, and none is a candidate or in N1.
+- So the run is not expected to change a candidate. It measures stage c under a cap, and it continues the search.
+
+**Design.**
+- **Data directory:** `x10`, a fork of X9's state, made this morning so that the smoke runs could copy it. x9 has not
+  changed since.
+  - `soup.t4_setup --dir x10`, then its corpus is replaced by a copy of X9's (16,826 files);
+  - X9's `queue/stage2c` (156), `queue/pending` (1) and `queue/seen` (18,333) are copied in;
+  - so are the 156 stage-b results that the stage-c tasks read, and nothing else from `results/`;
+  - `soup.known build --out /data/x10`: 51 known entries, 1,651 candidate entries, 62,038 seen-before keys.
+- **Arm and verifier:** arm `fusion4`, verifier V7, as in X9.
+- **Processes:** 6 searchers kept alive (`--min-searchers 6`) and 4 verifiers.
+  - `--max-c 2 --cap-c 2`: two stage-c tasks whenever the lane has work, never more. v0 prefers stage c, one more
+    verifier joins it there, and the other two work on stages a and b.
+  - The verifier floor is then 3, so the rebalancer can move one verifier to search if pending runs dry.
+  - The pending lane is capped at 1,500 (the default `--qmax`).
+- **Memory:** `--recycle-mb 700`, `--mem-stop-mb 1000`. MemAvailable is now logged every tick.
+- **Budget and seeds:** 28,800 s (8 h); seeds from 1401.
+
+**Run:**
+1. Compare `date -u` with `podman machine ssh date -u`, and keep the Mac awake for the whole budget (the app's
+   keep-awake).
+2. `podman run -d --name soup-x10 -v "$PWD/work:/data" -e SOUP_DATA=/data/x10 -e SOUP_VERIFIER=V7 soup python3 -m
+   soup.stream.supervisor --arm fusion4 --searchers 6 --verifiers 4 --min-searchers 6 --max-c 2 --cap-c 2 --seed0 1401
+   --budget 28800 --recycle-mb 700 --mem-stop-mb 1000 --run x10`.
+
+**Done before this entry, disclosed.**
+- **Code:**
+  - `--cap-c`, the drain rule and the fresh-heartbeat check (`f9a774e`);
+  - `--max-c` and the MemAvailable log (`3e7394b`);
+  - 101 tests pass.
+- **Smoke runs** on copies of the fork, deleted afterwards (`notes/capsmoke.py`):
+  - `capsmoke`: 5 verifiers, no searcher, cap 2 (REPORT).
+  - 6 searchers, 5 verifiers, `--max-c 3 --cap-c 3` (`notes/x10smoke_cap3.out`): the memory rule fired after 217 s
+    (860 MB). The three stage-c tasks started together, and their long E runs grew at the same time. That was the first
+    design, dropped.
+  - 6 searchers, 4 verifiers, `--max-c 2 --cap-c 2` (`notes/x10smoke_cap2.out`): ran its 900 s.
+    - MemAvailable fell to 2,516 MB while both E runs grew, then stayed near 5.6 GB.
+    - 22 theories were verified, about 44 per stage-a/b verifier-hour.
+    - 426,187 evaluations were made, 0.28M per searcher-hour at a steady rate. X8 + x8b made about 0.72M; X9's corpus is
+      about twice X8's.
+    - The pending lane reached 1,500 in 4 minutes.
+  - Nothing else was read.
+
+**Predictions** (descriptive):
+- **U1, the cap:** no tick in `logs/stats.jsonl` has more than 2 workers in stage c, and the run reaches its budget
+  without the memory rule.
+- **U2, stage-c throughput:** at least 12 of the 150 copied tasks with open claims get through stage c. Two slots over
+  8 h at 40 minutes would be 24; under load X8 took 71 minutes.
+- **U3, stage-c yield:** stage c settles at least 5% of the claims it runs on, and proves at most one. Since T4 it has
+  settled 7.3% and proved none.
+- **U4, the search:** level 0 rises by at least 10M, to at least 125.1M. The smoke rate gives about 13M for 48
+  searcher-hours.
+- **U5, verification beside stage c:** at least 400 new theories get through stages a and b (the smoke rate gives about
+  700).
+
+**After the run:**
+- X9's post-run pipeline with x10 added (`taxonomy.RUNS`, `funnel.DIRS`, `known.RUN_DIRS`): the split per candidate,
+  dedupe, N1, F1, the funnel, the linear sweep and a REPORT section.
+- The 156 copied results are reported apart, since their stages a and b ran in x8, x8b or x9.
+
+**Caveats.**
+- **Double counting:** level 1 and F1 count the copied results under both x9 and x10, as with the 65 in X9. The distinct
+  count is reported.
+- **Wall time under load:** E's limits are CPU time, but those of FMB, Mace4 and the linear screen are wall time, and
+  10 processes on 11 cores slow them down.
+- **The lane is ordered by priority:** the highest-priority tasks will be done and most of the rest will not.
+- **A sleeping Mac:** if it sleeps, the VM freezes and the budget runs on a frozen clock (24 Nov). That would be a
+  deviation.
+
 ## X9: verifier V7 drains X8's queue (written 24 Nov 2026, 22:27 UTC, before X9 starts)
 
 Exploratory and descriptive. X8 + x8b were search-heavy (8 searchers, 3 verifiers), and verification was the bottleneck:
