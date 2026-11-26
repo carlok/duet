@@ -2,6 +2,67 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X11: arm fusion5, the parameter-disguise skip at scale (written 26 Nov 2026, 06:17 UTC, before X11 starts)
+
+Exploratory and descriptive. Half of X10's 578 verified theories were parameter disguises of one shape (REPORT, "X10").
+Arm `fusion5` skips them in the search (`70ba826`; REPORT, "A search-side skip for parameter disguises"). X11 asks what
+the search finds once they are skipped. The user chose X11 before the stage-c backlog and before an ML ranking.
+
+**Design.**
+- **Data directory:** `x11`. `soup.t4_setup --dir x11`, then x10's corpus is copied in (17,341 found structures), and
+  `soup.known build --out /data/x11` gives 129 known entries, 1,733 candidate entries and 74,884 seen-before keys. The
+  queue and the results start empty. X10's 207 stage-c tasks are not copied.
+- **Arm and verifier:** arm `fusion5`, verifier V7. The image is `c96838c1e261`, built from `70ba826`.
+- **Processes:** as in x10b: 4 searchers kept alive (`--min-searchers 4`), 4 verifiers, `--max-c 2 --cap-c 2`,
+  `--drain-c 3600`, `--recycle-mb 700`, `--mem-stop-mb 1000`. The pending lane is capped at 1,500.
+- **Budget and blocks:** 28,800 s in all, in one or more blocks. Each block is at least 2 hours and at most what is
+  left, chosen by the user at its start; the last block takes what is left. Block k uses `--run x11<letter>`,
+  `--seed0` 1601 + 50(k − 1) and `--budget` the block's length. Nothing in `work/x11` is changed by hand between
+  blocks, and the image stays the same. If the 28,800 s are not used by the end of 30 Nov 2026 (UTC), X11 ends with what
+  has run.
+- **Before each block:** compare `date -u` with `podman machine ssh date -u`, check that no other soup container runs,
+  check the user's containers' memory with `podman stats --no-stream`, and keep the Mac awake for the block.
+- **Command** (block k):
+  `podman run -d --name soup-x11<letter> -v "$PWD/work:/data" -e SOUP_DATA=/data/x11 -e SOUP_VERIFIER=V7 soup python3 -m
+  soup.stream.supervisor --arm fusion5 --searchers 4 --verifiers 4 --min-searchers 4 --max-c 2 --cap-c 2 --drain-c
+  3600 --seed0 <1601 + 50(k-1)> --budget <block> --recycle-mb 700 --mem-stop-mb 1000 --run x11<letter>`.
+
+**Done before this entry, disclosed.**
+- X10's results, its post-run checks and its REPORT section were all read.
+- `soup.paramskip` was measured on every result of X5 to X10 (`notes/paramskip_check.out`). It skips all 711 theories
+  V6 marked, no theory at funnel level 7 or 8, and 22 of 258 candidates (15 known, 7 at N1 ranks 63–84 with
+  classical models). 34 of its skips are false (E refutes).
+- Paired smoke runs of 600 s, `fusion4` against `fusion5`, on copies of x10's corpus with this library, were deleted
+  afterwards (`notes/paramskip_smoke.out`). Evaluations per searcher-hour were 0.91M and 0.90M. Pushed disguises
+  numbered 31 of 1,548 under fusion4 and 0 of 1,550 under fusion5. Of the verified theories, 48 and 50, none was a
+  disguise.
+
+**Predictions** (descriptive; on the sum over blocks; X10 = its own 578 theories, or the whole `x10` directory for F1):
+- **W1, the skip:** at most 5% of X11's verified theories are marked "parameter definition" by V6 (X10: 50.9%).
+- **W2, its cost:** the searchers make at least 0.75M evaluations per searcher-hour (x10b 0.90M), and the Mace4 step
+  takes at most 5% of searcher time (smoke 1.2%).
+- **W3, structure:** F1's structured family is at least 30% of `x11` (X10 11.0%, X9 61.4%, X8 + x8b 43.2%).
+- **W4, the 𝔽₄ corner:** at most 10 of X11's 20 candidates have a classical model among the base probes (X10 15).
+- **W5, disconnected:** at least 8 of X11's 20 candidates are disconnected (X10 4, X9 14, X8 9).
+- **W6, families:** X11 adds at least 5 new structured families (X10 3).
+- **W7, memory:** no block is stopped by its memory rule.
+
+**After the run:** X10's post-run pipeline with `x11` added to `taxonomy.RUNS`, `funnel.DIRS` and `known.RUN_DIRS`:
+fragments, statistics, candidates, profile `--jobs 4`, hidden and `--param`, relabel, rank, rediscover, the split per
+candidate, `notes/disconnected.py x11 x10`, dedupe, N1, F1, the funnel, the linear sweep and a REPORT section. The
+predictions are judged by a script `notes/x11_predictions.py`, written after the run, using the definitions above.
+
+**Caveats.**
+- **No control arm.** The comparison with X10 is confounded: the library rebuilt after X10 already skips X10's
+  disguises and its candidates' equivalents, and under fusion4 the smoke pushed only 2% disguises. The smoke is the only
+  within-library contrast, and it lasted 10 minutes.
+- **False skips:** about 3.5% of the skips measured on X6–X10 are wrong, and their countermodels have more than 4
+  elements. The skip may also push the search into a disguise it does not test, such as terms in which x or y occurs
+  twice. Such terms are not in the skip's list, and V6 would still catch them in the verifier.
+- **Countermodels from the searchers** go into the corpus, and so change the cheap scores of other theories. The
+  verifiers' models do the same.
+- **A sleeping Mac** freezes the VM, and the budget then runs on a frozen clock. That would be a deviation.
+
 ## X10: stage c under a cap, with the search beside it (written 25 Nov 2026, 06:03 UTC, before X10 starts)
 
 Exploratory and descriptive. X9 left 156 stage-c tasks and showed two gaps (deviation 11). Both are fixed:
