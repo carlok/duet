@@ -2,6 +2,53 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## fusion6 against fusion5: a paired live smoke run (26 Nov 2026, after X11; not preregistered, 15 minutes)
+
+`fam5` (arm `fusion5`) and `fam6` (arm `fusion6`, with the rescore throttle of `320b9b7`) were started together at
+17:34 UTC. They ran on two copies of x11's corpus (19,531 structures), each with a known library rebuilt after X11 (129
+known entries, 1,893 candidate entries, 78,175 seen-before keys). Both used the same seeds (1701+), 4 searchers and 1
+verifier, V7, normal maintenance, and 900 s, not the 600 s first planned: the throttle allows fusion6's second rescore
+only after 600 s, and a 600 s run would not have shown it. Image: `soup` = `d6e4dcd6ddbc`, built for X11's post-run
+checks; its code is that of `3bb3818` except one docstring. The copies were deleted afterwards.
+
+Command: `notes/fusion6_smoke.py` (output `notes/fusion6_smoke.out`). Families are labelled on x11's corpus, which the
+smoke runs did not change, so both runs are labelled alike.
+
+| | fusion5 | fusion6 |
+| --- | --- | --- |
+| evaluations per searcher-hour | 0.80M | 0.69M |
+| archive elites at the end | 1,129 | 12,604 |
+| rescores: count, seconds, share of searcher time | 29, 89 s, 2.4% | 8, 145 s, 4.0% |
+| parameter skips (Mace4 calls, seconds, share) | 28 (41, 26 s, 0.7%) | 148 (186, 177 s, 4.9%) |
+| cell wins / pushes | 9,589 / 3,751 | 29,637 / 16,911 |
+| families among all pushes: distinct, largest share, effective number | 233, 8.4%, 82 | 438, 4.5%, 164 |
+| **pending top 80** (about an hour of X11's verifiers): distinct, largest share | 13, 61% | **53, 5%** |
+| pending top 80: new to F1 / mean cheap score | 6 / 16.3 | 29 / 9.5 |
+| pending top 500: distinct, largest share, new to F1, mean cheap | 59, 39%, 20, 11.7 | 169, 6.2%, 96, 7.8 |
+| verified (positive) | 3 (0) | 8 (2) |
+| MemAvailable min / searcher PSS max | 3,096 / 520 MB | 3,230 / 539 MB |
+
+**Reading:**
+- **The diversity pressure works live, and more strongly at the head of the queue than offline.** In fusion5's top 80,
+  one family holds 61%. In fusion6's top 80, no family holds more than 5%, and 29 of the 53 families are new to F1.
+  Offline, the top 500 had 162–180 families against 64–76; live it is 169 against 59.
+- **The throttle works.** Each fusion6 searcher rescored twice, at about 18 s each with about 3,100 elites. That is
+  4.0% of searcher time. Rescoring at every corpus growth, as fusion5 does (5 to 8 times per searcher here), would cost
+  about four times as much.
+- **The costs are larger than offline:**
+  - The searchers ran 14% slower.
+  - The mean cheap score at the head of the queue is 41% lower (top 80) and 33% lower (top 500), against 15% offline.
+  - The parameter skip cost 4.9% of searcher time, near the 5% bound X11 used: 11 times more elites mean many more cell
+    wins to check.
+- **What this does not show:**
+  - Whether the more diverse theories score as well once verified. 3 and 8 verified theories are far too few.
+  - How the 41% lower cheap scores meet the push gate over hours. A lower k × priority could stall fusion6's pushes
+    sooner (REPORT X11, the push gate).
+  - Its behaviour beyond 15 minutes, with one set of seeds. The archive was still growing, and a rescore costs time in
+    proportion to the archive.
+- **Next, if a run follows:** a preregistered X12 with `--arm fusion6`, whose predictions are about verified scores and
+  families, with the push gate taken into account (more verifiers, or a bar that follows the queue).
+
 ## X11: arm `fusion5`, the parameter-disguise skip at scale (26 Nov 2026; preregistered; one block)
 
 Preregistration: PREREGISTRATION.md, X11 (`695a31b`, before the start) and one amendment before the start (`2922f7b`:

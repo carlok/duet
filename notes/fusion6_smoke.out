@@ -1,0 +1,18 @@
+== fam5 (fusion5): 931 s, 1.02 searcher-hours, 816,080 evaluations = 0.80M per searcher-hour; searcher PSS max 520 MB; MemAvailable min 3096 MB
+   archive elites 1,129 (per searcher [288, 275, 278, 288]); rescores 29 in 89 s = 2.4% of searcher time; per searcher [(5, 8), (8, 24), (8, 29), (8, 29)]
+   wins 9,589, pushed 3,751, held 0; parameter skips 28 (Mace4 41 calls, 26 s)
+   pushed theories found 3751: families {'n': 3751, 'distinct': 233, 'largest_share': 0.084, 'effective': 82.3, 'new_to_F1': 113}
+   verified 3: positive 0, screened {'split': 1}; families {'n': 3, 'distinct': 3, 'largest_share': 0.333, 'effective': 3.0, 'new_to_F1': 1}
+   largest families among pushes: [('·: TSQ, assoc, const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, sq-right-id, sq-left-id, flex', 314), ('·: - | ∘: comm, flex', 235), ('·: - | ∘: -', 217)]
+   pending top 80: mean cheap 16.25, families {'n': 80, 'distinct': 13, 'largest_share': 0.613, 'effective': 4.7, 'new_to_F1': 6}
+   pending top 500: mean cheap 11.73, families {'n': 500, 'distinct': 59, 'largest_share': 0.392, 'effective': 15.2, 'new_to_F1': 20}
+   pending top 1500: mean cheap 8.36, families {'n': 1500, 'distinct': 126, 'largest_share': 0.171, 'effective': 51.4, 'new_to_F1': 45}
+== fam6 (fusion6): 915 s, 1.00 searcher-hours, 689,923 evaluations = 0.69M per searcher-hour; searcher PSS max 539 MB; MemAvailable min 3230 MB
+   archive elites 12,604 (per searcher [3078, 3184, 3229, 3113]); rescores 8 in 145 s = 4.0% of searcher time; per searcher [(2, 36), (2, 36), (2, 35), (2, 37)]
+   wins 29,637, pushed 16,911, held 0; parameter skips 148 (Mace4 186 calls, 177 s)
+   pushed theories found 16912: families {'n': 16912, 'distinct': 438, 'largest_share': 0.045, 'effective': 164.3, 'new_to_F1': 291}
+   verified 8: positive 2, screened {'split': 2}; families {'n': 8, 'distinct': 7, 'largest_share': 0.25, 'effective': 6.7, 'new_to_F1': 3}
+   largest families among pushes: [('·: - | ∘: comm, flex', 755), ('·: - | ∘: -', 634), ('·: - | ∘: flex', 563)]
+   pending top 80: mean cheap 9.52, families {'n': 80, 'distinct': 53, 'largest_share': 0.05, 'effective': 46.6, 'new_to_F1': 29}
+   pending top 500: mean cheap 7.83, families {'n': 500, 'distinct': 169, 'largest_share': 0.062, 'effective': 103.1, 'new_to_F1': 96}
+   pending top 1500: mean cheap 6.66, families {'n': 1500, 'distinct': 272, 'largest_share': 0.05, 'effective': 139.0, 'new_to_F1': 155}

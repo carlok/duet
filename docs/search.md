@@ -86,6 +86,8 @@ that filter would confine a run to the quasigroup-like corner. It was not used.
 11. **Diversity over families (prototype).** The attractors come from the score, not from a lack of random variation, so
     arm `fusion6` adds diversity pressure. The family of a theory becomes one of its cell's coordinates, and common
     families lose queue priority. Offline, the 500 theories the verifiers would reach span 162–180 families, against
-    64–76. Its rescore is now throttled (tested); it needs a live test before a run.
+    64–76. With its rescore throttled, a 15-minute live test against `fusion5` agrees: the 80 theories the verifiers
+    would reach first span 53 families, the largest at 5%, against 13 with one at 61%. The price is 14% slower searchers
+    and cheap scores 41% lower at the head of the queue. Whether the verified scores follow is for a preregistered run.
 
 Details, numbers and commands: [`REPORT.md`](../REPORT.md). Next: [the ranking](ranking.md).

@@ -120,8 +120,9 @@ x11 added 16 new structured families. Properties are corpus-implied; E confirmed
   the first 14 minutes, so the verifiers spent 8 hours on that batch. The verifiers are the bottleneck.
 - **Before that:** X10 found the parameter-disguise attractor; X9 drained X8's queue with the faster verifier V7.
 - **Next:**
-  - arm `fusion6`, which adds pressure toward rare families: an offline prototype with a tested rescore throttle,
-    which needs a live test;
+  - arm `fusion6`, which adds pressure toward rare families. In a 15-minute live test against `fusion5`, the 80
+    theories the verifiers would reach first span 53 families instead of 13, at 14% slower searchers and lower cheap
+    scores. A preregistered run would tell whether those theories hold up once verified;
   - a push gate that follows the queue, or fewer searchers and more verifiers;
   - a specialist's eye on the unidentified candidates, starting with `55cb2c91` and `3818b88f`.
 

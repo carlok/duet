@@ -292,7 +292,12 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - **Arm `fusion6`, offline prototype** (REPORT, "Family pressure"): over 400,000 proposals and 3 seeds, the top 500
       pushes hold 162–180 families against fusion5's 64–76. The largest family's share falls to under 5%, and the mean
       cheap score falls 15%. The rescore is throttled to once per 600 s (320b9b7, `tests/test_fusion6.py`, passing since
-      X11). Next: a paired live smoke with maintenance against fusion5.
+      X11).
+    - **fusion6 live smoke** (REPORT, "fusion6 against fusion5", 26 Nov evening; 900 s, 4 searchers + 1 verifier each,
+      copies of x11's corpus, deleted afterwards). The pending top 80 has 53 families, largest 5%, against fusion5's 13,
+      largest 61%. Costs: searchers 14% slower (0.69M against 0.80M per searcher-hour), rescores 4.0% of searcher time,
+      the parameter skip's Mace4 4.9%. The mean cheap score at the head of the queue is 41% lower. The archive is 11×
+      larger. The smoke does not show verified scores or the push gate over hours.
   - 26 Nov, evening (REPORT "X11"):
     - **X11** (fusion5, V7, image `soup:x11` = c96838c1e261, fork of x10's corpus in `work/x11`, empty queue) ran one
       block x11a of 28,834 s to budget. No deviation. **All seven predictions W1–W7 hold.**
