@@ -83,7 +83,7 @@ by the whole theory but by no single law of it.
 | `hidden.py`, `split.py`, `relabel.py` | Post hoc equivalence checks: one operation a short term in the other; with `--param`, a term plus a constant square (`hidden_param`, also the V6 screen); a ·-theory plus a ∘-theory (finite certificate or E proof); named theories under the 8 relabellings. Resumable `--set candidates`; `split --fragments 1` scans a data directory |
 | `lean_cert.py` | Lean 4 files for finite models (`decide` only) into `lean/Duet/`, and the `Duet.lean` root. Tables are packed into one `Nat` literal by default (`--encoding packed`, from packed-table-footprint; `vec` for the modules made before 24 Nov). `lean/Duet/Delta.lean` is hand-written: general proofs, no `decide` |
 | `known.py` | X7: the known library (catalogue + ledger, fragments and subvarieties; earlier candidates, equivalents) and the seen-before keys, for arm `fusion4`; `build --out` before a run |
-| `paramskip.py` | After X10: the search-side parameter-disguise skip for arm `fusion5`. 5,008 linear parameter terms (x and y once each, z·z or z∘z, 2-4 operations); step 1 on the corpus models (numba, early exit), step 2 Mace4 on 2-4 elements for a model where the term fails (added to the corpus). Measured in `notes/paramskip_check.out`, smoke in `notes/paramskip_smoke.out` |
+| `paramskip.py` | After X10: the search-side parameter-disguise skip for arm `fusion5`. 5,008 linear parameter terms (x and y once each, z·z or z∘z, 2-4 operations); step 1 on the corpus models (numba, early exit), step 2 Mace4 on 2-5 elements (the default `max_n`; the measurement used 2-4) for a model where the term fails (added to the corpus). Measured in `notes/paramskip_check.out`, smoke in `notes/paramskip_smoke.out` |
 | `funnel.py` | The live funnel, level 0 (cheap evaluations) to level 8 (studied closely, unidentified), over all runs; `--readme` rewrites the README block between the funnel markers. Level 0 = every searcher's final `evals` from `runs/<run>/archive_s*.json` (retired searchers included); distinct from the union of `bloom_*.npy`; milestones 50M/100M/200M |
 | `taxonomy.py` | F1: primary family per verified theory (disguise, known, no synergy, diagonal, argument-ignoring, structured) and the reduct signature (22 relabelling-closed one-op laws, union corpus, E-confirmed); new/emerging flags, accumulation curve with Chao1. `build --confirm --jobs 8`, then `report --readme --docs` (README block between `<!-- families:start -->` and `<!-- families:end -->`, `docs/families.md`). `families.py` is the unrelated countermodel module |
 | `dedupe.py` | Candidates up to logical equivalence under the 8 relabellings (model filter on every run's corpus, then E both ways, in parallel); post hoc, the ranking is not changed |
@@ -291,9 +291,26 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       at scale.
     - **Arm `fusion6`, offline prototype** (REPORT, "Family pressure"): over 400,000 proposals and 3 seeds, the top 500
       pushes hold 162–180 families against fusion5's 64–76. The largest family's share falls to under 5%, and the mean
-      cheap score falls 15%. Its rescore cost blocks a run until it is throttled.
-    - **X11** (fusion5) is preregistered (695a31b) and runs on image `soup:x11` = c96838c1e261, because `soup` was rebuilt
-      for the fusion6 prototype afterwards.
+      cheap score falls 15%. The rescore is throttled to once per 600 s (320b9b7, `tests/test_fusion6.py`, passing since
+      X11). Next: a paired live smoke with maintenance against fusion5.
+  - 26 Nov, evening (REPORT "X11"):
+    - **X11** (fusion5, V7, image `soup:x11` = c96838c1e261, fork of x10's corpus in `work/x11`, empty queue) ran one
+      block x11a of 28,834 s to budget. No deviation. **All seven predictions W1–W7 hold.**
+    - **The skip:** 0 of 640 verified theories are parameter disguises (X10 294 of 578). The searchers skipped 890 cell
+      wins (107 distinct law sets), with Mace4 at 0.11% of searcher time. 0.95M evaluations per searcher-hour.
+    - **Results:** 307 of 640 have a positive score (X10 70). Stage b took 54 s per theory (X10 255 s). F1: structured
+      48.0%, no synergy 50.9%. There are 16 new families, 170 in all, Chao1 index 204. Level 0 is 174.0M, level 7 is 69,
+      level 8 still 9.
+    - **Candidates:** 5 of 20 have classical models (X10 15) and 10 are disconnected (X10 4). They are 16 new varieties
+      (278 candidates, 230 varieties). `1f430506` and `1238c063` take N1 ranks 1 and 2, unstudied; both have the bridge
+      (x·y)·(x∘z) = z∘x. Six disconnected candidates share (x∘y)·(z·y) = y∘x.
+    - **The Steiner shape stays** without a disguise: the largest x11 family is a TSQ family (59 of 307), and
+      x·(x·x) = y·(x·y) is proved in 77 theories.
+    - **Stage c:** 16 theories, settled 3 of about 28 claims (FMB). 15 stage-c and 1,016 pending tasks are left in
+      `work/x11/queue`. Linear sweep: 58 open claims, none refuted.
+    - **Near miss:** MemAvailable fell to 1,050 MB at 13:32 UTC, 50 MB above the stop; cause not established.
+    - **ParamSkip's Mace4 bound:** the searcher uses the default `max_n` 5. The X5–X10 measurement used 4, and the docs
+      said 2–4 until corrected after X11.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -421,6 +438,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
 - The stage-c lane is ordered by priority, so a backlog copied into a run with searchers is not drained: the run's own
   new tasks go first. X10 reached 2 of 156 copied tasks (U2). To drain a backlog, run stage c without searchers, or
   give the copied tasks their own lane.
+- The push gate (k × priority ≥ 0.5 × the arm's 20th best verified score) stops the pushes once verified scores rise.
+  A run that starts with no results stalls fastest: X11 made 99% of its 3,291 pushes in its first 805 s, and the
+  verifiers spent the 8 hours on that batch (x10b: 99% by 9.9% of its block, x8b by 34.7%). Searcher speed (W2-type
+  numbers) is then not search reaching the verifiers. Measure with `notes/push_gate.py <dirs>` before reading
+  anything into the search's later hours.
 
 ## Tasks, in order
 

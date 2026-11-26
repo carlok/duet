@@ -1,0 +1,58 @@
+== x11: 20 candidates
+d3dd46a7 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ y) = y · x & x ∘ (x ∘ (x ∘ x)) = x & x · (y ∘ z) = (x · z) ∘ y
+83b40efa works=True connected=- unknown=split None classical=2 e.g. F4[1,1,0]|aff4[3,1,0] 
+1f430506 works=True connected=- unknown=- classical=0 DISCONNECTED
+    (x · y) · (x ∘ z) = z ∘ x & ((x ∘ y) · (z · z)) · x = x
+3186abb9 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ (y · z)) = x & (x ∘ y) · (z · y) = y ∘ x & x · ((y · (x ∘ y)) · y) = x
+ca8de08f works=True connected=- unknown=split None classical=2 e.g. F4[1,1,0]|aff4[3,1,0] 
+6b2c7c66 works=True connected=- unknown=split None classical=2 e.g. F4[1,1,0]|aff4[3,1,0] 
+1238c063 works=True connected=- unknown=- classical=0 DISCONNECTED
+    (x · y) · (x ∘ z) = z ∘ x & (x · ((x ∘ y) · x)) · y = y
+7929039e works=False connected=- unknown=split None classical=0 
+90b1bb7f works=False connected=- unknown=split None classical=0 
+5a36795a works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ (y · z)) = x & x · ((y ∘ x) ∘ z) = x & (x ∘ y) · (z · y) = y ∘ x & x · ((y · y) · (z ∘ x)) = x
+86387c77 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · ((y ∘ x) ∘ z) = x & (x ∘ y) · (z · y) = y ∘ x & x · ((y · y) · (z ∘ x)) = x
+5614e5df works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ (z ∘ w)) = x & (x ∘ y) · (z · y) = y ∘ x
+ffe8444d works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ (z ∘ y)) = x & (x ∘ y) · (z · y) = y ∘ x
+5aef0732 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y ∘ y) = x & (x ∘ y) ∘ (y · z) = x ∘ z & (x ∘ y) ∘ ((y ∘ y) ∘ y) = x
+9e4c2121 works=False connected=- unknown=split None classical=0 
+45cbcc02 works=True connected=- unknown=- classical=2 e.g. B2.join|F4[1,1,0] 
+20a30709 works=False connected=- unknown=split None classical=5 e.g. F4[1,1,2]|F4[3,1,1] 
+0440c364 works=True connected=- unknown=split None classical=0 
+d2488e78 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (y · y) = x & x · (y ∘ (y · z)) = x & x · ((x ∘ y) ∘ y) = x & (x ∘ y) · (z · y) = y ∘ x & x · (x ∘ ((y · x) · z)) = x
+edf5a9f8 works=True connected=- unknown=split None classical=0 
+x11: 10 of 20 disconnected (works, unconnected, no classical model)
+== x10: 20 candidates
+1e3386e2 works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+0a0ff2fe works=True connected=- unknown=- classical=24 e.g. F4[1,1,1]|F4[1,1,3] 
+17a2d80a works=True connected=- unknown=- classical=24 e.g. F4[1,1,1]|F4[1,1,3] 
+4714a8a9 works=True connected=- unknown=- classical=24 e.g. F4[1,1,1]|F4[1,1,3] 
+23a4d276 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y · y & (x · ((y · y) · y)) ∘ x = x
+641be589 works=True connected=- unknown=- classical=24 e.g. F4[1,1,1]|F4[1,1,3] 
+fdc2fd06 works=True connected=- unknown=- classical=24 e.g. F4[1,1,1]|F4[1,1,3] 
+a8ee080e works=True connected=- unknown=- classical=1 e.g. aff6[2,2,2]|aff6[3,1,0] 
+d3db21dd works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+95a4a768 works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+ec36621c works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · ((y ∘ z) ∘ z) = x & (x ∘ y) · z = (y · z) ∘ x
+cf580ad5 works=False connected=- unknown=- classical=0 
+7612227e works=True connected=- unknown=- classical=24 e.g. F4[1,1,1]|F4[1,1,3] 
+86165a1a works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+d7189798 works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+18acb214 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = x & x · (y ∘ y) = x & (x ∘ y) · y = y ∘ (x ∘ y)
+628d9161 works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+5013265c works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x ∘ (y · (z · y)) = z ∘ x & ((x ∘ (x · y)) · y) · x = x
+68ed0734 works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+0fec2192 works=True connected=- unknown=- classical=11 e.g. F4[1,1,1]|F4[1,1,3] 
+x10: 4 of 20 disconnected (works, unconnected, no classical model)

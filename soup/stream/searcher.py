@@ -17,7 +17,7 @@ no duality operator, no duality bonus). Elites are only shared within an arm.
   one-hash bitmap counts distinct evaluated law sets.
 'fusion5' (after X10, 26 Nov 2026): 'fusion4', and a theory that would win an archive cell is skipped when it is a
   parameter disguise (soup.paramskip: on its corpus models one operation is a linear term in the other plus constant
-  squares, and Mace4 finds no model on 2 to 4 elements where that fails). Countermodels Mace4 finds go into the corpus.
+  squares, and Mace4 finds no model on 2 to 5 elements where that fails). Countermodels Mace4 finds go into the corpus.
 'fusion6' (prototype, 26 Nov 2026): 'fusion5' with pressure toward rare families. The structured-family label of a
   theory (soup.taxonomy.family_of: which of F1's 22 property laws its corpus models imply, canonical under the 8
   relabellings) becomes a sixth descriptor, so each family has cells of its own and an attractor fills only its own.

@@ -1,0 +1,5 @@
+s1601: evals 7458857, pushed 825, lattice-skipped 235487, ignore-skipped 264996
+s1602: evals 7621860, pushed 781, lattice-skipped 228502, ignore-skipped 310960
+s1603: evals 7646921, pushed 845, lattice-skipped 235188, ignore-skipped 325689
+s1604: evals 7842383, pushed 840, lattice-skipped 269338, ignore-skipped 313558
+x11: 968515 of 30570021 evaluations skipped as lattice-valid (3.2%)

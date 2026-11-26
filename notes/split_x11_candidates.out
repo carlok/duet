@@ -1,0 +1,21 @@
+20 candidates to check from ['x11']
+d3dd46a7 x11    split False  (witness n = 2)
+1f430506 x11    split False  (witness n = 2)
+3186abb9 x11    split False  (witness n = 2)
+1238c063 x11    split False  (witness n = 2)
+5a36795a x11    split False  (witness n = 2)
+86387c77 x11    split False  (witness n = 2)
+5614e5df x11    split False  (witness n = 2)
+ffe8444d x11    split False  (witness n = 2)
+83b40efa x11    split None E did not derive a bridge law from one-operation consequences 
+ca8de08f x11    split None E did not derive a bridge law from one-operation consequences 
+6b2c7c66 x11    split None E did not derive a bridge law from one-operation consequences 
+7929039e x11    split None E did not derive a bridge law from one-operation consequences 
+90b1bb7f x11    split None E did not derive a bridge law from one-operation consequences 
+5aef0732 x11    split False  (witness n = 2)
+45cbcc02 x11    split False  (witness n = 3)
+d2488e78 x11    split False  (witness n = 2)
+9e4c2121 x11    split None E did not derive a bridge law from one-operation consequences 
+20a30709 x11    split None E did not derive a bridge law from one-operation consequences 
+0440c364 x11    split None E did not derive a bridge law from one-operation consequences 
+edf5a9f8 x11    split None timeout 

@@ -1,0 +1,35 @@
+results 640: x11 640 {'x11a': 640}
+W1: screened {'split': 7}; parameter definitions 0 of 640 (0.0%) -> holds (<= 5%; X10 50.9%)
+W2: evaluations {'x11a': 30570021}, searcher-hours {'x11a': 32.02}, 0.95M per searcher-hour; Mace4 124 s = 0.11% of searcher time -> holds (>= 0.75M and <= 5%)
+  s1601: evals 7,458,857, cell wins skipped 419, distinct law sets skipped 35, Mace4 calls 37 (43.1 s), countermodels added 3
+  s1602: evals 7,621,860, cell wins skipped 7, distinct law sets skipped 11, Mace4 calls 14 (13.5 s), countermodels added 7
+  s1603: evals 7,646,921, cell wins skipped 35, distinct law sets skipped 23, Mace4 calls 25 (30.3 s), countermodels added 6
+  s1604: evals 7,842,383, cell wins skipped 429, distinct law sets skipped 38, Mace4 calls 39 (37.0 s), countermodels added 7
+  in all: cell wins skipped 890, distinct law sets 107, countermodels added 23
+W3: x11 in families.json 640: {'no synergy': 326, 'structured': 307, 'disguise': 7}; structured 48.0% -> holds (>= 30%; X10 11.0%)
+W6: x11 has 60 structured families, 16 new -> holds (>= 5; X10 3)
+  new: ·: TSQ, assoc, const-sq, sq-right-id, sq-left-id, flex | ∘: idem: 5
+  new: ·: comm, flex | ∘: idem, left-inv: 3
+  new: ·: comm, idem, flex | ∘: const-sq, sq-right-id, sq-left-id, flex: 3
+  new: ·: flex | ∘: sq-left-id, left-inv, flex: 1
+  new: ·: assoc, sq-left-id, left-inv, flex | ∘: left-inv: 1
+  new: ·: comm, assoc, const-sq, flex | ∘: const-sq, sq-right-id, sq-left-id: 1
+  new: ·: const-sq | ∘: sq-left-id: 1
+  new: ·: const-sq, sq-left-id, right-inv | ∘: left-inv: 1
+  new: ·: TSQ, flex | ∘: comm, idem, flex: 1
+  new: ·: TSQ, assoc, const-sq, sq-right-id, sq-left-id, flex | ∘: comm, idem, flex: 1
+  new: ·: - | ∘: TSQ, assoc, const-sq, sq-right-id, sq-left-id, flex: 1
+  new: ·: const-sq, sq-left-id | ∘: idem, flex: 1
+  new: ·: assoc, sq-left-id, left-inv, flex | ∘: flex: 1
+  new: ·: const-sq, sq-right-id, sq-left-id, left-inv | ∘: idem: 1
+  new: ·: assoc, sq-left-id, left-inv, flex | ∘: sq-left-id, flex: 1
+  new: ·: sq-left-id | ∘: sq-left-id, left-inv, flex: 1
+  largest in x11: [('·: TSQ, const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, sq-right-id, sq-left-id, left-inv', 59), ('·: comm, const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, sq-right-id, sq-left-id', 40), ('·: comm, const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, sq-left-id', 32), ('·: comm, flex | ∘: sq-left-id', 22), ('·: - | ∘: comm, flex', 20)]
+W4: 5 of 20 candidates with a classical model -> holds (<= 10; X10 15)
+W5: 10 of 20 disconnected -> holds (>= 8; X10 4)
+W7: x11a: 1739 ticks, elapsed 28834 s, stopped by budget; min MemAvailable 1050 MB at 2026-11-26 13:32:10 -> holds
+other: positive score 307; through stage c 16; open or unknown claims 58; stage-c lane at the end 15, pending 1016
+stage c: 16 theories, minutes [11.3, 29.2, 29.2, 30.5, 33.2, 34.9, 35.9, 53.9, 60.6, 62.5, 65.8, 69.5, 71.9, 72.0, 81.4, 96.3]; claims ~28: open 25, settled 3: {'FMB': 3}
+  top: d3dd46a7 score 1.744 stage b models None
+  top: 83b40efa score 1.286 stage b models None
+  top: 1f430506 score 1.062 stage b models None

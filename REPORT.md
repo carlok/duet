@@ -2,6 +2,109 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X11: arm `fusion5`, the parameter-disguise skip at scale (26 Nov 2026; preregistered; one block)
+
+Preregistration: PREREGISTRATION.md, X11 (`695a31b`, before the start) and one amendment before the start (`2922f7b`:
+the image is named by the tag `soup:x11` = `c96838c1e261`). No deviation. Data directory `x11`: x10's corpus (17,341
+found structures), a known library rebuilt after X10, an empty queue and no results. Arm `fusion5`, verifier V7, 4
+searchers kept alive, 4 verifiers, `--max-c 2 --cap-c 2 --drain-c 3600`, recycling at 700 MB, memory stop at 1,000 MB.
+- **x11a:** 26 Nov 07:59–15:59 UTC, one block for the whole budget, to budget: 28,834 s (the budget is checked once per
+  tick). The drain cut no stage-c task. The VM clock matched the Mac's at the end.
+
+Commands:
+- run: the preregistered command with `soup:x11`, `--seed0 1601 --budget 28800 --run x11a`;
+- post-run: `work/check/x11_post.log` and `work/check/x11_post2.log`, the steps of X10 on `x11` (statistics
+  `notes/{runstats,diagonal,heartbeats}_x11.out`; split per candidate, `notes/split_x11_candidates.out`;
+  `notes/disconnected.py x11 x10`, `notes/disconnected_x11_x10.out`);
+- predictions: `notes/x11_predictions.py` (output `notes/x11_predictions.out`);
+- table: `notes/x11_table.py` (output `notes/x11_table.out`);
+- push gate: `notes/push_gate.py x11 x10 x8` (output `notes/push_gate.out`), post hoc.
+
+| | X11 (x11a, 8.0 h) | X10's own theories (both blocks) |
+| --- | --- | --- |
+| theories found and verified | 640 | 578 |
+| through stage c | 16 | 13 |
+| positive score | 307 | 70 |
+| screened: parameter definition / split | 0 / 7 | 294 / 1 |
+| stage a / b / c, hours | 0.07 / 6.72 / 13.97 | 0.67 / 14.18 / 11.09 |
+| mean stage b per theory | 54 s | 255 s |
+| claims / proved | 840 / 507 | 390 / 119 |
+| refuted: finite model (a, c) / FMB / linear / E saturation | 158 / 82 / 9 / 26 | 33 / 18 / 58 / 41 |
+| unknown / open | 33 / 25 | 97 / 24 |
+| cheap evaluations | 30,570,021 | 28,328,985 |
+| structures added to the corpus | 2,190 | 515 |
+
+**Predictions** (descriptive; all seven hold):
+- **W1 holds.** No theory of the 640 was marked a parameter definition by V6 (X10: 294 of 578, 50.9%). The searchers
+  skipped 890 cell wins, which were 107 distinct law sets: the same few disguises came back and were answered from the
+  cache.
+- **W2 holds.** 0.95M evaluations per searcher-hour over 32.0 searcher-hours (≥ 0.75M). The Mace4 step made 115 calls
+  in 124 s, 0.11% of searcher time (≤ 5%), and sent 23 countermodels to the corpus, where the corpus test matched but
+  the theory was not a disguise. But see the push gate below: speed here is search speed, not search that reached the
+  verifiers.
+- **W3 holds.** F1's structured family is 48.0% of `x11` (307 of 640; X10 11.0%). No synergy is 50.9%, disguise 1.1%
+  (the 7 split screens).
+- **W4 holds.** 5 of the 20 candidates have a classical model among the base probes (X10 15): `83b40efa`, `ca8de08f`,
+  `6b2c7c66` (𝔽₄ with an affine ∘ over ℤ/4), `45cbcc02` (the 2-element join with 𝔽₄) and `20a30709` (𝔽₄).
+- **W5 holds.** 10 of 20 are disconnected (X10 4, X9 14, X8 9).
+- **W6 holds.** X11 adds 16 new structured families (X10 3), the largest with 5 theories (`·: TSQ, assoc, const-sq,
+  sq-right-id, sq-left-id, flex | ∘: idem`). There are 170 in all, Chao1 index 204 (descriptive).
+- **W7 holds.** The block ran to budget. It came close once: MemAvailable fell to 1,050 MB at 13:32:10 UTC, 50 MB above
+  the stop, and was back above 1,900 MB a minute later. At that tick the run's own processes held 5.8 GB, two verifiers
+  were in stage c and one was at 1.55 GB in stage a. The rest went to prover children (outside the workers' PSS) or the
+  user's other containers; which one is not established.
+
+**The push gate (found after the run; post hoc).** A searcher pushes a cell win only if k × priority ≥ 0.5 × the 20th
+best verified score of the arm (supervisor `--gate 0.5`); otherwise the win is held in the archive. X11's results
+directory started empty, so the bar rose with X11's own first results: 0.11 at 570 s, 0.22 at 1,445 s, 0.70 at the end.
+- 99% of X11's 3,291 pushes came in the first 805 s, 2.8% of the block. After 1,445 s the searchers pushed 8 more and
+  held 7,954 cell wins.
+- The verifiers worked all 8 hours on that first batch: pending fell from 1,500 to 1,016, and 1,635 tasks were trimmed
+  from the full lane early on. So every theory X11 verified was pushed in its first 14 minutes. The later search, about
+  29M evaluations, reached the verifiers only through the countermodels it sent to the corpus.
+- Earlier runs stalled later: x10b made 99% of its pushes by 9.9% of its block, x8b by 34.7%. x10a and x8 did not stall
+  (their bar was 0 or low).
+- The verifiers are the bottleneck, at about 80 theories per hour, and the gate turns the extra search into archive
+  churn. Nothing was changed. Two candidates for the next run: a bar that follows the queue (few competitive tasks
+  pending means push more), or fewer searchers and more verifiers.
+
+**Families (F1, `soup.taxonomy build --confirm`, 1,725 E checks over all runs; 96.9% of corpus-implied properties
+confirmed).** The Steiner corner is still there in plain form. The largest structured family in `x11` is `·: TSQ,
+const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, sq-right-id, sq-left-id, left-inv` (59 of 307), and
+x·(x·x) = y·(x·y) is proved in 77 of the 640 theories (emerging again, as in X5–X7 and X9). Neither screen touches it,
+because it is not a disguise.
+
+**The candidates** (the top 20 of X11's non-fragments):
+- **Split:** none of the 20 is split. 11 have a finite certificate on 2–3 elements. 9 are undecided: in 8, E derived no
+  bridge law from the one-operation consequences, and 1 hit the 900 s cap.
+- **Identification:** hidden 0, parameter definition 0, relabel 0, rediscover 0 (no E job over x11's 640 results).
+- **Disconnected (10):** `d3dd46a7`, `1f430506`, `3186abb9`, `1238c063`, `5a36795a`, `86387c77`, `5614e5df`,
+  `ffe8444d`, `5aef0732`, `d2488e78`. Six of them share the bridge (x∘y)·(z·y) = y∘x and prove x∘y = y∘x; dedupe keeps
+  them as six varieties. `1f430506` and `1238c063` share (x·y)·(x∘z) = z∘x and both prove (x∘(x·x))·y = y.
+- **Dedupe:** 16 new varieties. Two groups of three merge inside X11 (`83b40efa`, `ca8de08f`, `6b2c7c66`; `7929039e`,
+  `90b1bb7f`, `9e4c2121`), and none equals an earlier candidate. Over all runs, 278 candidates are 230 varieties.
+- **N1:** 153 enter (86 identified as known, 37 fail "works", 2 without a record), 14 of them from X11. X11 takes ranks
+  1 and 2 (`1f430506`, `1238c063`) and 12 and 13 (`5614e5df`, `ffe8444d`). The earlier top moves down two places. None
+  of X11's candidates has been studied.
+- **Funnel:** level 0 is 174,032,321 (+30.6M; 87% of the way to 200M). Distinct, from X7 on: 72.4M of 112.8M raw, X11
+  alone 18.8M of 30.6M (61.6%). Level 1 is 10,614, level 7 rises from 57 to 69 (12 from X11), level 8 stays at 9.
+
+**Stage c:** 16 theories, 11 to 96 minutes each. It settled 3 of about 28 claims, all by Vampire FMB, and proved none.
+Since T4 it has settled about 10 of 151. At the end, 15 tasks wait in `work/x11/queue/stage2c` and 1,016 in pending.
+
+**Linear sweep after the run** (`soup.linear sweep --jobs 10`): 58 open claims, none refuted.
+
+**Reading:**
+- **The skip works and costs almost nothing.** No parameter disguise reached the verifier, for 0.11% of searcher time.
+  The theories that took their place are richer: 307 of 640 have a positive score (X10 70 of 578), and stage b took
+  54 s per theory against 255 s.
+- **The candidates left the 𝔽₄ corner:** 5 of 20 have a classical model against 15, 10 are disconnected against 4,
+  and two take N1 ranks 1 and 2.
+- **No control arm.** The library rebuilt after X10 already skips X10's disguises and candidates, so the skip and the
+  library cannot be told apart here. The 600 s smoke run is the only contrast within one library (31 of 1,548 pushes
+  were disguises under fusion4, 0 of 1,550 under fusion5).
+- **All of it comes from the first 14 minutes of search** (the push gate). The 8 hours were verifier time.
+
 ## Family pressure, arm `fusion6`: an offline prototype (26 Nov 2026; no run, no verification)
 
 The attractors come from the score, not from a collapsed population. MAP-Elites already proposes random laws: 10% of
@@ -48,6 +151,9 @@ every push, the corpus store is detached, and there is no maintenance (no refres
   interval, so the searchers would stop searching. Before any run: throttle or make the rescore incremental, then do a
   live smoke run with maintenance, paired with fusion5.
 - **Tests:** `tests/test_taxonomy.py::test_family_of_matches_the_label_and_caches`; 108 tests pass.
+- **Throttle (`320b9b7`, written during X11, tested after it):** fusion6 rescores at most once per 600 s
+  (`Searcher._maybe_rescore`); other arms rescore at once, as before. `tests/test_fusion6.py`; 110 tests pass. The live
+  smoke run with maintenance, paired with fusion5, is still to do.
 
 ## A search-side skip for parameter disguises, arm `fusion5` (26 Nov 2026; code, tests, measurement, smoke runs)
 
@@ -61,6 +167,12 @@ search has spent cells and queue slots on it. `soup.paramskip` moves the test in
 - **Step 2, confirmation:** when step 1 fires, Mace4 looks for a model of T on 2 to 4 elements where the term fails
   (2 s). A model found goes into the shared corpus and step 1 runs again, at most 3 times. T is skipped only if a term
   still matches.
+  - **Correction (26 Nov, after X11):** 2 to 4 elements is the bound of the measurement on X5–X10
+    (`notes/paramskip_check.py`, `max_n` 4). The searcher uses `ParamSkip`'s default, 2 to 5 elements. That default ran
+    in the smoke runs and in X11, and it was stated as 2 to 4 here, in CLAUDE.md and in the searcher's docstring (the
+    X11 preregistration states no bound). Mace4 tries
+    the sizes in order within the same 2 s, so the larger bound finds every countermodel the smaller one finds, and
+    skips no more theories than measured.
 - **Arm `fusion5`:** `fusion4` plus the skip. It runs only when a theory would win an archive cell, and its result is
   cached per law set. V6's screen in the verifier is unchanged.
 - **Tests:** `tests/test_paramskip.py`: the term set, the kernel on a translated XOR, a disguise skipped, and a thin

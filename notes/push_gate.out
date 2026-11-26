@@ -1,0 +1,35 @@
+x11a: 1739 ticks, 28834 s; pushes 3,291, held 7,954; 99% of pushes by 805 s (2.8% of the block); pending at the end 1016, bar at the end 0.6964 x gate, k 0.0123
+   at    570 s: pushes so far  3,110, held    197, pending 1500, bar 0.1131, k 0.0068
+   at   1445 s: pushes so far  3,283, held  1,600, pending 1466, bar 0.2198, k 0.0047
+   at   2890 s: pushes so far  3,289, held  2,847, pending 1426, bar 0.266, k 0.0051
+   at   7207 s: pushes so far  3,290, held  4,896, pending 1310, bar 0.4968, k 0.0063
+   at  14421 s: pushes so far  3,290, held  6,218, pending 1186, bar 0.6581, k 0.0092
+   at  28834 s: pushes so far  3,291, held  7,954, pending 1016, bar 0.6964, k 0.0123
+x10a: 126 ticks, 2331 s; pushes 6,947, held 0; 99% of pushes by 2252 s (96.6% of the block); pending at the end 1500, bar at the end 0.0 x gate, k 0.0015
+   at     49 s: pushes so far      0, held      0, pending 0, bar 0.0, k 0.0011
+   at    116 s: pushes so far  1,007, held      0, pending 1123, bar 0.0, k 0.0015
+   at    232 s: pushes so far  1,763, held      0, pending 1506, bar 0.0, k 0.0015
+   at    587 s: pushes so far  3,440, held      0, pending 1502, bar 0.0, k 0.0016
+   at   1173 s: pushes so far  5,188, held      0, pending 1501, bar 0.0, k 0.0016
+   at   2331 s: pushes so far  6,947, held      0, pending 1500, bar 0.0, k 0.0015
+x10b: 1494 ticks, 26530 s; pushes 5,899, held 5,532; 99% of pushes by 2632 s (9.9% of the block); pending at the end 1008, bar at the end 0.4482 x gate, k 0.0021
+   at    522 s: pushes so far  2,994, held      0, pending 1500, bar 0.0, k 0.0015
+   at   1326 s: pushes so far  4,509, held      0, pending 1500, bar 0.0, k 0.0013
+   at   2649 s: pushes so far  5,862, held      0, pending 1500, bar 0.0, k 0.0011
+   at   6633 s: pushes so far  5,899, held  1,972, pending 1400, bar 0.2391, k 0.0019
+   at  13260 s: pushes so far  5,899, held  3,604, pending 1261, bar 0.3293, k 0.0016
+   at  26530 s: pushes so far  5,899, held  5,532, pending 1008, bar 0.4482, k 0.0021
+x8: 252 ticks, 4183 s; pushes 12,248, held 2,283; 99% of pushes by 3966 s (94.8% of the block); pending at the end 1500, bar at the end 0.2023 x gate, k 0.0164
+   at     79 s: pushes so far  1,383, held      0, pending 1524, bar 0.0, k 1.0
+   at    216 s: pushes so far  3,213, held      0, pending 1510, bar 0.0, k 0.0159
+   at    413 s: pushes so far  4,825, held      0, pending 1502, bar 0.0, k 0.021
+   at   1045 s: pushes so far  7,912, held      0, pending 1502, bar 0.0936, k 0.0205
+   at   2096 s: pushes so far 10,244, held    577, pending 1501, bar 0.1597, k 0.0169
+   at   4183 s: pushes so far 12,248, held  2,283, pending 1500, bar 0.2023, k 0.0164
+x8b: 1620 ticks, 28252 s; pushes 6,085, held 21,586; 99% of pushes by 9808 s (34.7% of the block); pending at the end 1256, bar at the end 0.5422 x gate, k 0.0084
+   at    565 s: pushes so far  1,602, held  3,161, pending 1500, bar 0.2023, k 0.0164
+   at   1416 s: pushes so far  2,750, held  4,329, pending 1500, bar 0.2023, k 0.0164
+   at   2832 s: pushes so far  4,007, held  5,344, pending 1500, bar 0.2023, k 0.0164
+   at   7060 s: pushes so far  5,925, held  8,827, pending 1500, bar 0.2992, k 0.0107
+   at  14122 s: pushes so far  6,070, held 15,839, pending 1487, bar 0.3593, k 0.0083
+   at  28252 s: pushes so far  6,085, held 21,586, pending 1256, bar 0.5422, k 0.0084

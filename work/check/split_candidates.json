@@ -10355,5 +10355,604 @@
    13945,
    23875
   ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ]
+  },
+  "key": "d3dd46a72e6684b3",
+  "source": "x11",
+  "laws": [
+   "x · (y ∘ y) = y · x",
+   "x ∘ (x ∘ (x ∘ x)) = x",
+   "x · (y ∘ z) = (x · z) ∘ y"
+  ],
+  "T": [
+   297,
+   1361,
+   6096
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "1f4305064aac0f9a",
+  "source": "x11",
+  "laws": [
+   "(x · y) · (x ∘ z) = z ∘ x",
+   "((x ∘ y) · (z · z)) · x = x"
+  ],
+  "T": [
+   16842,
+   62191
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "3186abb9dac03c28",
+  "source": "x11",
+  "laws": [
+   "x · (y ∘ (y · z)) = x",
+   "(x ∘ y) · (z · y) = y ∘ x",
+   "x · ((y · (x ∘ y)) · y) = x"
+  ],
+  "T": [
+   1132,
+   17315,
+   35909
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "1238c06359d6f921",
+  "source": "x11",
+  "laws": [
+   "(x · y) · (x ∘ z) = z ∘ x",
+   "(x · ((x ∘ y) · x)) · y = y"
+  ],
+  "T": [
+   16842,
+   58599
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "5a36795a36c4cdd0",
+  "source": "x11",
+  "laws": [
+   "x · (y ∘ (y · z)) = x",
+   "x · ((y ∘ x) ∘ z) = x",
+   "(x ∘ y) · (z · y) = y ∘ x",
+   "x · ((y · y) · (z ∘ x)) = x"
+  ],
+  "T": [
+   1132,
+   1590,
+   17315,
+   32705
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "86387c77348a1bdb",
+  "source": "x11",
+  "laws": [
+   "x · ((y ∘ x) ∘ z) = x",
+   "(x ∘ y) · (z · y) = y ∘ x",
+   "x · ((y · y) · (z ∘ x)) = x"
+  ],
+  "T": [
+   1590,
+   17315,
+   32705
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "5614e5df92041cb5",
+  "source": "x11",
+  "laws": [
+   "x · (y ∘ (z ∘ w)) = x",
+   "(x ∘ y) · (z · y) = y ∘ x"
+  ],
+  "T": [
+   1200,
+   17315
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "ffe8444dc40af1fe",
+  "source": "x11",
+  "laws": [
+   "x · (y ∘ (z ∘ y)) = x",
+   "(x ∘ y) · (z · y) = y ∘ x"
+  ],
+  "T": [
+   1192,
+   17315
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 8,
+  "key": "83b40efad09992d2",
+  "source": "x11",
+  "laws": [
+   "x · y = y · x",
+   "x · (x · (y ∘ y)) = y · y",
+   "((x · x) ∘ (x · y)) · x = y"
+  ],
+  "T": [
+   17,
+   10092,
+   62443
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 8,
+  "key": "ca8de08fb8d6eabf",
+  "source": "x11",
+  "laws": [
+   "x · y = y · x",
+   "x · ((y · x) · y) = x ∘ x",
+   "x · ((y · y) ∘ (x · y)) = y"
+  ],
+  "T": [
+   17,
+   13170,
+   33298
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 9,
+  "key": "6b2c7c669ca099ec",
+  "source": "x11",
+  "laws": [
+   "x · (x · (y ∘ y)) = y · y",
+   "x · ((y · y) ∘ (x · y)) = y",
+   "((x · x) ∘ (x · y)) · x = y"
+  ],
+  "T": [
+   10092,
+   33298,
+   62443
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 14,
+  "key": "7929039e62c877ab",
+  "source": "x11",
+  "laws": [
+   "x · (x · y) = y",
+   "x ∘ (y ∘ y) = x",
+   "(x · x) ∘ x = x",
+   "x · x = y ∘ ((x · y) · x)",
+   "x ∘ (y · ((y ∘ z) ∘ z)) = x"
+  ],
+  "T": [
+   48,
+   98,
+   135,
+   14595,
+   31495
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 15,
+  "key": "90b1bb7f0291d102",
+  "source": "x11",
+  "laws": [
+   "x · (x · y) = y",
+   "x · (x ∘ x) = x",
+   "(x · x) ∘ x = x",
+   "x · x = y ∘ ((x · y) · x)",
+   "(x ∘ (y ∘ (z ∘ z))) ∘ y = x"
+  ],
+  "T": [
+   48,
+   60,
+   135,
+   14595,
+   58338
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "5aef07329e6079a2",
+  "source": "x11",
+  "laws": [
+   "x · (y ∘ y) = x",
+   "(x ∘ y) ∘ (y · z) = x ∘ z",
+   "(x ∘ y) ∘ ((y ∘ y) ∘ y) = x"
+  ],
+  "T": [
+   68,
+   18903,
+   48532
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 3,
+   "F": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ],
+    [
+     0,
+     0,
+     2
+    ]
+   ],
+   "G": [
+    [
+     1,
+     0,
+     2
+    ],
+    [
+     0,
+     2,
+     1
+    ],
+    [
+     2,
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "45cbcc022d4a0d2e",
+  "source": "x11",
+  "laws": [
+   "x · x = x",
+   "x · y = y · x",
+   "x ∘ y = y ∘ x",
+   "x ∘ (x ∘ y) = y",
+   "x · (y · (y ∘ x)) = y · x"
+  ],
+  "T": [
+   2,
+   17,
+   41,
+   93,
+   10155
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "d2488e780f167ce2",
+  "source": "x11",
+  "laws": [
+   "x · (y · y) = x",
+   "x · (y ∘ (y · z)) = x",
+   "x · ((x ∘ y) ∘ y) = x",
+   "(x ∘ y) · (z · y) = y ∘ x",
+   "x · (x ∘ ((y · x) · z)) = x"
+  ],
+  "T": [
+   53,
+   1132,
+   1577,
+   17315,
+   29978
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 15,
+  "key": "9e4c212167ae2d09",
+  "source": "x11",
+  "laws": [
+   "x · (x · y) = y",
+   "x ∘ (x · x) = x",
+   "(x · x) ∘ x = x",
+   "x · x = y ∘ ((x · y) · x)",
+   "(x ∘ (y ∘ (z ∘ z))) ∘ y = x"
+  ],
+  "T": [
+   48,
+   75,
+   135,
+   14595,
+   58338
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 11,
+  "key": "20a30709227b1669",
+  "source": "x11",
+  "laws": [
+   "x · x = y · y",
+   "x · ((y · y) ∘ (x · y)) = y",
+   "(x ∘ (x ∘ (y · z))) · z = y"
+  ],
+  "T": [
+   14,
+   33298,
+   56391
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 13,
+  "key": "0440c364bd298c01",
+  "source": "x11",
+  "laws": [
+   "x · (y · (z · z)) = y · x",
+   "x · ((y ∘ x) ∘ (x · y)) = x",
+   "((x · y) ∘ (x · x)) · y = x"
+  ],
+  "T": [
+   9821,
+   33666,
+   62492
+  ]
+ },
+ {
+  "split": null,
+  "why": "timeout",
+  "secs": 900.0,
+  "key": "edf5a9f8a517fc96",
+  "source": "x11",
+  "laws": [
+   "x · (y · x) = y · y",
+   "(x ∘ (y ∘ (y · y))) ∘ z = z",
+   "(x ∘ ((y ∘ y) ∘ y)) ∘ y = y"
+  ],
+  "T": [
+   184,
+   58078,
+   61525
+  ]
  }
 ]

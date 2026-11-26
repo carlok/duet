@@ -77,11 +77,15 @@ that filter would confine a run to the quasigroup-like corner. It was not used.
 9. **Back to the Steiner corner (X10).** Half of X10's verified theories were parameter disguises of one shape,
    `x ∘ y = x · ((z · z) · (y · (z ∘ z)))`, and 15 of its 20 candidates have models over 𝔽₄. V6 caught every disguise,
    but only in the verifier, after the search had spent its cells on them. The screen therefore moved into the search.
-   Arm `fusion5` skips such a theory before it takes a cell: a corpus test, confirmed by Mace4 on 2 to 4 elements. Run
-   X11 tests it at scale.
-10. **Diversity over families (prototype).** The attractors come from the score, not from a lack of random variation, so
+   Arm `fusion5` skips such a theory before it takes a cell: a corpus test, confirmed by Mace4 on 2 to 5 elements.
+10. **The skip in the search (X11).** No parameter disguise reached the verifier, for 0.11% of searcher time. 48% of
+    X11's verified theories are structured (X10 11%), only 5 of its 20 candidates have a classical model (X10 15), and
+    two of them lead the ranking. The Steiner shape is still there without a disguise. A side finding: the searchers
+    stop pushing once the verified scores rise past their gate. X11 pushed 99% of its theories in its first 14 minutes,
+    and the verifiers worked on them for 8 hours.
+11. **Diversity over families (prototype).** The attractors come from the score, not from a lack of random variation, so
     arm `fusion6` adds diversity pressure. The family of a theory becomes one of its cell's coordinates, and common
     families lose queue priority. Offline, the 500 theories the verifiers would reach span 162–180 families, against
-    64–76. It needs a cheaper rescore and a live test before a run.
+    64–76. Its rescore is now throttled (tested); it needs a live test before a run.
 
 Details, numbers and commands: [`REPORT.md`](../REPORT.md). Next: [the ranking](ranking.md).

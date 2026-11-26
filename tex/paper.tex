@@ -25,15 +25,15 @@ an open-ended search over small equational theories\\[4pt]\large Draft, 26 Novem
 \begin{abstract}
 We report nine theories in two binary operations $\op$ and $\cop$ that neither our automatic checks nor a close
 reading by hand could identify. Each has \emph{synergy}: it implies a law that none of its own laws implies alone.
-They are what remains of 143 million cheap evaluations after a sequence of stricter filters: verification by
-finite-model search and the provers E, Vampire, Mace4 and Z3 (9{,}974 theories), a proved emergent law (6{,}953), no
-fragment of a named theory (5{,}670), the top candidates of each run merged into varieties (214), no identification by
-any automatic check (139), every automatic novelty mark (57), and study by hand (9). Every implication reported has a
+They are what remains of 174 million cheap evaluations after a sequence of stricter filters: verification by
+finite-model search and the provers E, Vampire, Mace4 and Z3 (10{,}614 theories), a proved emergent law (7{,}260), no
+fragment of a named theory (5{,}977), the top candidates of each run merged into varieties (230), no identification by
+any automatic check (153), every automatic novelty mark (69), and study by hand (9). Every implication reported has a
 prover proof, and every non-implication a finite model, a checked convergent rewrite system or a model on
 $\mathbb{Z}$. The theories have 2 to 6 laws of order at most~4, proposed by a quality-diversity search scored on
 12{,}509 finite structures. The same pipeline rediscovers lattice bases, absorption pairs, a fragment of Heyting
-algebras and Steiner loops in disguise. The search continues: the verified theories fall into 154 families, and the
-last four runs added 26, 11, 18 and 3 new ones. None of the nine is claimed new.
+algebras and Steiner loops in disguise. The search continues: the verified theories fall into 170 families, and the
+last five runs added 26, 11, 18, 3 and 16 new ones. None of the nine is claimed new.
 \end{abstract}
 
 \section{Question}
@@ -119,17 +119,17 @@ Table~\ref{tab:nine} lists the nine theories at its bottom.
 \begin{table}[!htb]\centering\small
 \begin{tabular}{rrl}\toprule
 level & theories & what survives \\\midrule
-0 & 143{,}462{,}300 & cheap evaluations on the corpus (repeats counted again) \\
-1 & 9{,}974 & verified by provers and finite-model search \\
-2 & 6{,}953 & with a proved emergent law \\
-3 & 5{,}670 & not a fragment of one of ten named theories \\
-4 & 258 & candidates: the top 20 non-fragments of each run \\
-5 & 214 & distinct varieties (equivalence by E, both ways) \\
-6 & 139 & identified by no check (split, definition, relabelling, catalogue) \\
-7 & 57 & every automatic mark: off-diagonal synergy, no classical model, nothing related \\
+0 & 174{,}032{,}321 & cheap evaluations on the corpus (repeats counted again) \\
+1 & 10{,}614 & verified by provers and finite-model search \\
+2 & 7{,}260 & with a proved emergent law \\
+3 & 5{,}977 & not a fragment of one of ten named theories \\
+4 & 278 & candidates: the top 20 non-fragments of each run \\
+5 & 230 & distinct varieties (equivalence by E, both ways) \\
+6 & 153 & identified by no check (split, definition, relabelling, catalogue) \\
+7 & 69 & every automatic mark: off-diagonal synergy, no classical model, nothing related \\
 8 & 9 & studied closely by hand, still unidentified \\\bottomrule
 \end{tabular}
-\caption{The funnel (\texttt{soup.funnel}). Level~0 is $7.8\times10^{-19}$ of the $1.8\times10^{26}$ sets of up to
+\caption{The funnel (\texttt{soup.funnel}). Level~0 is $9.5\times10^{-19}$ of the $1.8\times10^{26}$ sets of up to
 six laws.}\label{tab:funnel}
 \end{table}
 
@@ -218,20 +218,25 @@ Skipping those (X5) led to the Steiner-loop disguise, and screening that (X6) le
 model (X5: 0). X7 also skips every theory the corpus relates to a known structure or an earlier candidate; 12 of its
 top 20 carry every automatic mark. In X10 the search fell back into the Steiner corner: half of its 578 verified
 theories were parameter disguises of one shape, $x\cop y=x\op((z\op z)\op(y\op(z\cop z)))$, all screened out, and 15
-of its top 20 have models over $\mathbb{F}_4$ or $\mathbb{Z}/6$. Every run from X4 on was preregistered with its
-deviations recorded; X6 to X9 and the first block of X10 were stopped early by their memory rule.
+of its top 20 have models over $\mathbb{F}_4$ or $\mathbb{Z}/6$. X11 moved that screen into the search, as a corpus
+test confirmed by Mace4: none of its 640 verified theories is such a disguise, only 5 of its top 20 have a classical
+model, and two of them lead the novelty ranking. The Steiner shape itself remains, without a disguise. All of X11's
+verified theories were pushed in its first 14 minutes: once verified scores rise, a gate stops the pushes, and the
+verifiers, not the search, set the pace. Every run from X4 on was preregistered with its deviations recorded; X6 to
+X9 and the first block of X10 were stopped early by their memory rule.
 
 \subsection{Families}
 A preregistered post hoc statistic, F1, puts each verified theory in one family, by the first rule that matches: a
 disguise, known (a proved relation to a catalogue entry or the ledger), no proved synergy, diagonal,
 argument-ignoring, or \emph{structured}. A structured theory is labelled by which of eleven one-operation properties
 each operation has (commutative, associative, idempotent, constant squares, and so on), up to relabelling; E confirms
-96.7\% of the 12{,}993 property claims. Structured theories are 0 to 0.5\% of the early runs, 44 to 69\% of X5 to
-X7, and 11\% of X10. There are 154 structured families, and X7 to X10 added 26, 11, 18 and 3. Chao1 gives 175, but the search skips
+96.9\% of the 15{,}059 property claims. Structured theories are 0 to 0.5\% of the early runs, 44 to 69\% of X5 to
+X7, 11\% of X10 and 48\% of X11. There are 170 structured families, and X7 to X11 added 26, 11, 18, 3 and 16. Chao1
+gives 204, but the search skips
 what it has seen, so this is a descriptive index, not an estimate~\cite{stads2018}. The direction of the search
 mattered more than its volume: the prior arm made 51 of the first 63.7 million cheap evaluations and found 6 families,
-the fusion arms X4 to X7 made 12.5 million and found 118, X8 made 51.5 million and found 11, and X10 made 28.3 million
-and found 3.
+the fusion arms X4 to X7 made 12.5 million and found 118, X8 made 51.5 million and found 11, X10 made 28.3 million
+and found 3, and X11 made 30.6 million and found 16.
 
 \section{Limitations}
 \begin{itemize}
@@ -246,14 +251,15 @@ and found 3.
   is not certified.
 \item ``Not named'' rests on checks against ten named theories and a catalogue of 13, and on web searches, which
   missed the Yang--Baxter source on the first pass.
-\item The explored share is small ($1.43\times10^{8}$ cheap evaluations against $1.8\times10^{26}$ law sets) and not
+\item The explored share is small ($1.74\times10^{8}$ cheap evaluations against $1.8\times10^{26}$ law sets) and not
   random: the search started in the most-studied part of two-operation algebra, so rediscovery there is expected, and
   finding nothing new would not show that nothing new exists.
 \end{itemize}
 
 \section*{Status, reproducibility, and how this work was made}
-X10 ran two stage-c tasks at a time beside the search for 8 hours. They settled none of their claims, and since the
-lane is ordered by priority, the search's new tasks went before the 156 that were waiting. All runs use a container with
+The long prover runs (stage c) remain the weak stage: since T4 they have settled about 10 of 151 claims, and in X10 and
+X11 they ran two at a time beside the search for 8 hours each. None of X11's top candidates has been studied by hand
+yet. All runs use a container with
 pinned versions (Z3 5.4.1, E 3.2.5, Vampire 5.1.0, Prover9/Mace4 LADR-2026-8A, Twee 2.7.1, built from source). Code,
 data, preregistrations and every number with the command behind it are at \url{https://github.com/carlok/duet};
 \texttt{intro/} introduces the subject from scratch. An AI coding assistant (Claude Code, by Anthropic) designed,

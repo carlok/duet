@@ -1,0 +1,10 @@
+theories                                      X11 (x11a): 640 | X10 own: 578
+through stage c                               X11 (x11a): 16 | X10 own: 13
+positive score                                X11 (x11a): 307 | X10 own: 70
+screened param / split                        X11 (x11a): 0 / 7 | X10 own: 294 / 1
+stage a / b / c hours                         X11 (x11a): 0.07 / 6.72 / 13.97 | X10 own: 0.67 / 14.18 / 11.09
+mean stage b per theory (s)                   X11 (x11a): 54 | X10 own: 255
+claims / proved                               X11 (x11a): 840 / 507 | X10 own: 390 / 119
+refuted: finite (a/c) / FMB / linear / E sat  X11 (x11a): 158 / 82 / 9 / 26 | X10 own: 33 / 18 / 58 / 41
+unknown / open                                X11 (x11a): 33 / 25 | X10 own: 97 / 24
+other outcomes                                X11 (x11a): {} | X10 own: {}

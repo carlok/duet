@@ -24,7 +24,7 @@ from pathlib import Path
 
 import numpy as np
 
-RUNS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', 'x7', 'x8', 'x9', 'x10']
+RUNS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', 'x7', 'x8', 'x9', 'x10', 'x11']
 PRIMARY = ['disguise', 'known', 'no synergy', 'diagonal', 'argument-ignoring', 'structured']
 PROPS = [('comm', 'x · y = y · x'), ('assoc', '(x · y) · z = x · (y · z)'), ('idem', 'x · x = x'),
          ('const-sq', 'x · x = y · y'), ('sq-right-id', 'x · (y · y) = x'), ('sq-left-id', '(y · y) · x = x'),
