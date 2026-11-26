@@ -81,6 +81,17 @@ def signature(imp):
     return sorted(i for i in PL if imp[i])
 
 
+_FAM = {}
+
+
+def family_of(imp):
+    """The structured-family label of a corpus-implied law vector, canonical under the 8 relabellings; cached per
+    signature. Arm fusion6 uses it in the search (one corpus, no E confirmation), so it can differ from F1's label."""
+    s = tuple(signature(imp))
+    if s not in _FAM: _FAM[s] = canonical_label(s)
+    return _FAM[s]
+
+
 def chao1(counts):
     """Chao1 richness estimate from the abundance of each class. S + f1^2 / (2 f2); bias-corrected
     S + f1 (f1 - 1) / 2 when f2 = 0."""

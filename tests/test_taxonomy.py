@@ -25,6 +25,14 @@ def test_relabelled_twin_same_family():
         assert canonical_label(signature(C.implied(t2))) == canonical_label(signature(C.implied(t)))
 
 
+def test_family_of_matches_the_label_and_caches():
+    from soup.taxonomy import _FAM, family_of
+    imp = C.implied(T(C38))
+    assert family_of(imp) == canonical_label(signature(imp))
+    n = len(_FAM); family_of(imp)
+    assert len(_FAM) == n                          # the second call is served from the cache
+
+
 def test_label_reads():
     S = T(['x · y = y · x', 'x · (x · y) = y', 'x ∘ x = x'])
     assert label(S) == '·: TSQ | ∘: idem'

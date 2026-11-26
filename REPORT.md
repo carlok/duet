@@ -2,6 +2,53 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## Family pressure, arm `fusion6`: an offline prototype (26 Nov 2026; no run, no verification)
+
+The attractors come from the score, not from a collapsed population. MAP-Elites already proposes random laws: 10% of
+proposals are two fresh laws, and 25% replace one law of an elite. But an attractor theory beats a newcomer in every cell
+it can enter, because the cells do not record what kind of structure a theory is. `fusion6` adds diversity pressure
+over families.
+- **Family cells:** the structured-family label (`soup.taxonomy.family_of`: which of F1's 22 property laws the corpus
+  models imply, canonical under the 8 relabellings, cached) is a sixth descriptor. Each family gets cells of its own,
+  and an attractor fills only its own.
+- **Rarity in the queue:** the push priority is divided by sqrt(1 + n), where n is the number of theories of the same
+  family the searcher has pushed. The verifiers only reach the top of the queue, so this moves their share toward rare
+  families.
+- **Everything else** is `fusion5`.
+
+**Offline comparison** (`notes/family_sim.py`, output `notes/family_sim.out`): one searcher per arm and seed (1601–1603),
+400,000 proposals each, all six at once on a fork of x10's corpus, deleted afterwards. The queue is a stub that records
+every push, the corpus store is detached, and there is no maintenance (no refresh, no verified scores, no gate). The
+"top 500" are the pushes with the highest priority under each arm's own rule, about what a run's verifiers reach
+(x10b verified 555).
+
+| | fusion5 | fusion6 |
+| --- | --- | --- |
+| proposals per second (6 processes at once) | 79–80 | 80–81 |
+| archive elites (families) | 294–300 (66–67) | 5,516–5,731 (363–388) |
+| pushes | 1,187–1,260 | 7,847–8,600 |
+| top 500: distinct families | 64–76 | 162–180 |
+| top 500: effective number of families, exp(entropy) | 22–38 | 112–120 |
+| top 500: largest family's share | 10–18% | 3.4–4.8% |
+| top 500: families absent from F1's structured families | 32–34 | 108–127 |
+| top 500: mean cheap score | 8.3–8.8 | 7.0–7.6 |
+| parameter disguises skipped | 4–6 | 46–70 |
+
+**Reading:**
+- **The pressure works on what the verifiers would see.** The top 500 hold 2.5 times as many families, the largest
+  family's share falls from 10–18% to under 5%, and the families F1 has not seen rise 3.5 times. The largest family is
+  the same in both arms, a TSQ with constant squares, so the Steiner corner is still the strongest pull. Its share falls.
+- **The price** is 15% in mean cheap score at the top, and more disguises to skip, since the search explores more.
+  Whether verified scores fall too is not known.
+- **"Absent from F1"** compares labels from one corpus without E confirmation against F1's labels from the union corpus
+  with E. The labels can differ for that reason alone. That is why fusion5 shows 32–34 "new" families too; only the
+  ratio means anything.
+- **Not runnable as it is.** The archive is 19 times larger. In a run, `rescore()` scores every elite again whenever the
+  corpus grows (each 20-s maintenance with new structures). 5,600 elites at about 12 ms each would take longer than the
+  interval, so the searchers would stop searching. Before any run: throttle or make the rescore incremental, then do a
+  live smoke run with maintenance, paired with fusion5.
+- **Tests:** `tests/test_taxonomy.py::test_family_of_matches_the_label_and_caches`; 108 tests pass.
+
 ## A search-side skip for parameter disguises, arm `fusion5` (26 Nov 2026; code, tests, measurement, smoke runs)
 
 X10's attractor (half of its verified theories were parameter disguises) is screened only in the verifier, after the

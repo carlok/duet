@@ -18,6 +18,11 @@ no duality operator, no duality bonus). Elites are only shared within an arm.
 'fusion5' (after X10, 26 Nov 2026): 'fusion4', and a theory that would win an archive cell is skipped when it is a
   parameter disguise (soup.paramskip: on its corpus models one operation is a linear term in the other plus constant
   squares, and Mace4 finds no model on 2 to 4 elements where that fails). Countermodels Mace4 finds go into the corpus.
+'fusion6' (prototype, 26 Nov 2026): 'fusion5' with pressure toward rare families. The structured-family label of a
+  theory (soup.taxonomy.family_of: which of F1's 22 property laws its corpus models imply, canonical under the 8
+  relabellings) becomes a sixth descriptor, so each family has cells of its own and an attractor fills only its own.
+  The push priority is divided by sqrt(1 + n), where n is the number of theories of the same family this searcher has
+  pushed, so the verifiers' share moves toward rare families.
 """
 import argparse
 import math
@@ -69,17 +74,19 @@ class Searcher:
     def __init__(self, name, seed, arm, run):
         self.name, self.arm, self.run = name, arm, run
         self.prior = arm == 'prior'
-        self.fusion = arm in ('fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5')
-        self.rigid = arm in ('fusion2', 'fusion3', 'fusion4', 'fusion5')
+        self.fusion = arm in ('fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6')
+        self.rigid = arm in ('fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6')
+        self.family = arm == 'fusion6'
+        self.fam_pushed = {}        # fusion6: family label -> theories of it this searcher has pushed
         self.rng = random.Random(seed)
         self.C = Corpus(store=ensure('corpus'))
         self.lat_skipped = self.ign_skipped = 0
         self.known_skipped = self.cand_skipped = self.seen_skipped = self.par_skipped = 0
         self.lib = None; self.prior_seen = set(); self.bloom = None; self.pskip = None
-        if arm == 'fusion5':      # after X10: skip parameter disguises before they take a cell (soup.paramskip)
+        if arm in ('fusion5', 'fusion6'):   # after X10: skip parameter disguises before they take a cell (soup.paramskip)
             from ..paramskip import ParamSkip
             self.pskip = ParamSkip(self.C)
-        if arm in ('fusion4', 'fusion5'):   # X7: skip what earlier runs already know (soup.known), count distinct evaluations
+        if arm in ('fusion4', 'fusion5', 'fusion6'):   # X7: skip what earlier runs already know (soup.known), count distinct evaluations
             import json
             from ..known import Library
             self.lib = Library(self.C, data()); self.t_lib = time.time()
@@ -139,7 +146,11 @@ class Searcher:
         score = sum(w[ORDER[e]] for e in fg) / (1 + sum(ORDER[t] for t in T)) * ((1 + len(du)) if self.prior else 1)
         nb = int(sum(BRIDGE[t] for t in T))
         desc = (len(T), len(du), nb, min(4, int(math.log2(m)) // 2), int(min(ORDER[e] for e in fg)))
-        return {'T': T, 'cheap': score, 'desc': desc, 'dualities': du, 'n_gain': int(len(fg))}
+        out = {'T': T, 'cheap': score, 'desc': desc, 'dualities': du, 'n_gain': int(len(fg))}
+        if self.family:                           # fusion6: the family is a sixth descriptor
+            from ..taxonomy import family_of
+            out['family'] = family_of(imp); out['desc'] = desc + (out['family'],)
+        return out
 
     def k(self):
         v, c = self.ratio
@@ -165,6 +176,8 @@ class Searcher:
         if push and any(BRIDGE[t] for t in s['T']) and key not in self.verified:
             novelty = sum(t not in self.pushed_laws for t in s['T']) / len(s['T'])
             prio = s['cheap'] * (1 + novelty)      # raw (cheap scale); the supervisor rescales with k
+            if self.family:                         # fusion6: common families lose priority
+                prio /= math.sqrt(1 + self.fam_pushed.get(s['family'], 0))
             # gate: only theories whose calibrated priority could reach the current top 20 enter the queue;
             # the others stay in the archive (not marked seen) and are pushed if they improve later
             if self.gate['k'] * prio < self.gate['threshold']:
@@ -172,8 +185,9 @@ class Searcher:
             if not self.Q.mark_seen(key): return True
             self.Q.push(key, {'T': list(canonical(s['T'])), 'cheap': s['cheap'], 'desc': list(s['desc']),
                               'novelty': novelty, 'arm': self.arm, 'run': self.run, 'searcher': self.name,
-                              't_pushed': time.time()}, prio)
+                              't_pushed': time.time(), **({'family': s['family']} if self.family else {})}, prio)
             self.pushed_laws |= set(s['T']); self.pushed += 1
+            if self.family: self.fam_pushed[s['family']] = self.fam_pushed.get(s['family'], 0) + 1
         return True
 
     def rescore(self):
@@ -287,7 +301,7 @@ class Searcher:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--seed', type=int, required=True)
-    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5'])
+    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6'])
     ap.add_argument('--run', required=True); ap.add_argument('--budget', type=float, default=1e9)
     a = ap.parse_args()
     s = Searcher(a.name, a.seed, a.arm, a.run)

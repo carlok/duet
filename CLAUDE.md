@@ -91,7 +91,7 @@ by the whole theory but by no single law of it.
 | `catalogue.py`, `rediscover.py` | R1: 13 known two-operation structures (10 of T3 + doppelsemigroups, weakly associative lattices, Δ-bijective pairs marked `post_hoc`); which of them each verified theory is a fragment, subvariety or equivalent of, under the 8 relabellings (model filter, then E). Post hoc only, never in the search (rule 6). `--summary [--candidates]` |
 | `loop_dual.py` | First-session batch MAP-Elites (superseded by `stream/`) |
 | `stream/fqueue.py` | File priority queue: `queue/{pending,stage2c,claimed,seen,dropped}`; `claim(..., caps={lane: n})` counts and claims under an O_EXCL lock file (`queue/.lock_<lane>`) |
-| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip), `fusion3` (IGNORE2: ignored variables may repeat), `fusion4` (X7: plus the known library and seen-before skips), `fusion5` (after X10: plus `soup.paramskip`, checked only at a cell win) |
+| `stream/searcher.py` | Continuous MAP-Elites, pushes every cell win with a bridge; verified scores replace cheap ones. Arms `prior`, `noprior`, `fusion` (X4: off-diagonal cheap score, 2-element-lattice skip, tradition-fusion proposals), `fusion2` (X5: plus the IGNORE skip), `fusion3` (IGNORE2: ignored variables may repeat), `fusion4` (X7: plus the known library and seen-before skips), `fusion5` (after X10: plus `soup.paramskip`, checked only at a cell win), `fusion6` (prototype: plus the family label as a sixth descriptor and push priority / sqrt(1 + pushes of that family); its archive is 19 times larger, so `rescore()` must be throttled before any run) |
 | `stream/verifier.py` | Pulls tasks, runs stages a+b or c, writes `results/<key>.json`, models to the corpus; `--cap-c N` (from the supervisor) caps stage-c tasks over all verifiers; after `--c-until T` (from `--drain-c`) it starts no stage-c task. On SIGTERM it puts its own claimed task back |
 | `stream/supervisor.py` | Starts and rebalances processes; single writer of `logs/stats.jsonl`, `journal/journal.md`, `journal/leaderboard.md`. `--min-searchers N` (X8); `--cap-c N` (after X9): at most N stage-c tasks at once, and the verifier floor becomes N + 1, so a run that drains its queue turns its idle verifiers into searchers; `--drain-c S` (X10, runs in blocks): no new stage-c task in the last S seconds, and the journal's end entry counts the stage-c tasks the stop cut (counted before SIGTERM) |
 
@@ -289,6 +289,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       X6–X10 and no level-7 or level-8 theory. 34 of its skips are false (E refutes; countermodels on more than 4
       elements). In a paired 600 s smoke it cost 1% of evaluations, and fusion4 pushed 2% disguises against 0. Not run
       at scale.
+    - **Arm `fusion6`, offline prototype** (REPORT, "Family pressure"): over 400,000 proposals and 3 seeds, the top 500
+      pushes hold 162–180 families against fusion5's 64–76. The largest family's share falls to under 5%, and the mean
+      cheap score falls 15%. Its rescore cost blocks a run until it is throttled.
+    - **X11** (fusion5) is preregistered (695a31b) and runs on image `soup:x11` = c96838c1e261, because `soup` was rebuilt
+      for the fusion6 prototype afterwards.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.

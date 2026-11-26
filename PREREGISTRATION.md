@@ -26,6 +26,9 @@ the search finds once they are skipped. The user chose X11 before the stage-c ba
   `podman run -d --name soup-x11<letter> -v "$PWD/work:/data" -e SOUP_DATA=/data/x11 -e SOUP_VERIFIER=V7 soup python3 -m
   soup.stream.supervisor --arm fusion5 --searchers 4 --verifiers 4 --min-searchers 4 --max-c 2 --cap-c 2 --drain-c
   3600 --seed0 <1601 + 50(k-1)> --budget <block> --recycle-mb 700 --mem-stop-mb 1000 --run x11<letter>`.
+- **Amendment before the start (written 26 Nov 2026, 07:58 UTC):** after this entry, the `soup` image was rebuilt for
+  an offline prototype (arm `fusion6`, which X11 does not use). So the command names the preregistered image by a tag,
+  `soup:x11` = `c96838c1e261`, in place of `soup`. Nothing else changes.
 
 **Done before this entry, disclosed.**
 - X10's results, its post-run checks and its REPORT section were all read.
