@@ -67,6 +67,21 @@ Each round taught one lesson, and the search was changed to answer it.
 
 Both filters X5 called for now exist. A definition with a parameter (verifier V6) catches 18 of X5's 20 candidates and
 none from earlier runs. Ignored variables that repeat (arm `fusion3`) are implied by 151 of all 158 candidates, so
-that filter would confine a run to the quasigroup-like corner. Using it is a choice for the next run.
+that filter would confine a run to the quasigroup-like corner. It was not used.
+
+7. **Volume did less than direction (X8).** Eight searchers kept alive took level 0 past 100 million. They added 11
+   structured families, against 118 from the much smaller fusion runs X4 to X7.
+8. **A faster verifier (X9).** Verifier V7 stops running z3 once E has proved a claim, and tries linear models over finite
+   rings first. It verified 88.8 theories per verifier-hour, about five times more than before, and the linear models
+   refuted 17% of the claims they ran on, in about a second each.
+9. **Back to the Steiner corner (X10).** Half of X10's verified theories were parameter disguises of one shape,
+   `x ∘ y = x · ((z · z) · (y · (z ∘ z)))`, and 15 of its 20 candidates have models over 𝔽₄. V6 caught every disguise,
+   but only in the verifier, after the search had spent its cells on them. The screen therefore moved into the search.
+   Arm `fusion5` skips such a theory before it takes a cell: a corpus test, confirmed by Mace4 on 2 to 4 elements. Run
+   X11 tests it at scale.
+10. **Diversity over families (prototype).** The attractors come from the score, not from a lack of random variation, so
+    arm `fusion6` adds diversity pressure. The family of a theory becomes one of its cell's coordinates, and common
+    families lose queue priority. Offline, the 500 theories the verifiers would reach span 162–180 families, against
+    64–76. It needs a cheaper rescore and a live test before a run.
 
 Details, numbers and commands: [`REPORT.md`](../REPORT.md). Next: [the ranking](ranking.md).

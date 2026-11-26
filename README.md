@@ -88,7 +88,8 @@ x10 added 3 new structured families. Properties are corpus-implied; E confirmed 
   - steering off that trick led to Steiner loops in disguise;
   - screening that disguise moved the top candidates off classical ground (X6);
   - skipping everything already known sent the verifiers to new ground: 12 of X7's top 20 carry every automatic
-    mark.
+    mark;
+  - the search went back to the Steiner corner (X10), so the disguise screen moved into the search itself (X11).
 - **[The ranking](docs/ranking.md).** A preregistered novelty ranking, N1, with its live table.
 - **[Families and emerging patterns](docs/families.md).** Every verified theory sorted into a family, with each
   run's share, the families and laws that are new or emerging, and an accumulation curve.
@@ -117,8 +118,10 @@ x10 added 3 new structured families. Properties are corpus-implied; E confirmed 
     is at rank 10. Levels 7 and 8 are 57 and 9.
 - **Before that:** X9 drained X8's queue with the faster verifier V7, at 88.8 theories per verifier-hour.
 - **Also:** 154 structured families (F1); X10 added 3, with one theory each.
-- **Open:**
-  - a search-side skip for the parameter disguise, before another search run;
+- **Running now:** X11 (preregistered), 8 hours with arm `fusion5`, which skips the parameter disguise in the search.
+  Measured on X5 to X10, it skips every disguise the verifier marked and no candidate at funnel level 7 or 8.
+- **Next:**
+  - arm `fusion6`, which adds pressure toward rare families: an offline prototype so far, which needs a live test;
   - a specialist's eye on the unidentified candidates, starting with `55cb2c91` and `3818b88f`.
 
 ## License
