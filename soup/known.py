@@ -29,7 +29,7 @@ import numpy as np
 from .paths import data
 
 # earlier runs; the output directory itself and missing directories are skipped (X8 added x4a and x7, 24 Nov 2026)
-RUN_DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x4a', 'x5', 'x6', 'x7', 'x8', 'x9']
+RUN_DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x4a', 'x5', 'x6', 'x7', 'x8', 'x9', 'x10']
 
 
 def _relabelled(T):

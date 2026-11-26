@@ -23,7 +23,7 @@ import time
 from math import comb as _comb
 from pathlib import Path
 
-DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x4a', 'x5', 'x6', 'x7', 'x8', 'x9']
+DIRS = ['.', 't4-prior', 't4-noprior', 'x1', 'x2', 'x3', 'x4', 'x4a', 'x5', 'x6', 'x7', 'x8', 'x9', 'x10']
 START, END = '<!-- funnel:start -->', '<!-- funnel:end -->'
 EVAL_ONLY = {'x4a'}       # aborted after 3 min (deviation 6): its evaluations happened, its results are not used
 MILESTONES = [(50e6, 'the dust removed'), (100e6, 'the surface scratched'), (200e6, 'digging')]
