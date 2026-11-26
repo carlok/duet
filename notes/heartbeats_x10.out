@@ -1,0 +1,11 @@
+s1401: evals 277394, pushed 1142, lattice-skipped 7336, ignore-skipped 10799
+s1402: evals 271595, pushed 1153, lattice-skipped 5796, ignore-skipped 12388
+s1403: evals 275793, pushed 1187, lattice-skipped 5457, ignore-skipped 9800
+s1404: evals 292119, pushed 1159, lattice-skipped 6885, ignore-skipped 11070
+s1405: evals 287244, pushed 1133, lattice-skipped 7159, ignore-skipped 10807
+s1406: evals 280358, pushed 1173, lattice-skipped 6422, ignore-skipped 9116
+s1451: evals 6793087, pushed 1543, lattice-skipped 221588, ignore-skipped 280438
+s1452: evals 6813311, pushed 1510, lattice-skipped 225262, ignore-skipped 255115
+s1453: evals 6474297, pushed 1438, lattice-skipped 245906, ignore-skipped 250135
+s1454: evals 6563787, pushed 1408, lattice-skipped 248677, ignore-skipped 252432
+x10: 980488 of 28328985 evaluations skipped as lattice-valid (3.5%)

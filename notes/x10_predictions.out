@@ -1,0 +1,17 @@
+results 734: x10 580 {'x10b': 557, 'x10a': 23}; copied stage-c tasks 156, copied pending 1; copied results not redone 154
+U1: most workers in stage c at one tick: 2 (cap 2) -> cap holds
+  x10a: 126 ticks, elapsed 2331 s, stopped by memory rule, min MemAvailable 599 MB, most in stage c 2
+  x10b: 1494 ticks, elapsed 26530 s, stopped by budget, min MemAvailable 1745 MB, most in stage c 2
+  -> U1 fails: memory rule in ['x10a']
+U2: 15 theories through stage c, 2 of them copied, 13 from X10's own search -> fails (>= 12 copied)
+  minutes in stage c: [22.0, 29.3, 30.5, 43.1, 45.2, 46.9, 57.3, 57.9, 58.9, 59.5, 60.0, 60.6, 61.3, 63.3, 71.5]; mean 51.2
+  x10a: stage-c lane 156 at the start, 157 at the end; stage-c worker-hours 1.27
+  x10b: stage-c lane 157 at the start, 207 at the end; stage-c worker-hours 13.17
+U3: claims in stage c ~27: open 27, settled 0 (0.0%): {}; proved 0 -> fails (>= 5% settled, <= 1 proved)
+U4: evaluations {'x10a': 1684503, 'x10b': 26644482}, sum 28,328,985 -> holds (>= 22M, restated); level 0 143,462,300 (115,133,315 before)
+  x10a: searcher-hours 3.86, 0.44M per searcher-hour, searchers at most 6
+  x10b: searcher-hours 29.46, 0.90M per searcher-hour, searchers at most 4
+U5: 578 theories through stages a and b in X10 (0 of them the copied pending one) -> holds (>= 400)
+  x10a: 23 theories, 1.30 verifier-hours outside stage c, 17.6 per hour
+  x10b: 555 theories, 16.28 verifier-hours outside stage c, 34.1 per hour
+  positive score: 70; open claims left in X10 results: 124

@@ -269,6 +269,21 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - **Candidates:** X9's 20 are 20 new varieties (238 candidates, 200 varieties), 14 disconnected; 12 of the 20 have a
       square as a one-sided identity. Best at N1 is `3b20fedd`, rank 12. Funnel level 7 is 54, level 8 still 9.
     - **156 stage-c tasks** wait in `work/x9/queue/stage2c`.
+  - 26 Nov, early (REPORT "X10"):
+    - **X10** (V7, fusion4, `--max-c 2 --cap-c 2 --drain-c 3600`, fork of X9 in `work/x10`) ran in two blocks:
+      - x10a, 6 searchers: the memory rule fired after 2,313 s (deviation 12);
+      - x10b, 4 searchers: 26,499 s, to budget;
+      - in all 28,812 s.
+    - **Predictions:** U1 fails (x10a). U2 fails: 2 copied tasks went through stage c, because X10's own tasks outranked
+      them in the lane. U3 fails: stage c settled 0 of about 27 claims. U4 holds: +28.3M, so level 0 is 143.5M, and
+      x10b ran at 0.90M per searcher-hour. U5 holds: 578 verified.
+    - **Parameter-disguise attractor:** 294 of 578 (51%; X9 1.9%) match one term, x∘y = x·((z·z)·(y·(z∘z))). The V6
+      screen scores them all 0, at about 8 s each. They were most frequent at the start, and the cause is not
+      established.
+    - **Families:** structured is 11.0% of `x10` (X9 61.4%); 3 new families (154 in all, Chao1 175).
+    - **Candidates:** 14 new varieties (214 of 258), 4 of 20 disconnected, 15 of 20 with 𝔽₄ or ℤ/6 models. Best at N1:
+      `ec36621c` at rank 10. Level 7 is 57, level 8 still 9.
+    - **Linear sweep:** 342 open claims, none refuted.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -393,6 +408,9 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   searchers to what is left (about 0.5 GB each); X10 dropped from 6 to 4 (third amendment). The `pss_mb` of a worker in
   `stats.jsonl` counts its own process only: E, Vampire and Mace4 children are outside it, and swing the rest by up to
   3.5 GB.
+- The stage-c lane is ordered by priority, so a backlog copied into a run with searchers is not drained: the run's own
+  new tasks go first. X10 reached 2 of 156 copied tasks (U2). To drain a backlog, run stage c without searchers, or
+  give the copied tasks their own lane.
 
 ## Tasks, in order
 

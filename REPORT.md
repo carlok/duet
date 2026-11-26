@@ -2,6 +2,104 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X10: stage c under a cap, with the search beside it (25–26 Nov 2026; preregistered; two blocks)
+
+Preregistration: PREREGISTRATION.md, X10 (commit `a142ad2`, before the start) and four amendments, each before the
+block it changed (`081c308`, `6139c25`, `c615956`, `47fa414`); deviation 12. Data directory `x10`, a fork of X9's corpus
+and queue. Arm `fusion4`, verifier V7, 4 verifiers, `--max-c 2 --cap-c 2 --drain-c 3600`, recycling at 700 MB, memory
+stop at 1,000 MB. The user's web stack (about 1.2 GB) ran beside both blocks.
+- **x10a:** 25 Nov 13:52–14:31 UTC, 6 searchers. The memory rule stopped it after 2,313 s (deviation 12).
+- **x10b:** 25 Nov 18:57 – 26 Nov 02:20 UTC, 4 searchers (third amendment), one block for the rest of the budget
+  (fourth amendment). It ran to its budget: 26,499 s, with MemAvailable never below 1,745 MB. The drain cut no stage-c
+  task. The VM clock matched the Mac's at the end.
+- **In all:** 28,812 s of the 28,800 s (the budget is checked once per tick). The kernel log shows no OOM kill.
+
+Commands:
+- run: as in the fourth amendment;
+- post-run: `work/check/x10_post.log` (fragments, statistics `notes/{runstats,diagonal,heartbeats}_x10.out`, candidates,
+  profile `--jobs 4`, hidden and `--param`, relabel, rank, rediscover) and `work/check/x10_post2.log` (split per
+  candidate, output `notes/split_x10_candidates.out`; `notes/disconnected.py x10 x9`; `soup.dedupe --jobs 6`;
+  `soup.novelty`; `soup.taxonomy build --confirm` and `report`; `soup.funnel`; `soup.linear sweep --jobs 10`);
+- predictions: `notes/x10_predictions.py` (output `notes/x10_predictions.out`);
+- table: `notes/x10_table.py` (output `notes/x10_table.out`).
+
+| | x10a (6 searchers, 0.64 h) | x10b (4 searchers, 7.36 h) | copied, not reached |
+| --- | --- | --- | --- |
+| theories found and verified in the block | 23 | 555 | 154 |
+| through stage c | 0 | 13 of them, and 2 copied tasks | 0 |
+| positive score | 6 | 64 | 11 |
+| screened: parameter definition / split | 16 / 0 | 278 / 1 | 0 / 0 |
+| stage a / b / c, hours | 0.02 / 0.33 / 0 | 0.65 / 13.85 / 11.09 | from X9 |
+| mean stage b per theory | 172 s | 258 s | from X9 |
+| claims / proved | 14 / 9 | 376 / 110 | 313 / 11 |
+| refuted: finite model (a, c) / FMB / linear / E saturation | 2 / 0 / 1 / 2 | 31 / 18 / 57 / 39 | 57 / 16 / 11 / 0 |
+| unknown / open | 0 / 0 | 97 / 24 | 218 / 0 |
+| cheap evaluations | 1,684,503 | 26,644,482 | – |
+| structures added to the corpus | 38 | 477 | – |
+
+A result counts under the block that wrote it last. The 156 copied stage-c tasks came with their stage-b results,
+which ran in x8, x8b or x9: 2 went through stage c in x10b (counted in the x10b column), 154 were not reached.
+
+**Predictions** (descriptive; on both blocks):
+- **U1 fails.** The cap held: at no tick were more than 2 verifiers in stage c. But x10a did not reach its budget: its
+  memory rule fired (deviation 12). x10b ran to its budget.
+- **U2 fails.** 15 theories went through stage c, but only 2 of them were copied tasks, against ≥ 12. The other 13
+  were X10's own: the stage-c lane is ordered by priority, and the new tasks outranked the copied ones (priorities
+  12.8–25.0). The lane grew from 156 to 207 tasks. The 15 took 22 to 72 minutes each, mean 51.2, under load.
+- **U3 fails.** Stage c ran on about 27 claims and settled none, against ≥ 5%. It proved none, within "at most one".
+  Since T4 it has now settled 7 of about 123 claims.
+- **U4 holds.** X10 made 28,328,985 cheap evaluations, against ≥ 22M: level 0 is now 143,462,300. x10b's 4 searchers made
+  0.90M evaluations per searcher-hour, x10a's 6 made 0.44M (smoke run: 0.60M). Fewer searchers beside the user's
+  stack ran faster each; the amendment expected 15–19M in all.
+- **U5 holds.** 578 new theories got through stages a and b, against ≥ 400: 34.1 per verifier-hour outside stage c in
+  x10b. Half of them were cheap (below).
+
+**A new attractor: parameter disguises.** 294 of X10's 578 theories (50.9%) were screened as parameter definitions
+(V6's screen, `soup.hidden --param`): X9 had 25 of 1,320 (1.9%), X8 + x8b 20 of 444 (4.5%; R3). All 294 match the same
+term, x∘y = x·((z·z)·(y·(z∘z))): ∘ is · twisted by two constant squares. Most also make · a Steiner-type quasigroup:
+x·(x·y) = y in 135, x·y = y·x in 118. This is X5's attractor (∘ a translate of a Steiner loop) in a new form.
+- **The screen works:** every one scores 0, and none is a candidate.
+- **The cost in verifier time is small:** 2,342 s in all, about 8 s each, against 100,301 s for X10's other theories.
+  The cost is in queue slots and in where the searchers spend their evaluations.
+- **The share fell during the run:** 65 of the first 99 results (in file time), 32 of the last 81. x10a, the first
+  39 minutes, had 16 of 23. So the searchers did not drift into it: they started there.
+- **Cause not established.** Between X8 and X10 the searchers changed in their corpus (X9 added 9,118 structures),
+  their known library (X9's candidates and 62,038 seen-before keys) and the column cache (outputs byte-identical,
+  `74a07ff`). A replay of X8's elites on X9's corpus would separate the first two. A search-side skip for this family,
+  like IGNORE for argument-ignoring laws, is a candidate for the next run; nothing was changed.
+
+**Families (F1, `soup.taxonomy build --confirm`, 247 new E checks; 96.7% of corpus-implied properties confirmed):**
+- **Shares in `x10`** (734 results, the 154 copied ones included): no synergy 48.8%, disguise 40.2%, structured 11.0%
+  (81 theories). X9 had 61.4% structured, X8 + x8b 43.2%.
+- **New families:** 3, with one theory each: `·: comm, flex | ∘: left-inv, flex`, `·: comm, idem, flex | ∘: const-sq,
+  sq-right-id, sq-left-id, left-inv` and `·: const-sq, sq-left-id | ∘: const-sq, sq-right-id, sq-left-id, flex`.
+  154 structured families in all, Chao1 index 175 (descriptive).
+- **Emerging:** `·: TSQ, flex | ∘: comm, flex` (27 of X10's 81 structured) and `·: comm, flex | ∘: comm, flex` (13),
+  both first seen in X6. A TSQ is the Steiner shape again.
+
+**The candidates** (the top 20 of X10's non-fragments):
+- **Split:** none of 20 (finite certificates on 2–4 elements).
+- **Identification:** hidden 0, parameter definition 0, relabel 0, rediscover 0 (no E job over X10's 734 results).
+- **Classical models:** 15 of 20 have a non-degenerate model among the base probes. The example listed is affine over
+  𝔽₄ in 14 (`F4[1,1,1]|F4[1,1,3]`) and over ℤ/6 in one. X5's 20 all had affine 𝔽₄ models.
+- **Disconnected:** 4 of 20 (X9 14, X8 9): `23a4d276`, `ec36621c`, `18acb214`, `5013265c`.
+- **Dedupe:** 14 new varieties; three groups inside X10 merge (4, 3 and 2 candidates). None equals an earlier
+  candidate. Over all runs, 258 candidates are 214 varieties.
+- **N1:** 139 enter (82 identified as known, 35 fail "works", 2 without a record). The top 9 are unchanged. X10's best
+  are `ec36621c` at rank 10 (x·((y∘z)∘z) = x, (x∘y)·z = (y·z)∘x), `18acb214` at 11 (x·x = x, x·(y∘y) = x,
+  (x∘y)·y = y∘(x∘y)) and `5013265c` at 19.
+- **Funnel:** level 1 is 9,974; level 7 rises from 54 to 57; level 8 stays at 9.
+
+**Linear sweep after the run** (`soup.linear sweep --jobs 10`, q ≤ 64, affine ≤ 16): 342 open claims in `x10`, none
+refuted, in 23 minutes. As after X9, the wider range adds nothing to V7's stage-b screen.
+
+**Reading:**
+- **The cap and the drain work.** Two stage-c tasks at a time held for 7.4 hours beside 4 searchers and the user's
+  stack, and the drain cut nothing at the stop.
+- **Stage c is still the weak stage.** In 14.4 worker-hours it settled no claim, and a priority-ordered lane does not
+  drain a backlog while the search feeds it. Stage c's yield since T4 is now about 6% (7 of about 123 claims).
+- **The search went back to the Steiner corner.** Half its verified theories were parameter disguises, and 15 of its 20
+  candidates have 𝔽₄ models. X10 raised level 0 by a quarter and added 3 small families.
 ## The stage-c drain, for runs in blocks (25 Nov 2026; code change, tests and a check run, no scaled run)
 
 The user asked to run X10 in blocks of a few hours, not in one 8-hour block, so the Mac only has to stay awake for one

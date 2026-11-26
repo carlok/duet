@@ -1,0 +1,10 @@
+theories                                      x10a own: 23 | x10b own: 555 | X10 own: 578 | copied, redone in X10: 2 | copied, not reached: 154
+through stage c                               x10a own: 0 | x10b own: 13 | X10 own: 13 | copied, redone in X10: 2 | copied, not reached: 0
+positive score                                x10a own: 6 | x10b own: 64 | X10 own: 70 | copied, redone in X10: 0 | copied, not reached: 11
+screened param / split                        x10a own: 16 / 0 | x10b own: 278 / 1 | X10 own: 294 / 1 | copied, redone in X10: 0 / 0 | copied, not reached: 0 / 0
+stage a / b / c hours                         x10a own: 0.02 / 0.33 / 0.00 | x10b own: 0.65 / 13.85 / 11.09 | X10 own: 0.67 / 14.18 / 11.09 | copied, redone in X10: 0.00 / 0.87 / 1.70 | copied, not reached: 0.00 / 10.49 / 0.00
+mean stage b per theory (s)                   x10a own: 172 | x10b own: 258 | X10 own: 255 | copied, redone in X10: 1564 | copied, not reached: 245
+claims / proved                               x10a own: 14 / 9 | x10b own: 376 / 110 | X10 own: 390 / 119 | copied, redone in X10: 5 / 0 | copied, not reached: 313 / 11
+refuted: finite (a/c) / FMB / linear / E sat  x10a own: 2 / 0 / 1 / 2 | x10b own: 31 / 18 / 57 / 39 | X10 own: 33 / 18 / 58 / 41 | copied, redone in X10: 2 / 0 / 0 / 0 | copied, not reached: 57 / 16 / 11 / 0
+unknown / open                                x10a own: 0 / 0 | x10b own: 97 / 24 | X10 own: 97 / 24 | copied, redone in X10: 0 / 3 | copied, not reached: 218 / 0
+other outcomes                                x10a own: {} | x10b own: {} | X10 own: {} | copied, redone in X10: {} | copied, not reached: {}

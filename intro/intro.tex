@@ -11,7 +11,7 @@
 \medskip
 {\large An introduction from scratch to the \proj{} project\par}
 \medskip
-23 November 2026\par
+26 November 2026\par
 \medskip
 \rule{0.3\textwidth}{0.4pt}
 \end{center}
@@ -23,7 +23,7 @@ it means for laws to \emph{imply} other laws. It then explains the project's que
 without help, find small sets of laws in two operations whose combination does more than the parts? It also
 explains how that search is built, what it has found so far, and why the question could matter.
 Exercises with solutions, arranged by the sections of this text, are in \file{exercises.pdf}. The project lives at
-\url{https://github.com/carlok/duet}. Numbers about it are as of 23 November 2026; the repository's \file{REPORT.md} is
+\url{https://github.com/carlok/duet}. Numbers about it are as of 26 November 2026; the repository's \file{REPORT.md} is
 the authoritative record, with the command behind every number. This text, like most of the project, was written with
 an AI coding assistant under the author's direction (\file{docs/how-made.md} in the repository). No language model
 takes part in the search or its scoring.
@@ -331,7 +331,7 @@ ideally someone who knows the field.
 
 \section{What has been found so far}\label{sec:found}
 
-As of 23 November 2026, honestly stated:
+As of 26 November 2026, honestly stated:
 \begin{itemize}
 \item \textbf{Rediscovery.} The search keeps finding lattice theory in pieces. It rediscovered two of McKenzie's four
   laws, twelve different bases for lattices, and Fried's weakly associative lattices. Against a list of 13 known
@@ -352,13 +352,15 @@ As of 23 November 2026, honestly stated:
 \item \textbf{Steering away, and a new disguise.} The next run (X5) skipped every theory with such a law. It left the
   lattice region, but its best candidates turned out to be \emph{Steiner loops}, a classical one-operation structure,
   with $\cop$ the same operation shifted by a constant: $x\cop y=(x\op y)\op c$. That disguise is now filtered too,
-  and a longer run (X6) uses the filter. The latest run (X7) also skips everything already known or already seen,
-  and 12 of its 20 best candidates pass every automatic check.
+  and a longer run (X6) uses the filter. A later run (X7) also skips everything already known or already seen,
+  and 12 of its 20 best candidates pass every automatic check. The search keeps returning to Steiner loops: in the
+  latest run (X10), half of the verified theories were a twisted form of the same disguise, and the filter caught
+  every one.
 \item \textbf{Close looks.} The top candidates of a novelty ranking were studied one by one. One is a fragment of
   Heyting algebras, the algebras of intuitionistic logic, reached with no knowledge of logic. Nine are still
   unidentified. The best studied is $\{x\op(x\cop y)=x,\ x\op y=((y\op z)\op x)\cop x\}$. Its $\cop$ acts as a partial swap of the arguments of
   $\op$, and with the two operations set equal it has only one-element models.
-\item \textbf{Scale.} All runs together made about 64 million cheap evaluations and verified $7{,}476$ theories.
+\item \textbf{Scale.} All runs together made about 143 million cheap evaluations and verified $9{,}974$ theories.
   Sets of up to six of the $71{,}369$ laws number about $1.8\times10^{26}$. The search has seen a speck of the space,
   and mostly the corner humans know best.
 \item \textbf{Open problems.} Four implications were shown false although every countermodel is infinite (a

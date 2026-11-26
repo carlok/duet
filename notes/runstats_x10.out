@@ -1,0 +1,5 @@
+x10: results 734, score>0 81, with emergent law 81, claims 708
+ claim outcomes: {'finite (stage a/c)': 161, 'proved': 130, 'unknown': 315, 'open': 27, 'FMB': 34, 'E sat (uncertified)': 24, 'E sat': 17}
+ FMB ran on 386 claims; refutation sizes {5: 2, 6: 11, 7: 1, 8: 16, 11: 4}
+ stage c results: 15 | verifier cfgs: {'V7': 678, 'V6': 56}
+ V4 screens: {'parameter definition': 294, 'split': 1} | screen secs median 0.2 max 404.7

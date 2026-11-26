@@ -1,0 +1,12 @@
+x10: 734 results, 81 with positive score, 0 prove a one-variable emergent law
+    29  x ∘ y = y ∘ x  (2 variables)
+    18  x · (x · x) = y · (x · y)  (2 variables)
+    11  x · y = y · x  (2 variables)
+     9  x · (x · y) = x ∘ (x ∘ y)  (2 variables)
+     5  x · (x · y) = x · (y · x)  (2 variables)
+     4  x · (x · x) = y ∘ (x ∘ y)  (2 variables)
+     4  x · (x ∘ y) = x · (y ∘ x)  (2 variables)
+     3  x · (x ∘ x) = y · (y ∘ x)  (2 variables)
+     3  x ∘ (x ∘ y) = y  (2 variables)
+     3  x · (x · x) = y ∘ (y ∘ x)  (2 variables)
+proved emergent associativity 0 | commutativity 40
