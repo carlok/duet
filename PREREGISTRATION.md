@@ -2,6 +2,86 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## X12: arm fusion6 against fusion5, run side by side (written 26 Nov 2026, 18:52 UTC, before X12 starts)
+
+Confirmatory for the family pressure, exploratory for the rest. Arm `fusion6` adds pressure toward rare families (REPORT,
+"Family pressure"). In a 15-minute live smoke run (REPORT, "fusion6 against fusion5"), the 80 theories its verifiers
+would reach first spanned 53 F1 families against fusion5's 13, at cheap scores 41% lower. X12 asks whether that
+diversity survives verification, and at what price in score. It is the first run since T4 with a matched control arm,
+in answer to X11's main caveat. The user asked for X12 after the smoke run.
+
+**Design.**
+- **Two arms, side by side,** in two data directories, `x12-f5` (arm `fusion5`) and `x12-f6` (arm `fusion6`). Each is
+  made by `soup.t4_setup --dir <dir>`, then x11's corpus is copied in (19,531 found structures), and
+  `soup.known build --out /data/<dir>` gives 129 known entries, 1,893 candidate entries and 78,175 seen-before keys
+  (the library rebuilt after X11, as in the smoke run). Queues and results start empty.
+- **Verifier V7, stages a and b only.** `--drain-c` equals the block's budget, so no verifier starts a stage-c task
+  (`supervisor.c_until`; stage c settled 3 of about 28 claims in X11). Claims stage b leaves open wait in each
+  directory's stage-c lane. Scores are stage-b scores.
+- **Processes, per arm:** 2 searchers kept alive (`--min-searchers 2`), 2 verifiers, `--recycle-mb 700`,
+  `--mem-stop-mb 1000`. Both arms together use 8 processes, as X11 did. The push gate is unchanged (`--gate 0.5`).
+- **Image:** `soup:x12` = `62d4e04a6c98`, built from `158bb3d`, which is X11's code plus documentation (110 tests pass).
+- **Budget and blocks:** 28,800 s per arm, in one or more blocks of at least 2 hours each, chosen by the user at the
+  start. Both arms run each block at the same time, started within one minute of each other, with the same
+  `--budget`. Block k uses `--run x12f5<letter>` and `--run x12f6<letter>`, and `--seed0` 1801 + 50(k − 1) in both
+  arms. If one arm's memory rule stops it, the other arm is stopped by hand within 5 minutes, and the next block gives
+  both the same remaining budget. Nothing in either directory is changed by hand between blocks. X12 ends by
+  3 Dec 2026 (UTC) with what has run.
+- **Before each block:** compare `date -u` with `podman machine ssh date -u`, check that no other soup container
+  runs, check the user's containers' memory with `podman stats --no-stream`, and keep the Mac awake.
+- **Command** (block k, arm a in {5, 6}, budget B):
+  `podman run -d --name soup-x12f<a><letter> -v "$PWD/work:/data" -e SOUP_DATA=/data/x12-f<a> -e SOUP_VERIFIER=V7
+  soup:x12 python3 -m soup.stream.supervisor --arm fusion<a> --searchers 2 --verifiers 2 --min-searchers 2
+  --drain-c B --seed0 <1801 + 50(k-1)> --budget B --recycle-mb 700 --mem-stop-mb 1000 --run x12f<a><letter>`.
+
+**Done before this entry, disclosed.**
+- X11's results and its post-run checks were all read, and so was the push-gate measurement (`notes/push_gate.out`).
+  X11 made 99% of its pushes in its first 805 s.
+- The offline prototype (`notes/family_sim.out`) and the paired smoke run (`notes/fusion6_smoke.out`) were read. The
+  smoke run used this library and corpus, 4 searchers and 1 verifier per arm, for 900 s, and its copies were deleted.
+  The predictions below are informed by it.
+
+**Predictions.** Each is judged on the sum over blocks. F1 labels come from `soup.taxonomy build --confirm` with both
+directories added to `taxonomy.RUNS`. "Structured" and "family" are F1's.
+- **Y1, diversity (primary):** at equal sample size, fusion6's structured verified theories span at least 1.5 times as
+  many families as fusion5's. Equal size means the expected number of distinct families in a random subsample of m
+  theories without replacement, m the smaller arm's number of structured theories (exact rarefaction:
+  E = Σ_f [1 − C(N − n_f, m) / C(N, m)]).
+- **Y2, concentration:** the largest family's share of structured theories in fusion6 is at most half of fusion5's.
+- **Y3, quality (non-inferiority, the open question):** fusion6's share of verified theories with a positive score is
+  at least 0.8 times fusion5's. Fisher's exact test (two-sided) on the 2 × 2 table is reported beside it.
+- **Y4, candidates:** among each arm's 20 candidates (the top 20 non-fragments), fusion6 has at least as many
+  disconnected ones (`notes/disconnected.py x12-f6 x12-f5`), and at least as many at funnel level 7.
+- **Y5, new families:** fusion6 adds more new structured families than fusion5. New means that no theory of any run up
+  to X11 has it; the other arm does not count.
+- **Y6, cost:** fusion6's searchers make at least 0.5M evaluations per searcher-hour (smoke 0.69M). Its rescores and
+  the parameter skip's Mace4 step together take at most 15% of its searcher time (smoke 8.9%).
+- **Y7, the gate (descriptive):** in both arms, 99% of the first block's pushes come within its first 10%
+  (`notes/push_gate.py`).
+- **Y8, the run:** no block is stopped by a memory rule, and each arm verifies at least 300 theories.
+
+**After the run:**
+- X11's post-run pipeline on both directories, with `x12-f5` and `x12-f6` added to `taxonomy.RUNS`, `funnel.DIRS` and
+  `known.RUN_DIRS`, in that order: fragments, statistics, candidates (both as sources), profile `--jobs 4`, hidden
+  and `--param`, relabel, rank, rediscover, the split per candidate, `notes/disconnected.py x12-f6 x12-f5`, dedupe,
+  N1, F1, the funnel and the linear sweep.
+- A script `notes/x12_predictions.py`, written after the run with the definitions above, judges Y1–Y8. Then a REPORT
+  section.
+
+**Caveats.**
+- **Family diversity is partly built in.** fusion6 is designed to push diverse families, so Y1 and Y2 are expected.
+  The informative predictions are Y3 and Y4: whether those theories hold up once verified.
+- **Same seeds do not make paired trajectories.** The arms diverge at the first proposal. Each arm is one realisation,
+  and two searchers per arm are a small sample of search trajectories.
+- **The push gate is unchanged.** Both arms will verify mostly what they pushed in their first minutes (Y7), so the
+  comparison is between the heads of two queues, not between whole searches.
+- **Shared machine.** Both arms share the VM's CPU and memory, and the user's containers. Contention hits both arms
+  alike, since they run at the same time, but it is not controlled.
+- **No stage c.** Claims left open by stage b stay open, so scores are stage-b scores. That is the same for both arms.
+- **F1 labels rest on corpus models.** E confirmed about 97% of the properties so far. Each arm's corpus also grows
+  with its own countermodels, and F1 labels every run on one union corpus.
+- **A sleeping Mac** freezes the VM, and the budget then runs on a frozen clock. That would be a deviation.
+
 ## X11: arm fusion5, the parameter-disguise skip at scale (written 26 Nov 2026, 06:17 UTC, before X11 starts)
 
 Exploratory and descriptive. Half of X10's 578 verified theories were parameter disguises of one shape (REPORT, "X10").
