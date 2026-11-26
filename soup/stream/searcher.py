@@ -42,6 +42,7 @@ from .fqueue import FileQueue
 MAX_LAWS = 6
 BLOOM_BITS = 1 << 27        # X7: one-hash bitmap (16 MB) of evaluated law sets, for distinct level-0 counts
 LIB_REFRESH = 1800.0        # X7: seconds between rebuilds of the known library's corpus view
+RESCORE_EVERY = 600.0       # fusion6: at most one full rescore of its (much larger) archive in this many seconds
 W = {0: 0, 1: 1.0, 2: 0.5, 3: 0.1, 4: 0.0}
 W_FUSION = {0: 0, 1: 1.0, 2: 0.5, 3: 0.25, 4: 0.125}
 
@@ -110,6 +111,7 @@ class Searcher:
         self.single = {}
         self.evals = self.pushed = self.wins = self.held = 0
         self.gate = {'k': 1.0, 'threshold': 0.0}   # from the supervisor (queue/gate.json)
+        self.stale = False; self.t_rescore = 0.0; self.rescores = 0; self.rescore_secs = 0.0
 
     # ---- cheap surrogate
     def imp1(self, t):
@@ -201,6 +203,18 @@ class Searcher:
                 else: continue
             self.insert(s, push=False)
 
+    def _maybe_rescore(self, new, now=None):
+        """Rescore when the corpus grew. Every arm but fusion6 does so at once, as before. fusion6's archive is about 19
+        times larger (REPORT, "Family pressure"), so it rescores at most once in RESCORE_EVERY seconds. In between,
+        elites keep the cheap scores of the last rescore, which can only be too high (a new model refutes a claim),
+        and new proposals are scored on the grown corpus."""
+        now = time.time() if now is None else now
+        if new: self.stale = True
+        if not self.stale or (self.family and now - self.t_rescore < RESCORE_EVERY): return False
+        t0 = time.time(); self.rescore()
+        self.stale = False; self.t_rescore = now; self.rescores += 1; self.rescore_secs += time.time() - t0
+        return True
+
     def ingest_results(self):
         for e in os.scandir(self.results_dir):
             if not e.name.endswith('.json') or e.name.startswith('.'): continue
@@ -246,8 +260,7 @@ class Searcher:
     def maintenance(self, t_start):
         g = read_json(data('queue', 'gate.json'))
         if g and g.get('arm') == self.arm: self.gate = g
-        new = self.C.refresh()
-        if new: self.rescore()
+        self._maybe_rescore(self.C.refresh())
         if self.lib is not None and time.time() - self.t_lib > LIB_REFRESH:
             self.lib.refresh(); self.t_lib = time.time()       # the corpus grew: library models, every 30 min
         self.ingest_results()
@@ -257,6 +270,7 @@ class Searcher:
                   lat_skipped=self.lat_skipped, ign_skipped=self.ign_skipped,
                   known_skipped=self.known_skipped, cand_skipped=self.cand_skipped, seen_skipped=self.seen_skipped,
                   par_skipped=self.par_skipped, **self.pskip_stats(),
+                  rescores=self.rescores, rescore_secs=round(self.rescore_secs, 1),
                   distinct=self.distinct(),
                   verified_seen=len(self.verified), k=round(self.k(), 4), mem=memory(os.getpid()))
 
