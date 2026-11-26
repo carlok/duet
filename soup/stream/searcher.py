@@ -15,6 +15,9 @@ no duality operator, no duality bonus). Elites are only shared within an arm.
 'fusion4' (X7, 23 Nov 2026): 'fusion2' plus soup.known: theories that are fragments or subvarieties of a known theory, or
   equivalent to an earlier candidate, are skipped; keys pushed or verified by earlier runs are never pushed again; a
   one-hash bitmap counts distinct evaluated law sets.
+'fusion5' (after X10, 26 Nov 2026): 'fusion4', and a theory that would win an archive cell is skipped when it is a
+  parameter disguise (soup.paramskip: on its corpus models one operation is a linear term in the other plus constant
+  squares, and Mace4 finds no model on 2 to 4 elements where that fails). Countermodels Mace4 finds go into the corpus.
 """
 import argparse
 import math
@@ -66,14 +69,17 @@ class Searcher:
     def __init__(self, name, seed, arm, run):
         self.name, self.arm, self.run = name, arm, run
         self.prior = arm == 'prior'
-        self.fusion = arm in ('fusion', 'fusion2', 'fusion3', 'fusion4')
-        self.rigid = arm in ('fusion2', 'fusion3', 'fusion4')
+        self.fusion = arm in ('fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5')
+        self.rigid = arm in ('fusion2', 'fusion3', 'fusion4', 'fusion5')
         self.rng = random.Random(seed)
         self.C = Corpus(store=ensure('corpus'))
         self.lat_skipped = self.ign_skipped = 0
-        self.known_skipped = self.cand_skipped = self.seen_skipped = 0
-        self.lib = None; self.prior_seen = set(); self.bloom = None
-        if arm == 'fusion4':      # X7: skip what earlier runs already know (soup.known), count distinct evaluations
+        self.known_skipped = self.cand_skipped = self.seen_skipped = self.par_skipped = 0
+        self.lib = None; self.prior_seen = set(); self.bloom = None; self.pskip = None
+        if arm == 'fusion5':      # after X10: skip parameter disguises before they take a cell (soup.paramskip)
+            from ..paramskip import ParamSkip
+            self.pskip = ParamSkip(self.C)
+        if arm in ('fusion4', 'fusion5'):   # X7: skip what earlier runs already know (soup.known), count distinct evaluations
             import json
             from ..known import Library
             self.lib = Library(self.C, data()); self.t_lib = time.time()
@@ -150,6 +156,8 @@ class Searcher:
             self.seen_skipped += 1; return False
         cell = self.archive.get(s['desc'])
         if cell is not None and (cell['key'] == key or self.eff(s) <= self.eff(cell)): return False
+        if self.pskip is not None and self.pskip.check(s['T'], name=f'paramskip-{self.name}'):
+            self.par_skipped += 1; return False   # a parameter disguise would win this cell (fusion5)
         if cell is not None: self.where.pop(cell['key'], None)
         old = self.where.get(key)
         if old is not None and old != s['desc']: self.archive.pop(old, None)
@@ -234,8 +242,15 @@ class Searcher:
                   archive=len(self.archive), wins=self.wins, pushed=self.pushed, held=self.held, gate=self.gate.get('threshold'), corpus=len(self.C),
                   lat_skipped=self.lat_skipped, ign_skipped=self.ign_skipped,
                   known_skipped=self.known_skipped, cand_skipped=self.cand_skipped, seen_skipped=self.seen_skipped,
+                  par_skipped=self.par_skipped, **self.pskip_stats(),
                   distinct=self.distinct(),
                   verified_seen=len(self.verified), k=round(self.k(), 4), mem=memory(os.getpid()))
+
+    def pskip_stats(self):
+        p = self.pskip
+        if p is None: return {}
+        return {'pskip_fired': p.fired, 'pskip_mace': p.mace_calls, 'pskip_mace_secs': round(p.mace_secs, 1),
+                'pskip_added': p.added}
 
     def snapshot(self):
         ensure('runs', self.run)
@@ -272,7 +287,7 @@ class Searcher:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--seed', type=int, required=True)
-    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4'])
+    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5'])
     ap.add_argument('--run', required=True); ap.add_argument('--budget', type=float, default=1e9)
     a = ap.parse_args()
     s = Searcher(a.name, a.seed, a.arm, a.run)

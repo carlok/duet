@@ -139,11 +139,13 @@ from .data import TREES as _TREES
 def _ladr(t): return 'xyzwuv'[t[1]] if t[0] == 'v' else f"{'f' if t[0] == 'f' else 'g'}({_ladr(t[1])},{_ladr(t[2])})"
 
 
-def ladr_input(T, goal=None, extra='', extra_axioms=()):
-    """T: law indices; extra_axioms: further equations as (lhs, rhs) trees (e.g. lemmas beyond order 4)."""
+def ladr_input(T, goal=None, extra='', extra_axioms=(), goal_tree=None):
+    """T: law indices; extra_axioms: further equations as (lhs, rhs) trees (e.g. lemmas beyond order 4);
+    goal_tree: a goal given as (lhs, rhs) trees instead of a law index."""
     ax = '\n'.join([f'{_ladr(_TREES[t][0])} = {_ladr(_TREES[t][1])}.' for t in T] +
                    [f'{_ladr(l)} = {_ladr(r)}.' for l, r in extra_axioms])
     g = f'{_ladr(_TREES[goal][0])} = {_ladr(_TREES[goal][1])}.' if goal is not None else ''
+    if goal_tree is not None: g = f'{_ladr(goal_tree[0])} = {_ladr(goal_tree[1])}.'
     return f'{extra}\nformulas(assumptions).\n{ax}\nend_of_list.\nformulas(goals).\n{g}\nend_of_list.\n'
 
 

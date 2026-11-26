@@ -1,0 +1,10 @@
+== pskip4: 623 s, 0.67 searcher-hours, 615,028 evaluations = 0.91M per searcher-hour; searcher PSS max 529 MB; MemAvailable min 4872 MB
+   wins 17,635, pushed 3,298, held 0; skips: ignore 26,117, known 60,795, candidate 2,657, seen 1,673, parameter 0 (step 1 fired 0, Mace4 0 calls, 0 s, 0 countermodels)
+   pushed 1548: parameter disguises (offline check) 31
+   final archive elites 1058: disguises 20
+   verified 48: V6 parameter definition 0, positive score 5
+== pskip5: 619 s, 0.67 searcher-hours, 605,891 evaluations = 0.90M per searcher-hour; searcher PSS max 499 MB; MemAvailable min 4872 MB
+   wins 12,238, pushed 3,379, held 0; skips: ignore 25,986, known 56,936, candidate 2,766, seen 1,690, parameter 31 (step 1 fired 32, Mace4 32 calls, 28 s, 9 countermodels)
+   pushed 1550: parameter disguises (offline check) 0
+   final archive elites 1057: disguises 0
+   verified 50: V6 parameter definition 0, positive score 8

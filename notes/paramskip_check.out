@@ -1,0 +1,54 @@
+mode confirm, max_n 4; corpus 17341 found structures, 12509 base; 5008 terms; ready in 12 s
+x5: 292 results; skip and V6 0, skip only 237, V6 only 0, neither 55
+x6: 1460 results; skip and V6 356, skip only 142, V6 only 0, neither 962
+x7: 737 results; skip and V6 16, skip only 4, V6 only 0, neither 717
+x8: 444 results; skip and V6 20, skip only 10, V6 only 0, neither 414
+x9: 1320 results; skip and V6 25, skip only 12, V6 only 0, neither 1283
+x10: 734 results; skip and V6 294, skip only 87, V6 only 0, neither 353
+check time: mean 72.0 ms, max 3012 ms over 4987; step 1 fired 1214, Mace4 calls 1234 (298 s, 0.24 s each), countermodels added 44
+
+skipped, not marked by V6 (255), X6-X10, by what V6 said (positive verified score in brackets):
+  census agrees, E open: 214 (33)
+  E refutes: 34 (4)
+  screen not run: 7 (0)
+  examples with a positive score:
+    x6 09e11243 0.2023 x · y = ((x ∘ y) ∘ (z·z ∘ z∘z)) census agrees, E open
+    x6 0dbd10c8 0.1581 x · y = (z·z ∘ (x ∘ y)) census agrees, E open
+    x6 0fba42cd 0.5276 x ∘ y = (y · (x · z∘z)) census agrees, E open
+    x6 1ae0eaad 0.1169 x ∘ y = (x · (y · z∘z)) E refutes
+    x6 2020c295 0.1153 x · y = ((x ∘ z·z) ∘ y) census agrees, E open
+    x6 31549338 0.121 x ∘ y = ((z∘z · x) · y) census agrees, E open
+    x6 46713f3c 0.1619 x · y = ((x ∘ y) ∘ (z·z ∘ z∘z)) census agrees, E open
+    x6 471bc1d7 0.1944 x ∘ y = (((x · z·z) · (y · z·z)) · z∘z) census agrees, E open
+    x6 4bdf1ad8 0.3597 x · y = ((x ∘ y) ∘ (z·z ∘ z∘z)) census agrees, E open
+    x6 4f326da5 0.2592 x ∘ y = (((x · z∘z) · (y · z∘z)) · z∘z) census agrees, E open
+    x6 557b7678 0.1169 x ∘ y = (x · (y · z∘z)) E refutes
+    x6 7847487e 1.475 x ∘ y = (y · ((x · z·z) · z∘z)) census agrees, E open
+    x6 8034ed11 0.079 x · y = (z·z ∘ (y ∘ x)) census agrees, E open
+    x6 84a81e00 0.0766 x ∘ y = (z·z · ((z∘z · x) · y)) census agrees, E open
+    x6 890dcb58 0.3149 x ∘ y = (((x · z·z) · (y · z·z)) · z∘z) census agrees, E open
+
+candidates (check/candidates.json), with their N1 status (check/novelty_ranking.json):
+  22 of 258 would be skipped; by N1 status: {'N1': 7, 'known': 15}; level 7 (of 57): 0; level 8: 0
+   x5         ebb197cc x ∘ y = (x · (y · z∘z))                  N1 rank 84, classical 9
+   x5         379c1621 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         6005984f x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         811b3500 x ∘ y = (x · (y · z∘z))                  N1 rank 76, classical 9
+   x5         e96c7cfd x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         ba93757c x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         eb5bd76d x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         d084b4a5 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         4a54b97e x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         be4719e3 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         39bd4af5 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         09797ec7 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         5b4e12f1 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         b7c6de53 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         eabe586f x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         e51eb8f1 x · y = (z·z ∘ (x ∘ y))                  N1 rank 75, classical 9
+   x5         2035fdd3 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ its trans…
+   x5         b9fb4af2 x ∘ y = (x · (y · z∘z))                  known: Identified: · is a Steiner loop and ∘ =
+   x6         7847487e x ∘ y = (y · ((x · z·z) · z∘z))          N1 rank 63, classical 9
+   x8         7e9c798d x ∘ y = ((x · y) · (z·z · z∘z))          N1 rank 66, classical 9
+   x8         725830a5 x ∘ y = ((x · y) · (z·z · z∘z))          N1 rank 64, classical 9
+   x10        86165a1a x ∘ y = (x · (z·z · (y · z∘z)))          N1 rank 80, classical 11

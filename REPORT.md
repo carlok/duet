@@ -2,6 +2,58 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## A search-side skip for parameter disguises, arm `fusion5` (26 Nov 2026; code, tests, measurement, smoke runs)
+
+X10's attractor (half of its verified theories were parameter disguises) is screened only in the verifier, after the
+search has spent cells and queue slots on it. `soup.paramskip` moves the test into the search.
+- **The terms:** V6 proved 1,300 parameter matches in X6–X10, with 34 distinct terms, and in all of them x and y occur
+  exactly once. The skip enumerates every such *linear parameter term* up to V6's size cap: x once, y once, at least one
+  of z·z, z∘z, and 2 to 4 operations. That gives 2,504 terms per direction, 5,008 in all.
+- **Step 1, corpus:** on every corpus model of T, one operation equals one of these terms in the other. A numba kernel
+  with early exit runs it, largest models first.
+- **Step 2, confirmation:** when step 1 fires, Mace4 looks for a model of T on 2 to 4 elements where the term fails
+  (2 s). A model found goes into the shared corpus and step 1 runs again, at most 3 times. T is skipped only if a term
+  still matches.
+- **Arm `fusion5`:** `fusion4` plus the skip. It runs only when a theory would win an archive cell, and its result is
+  cached per law set. V6's screen in the verifier is unchanged.
+- **Tests:** `tests/test_paramskip.py`: the term set, the kernel on a translated XOR, a disguise skipped, and a thin
+  corpus corrected by Mace4. 107 tests pass.
+
+**Against V6, on every result of X5 to X10** (`notes/paramskip_check.py`, x10's corpus, output
+`notes/paramskip_check.out`):
+- **Recall:** every one of the 711 theories V6 marked from X6 to X10 is skipped. So are 237 of X5's 292 (X5 ran V5,
+  without the screen; its Steiner translates).
+- **Step 1 alone is not enough.** It also skipped nine of X4's candidates at funnel level 7, whose term V6's census
+  refutes on 2 to 4 elements: x10's corpus lacks the models X4 found. With the confirmation none of them is skipped.
+- **Skipped without a V6 mark** (X6–X10): 255 theories. For 214, V6's census agrees with the term and E did not decide
+  in 30 s. For 34, E refutes the definition, so their countermodels have more than 4 elements: these are false skips,
+  4 of them with a positive score. For 7 the screen did not run.
+- **Candidates:** 22 of 258 would be skipped. 15 are already identified as known (X5's Steiner translates), and 7 are at
+  N1 ranks 63–84, all with classical models. No theory at funnel level 7 or 8 is skipped.
+- **Cost on these theories:** 72 ms per check on average; step 1 fired 1,214 times, with 1,234 Mace4 calls of 0.24 s
+  each, and 44 countermodels were added.
+
+**Paired smoke runs** (`notes/paramskip_smoke.py`, output `notes/paramskip_smoke.out`): `fusion4` and `fusion5` started
+together on two copies of x10's corpus, each with a known library rebuilt after X10. Same seeds (1501+), 4 searchers and
+1 verifier each, 600 s; the copies were deleted afterwards.
+
+| | fusion4 | fusion5 |
+| --- | --- | --- |
+| evaluations per searcher-hour | 0.91M | 0.90M |
+| cell wins / pushes | 17,635 / 3,298 | 12,238 / 3,379 |
+| skipped as parameter disguises | – | 31 (Mace4: 32 calls, 28 s; 9 countermodels added) |
+| pushed theories that are disguises (offline check) | 31 of 1,548 | 0 of 1,550 |
+| final archive elites that are disguises | 20 of 1,058 | 0 of 1,057 |
+| verified / V6 parameter definition / positive score | 48 / 0 / 5 | 50 / 0 / 8 |
+| searcher PSS max | 529 MB | 499 MB |
+
+- **With the library rebuilt after X10, the attractor is weaker at the start than in X10.** Only 2% of fusion4's pushes
+  are disguises, and none of its 48 verified theories was one. X10's disguises are now seen-before keys, and its
+  candidates are in the library. Ten minutes cannot show whether it grows back over hours.
+- **The cost is small:** 1% fewer evaluations and 1.2% of searcher time in Mace4.
+- **Not tested:** a long run, and whether `fusion5` moves the candidates off the 𝔽₄ corner. That needs a preregistered
+  run.
+
 ## X10: stage c under a cap, with the search beside it (25–26 Nov 2026; preregistered; two blocks)
 
 Preregistration: PREREGISTRATION.md, X10 (commit `a142ad2`, before the start) and four amendments, each before the
