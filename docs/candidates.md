@@ -32,6 +32,24 @@ So it is not identified, and weak. With `3818b88f` it forms the first two-member
 [families statistic](families.md). It is not a ledger row, because neither theory is identified. Memo:
 [`notes/de0c0cf3.md`](../notes/de0c0cf3.md).
 
+## `1f430506` (X11, N1 rank 1): squares are left identities, and ∘ is a commutative choice
+
+- **The claim.** `(x · y) · (x ∘ z) = z ∘ x` and `((x ∘ y) · (z · z)) · x = x`. Together they imply
+  `(x · x) · y = y` (every square is a left identity; ETP Equation 31), and then `x ∘ y = y ∘ x`. Neither law alone
+  implies either.
+- **The models (a theorem, checked against Mace4 for n ≤ 3).** A magma plus a commutative `∘` that picks each `x ∘ y`
+  from a set `W(x, y)` fixed by `·`. The `·`-parts are exactly the magmas with `(x · x) · y = y` that have a right
+  zero.
+- **Its shadows are weak.**
+  - The laws of `·` alone that it implies are exactly those of Equation 31.
+  - Of `∘` alone it implies only commutativity.
+  - With `x · y = x ∘ y`, only one-element models are left, and an associative `·` collapses to `x · y = y`.
+- **Literature.** Equation 31 is studied for semigroups and quasigroups, and neither fits here. No source was found for
+  the whole theory. Not identified.
+- **Sibling.** `1238c063` (N1 rank 2) shares the first law and both emergent laws, but it is a different variety.
+
+Memo: [`notes/1f430506.md`](../notes/1f430506.md).
+
 ## `71fd2cc6` (X12, N1 rank 18, X12's top score): a commutative g-dimonoid, identified
 
 T = {x·y = y·x, x∘(x·y) = y∘x, (x∘y)·z = y·(z·x)}.

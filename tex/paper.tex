@@ -24,7 +24,7 @@ an open-ended search over small equational theories\\[4pt]\large Draft, 27 Novem
 \maketitle
 
 \begin{abstract}
-We report nine theories in two binary operations $\op$ and $\cop$ that neither our automatic checks nor a close
+We report ten theories in two binary operations $\op$ and $\cop$ that neither our automatic checks nor a close
 reading by hand could identify. Each has \emph{synergy}: it implies a law that none of its own laws implies alone.
 They are what remains of 202 million cheap evaluations after a sequence of stricter filters
 (Table~\ref{tab:funnel}), from verification by finite-model search and the provers E, Vampire, Mace4 and Z3 (11{,}908
@@ -33,7 +33,7 @@ a checked convergent rewrite system or a model on $\mathbb{Z}$. The theories hav
 proposed by a quality-diversity search scored on 12{,}509 finite structures. The same pipeline rediscovers lattice
 bases, absorption pairs, a fragment of Heyting algebras, commutative $g$-dimonoids and Steiner loops in disguise. The
 verified theories fall into 241 families, still rising; against a control arm, pressure toward rare families doubled
-the families found without lowering the scores. None of the nine is claimed new.
+the families found without lowering the scores. None of the ten is claimed new.
 \end{abstract}
 
 \section{Question}
@@ -109,9 +109,9 @@ The pipeline:
 
 \section{Results}
 
-\subsection{The funnel and the nine}
+\subsection{The funnel and the ten}
 Table~\ref{tab:funnel} follows every theory the search has looked at, over all runs up to 27 November 2026.
-Table~\ref{tab:nine} lists the nine theories at its bottom.
+Table~\ref{tab:nine} lists the ten theories at its bottom.
 
 \begin{table}[!htb]\centering\small
 \begin{tabular}{rrl}\toprule
@@ -124,7 +124,7 @@ level & theories & what survives \\\midrule
 5 & 262 & distinct varieties (equivalence by E, both ways) \\
 6 & 170 & identified by no check (split, definition, relabelling, catalogue) \\
 7 & 78 & every automatic mark: off-diagonal synergy, no classical model, nothing related \\
-8 & 9 & studied closely by hand, still unidentified \\\bottomrule
+8 & 10 & studied closely by hand, still unidentified \\\bottomrule
 \end{tabular}
 \caption{The funnel (\texttt{soup.funnel}). Level~0 is $1.1\times10^{-18}$ of the $1.8\times10^{26}$ sets of up to
 six laws.}\label{tab:funnel}
@@ -141,9 +141,10 @@ key & laws \\\midrule
 \texttt{55cb2c91} & $x\op(y\op z)=x\op y$, $x\op(x\cop y)=x$, $x\op y=(y\op x)\cop x$ \\
 \texttt{1d0a5211} & $x\op(x\cop y)=y\cop x$, $(x\cop(y\op z))\cop z=z$ \\
 \texttt{742cc445} & $x\op(y\cop(x\cop z))=x$, $x\cop((x\cop y)\op(z\cop x))=x$ \\
+\texttt{1f430506} & $(x\op y)\op(x\cop z)=z\cop x$, $((x\cop y)\op(z\op z))\op x=x$ \\
 \texttt{97a7dfcf} & $x\op x=0$, $(x\op y)\op z=0$, $x\cop(y\op z)=0$, $x\op(y\cop x)=x\cop y$ \\
 \bottomrule\end{tabular}
-\caption{The nine unidentified theories (\texttt{docs/candidates.md}): the axioms, or a form E proves equivalent to them
+\caption{The ten unidentified theories (\texttt{docs/candidates.md}): the axioms, or a form E proves equivalent to them
 both ways. In the last row, 0 is the constant $x\op x$.}\label{tab:nine}
 \end{table}
 
@@ -153,10 +154,12 @@ larger variety: it contains the first with $\cop$ reversed, and has 65{,}536 mod
 share a core: every square is a right identity of $\op$, and $x\op(y\op z)=x\op(z\cop y)$. In \texttt{55cb2c91},
 $\cop$ acts as a partial swap $y\op x\mapsto x\op y$, forced where it is defined and free elsewhere. \texttt{1d0a5211} splits Stein's first law $x(xy)=yx$ across the two
 operations. \texttt{742cc445} pairs McKenzie's lattice law $x\op(y\cop(x\cop z))=x$ with a law that fails in the
-2-element lattice, and an associative $\cop$ forces $\op=\cop$. \texttt{97a7dfcf} is nilpotent. With the two
-operations set equal, seven of the nine have only one-element models or become a left-zero band or a null semigroup.
+2-element lattice, and an associative $\cop$ forces $\op=\cop$. In \texttt{1f430506} every square is a \emph{left}
+identity of $\op$, and $\cop$ is any commutative choice of values from sets that $\op$ determines. \texttt{97a7dfcf} is
+nilpotent. With the two
+operations set equal, eight of the ten have only one-element models or become a left-zero band or a null semigroup.
 Web searches found no
-source for any of the nine. This is weak evidence; identifying them needs specialists in the relevant literatures.
+source for any of the ten. This is weak evidence; identifying them needs specialists in the relevant literatures.
 
 \subsection{Calibration}
 On Z3 5.4.1 the absorption pair implies $x\op x=x$ with effort 494, and the census gives 1, 1, 2 lattices on 2, 3, 4

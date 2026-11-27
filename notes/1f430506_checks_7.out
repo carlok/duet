@@ -1,0 +1,6 @@
+  T + x·y = x∘y => x = y: proved Theorem
+  n=2: 0 models up to isomorphism (complete=True) []
+  n=3: 0 models up to isomorphism (complete=True) []
+  n=4: 0 models up to isomorphism (complete=True) []
+  n=5: 0 models up to isomorphism (complete=True) []
+  T + (x·y)·z = x·(y·z) => x·y = y: proved Theorem

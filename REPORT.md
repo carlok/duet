@@ -2,6 +2,37 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `1f430506`, X11's top candidate: not identified (27 Nov 2026; post hoc)
+
+T = {A: (x·y)·(x∘z) = z∘x, B: ((x∘y)·(z·z))·x = x}, N1 rank 1, unstudied until now.
+- **Sources:** memo `notes/1f430506.md`; checks `notes/1f430506_checks.py` parts 1–7 (outputs `notes/1f430506_checks.out`
+  and `_2` to `_7`) and `notes/1f430506_order4.py` (`.out`). E 30–60 s per goal.
+- **Emergent:** (x·x)·y = y, so every square is a left identity of · (ETP Equation 31 with the operations identified).
+  x∘y = y∘x follows.
+  - Neither law alone implies either: A alone has 2-element Mace4 models where they fail; for B alone E saturates, and
+    it has a 2-element model.
+  - The hand proof has 6 steps, from E's 9 clauses, plus 3 for commutativity.
+- **The models (theorem).** Let U be the set of squares and W(x,y) the set of w such that:
+  - p·w = w for every p in x·S ∪ y·S;
+  - (w·u)·x = x and (w·u)·y = y for every u in U.
+
+  The models are exactly a magma plus a commutative ∘ with x∘y ∈ W(x,y).
+  - Labelled counts: 12 on 2 elements and 1,491 on 3, by the formula and by Mace4 alike (part 2); 3,641,632 on 4, by
+    the formula (part 3).
+  - The verifier's census, capped at 8 per size, had 1, 8, 8 and 1.
+- **Reducts:**
+  - The ·-reducts are the magmas with (x·x)·y = y and a right zero. Checked on every magma with n ≤ 3.
+  - Every magma with Equation 31 embeds in one, so the ·-laws T implies are those of Equation 31.
+  - T implies no ∘-law beyond commutativity.
+  - With x·y = x∘y, E proves x = y. An associative · forces x·y = y.
+- **Literature:** a targeted agent found no source for the theory. Equation 31 is studied for semigroups (Markovski,
+  Sokolova and Goracinova Ilieva 2001) and as unipotent left loops in quasigroups. Neither setting fits a ·-reduct,
+  which has a right zero and is never associative in a non-degenerate model.
+- **`1238c063`** (N1 rank 2) shares A and both emergent laws. It is a different variety: each theory has a 4-element
+  model where the other's second law fails (part 6).
+- **Downstream:** `soup.funnel` gives level 8 = 10 (9). N1, F1 and levels 0–7 are unchanged.
+- **Caveat:** "not identified" rests on web searches, and the whole method samples the most-studied corners.
+
 ## g-dimonoids in the R1 catalogue (27 Nov 2026; post hoc, after `71fd2cc6`)
 
 Two post hoc catalogue entries, `g-dimonoid` and `commutative g-dimonoid` (`soup/catalogue.py`, `126c5f6`; with ⊣ = ·,

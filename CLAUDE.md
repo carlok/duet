@@ -340,8 +340,14 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       2015) plus x∘(x∘y) = x∘y (E both ways). Models: a commutative semigroup with x·x·y·z = x·y·z plus a free choice
       of twins, x∘y = the chosen twin of x·y (a theorem; no source for it).
     - **g-dimonoids in R1** (post hoc, `126c5f6`; REPORT "g-dimonoids in the R1 catalogue"): 96 verified theories
-      are proved subvarieties, mostly t4-prior to x3; of the candidates only 71fd2cc6, five more still open at 120 s per law (`notes/gdim_open.out`); no
-      level-8 theory. Now: funnel 6/7/8 = 170/78/9, 241 families, Chao1 305; X12's verdicts unchanged.
+      are proved subvarieties, mostly t4-prior to x3; of the candidates only 71fd2cc6, five more still open at 120 s
+      per law (`notes/gdim_open.out`); no level-8 theory. Now: funnel 6/7/8 = 170/78/9, 241 families, Chao1 305;
+      X12's verdicts unchanged.
+    - **`1f430506` studied, not identified** (27 Nov; `notes/1f430506.md`; funnel level 8 is now 10). T = {(x·y)·(x∘z)
+      = z∘x, ((x∘y)·(z·z))·x = x} forces (x·x)·y = y (ETP 31: squares are left identities), then ∘ commutative.
+      Theorem: models = a magma + a commutative ∘ with x∘y ∈ W(x,y) (fixed by x·S, y·S; squares·(x∘y) fix x, y);
+      ·-reducts = ETP-31 magmas with a right zero; ·-laws = ETP 31's, ∘-laws = commutativity only. Sibling
+      `1238c063` (N1 rank 2) shares A and both emergent laws, a different variety; its close look is next.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.

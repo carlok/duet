@@ -1,0 +1,4 @@
+  T, a model where (x · ((x ∘ y) · x)) · y = y fails: size 4 [[[1, 1, 1, 3], [0, 1, 2, 3], [3, 1, 1, 0], [1, 1, 2, 1]], [[2, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]] (searched to None, 1 model)
+  T2, a model where ((x ∘ y) · (z · z)) · x = x fails: size 4 [[[1, 1, 1, 3], [0, 1, 2, 3], [0, 0, 1, 3], [0, 1, 2, 3]], [[2, 3, 1, 3], [3, 3, 3, 3], [1, 3, 1, 3], [3, 3, 3, 3]]] (searched to None, 1 model)
+  T2 => x ∘ y = y ∘ x        proved (Theorem)
+  T2 => (x · x) · y = y      proved (Theorem)

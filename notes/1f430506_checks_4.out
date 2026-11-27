@@ -1,0 +1,21 @@
+  A alone, a model where x ∘ y = y ∘ x fails: size 2 [[[0, 0], [1, 1]], [[0, 1], [0, 1]]] (searched to None, 1 model)
+  A alone, a model where (x · x) · y = y fails: size 2 [[[1, 1], [1, 1]], [[1, 1], [1, 1]]] (searched to None, 1 model)
+  A alone, a model where (x ∘ (x · x)) · y = y fails: size 2 [[[0, 1], [1, 1]], [[1, 1], [1, 1]]] (searched to None, 1 model)
+  x ∘ y = y ∘ x              holds in every model on 2-3 elements
+  (x · x) · y = y            holds in every model on 2-3 elements
+  (x · x) · x = x            holds in every model on 2-3 elements
+  (x ∘ (x · y)) · z = z      holds in every model on 2-3 elements
+  (x ∘ (y · y)) · z = z      holds in every model on 2-3 elements
+  ((x · y) ∘ x) · z = z      holds in every model on 2-3 elements
+  x · x = y · y              fails on n=2: · [[0, 1], [0, 1]] ∘ [[0, 0], [0, 0]]
+  x · x = x                  fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  (x · y) · z = x · (y · z)  fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  x · y = y                  fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  x ∘ x = x                  fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  (x ∘ y) ∘ z = x ∘ (y ∘ z)  fails on n=2: · [[0, 1], [0, 1]] ∘ [[1, 0], [0, 0]]
+  (x · (x ∘ y)) · z = z      holds in every model on 2-3 elements
+  x · (y · y) = y · y        fails on n=3: · [[0, 1, 2], [0, 0, 0], [0, 1, 2]] ∘ [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+  x · (x · y) = y            fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  n=2: 5 magmas with (x·x)·y = y; 5 of them become ·-reducts with a right zero adjoined
+  n=3: 298 magmas with (x·x)·y = y; 298 of them become ·-reducts with a right zero adjoined
+  x·y = y with a commutative ∘ on 3 elements: 729 of 729 are models
