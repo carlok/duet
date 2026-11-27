@@ -69,8 +69,13 @@ V6 = dict(V5, param_screen=True, param_secs=10)
 #   A model counts only after check_offline.check_finite accepts it, and goes into the corpus. Stage c searches the
 #   full range again (q <= 64, affine up to 16, c_linear_secs).
 V7 = dict(V6, z3_after_e=False, linear_secs=60, linear_qmax=32, linear_affine_qmax=9, c_linear_secs=600)
+# V8 (after X12): V7 plus a wall-time cap on every z3 proof (core.prove secs, z3's own timeout). Before it, a z3 call
+# was bounded by its rlimit only, and in X12 two stage-a redundancy proofs ran 5.2 and 7.3 h without reaching rlimit
+# 10M, so two of fusion5's verifiers verified nothing for most of the block (PREREGISTRATION.md, deviation 13). A capped
+# proof ends 'unknown', as one that reaches its rlimit does. 120 s for stages a and b, 1,800 s for stage c.
+V8 = dict(V7, z3_secs=120, c_z3_secs=1800)
 CONFIGS = {'V1': V1, 'DEFAULTS': DEFAULTS, 'V2': V2, 'V3': V3, 'V4': V4, 'V5': V5, 'V6': V6,
-           'V7': V7}   # the stream verifier picks one by SOUP_VERIFIER
+           'V7': V7, 'V8': V8}   # the stream verifier picks one by SOUP_VERIFIER
 DIVISION = {'left quasigroup': ['x·(x∘y) = y', 'x∘(x·y) = y'], 'right quasigroup': ['(x·y)∘y = x', '(x∘y)·y = x']}
 
 
@@ -185,7 +190,7 @@ def stage_a(C, T, cfg=DEFAULTS, tag=''):
         if imp is not None and not imp[t]: continue
         n, _ = _countermodel(C, G, rest, t, cfg['indep_sizes'], cfg['model_rlimit'], f'indep{tag}')
         if n is None:
-            st, _ = prove(rest, t, cfg['redundant_rlimit'])
+            st, _ = prove(rest, t, cfg['redundant_rlimit'], cfg.get('z3_secs'))
             (redundant if st == 'proved' else unconfirmed).append(LAWS[t])
     out['redundant'] = redundant; out['independence_unconfirmed'] = unconfirmed
     claims, tried = [], set()
@@ -284,7 +289,7 @@ def stage_b(C, out, cfg=DEFAULTS):
     t0 = time.time()
     if not out.get('model_sizes') or out.get('screened'): return out
     T = out['T']
-    base = max(1, prove(T, T[0], cfg['base_rlimit'])[1])
+    base = max(1, prove(T, T[0], cfg['base_rlimit'], cfg.get('z3_secs'))[1])
     out['base_effort'] = base
     for c in out['claims']:
         if c['status'] != 'pending': continue
@@ -299,7 +304,7 @@ def stage_b(C, out, cfg=DEFAULTS):
         if c.get('e_status') == 'proved' and cfg.get('z3_after_e', True) is False:
             c['status'] = 'proved'; c['z3_skipped'] = True        # V7: E's proof stands, no z3 run
             set_difficulty(c, cfg); continue
-        st, used = prove(T, c['idx'], cfg['prove_rlimit'])
+        st, used = prove(T, c['idx'], cfg['prove_rlimit'], cfg.get('z3_secs'))
         if st != 'proved' and c.get('e_status') == 'proved':
             st = 'proved'; c['z3_unproved'] = True       # E's proof stands; z3 effort is then a lower bound
         c['status'] = st; c['effort'] = used
@@ -348,7 +353,7 @@ def stage_c(C, out, cfg=DEFAULTS, tag=''):
         if c.get('e_status') == 'proved' and cfg.get('z3_after_e', True) is False:
             c['status'] = 'proved'; c['z3_skipped'] = True; c['proved_in'] = 'c (E)'   # V7: no z3 after E's proof
             set_difficulty(c, cfg); continue
-        st, used = prove(T, c['idx'], cfg['c_prove_rlimit'])
+        st, used = prove(T, c['idx'], cfg['c_prove_rlimit'], cfg.get('c_z3_secs'))
         if st == 'proved' or c.get('e_status') == 'proved':        # E's proof stands even if z3 gives up
             c['status'] = 'proved'; c['effort'] = used
             c['difficulty_z3'] = round(max(0.0, math.log10(used / base)), 3)

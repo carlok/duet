@@ -215,11 +215,14 @@ def _axiom(i, S, f, g):
     return z3.ForAll(vs, body) if vs else body
 
 
-def prove(T, goal, rlimit=20_000_000):
-    """Returns (status, effort). Each call gets a fresh z3 context, so effort counts this proof only."""
+def prove(T, goal, rlimit=20_000_000, secs=None):
+    """Returns (status, effort). Each call gets a fresh z3 context, so effort counts this proof only.
+    secs: a wall-time cap (z3's own timeout), off by default. z3 can run for hours without reaching its rlimit: two
+    stage-a redundancy proofs in X12 ran 5.2 and 7.3 h at rlimit 10M (PREREGISTRATION.md, deviation 13)."""
     ctx = new_context()
     S = z3.DeclareSort('S', ctx); f = z3.Function('f', S, S, S); g = z3.Function('g', S, S, S)
     s = z3.Solver(ctx=ctx); s.set('rlimit', rlimit)
+    if secs: s.set('timeout', int(secs * 1000))
     for t in T: s.add(_axiom(t, S, f, g))
     L, R = TREES[goal]; k = max(nvars_tree(L), nvars_tree(R)); cs = [z3.Const(f'c{j}', S) for j in range(k)]
     s.add(_zt(L, cs, f, g) != _zt(R, cs, f, g))
