@@ -335,6 +335,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
       `out_of_memory_error` killed 4 verifiers, about 70 min apart, on `ff914371`, the head of its lane, which went back
       each time. Fix: verifier V8 (z3 wall-time caps,
       `tests/test_z3cap.py`). Notes: `notes/x12_hang.py`, `notes/x12_cap_check.out`, `notes/x12_table.out`.
+    - **`71fd2cc6` identified** (27 Nov; `notes/71fd2cc6.md`, ledger row 13): T ⟺ commutative g-dimonoids (Loday's
+      dimonoid axioms without the middle one, both operations commutative; Movsisyan et al. 2014, Zhuchok and Zhuchok
+      2015) plus x∘(x∘y) = x∘y (E both ways). Models: a commutative semigroup with x·x·y·z = x·y·z plus a free choice
+      of twins, x∘y = the chosen twin of x·y (a theorem; no source for it). Pitfall: R1's catalogue has dimonoids
+      but not g-dimonoids; adding them post hoc may identify more candidates.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.

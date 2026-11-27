@@ -2,6 +2,33 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `71fd2cc6`, X12's top theory: a commutative g-dimonoid (27 Nov 2026; post hoc close look; ledger row 13)
+
+T = {x·y = y·x, x∘(x·y) = y∘x, (x∘y)·z = y·(z·x)} (arm fusion6, N1 rank 18, score 2.924). Memo `notes/71fd2cc6.md`;
+checks `notes/71fd2cc6_checks.py` parts 1–6, outputs `notes/71fd2cc6_checks{,_2,_3,_4,_5,_6}.out`.
+- **Structure (E):**
+  - Both operations are commutative semigroups. Both associativities are emergent: E saturates on each from every
+    single law, except ∘'s from law 3, where a 2-element model by hand refutes it.
+  - Each operation cannot tell the other's products from its own one level down: x·(y∘z) = x·(y·z),
+    x∘(y·z) = x∘(y∘z).
+- **Identified:** T is equivalent to the axioms of commutative g-dimonoids plus x∘(x∘y) = x∘y (E both ways; the axioms
+  alone do not give that law, a 2-element Mace4 model).
+  - g-dimonoids: Movsisyan, Davidov and Safaryan 2014. The commutative ones: Zhuchok and Zhuchok 2015. Definitions read
+    in Gavrylkiv, arXiv:2607.29641 (2026).
+  - Our catalogue has Loday's dimonoids, not g-dimonoids. The dropped middle axiom fails in 276 of T's 324
+    non-degenerate models on 4 elements, so no check related them.
+- **Its models** (a theorem, by hand from two lemmas E proves; checked on all 764 labelled models with up to 4
+  elements): a commutative semigroup with x·x·y·z = x·y·z, and any choice of one element in each class of twins
+  (a·z = b·z for all z) that contains a product, with x∘y the chosen twin of x·y.
+  - The ·-reduct variety is var{Sℓ₂, N₃} in Araújo et al.'s survey (arXiv:1911.05817), read by the literature agent
+    only.
+  - No source was found for this description of the models.
+- **Time to identification:** pushed 26 Nov 19:46 UTC, verified 21:22, ranked 04:20, identified about 06:00 UTC.
+- **Effect:** funnel level 7 keeps it (N1's lists of identifications were fixed at its preregistration), level 8 does
+  not (ledger rows are left out). Level 8 stays at 9.
+- **Follow-up:** g-dimonoids and commutative g-dimonoids as post hoc catalogue entries (R1), to see how many other
+  candidates they relate.
+
 ## X12: arm `fusion6` against `fusion5`, side by side (26–27 Nov 2026; preregistered; one block; deviation 13)
 
 Preregistration: PREREGISTRATION.md, X12 (`fecc0b9`, before the start); the judging script `notes/x12_predictions.py`

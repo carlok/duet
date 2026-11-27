@@ -1,0 +1,6 @@
+  x · y = y · x            => (x · y) · z = x · (y · z) countersatisfiable (CounterSatisfiable)
+  x ∘ (x · y) = y ∘ x      => (x · y) · z = x · (y · z) countersatisfiable (CounterSatisfiable)
+  (x ∘ y) · z = y · (z · x) => (x · y) · z = x · (y · z) countersatisfiable (CounterSatisfiable)
+  x · y = y · x            => (x ∘ y) ∘ z = x ∘ (y ∘ z) countersatisfiable (CounterSatisfiable)
+  x ∘ (x · y) = y ∘ x      => (x ∘ y) ∘ z = x ∘ (y ∘ z) countersatisfiable (CounterSatisfiable)
+  (x ∘ y) · z = y · (z · x) => (x ∘ y) ∘ z = x ∘ (y ∘ z) unknown (ResourceOut)

@@ -1,0 +1,4 @@
+  T => (x · y) ∘ (x · y) = x ∘ y proved (Theorem, steps None)
+  T => (x · y) ∘ y = x ∘ y      proved (Theorem, steps None)
+  T => (x ∘ y) ∘ (x ∘ y) = x ∘ y proved (Theorem, steps None)
+  T => x ∘ (x ∘ (y ∘ y)) = x ∘ y proved (Theorem, steps None)

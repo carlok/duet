@@ -1,0 +1,5 @@
+CG = x · y = y · x & x ∘ y = y ∘ x & (x · y) · z = x · (y · z) & (x · y) · z = x · (y ∘ z) & (x · y) ∘ z = x ∘ (y ∘ z) & (x ∘ y) ∘ z = x ∘ (y ∘ z)
+  T => CG True
+  CG + x∘(x∘y)=x∘y => T True
+  CG => x∘(x∘y)=x∘y: unknown (ResourceOut)
+  T => CG (roles swapped) True | CG (swapped) == CG: True

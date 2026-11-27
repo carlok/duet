@@ -1,0 +1,13 @@
+n = 2: models 6, x∘y a function of the class of x·y in 6; commutative semigroups 6: every choice of twins a model in 4, some choice in 4
+n = 3: models 54, x∘y a function of the class of x·y in 54; commutative semigroups 63: every choice of twins a model in 30, some choice in 30
+n = 4: models 764, x∘y a function of the class of x·y in 764; commutative semigroups 1140: every choice of twins a model in 368, some choice in 368
+K4 without x∘(x∘y)=x∘y: Mace4 countermodel size 2 (1 model, 0.0 s)
+  · [[1, 0], [0, 1]]  ∘ [[1, 0], [0, 1]]
+K4 without x·(x·y)=x·(y·y): Mace4 countermodel size 2 (1 model, 0.0 s)
+  · [[0, 1], [1, 0]]  ∘ [[0, 1], [1, 0]]
+T and not x·(x·y)=x·y: Mace4 model size 3 (1 model, 0.0 s)
+  · [[1, 2, 2], [2, 2, 2], [2, 2, 2]]  ∘ [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+T and not x·(x·x)=x·x: Mace4 model size 3 (1 model, 0.0 s)
+  · [[1, 2, 2], [2, 2, 2], [2, 2, 2]]  ∘ [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+T and not x·(y·(x·y))=x·y: Mace4 model size 3 (1 model, 0.0 s)
+  · [[1, 2, 2], [2, 2, 2], [2, 2, 2]]  ∘ [[1, 1, 1], [1, 1, 1], [1, 1, 1]]

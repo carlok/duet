@@ -32,6 +32,27 @@ So it is not identified, and weak. With `3818b88f` it forms the first two-member
 [families statistic](families.md). It is not a ledger row, because neither theory is identified. Memo:
 [`notes/de0c0cf3.md`](../notes/de0c0cf3.md).
 
+## `71fd2cc6` (X12, N1 rank 18, X12's top score): a commutative g-dimonoid, identified
+
+T = {x·y = y·x, x∘(x·y) = y∘x, (x∘y)·z = y·(z·x)}.
+- **Structure** (E): both operations are commutative semigroups, and both associativities are emergent. Each
+  operation cannot tell the other's products from its own one level down: `x · (y ∘ z) = x · (y · z)` and
+  `x ∘ (y · z) = x ∘ (y ∘ z)`. With `x ∘ (x ∘ y) = x ∘ y` that is the whole theory (E, both ways).
+- **The models, in general:**
+  - Call `a` and `b` twins if `a · z = b · z` for every `z`.
+  - The models are exactly a commutative semigroup with `x·x·y·z = x·y·z`, together with any choice of one element in
+    each twin class of products. Then `x ∘ y` is the chosen twin of `x · y`.
+  - Proved by hand from two lemmas E proves, and checked on every model with up to 4 elements (764 labelled models,
+    324 non-degenerate).
+- **Identified** (ledger row 13): T is equivalent to the axioms of commutative g-dimonoids plus `x ∘ (x ∘ y) = x ∘ y`
+  (E both ways). g-dimonoids are Loday's dimonoids without their middle axiom (Movsisyan, Davidov and Safaryan 2014;
+  the commutative ones Zhuchok and Zhuchok 2015; counts of small ones, Gavrylkiv 2026). The middle axiom fails in most
+  models of T, which is why our catalogue, which has dimonoids, found no relation.
+- No source was found for the description of the models by twins.
+
+∘ is a selector on classes defined by ·, as in `3818b88f` and `de0c0cf3`, where it chooses on the blocks of a triple
+system. Memo: [`notes/71fd2cc6.md`](../notes/71fd2cc6.md).
+
 ## `55cb2c91` (N1 rank 6): not identified, and the nearest thing to the jazz aim so far
 
 - **The claim.** Two laws, `x · (x ∘ y) = x` and `x · y = ((y · z) · x) ∘ x`. Together they imply
@@ -94,5 +115,6 @@ in [`notes/n1_ranks4-6.md`](../notes/n1_ranks4-6.md).
 - **X5's top candidates** (ledger row 12). `·` is a Steiner loop, and `∘` is the same loop translated by a constant.
 - **`31d6d970`.** One variety, found three times. With associativity it is exactly Leech's rectangular skew lattices.
 - **`10c98c4b`.** Its core is a Δ-bijective pair, from the Yang–Baxter literature.
+- **`71fd2cc6`** (ledger row 13, above). A commutative g-dimonoid with `x ∘ (x ∘ y) = x ∘ y`.
 
 Next: [open problems](open-problems.md).
