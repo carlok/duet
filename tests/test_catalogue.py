@@ -13,8 +13,22 @@ def test_entries_in_law_table():
         assert all(ORDER[t] <= 4 for t in T), name
 
 
-def test_one_post_hoc_entry():
-    assert [n for n, k in KNOWN.items() if k['post_hoc']] == ['Delta-bijective pair']
+def test_post_hoc_entries():
+    assert [n for n, k in KNOWN.items() if k['post_hoc']] == ['Delta-bijective pair', 'g-dimonoid',
+                                                              'commutative g-dimonoid']
+
+
+def test_g_dimonoids():
+    """The g-dimonoid entry is the dimonoid entry without its middle axiom, and 71fd2cc6's smallest twin model
+    (notes/71fd2cc6.md) is a commutative g-dimonoid that is not a dimonoid."""
+    from soup.named import law_index
+    mid = law_index('(x∘y)·z=x∘(y·z)')
+    assert set(laws_of('dimonoid')) - set(laws_of('g-dimonoid')) == {mid}
+    assert set(laws_of('g-dimonoid')) < set(laws_of('commutative g-dimonoid'))
+    dot = [[0, 0, 0], [0, 0, 0], [0, 0, 2]]
+    circ = [[1, 1, 1], [1, 1, 1], [1, 1, 2]]
+    assert holds(laws_of('commutative g-dimonoid'), dot, circ)
+    assert not holds(laws_of('dimonoid'), dot, circ)
 
 
 def test_known_models():
