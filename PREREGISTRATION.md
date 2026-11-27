@@ -1261,3 +1261,42 @@ No random theory and no T4 theory had been profiled.
       process, which a worker's PSS does not count.
     - **The user's decision** (recorded at 16:23 UTC): the stack keeps running during the blocks. From x10b on, blocks
       run with 4 searchers instead of 6 (third amendment, written before x10b starts).
+13. **X12, two of fusion5's verifiers stuck in stage a for most of block x12a (found 27 Nov 2026, about 04:45 UTC,
+    after the post-run checks and the judging of Y1–Y8; written 05:05 UTC).**
+    - Block x12a ran to budget in both arms, 26 Nov 19:28:05 to 27 Nov 03:28 UTC, with no memory stop. But fusion5 wrote
+      no result after 22:16 UTC: its results per hour were 328, 87 and 145, then 0 for five hours.
+    - **What happened:** fusion5's v2 wrote its last result at about 20:10 UTC and v8 at about 22:16 UTC. Both then
+      stayed in stage a on one claimed theory each, 7.3 and 5.2 h, until the stop put both tasks back. Every stats tick
+      shows them in "stage a", and the queue showed 2 claimed throughout. In finished tasks fusion5 used 3.08 of its
+      16.0 verifier-hours, fusion6 10.84 of 16.03 (`notes/x12_table.py`, `notes/x12_table.out`).
+    - **Cause** (`notes/x12_hang.py`, `notes/x12_hang_28801.out`, `notes/x12_hang_71025.out`, `notes/x12_cap_check.out`):
+      - The two theories (keys `52ef5b80`, `7046daba`, both from searcher s1801) have five laws each, and both include
+        x·x = y·y.
+      - Stage a rerun on a copy of x12-f5's corpus stayed in one z3 call for 20 minutes in both: stack dumps at 5, 10
+        and 15 minutes, killed at 1,200 s. The call is the redundancy proof of x·x = y·y from the other four laws
+        (`verify.stage_a` → `core.prove`), which only its rlimit of 10M bounded.
+      - With a 60 s cap that proof reached an rlimit count of 0.99M and 1.53M. The other eight redundancy proofs of the
+        two theories reached 10M in 4 to 40 s. z3's counter grows too slowly there for the rlimit to bind within hours.
+    - **fusion6, the same cause by another route** (found 05:15 UTC): four of its verifiers died with z3's
+      `out_of_memory_error` (exit −6) at 23:55, 01:06, 02:15 and 03:24 UTC, each with one task claimed, which the
+      supervisor put back. The restarted verifier took the head of the lane again, `ff914371`, still first in
+      `work/x12-f6/queue/pending` at the end: about 4.6 verifier-hours. Rerun under V8 (`notes/x12_hang_f6_4888.out`),
+      its stage a took 567 s, nearly all in redundancy proofs stopped by the 120 s cap, and the task finished in 980 s;
+      under V7 they ran until z3's
+      1,500 MB memory cap aborted the process. That attribution rests on the stack, the timing and the lane order; it
+      was not rerun under V7.
+    - **Why nothing noticed it:** the supervisor watches memory and heartbeats, and a verifier inside z3 still sends
+      heartbeats. The host watcher read the journal and `stats.jsonl`, which kept being written. The crashes were
+      journaled, but nobody read the journal between the 72-minute check and the end of the block.
+    - **Effect on the predictions:** they were judged as preregistered, and all their inputs are complete. But the arms
+      got unequal verifier time: fusion5 verified 560 theories, nearly all in its first 3 hours, fusion6 734.
+      - Y1 compares at equal sample size, Y2 and Y3 are shares, Y7 and Y8 are not about sample size.
+      - Y4 (the top 20 of fewer verified theories) and Y5 (a count) depend on how far down its queue an arm got. Post
+        hoc, by exact rarefaction at fusion5's 266 structured theories, fusion6 has 51.8 expected new families against
+        4.0, so Y5's verdict does not depend on it. Y4's may.
+      - Each arm verified its queue in priority order, so fusion5's 560 are the head of its queue, and fusion6's 734
+        reach further down its own.
+    - **Fix** (after the run, before any further run): verifier V8 is V7 plus a wall-time cap on every z3 proof, 120 s
+      in stages a and b and 1,800 s in stage c (`core.prove(..., secs)`, z3's own timeout; `tests/test_z3cap.py`). A
+      capped proof ends "unknown", as one that reaches its rlimit does. V7 is unchanged.
+    - X12's budget, 28,800 s per arm, was spent in this one block, so X12 is complete. Nothing is rerun.

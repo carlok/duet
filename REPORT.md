@@ -2,6 +2,113 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## X12: arm `fusion6` against `fusion5`, side by side (26–27 Nov 2026; preregistered; one block; deviation 13)
+
+Preregistration: PREREGISTRATION.md, X12 (`fecc0b9`, before the start); the judging script `notes/x12_predictions.py`
+was committed during the block, before any F1 label or candidate existed (`b63598f`). One deviation (13, below). Two data
+directories, `x12-f5` (arm `fusion5`) and `x12-f6` (arm `fusion6`), each a fork of x11's corpus (19,531 found structures)
+with the library rebuilt after X11. Verifier V7, stages a and b only (`--drain-c 28800`), 2 searchers kept alive and 2
+verifiers per arm, recycling at 700 MB, memory stop at 1,000 MB, gate 0.5, image `soup:x12` = `62d4e04a6c98`.
+- **x12a:** both arms 26 Nov 19:28:05 to 27 Nov 03:28 UTC, the whole budget in one block (28,804 s and 28,847 s), seeds
+  1801–1802. No memory stop; the lowest MemAvailable in the VM was 3,496 MB. The VM clock matched the Mac's at the end.
+
+Commands:
+- run: the preregistered command, `--budget 28800 --drain-c 28800 --seed0 1801`, runs `x12f5a` and `x12f6a`;
+- post-run (image rebuilt with both directories in the run lists, 110 tests pass): X11's steps on both directories
+  (statistics `notes/{runstats,diagonal,heartbeats}_x12-f{5,6}.out`; split per candidate `notes/split_x12_candidates.out`;
+  `notes/disconnected.py x12-f6 x12-f5`, `notes/disconnected_x12-f6_x12-f5.out`; push gate `notes/push_gate_x12.out`);
+- predictions: `notes/x12_predictions.py` (output `notes/x12_predictions.out`);
+- table: `notes/x12_table.py` (output `notes/x12_table.out`);
+- the stall: `notes/x12_hang.py` and `notes/x12_cap_check.out` (deviation 13).
+
+| | fusion5 (`x12-f5`) | fusion6 (`x12-f6`) |
+| --- | --- | --- |
+| theories verified | 560 | 734 |
+| positive score (= F1 structured, in these arms) | 266 (47.5%) | 408 (55.6%) |
+| no claim at all / screened split / parameter definition | 216 / 29 / 0 | 107 / 48 / 0 |
+| **verifier-hours in finished tasks** (of 16) | **3.08** | **10.84** |
+| results per hour, hours 1–8 | 328, 87, 145, 0, 0, 0, 0, 0 | 78, 100, 150, 78, 90, 82, 81, 75 |
+| mean stage b per theory | 31 s | 61 s |
+| claims / proved | 704 / 456 | 1,272 / 695 |
+| refuted: finite model / FMB / linear / E saturation | 135 / 71 / 3 / 9 | 212 / 135 / 58 / 46 |
+| unknown (left in the stage-c lane) | 30 (24 tasks) | 126 (75 tasks) |
+| top score | 1.820 | 2.924 |
+| cheap evaluations / per searcher-hour | 17.07M / 1.07M | 10.47M / 0.65M |
+| rescores: count, seconds / parameter skip's Mace4 | 396, 2,032 s / 58 s | 94, 21,843 s / 1,024 s |
+| cell wins / pushed / held / trimmed from the full lane | 145,541 / 2,020 / 4,015 / 381 | 1,860,987 / 18,847 / 91,757 / 17,274 |
+| structures added to the corpus | 2,104 | 4,335 |
+
+**Predictions** (Y1–Y8 as preregistered; six hold, two fail):
+- **Y1 holds (primary).** At equal sample size, the 266 structured theories of fusion5, fusion6's span 132.2 expected
+  families against fusion5's 64.0 (exact rarefaction), a ratio of 2.06 (≥ 1.5). Raw: 164 against 64.
+- **Y2 holds.** The largest family's share of structured theories is 2.7% in fusion6 (`·: - | ∘: comm, flex`, 11 of
+  408) and 6.8% in fusion5 (a TSQ family, 18 of 266).
+- **Y3 holds, and the open question came out the other way.** fusion6's positive share is 55.6% against 47.5%, a ratio
+  of 1.17 (≥ 0.8); Fisher's exact test, two-sided, p = 0.0042. The diversity did not cost quality in stage b.
+- **Y4 fails.** Of each arm's 20 candidates, 3 of fusion6's are disconnected against 8 of fusion5's, and 4 reach funnel
+  level 7 against 6 (fusion5 has 3 more through a dedupe class). Among fusion6's 20, 9 fail "works" (fusion5 7) and 7
+  have the split check undecided (fusion5 5), which counts as "unknown", not disconnected; 6 have a classical model
+  (fusion5 8).
+- **Y5 holds.** fusion6 adds 70 structured families that no run up to X11 has, fusion5 4; one of them is in both.
+  Post hoc, at equal size (266 structured theories) the expected count is 51.8 against 4.0.
+- **Y6 fails.** fusion6's searchers made 0.65M evaluations per searcher-hour (≥ 0.5M holds), but rescores and the Mace4
+  step took 39.7% of searcher time (≤ 15%): 94 rescores at about 232 s each, against 18 s in the 15-minute smoke run.
+  The archive took 1.86M cell wins, 13 times fusion5's, and a rescore costs time in proportion to it. Without that
+  time the two arms search at the same speed (0.65 / 0.60 ≈ 1.08M against 1.07M).
+- **Y7 holds.** 99% of the block's pushes came by 1,181 s in fusion5 (4.1%) and by 1,516 s in fusion6 (5.3%).
+- **Y8 holds.** No memory stop; 560 and 734 verified (≥ 300 each).
+
+**Deviation 13: fusion5's verifiers stalled** (PREREGISTRATION.md, deviation 13). fusion5 wrote no result after 22:16
+UTC. Two verifiers sat in stage a on one theory each, 7.3 and 5.2 hours, until the stop put the tasks back. Both theories
+have five laws and include x·x = y·y. Reruns put the time in one z3 call, the redundancy proof of x·x = y·y from the other
+four laws, which only its rlimit of 10M bounded: in 60 s it reached a count of 0.99M and 1.53M, while the other eight
+redundancy proofs reached 10M in 4–40 s.
+- **fusion6 lost about 4.6 verifier-hours the same way, by a different route.** Four of its verifiers died with Z3's
+  `out_of_memory_error` (exit −6) at 23:55, 01:06, 02:15 and 03:24 UTC, about 70 minutes apart. Each time the
+  supervisor put the claimed task back, and the restarted verifier took the head of the lane again: `ff914371` (x·x = x,
+  x∘(y∘x) = y, x·((x·y)∘y) = x, (x·y)·z = y·(x·z)), still first in `work/x12-f6/queue/pending` at the end. Rerun under
+  V8, its stage a took 567 s, nearly all of it in redundancy proofs that the 120 s cap stopped, and the whole task
+  finished in 980 s (score 0; `notes/x12_hang_f6_4888.out`). Under V7 nothing stopped
+  them before Z3's 1,500 MB memory cap aborted the process. It was not rerun under V7 for 70 minutes, so this
+  attribution rests on the stack, the timing and the lane order.
+- **What it does to the comparison:** fusion6 had 3.5 times fusion5's verifier time in finished tasks (10.84 h
+  against 3.08 h). Y1 and Y5 hold
+  at equal sample size too, and Y2 and Y3 are shares, but fusion5's 560 are the head of its queue and fusion6's 734 reach
+  further down its own. Y4's top 20 are drawn from unequal pools.
+- **Fix:** verifier V8 = V7 plus a wall-time cap on every z3 proof (120 s in stages a and b, 1,800 s in stage c;
+  `core.prove(..., secs)`, `tests/test_z3cap.py`). With it, the stuck proofs end in 60 s in `notes/x12_cap_check.out`.
+
+**Families (F1, `soup.taxonomy build --confirm`; 96.6% of corpus-implied properties confirmed by E).** There are now 243
+structured families (X11: 170), Chao1 index 309 (descriptive). The Steiner shape is still the most common proved law in
+both arms: x·(x·x) = y·(x·y) in 67 of fusion5's 266 positive theories and 80 of fusion6's 408.
+
+**The candidates** (each arm's top 20 non-fragments, 40 in all):
+- **Identification:** hidden 0, parameter definition 0, relabel 0, rediscover 0 (no E job over the 1,294 results).
+- **Split:** none is split; 28 have a finite certificate and 12 are undecided (E derived no bridge law).
+- **Dedupe:** 32 new varieties. `e4c8b4e1` and `a4e004d7` (fusion5) and `d3f7e4c9` (fusion6) are one variety, found by
+  both arms; `ab4a1538` and `00d63fd1` (fusion6) are another. Over all runs, 318 candidates are 262 varieties.
+- **N1:** 171 enter (X11: 153). fusion6's 10 take ranks 18 (`71fd2cc6`, the top score of either arm), 22 (`b171c8f9`)
+  and lower; fusion5's 8 take rank 39 (`e92a33ca`) and lower. None has been studied.
+- **Funnel:** level 0 is 201,630,045 (+27.6M), past the 200M milestone. Level 1 is 11,908, level 7 rises from 69 to 79
+  (6 from fusion5, 4 from fusion6), level 8 stays at 9.
+
+**Linear sweep after the run:** 30 open claims in fusion5 and 126 in fusion6, none refuted.
+
+**Reading:**
+- **The family pressure does what it was built for, and its theories hold up.** At equal size fusion6's verified
+  theories span twice as many families, and 70 of them are new to every earlier run. Its positive share is higher, not
+  lower, and its best score is the highest of either arm. Y3 was the open question, and the diversity did not cost
+  quality.
+- **It did not give better candidates by our automatic marks.** Its top 20 by score have fewer disconnected theories and
+  fewer at level 7, and more of them fail "works". The candidate rule picks by score, and fusion6's highest scores are
+  not where the marks are. This is one block with two searchers per arm, and Y4 is the prediction the stall bears on.
+- **The rescore is the price, and it grows with the archive.** It took 38% of searcher time. Rescoring a sample of the
+  archive, or less often as the archive grows, would remove most of it.
+- **The push gate is unchanged, and both arms verified mainly the pushes of their first 25 minutes.** fusion6 pushed 9
+  times as many theories, and its lane trimmed 17,274.
+- **The stall is a verifier bug, not an arm effect,** and V8 fixes it. It hit both arms: fusion5 lost about 12.5 of its
+  16 verifier-hours and fusion6 about 4.6. So the counts of verified theories are not a fair comparison of the arms.
+
 ## fusion6 against fusion5: a paired live smoke run (26 Nov 2026, after X11; not preregistered, 15 minutes)
 
 `fam5` (arm `fusion5`) and `fam6` (arm `fusion6`, with the rescore throttle of `320b9b7`) were started together at

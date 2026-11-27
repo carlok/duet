@@ -1,0 +1,3 @@
+s1801: evals 5308323, pushed 9556, lattice-skipped 130239, ignore-skipped 192795
+s1802: evals 5219563, pushed 9291, lattice-skipped 149380, ignore-skipped 179222
+x12-f6: 279619 of 10527886 evaluations skipped as lattice-valid (2.7%)

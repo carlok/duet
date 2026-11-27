@@ -1,0 +1,68 @@
+T [2, 96, 1525, 4888] laws ['x · x = x', 'x ∘ (y ∘ x) = y', 'x · ((x · y) ∘ y) = x', '(x · y) · z = y · (x · z)'] cfg V8
+corpus 23866
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/site-packages/z3/z3core.py", line 4545 in Z3_solver_check_assumptions
+  File "/usr/local/lib/python3.13/site-packages/z3/z3.py", line 7920 in check
+  File "/app/soup/core.py", line 230 in prove
+  File "/app/soup/verify.py", line 193 in stage_a
+  File "<stdin>", line 33 in <module>
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/site-packages/z3/z3core.py", line 4545 in Z3_solver_check_assumptions
+  File "/usr/local/lib/python3.13/site-packages/z3/z3.py", line 7920 in check
+  File "/app/soup/core.py", line 230 in prove
+  File "/app/soup/verify.py", line 193 in stage_a
+  File "<stdin>", line 33 in <module>
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/site-packages/z3/z3core.py", line 4545 in Z3_solver_check_assumptions
+  File "/usr/local/lib/python3.13/site-packages/z3/z3.py", line 7920 in check
+  File "/app/soup/core.py", line 230 in prove
+  File "/app/soup/verify.py", line 193 in stage_a
+  File "<stdin>", line 33 in <module>
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/site-packages/z3/z3core.py", line 4545 in Z3_solver_check_assumptions
+  File "/usr/local/lib/python3.13/site-packages/z3/z3.py", line 7920 in check
+  File "/app/soup/core.py", line 230 in prove
+  File "/app/soup/verify.py", line 193 in stage_a
+  File "<stdin>", line 33 in <module>
+stage a finished in 567.0 s
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/selectors.py", line 398 in select
+  File "/usr/local/lib/python3.13/subprocess.py", line 2155 in _communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 1223 in communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 557 in run
+  File "/app/soup/sweep_fmb.py", line 40 in fmb
+  File "/app/soup/verify.py", line 258 in _fmb
+  File "/app/soup/verify.py", line 302 in stage_b
+  File "<stdin>", line 36 in <module>
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/site-packages/z3/z3core.py", line 4545 in Z3_solver_check_assumptions
+  File "/usr/local/lib/python3.13/site-packages/z3/z3.py", line 7920 in check
+  File "/app/soup/core.py", line 230 in prove
+  File "/app/soup/verify.py", line 307 in stage_b
+  File "<stdin>", line 36 in <module>
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/selectors.py", line 398 in select
+  File "/usr/local/lib/python3.13/subprocess.py", line 2155 in _communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 1223 in communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 557 in run
+  File "/app/soup/sweep_fmb.py", line 40 in fmb
+  File "/app/soup/verify.py", line 258 in _fmb
+  File "/app/soup/verify.py", line 302 in stage_b
+  File "<stdin>", line 36 in <module>
+Timeout (0:02:00)!
+Thread 0x0000ffff92d814c0 (most recent call first):
+  File "/usr/local/lib/python3.13/site-packages/z3/z3core.py", line 4545 in Z3_solver_check_assumptions
+  File "/usr/local/lib/python3.13/site-packages/z3/z3.py", line 7920 in check
+  File "/app/soup/core.py", line 230 in prove
+  File "/app/soup/verify.py", line 307 in stage_b
+  File "<stdin>", line 36 in <module>
+stage b finished at 980.4 s
+result: {"status": "ok", "score": 0.0, "secs_a": 567.0, "secs_b": 413.4, "model_counts": {"2": 1, "3": 0, "4": 1, "5": 0}, "independence_unconfirmed": ["x \u00b7 x = x"], "claims": [{"law": "x \u2218 y = y \u2218 x", "idx": 41, "order": 2, "status": "unknown", "e_status": "unknown", "e_processed": null, "linear": {"status": "none", "secs": 0.4, "qmax": 32, "affine_qmax": 9}, "fmb": {"status": "unknown", "secs": 60.0, "start": 7}, "effort": 6100720, "difficulty_z3": 3.863, "difficulty": 0.1, "no_e_proof": true}, {"law": "x \u00b7 (x \u2218 y) = x \u00b7 y", "idx": 275, "order": 3, "status": "unknown", "e_status": "unknown", "e_processed": null, "linear": {"status": "none", "secs": 0.4, "qmax": 32, "affine_qmax": 9}, "fmb": {"status": "unknown", "secs": 60.0, "start": 7}, "effort": 24356313, "difficulty_z3": 4.464, "difficulty": 0.1, "no_e_proof": true}, {"law": "x \u00b7 (x \u00b7 y) = x \u00b7 (x \u2218 y)", "idx": 3205, "order": 4, "status": "unknown", "e_status": "unknown", "e_processed": null, "linear": {"status": "none", "secs": 0.4, "qmax": 32, "affine_qmax": 9}, "fmb": {"status": "unknown", "secs": 60.0, "start": 7}, "effort": 30000056, "difficulty_z3": 4.554, "difficulty": 0.1, "no_e_proof": true}]}
+exit 0

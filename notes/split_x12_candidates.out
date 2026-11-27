@@ -1,0 +1,41 @@
+40 candidates to check from ['x12-f5', 'x12-f6']
+e92a33ca x12-f5 split False  (witness n = 2)
+4191a4ac x12-f5 split False  (witness n = 4)
+f0208980 x12-f5 split False  (witness n = 2)
+b1cf6dc0 x12-f5 split False  (witness n = 2)
+f5efe6ec x12-f5 split False  (witness n = 2)
+9aaebd8d x12-f5 split False  (witness n = 2)
+9c86c03e x12-f5 split False  (witness n = 2)
+2e0eb111 x12-f5 split False  (witness n = 2)
+83e82b8f x12-f5 split False  (witness n = 2)
+24f9f18b x12-f5 split False  (witness n = 2)
+883b071d x12-f5 split False  (witness n = 2)
+2ce8344a x12-f5 split False  (witness n = 2)
+d94efc4a x12-f5 split False  (witness n = 2)
+1ab10df1 x12-f5 split False  (witness n = 4)
+9f28c816 x12-f5 split False  (witness n = 4)
+71fd2cc6 x12-f6 split False  (witness n = 2)
+0080d09e x12-f6 split False  (witness n = 2)
+decef51d x12-f5 split None E did not derive a bridge law from one-operation consequences 
+bf9598e2 x12-f5 split None E did not derive a bridge law from one-operation consequences 
+e4c8b4e1 x12-f5 split None E did not derive a bridge law from one-operation consequences 
+a4e004d7 x12-f5 split None E did not derive a bridge law from one-operation consequences 
+eb103bde x12-f6 split False  (witness n = 2)
+6419fbc5 x12-f6 split False  (witness n = 2)
+b171c8f9 x12-f6 split False  (witness n = 2)
+a415728f x12-f6 split False  (witness n = 3)
+12fe3ea1 x12-f6 split False  (witness n = 2)
+b2bb6498 x12-f6 split False  (witness n = 4)
+92e4a13c x12-f6 split False  (witness n = 2)
+dcffb6d0 x12-f6 split False  (witness n = 2)
+86ee400f x12-f6 split False  (witness n = 2)
+a2f2ead2 x12-f6 split False  (witness n = 2)
+d3f7e4c9 x12-f6 split None E did not derive a bridge law from one-operation consequences 
+ab4a1538 x12-f6 split None E did not derive a bridge law from one-operation consequences 
+a0258a76 x12-f6 split None E did not derive a bridge law from one-operation consequences 
+dd47f32b x12-f6 split False  (witness n = 2)
+00d63fd1 x12-f6 split None E did not derive a bridge law from one-operation consequences 
+fbdadc21 x12-f6 split None E did not derive a bridge law from one-operation consequences 
+fb7e2e5b x12-f6 split None E did not derive a bridge law from one-operation consequences 
+a7f03fb8 x12-f5 split None E did not derive a bridge law from one-operation consequences 
+294e15b6 x12-f6 split None E did not derive a bridge law from one-operation consequences 

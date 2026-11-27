@@ -66,8 +66,8 @@ by the whole theory but by no single law of it.
 | `probes.py` | Deterministic corpus of 12,509 two-op structures on 2–6 elements (all on 2; affine pairs over ℤ/3–ℤ/6; 𝔽₄; Klein, S₃, ℤ/6 group-derived ops; lattices M₃, N₅, 2²; ℤ/n with +,×; random tables) |
 | `matrix.py` | numba: law × structure matrix → `M_probe_major.npy`, `M_law_major.npy` (packed bits, ~111 MB each), `meta.pkl`, `nondeg.npy`; `evaluate_one` for single structures |
 | `data.py` | Loads meta and the matrices (`mmap_mode='r'`, shared between processes), non-degeneracy mask, TPTP export |
-| `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`; `has(t)` caches each law's packed column for `sat`), `law_vector`, `prove` (fresh z3 context, returns effort), `Grounding`/`find_model` (grounded finite models in their own context) |
-| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `V6` (V5 plus the parameter-definition screen), `V7` (X9: V6, no z3 after an E proof, linear-model screen in stages b and c), `LEGACY` (first session) |
+| `core.py` | `Corpus` (base + found structures as packed law vectors; optional shared store `corpus/<n>_<hash>.npz` with `refresh()`; `has(t)` caches each law's packed column for `sat`), `law_vector`, `prove` (fresh z3 context, returns effort; `secs` caps its wall time, after X12), `Grounding`/`find_model` (grounded finite models in their own context) |
+| `verify.py` | Stages a (census, independence and claim countermodels to size 6), b (E then bounded z3; certified saturations), c (E long, Mace4 from the smallest unsearched size, long z3). Configs: `V1` (frozen, T3), `DEFAULTS` (V1 + certificates), `V2` (T4: E-step difficulty, one claim per order), `V3` (X1, X2: V2 + Vampire FMB), `V4` (X3: V3 + split and division screens in stage a, score 0), `V5` (X4: V4 with claims drawn from the off-diagonal gain), `V6` (V5 plus the parameter-definition screen), `V7` (X9: V6, no z3 after an E proof, linear-model screen in stages b and c), `V8` (after X12: V7 plus a wall-time cap on every z3 proof, 120 s in a and b, 1,800 s in c), `LEGACY` (first session) |
 | `offdiag.py` | X4: off-diagonal gain (emergent laws that no single law gives even with all one-variable consequences; certified by corpus models), `lat2()` (laws of the 2-element lattice), `pools()` (restrictive one-operation laws for the fusion proposals); X5: `IGNORE` (argument-ignoring laws, skipped by arm `fusion2`), `SQUARE` (analysis) |
 | `provers.py`, `confluence.py` | E, Vampire, Twee, Prover9, Mace4 wrappers (memory-capped); independent check of an E saturation (convergent rewrite system) |
 | `named.py`, `duality.py` | Law parser, named theories; dualities, `canonical(T)` and `theory_key(T)` up to the three dualities |
@@ -316,6 +316,25 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - **Near miss:** MemAvailable fell to 1,050 MB at 13:32 UTC, 50 MB above the stop; cause not established.
     - **ParamSkip's Mace4 bound:** the searcher uses the default `max_n` 5. The X5–X10 measurement used 4, and the docs
       said 2–4 until corrected after X11.
+  - 27 Nov, early (REPORT "X12"):
+    - **X12** (preregistered; `fusion6` in `work/x12-f6` against `fusion5` in `work/x12-f5`, side by side, V7, stage c
+      off, 2 searchers + 2 verifiers each, forks of x11's corpus, image `soup:x12` = 62d4e04a6c98): one block x12a,
+      28,800 s to budget in both arms, no memory stop. **Y1, Y2, Y3, Y5, Y7, Y8 hold; Y4 and Y6 fail.** Deviation 13.
+    - **Diversity:** at fusion5's 266 structured theories, fusion6 spans 132.2 expected families against 64.0 (Y1, ratio
+      2.06); largest family 2.7% against 6.8%; 70 new families against 4 (vs runs up to X11). 243 families in all,
+      Chao1 index 309.
+    - **Quality held:** positive score 408/734 (55.6%) against 266/560 (47.5%), Fisher p = 0.0042; top score 2.924
+      against 1.820. In these arms "positive score" and F1 "structured" are the same set.
+    - **Candidates did not improve (Y4):** disconnected 3/20 against 8/20, level 7 4 against 6; 9 of fusion6's 20 fail
+      "works". Best at N1: `71fd2cc6` (fusion6, rank 18). 318 candidates, 262 varieties; level 7 is 79, level 8 still 9.
+    - **Cost (Y6):** fusion6's rescores took 21,843 s (94 × ~232 s), 38% of searcher time, on 1.86M cell wins (13×
+      fusion5's). 0.65M evaluations per searcher-hour against 1.07M. Level 0 is 201.6M: past 200M.
+    - **Deviation 13, the z3 stall:** two fusion5 verifiers sat 7.3 and 5.2 h in one z3 redundancy proof each
+      (x·x = y·y from the other four laws, rlimit 10M never reached: 0.99M and 1.53M after 60 s). fusion5 used 3.08 of
+      its 16 verifier-hours in finished tasks, fusion6 10.84. fusion6 lost about 4.6 h to a crash loop: z3's
+      `out_of_memory_error` killed 4 verifiers, about 70 min apart, on `ff914371`, the head of its lane, which went back
+      each time. Fix: verifier V8 (z3 wall-time caps,
+      `tests/test_z3cap.py`). Notes: `notes/x12_hang.py`, `notes/x12_cap_check.out`, `notes/x12_table.out`.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.
@@ -448,6 +467,11 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
   verifiers spent the 8 hours on that batch (x10b: 99% by 9.9% of its block, x8b by 34.7%). Searcher speed (W2-type
   numbers) is then not search reaching the verifiers. Measure with `notes/push_gate.py <dirs>` before reading
   anything into the search's later hours.
+- A z3 rlimit is not a time limit. In X12 one redundancy proof ran 7.3 h at rlimit 10M and reached about 1M of it per
+  minute's work, and a verifier inside z3 still sends heartbeats, so nothing flagged it. A z3 memory abort (exit −6)
+  puts the claimed task back at the head of its lane, so one bad task can crash verifier after verifier. Use V8 (`core.prove(...,
+  secs)`), and after every run compare each arm's verifier time in finished tasks with its slots
+  (`notes/x12_table.py`) and look for verifiers with no result for an hour.
 
 ## Tasks, in order
 

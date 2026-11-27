@@ -1,0 +1,15 @@
+theories                                      x12-f5: 560 | x12-f6: 734
+positive score                                x12-f5: 266 | x12-f6: 408
+no claim at all                               x12-f5: 216 | x12-f6: 107
+screened param / split                        x12-f5: 0 / 29 | x12-f6: 0 / 48
+stage a / b hours                             x12-f5: 0.07 / 3.01 | x12-f6: 0.14 / 10.71
+verifier time in finished tasks               x12-f5: 3.08 h of 16.00 h | x12-f6: 10.84 h of 16.03 h
+stuck at the end (h)                          x12-f5: {'v2': 7.3, 'v8': 5.21} | x12-f6: {'v10': 0.08, 'v9': 0.05}
+results per hour                              x12-f5: [328, 87, 145, 0, 0, 0, 0, 0] | x12-f6: [78, 100, 150, 78, 90, 82, 81, 75]
+mean stage b per theory (s)                   x12-f5: 31 | x12-f6: 61
+claims / proved                               x12-f5: 704 / 456 | x12-f6: 1272 / 695
+refuted: finite (a/c) / FMB / linear / E sat  x12-f5: 135 / 71 / 3 / 9 | x12-f6: 212 / 135 / 58 / 46
+unknown / open                                x12-f5: 30 / 0 | x12-f6: 126 / 0
+top score                                     x12-f5: 1.8203 | x12-f6: 2.9236
+post hoc x12-f5: structured 266, new families 4; expected new at m = 266: 4.0
+post hoc x12-f6: structured 408, new families 70; expected new at m = 266: 51.8

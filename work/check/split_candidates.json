@@ -10954,5 +10954,1473 @@
    58078,
    61525
   ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "e92a33ca81551102",
+  "source": "x12-f5",
+  "laws": [
+   "(x ∘ x) · y = z · (y · z)",
+   "(x ∘ y) · x = x · (x ∘ y)",
+   "(x ∘ x) · (x ∘ y) = y · x",
+   "x ∘ (y ∘ (x ∘ (y · x))) = x"
+  ],
+  "T": [
+   5027,
+   5776,
+   17379,
+   28801
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 4,
+   "F": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     2,
+     1,
+     2,
+     2
+    ],
+    [
+     3,
+     1,
+     2,
+     3
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     0,
+     2,
+     3
+    ],
+    [
+     2,
+     1,
+     0,
+     3
+    ],
+    [
+     3,
+     2,
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "4191a4aca50646b7",
+  "source": "x12-f5",
+  "laws": [
+   "x · (x · y) = y · x",
+   "x · ((x ∘ y) · x) = y · x",
+   "x ∘ (x ∘ (y · (z ∘ z))) = y"
+  ],
+  "T": [
+   173,
+   13329,
+   28580
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "f0208980ea26f85a",
+  "source": "x12-f5",
+  "laws": [
+   "(x ∘ x) · y = z · (y · z)",
+   "(x ∘ x) · (x ∘ y) = y · x",
+   "x ∘ (y ∘ (x ∘ (y · x))) = x"
+  ],
+  "T": [
+   5027,
+   17379,
+   28801
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "b1cf6dc085947b70",
+  "source": "x12-f5",
+  "laws": [
+   "x · x = y · y",
+   "(x ∘ y) ∘ x = y ∘ (z · z)",
+   "(x · y) ∘ (y · y) = y ∘ x",
+   "(x ∘ (x · y)) ∘ y = y ∘ y",
+   "((x ∘ y) ∘ y) · x = x ∘ x"
+  ],
+  "T": [
+   14,
+   7087,
+   18082,
+   22069,
+   24159
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "f5efe6ec3c40c675",
+  "source": "x12-f5",
+  "laws": [
+   "(x ∘ x) · y = z · (y · z)",
+   "(x ∘ x) · (x ∘ y) = y · x",
+   "(x ∘ y) ∘ ((x · y) · x) = x"
+  ],
+  "T": [
+   5027,
+   17379,
+   47883
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ]
+  },
+  "key": "9aaebd8d42c41754",
+  "source": "x12-f5",
+  "laws": [
+   "(x ∘ x) · y = z · (y · z)",
+   "(x ∘ x) · (x ∘ y) = y · x",
+   "((x ∘ y) ∘ x) ∘ x = x ∘ y"
+  ],
+  "T": [
+   5027,
+   17379,
+   25747
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "9c86c03e09dbab72",
+  "source": "x12-f5",
+  "laws": [
+   "x · x = y · y",
+   "(x ∘ y) ∘ x = y ∘ (z · z)",
+   "(x · y) ∘ (y · y) = y ∘ x",
+   "((x ∘ y) ∘ y) · x = x ∘ x"
+  ],
+  "T": [
+   14,
+   7087,
+   18082,
+   24159
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "2e0eb1119f4694b5",
+  "source": "x12-f5",
+  "laws": [
+   "(x ∘ x) · y = z · (y · z)",
+   "x · x = x ∘ (y · (y · x))",
+   "(x ∘ x) · (x ∘ y) = y · x"
+  ],
+  "T": [
+   5027,
+   11370,
+   17379
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "83e82b8fec922119",
+  "source": "x12-f5",
+  "laws": [
+   "(x ∘ x) · y = z · (y · z)",
+   "x · x = x ∘ (y · (y · x))",
+   "(x ∘ x) · (x ∘ y) = y · x",
+   "x · x = (y ∘ (z ∘ z)) ∘ y"
+  ],
+  "T": [
+   5027,
+   11370,
+   17379,
+   22340
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "24f9f18bd2b42e00",
+  "source": "x12-f5",
+  "laws": [
+   "x · x = y · y",
+   "(x ∘ x) · y = z · (y · z)",
+   "(x ∘ x) · (x ∘ y) = y · x",
+   "x ∘ (y ∘ (x ∘ (y · x))) = x"
+  ],
+  "T": [
+   14,
+   5027,
+   17379,
+   28801
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "883b071d0cc65c89",
+  "source": "x12-f5",
+  "laws": [
+   "x · (x · y) = y",
+   "(x ∘ y) ∘ x = y ∘ (z · z)",
+   "(x · y) ∘ (y · y) = y ∘ x",
+   "((x ∘ x) · y) ∘ y = y ∘ y"
+  ],
+  "T": [
+   48,
+   7087,
+   18082,
+   24911
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "2ce8344a35fc50a6",
+  "source": "x12-f5",
+  "laws": [
+   "x · (x · y) = y",
+   "(x ∘ y) ∘ x = y ∘ (z · z)",
+   "(x · y) ∘ (y · y) = y ∘ x"
+  ],
+  "T": [
+   48,
+   7087,
+   18082
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "d94efc4acbc08f9b",
+  "source": "x12-f5",
+  "laws": [
+   "x · ((y ∘ z) · x) = z · y",
+   "x ∘ ((y ∘ z) · y) = x ∘ z",
+   "(x · y) ∘ (y · x) = y ∘ y",
+   "(x · y) ∘ (z ∘ z) = y ∘ x"
+  ],
+  "T": [
+   13446,
+   15283,
+   18073,
+   18550
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 4,
+   "F": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     0,
+     0,
+     0
+    ],
+    [
+     2,
+     0,
+     0,
+     0
+    ],
+    [
+     3,
+     0,
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     0,
+     3,
+     2
+    ],
+    [
+     2,
+     3,
+     0,
+     1
+    ],
+    [
+     3,
+     2,
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "1ab10df1a5117792",
+  "source": "x12-f5",
+  "laws": [
+   "x · (x ∘ x) = x",
+   "x · (y ∘ (y ∘ x)) = x ∘ x",
+   "x ∘ (y · (x · x)) = x ∘ y",
+   "((x ∘ x) · y) · z = z · y",
+   "x · (x ∘ (y ∘ (x · y))) = x",
+   "(x · y) · ((x ∘ y) ∘ x) = x"
+  ],
+  "T": [
+   60,
+   11167,
+   11537,
+   23099,
+   27133,
+   46056
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 4,
+   "F": [
+    [
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     2,
+     2,
+     2,
+     2
+    ],
+    [
+     3,
+     3,
+     3,
+     3
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     0,
+     3,
+     2
+    ],
+    [
+     2,
+     3,
+     0,
+     1
+    ],
+    [
+     3,
+     2,
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "9f28c816b64c56f4",
+  "source": "x12-f5",
+  "laws": [
+   "x · (x ∘ x) = x",
+   "x ∘ ((x · (y ∘ y)) · x) = x",
+   "(x ∘ y) ∘ ((x · y) · y) = y",
+   "((x ∘ y) · (x ∘ x)) ∘ x = y"
+  ],
+  "T": [
+   60,
+   37493,
+   47887,
+   63911
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "71fd2cc689934ea3",
+  "source": "x12-f6",
+  "laws": [
+   "x · y = y · x",
+   "x ∘ (x · y) = y ∘ x",
+   "(x ∘ y) · z = y · (z · x)"
+  ],
+  "T": [
+   17,
+   433,
+   5107
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "0080d09ece67da14",
+  "source": "x12-f6",
+  "laws": [
+   "x · ((y ∘ z) · z) = y · x",
+   "x ∘ (y ∘ ((x · y) · x)) = x",
+   "(x ∘ y) ∘ (y · (x ∘ x)) = x"
+  ],
+  "T": [
+   13475,
+   31643,
+   44865
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 19,
+  "key": "decef51db4bd80cd",
+  "source": "x12-f5",
+  "laws": [
+   "x · (y ∘ y) = y · x",
+   "(((x · x) ∘ y) · z) · z = y"
+  ],
+  "T": [
+   297,
+   68571
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 10,
+  "key": "bf9598e291b8db4f",
+  "source": "x12-f5",
+  "laws": [
+   "x · (x · x) = x",
+   "x · (y ∘ y) = x",
+   "(x · y) · y = x",
+   "(x ∘ x) ∘ x = x",
+   "x · (y · (x · y)) = x ∘ x",
+   "x ∘ (x · (x ∘ (y · x))) = y"
+  ],
+  "T": [
+   45,
+   68,
+   113,
+   150,
+   9922,
+   27933
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 13,
+  "key": "e4c8b4e14c384871",
+  "source": "x12-f5",
+  "laws": [
+   "x · y = y · x",
+   "x · (y · y) = x",
+   "(x ∘ x) ∘ x = x",
+   "x · (x ∘ (y ∘ y)) = x ∘ x",
+   "x ∘ (y ∘ (x ∘ (y ∘ x))) = x",
+   "(x ∘ (x ∘ x)) ∘ (x ∘ y) = y"
+  ],
+  "T": [
+   17,
+   53,
+   150,
+   11103,
+   29004,
+   51681
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 15,
+  "key": "a4e004d7189f1142",
+  "source": "x12-f5",
+  "laws": [
+   "x · x = y · y",
+   "x · (y ∘ (y ∘ z)) = z · x",
+   "(((x ∘ y) ∘ y) ∘ x) · z = z"
+  ],
+  "T": [
+   14,
+   10992,
+   69639
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ]
+  },
+  "key": "eb103bdee202bd25",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y · x",
+   "x · y = (y · x) ∘ y",
+   "(x · x) · y = (y · x) ∘ x",
+   "(x ∘ y) ∘ (y ∘ x) = y ∘ x"
+  ],
+  "T": [
+   173,
+   807,
+   8331,
+   19290
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     0
+    ]
+   ]
+  },
+  "key": "6419fbc5b14b867c",
+  "source": "x12-f6",
+  "laws": [
+   "x · (y · y) = x",
+   "((x · x) ∘ y) · (y · x) = x",
+   "(((x ∘ x) · y) · x) · y = x"
+  ],
+  "T": [
+   53,
+   52718,
+   68342
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "b171c8f9c5fd4c3f",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y · x",
+   "x · (y ∘ y) = x ∘ y",
+   "(x ∘ x) · y = (x ∘ y) ∘ x"
+  ],
+  "T": [
+   173,
+   347,
+   9045
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 3,
+   "F": [
+    [
+     0,
+     1,
+     2
+    ],
+    [
+     1,
+     1,
+     1
+    ],
+    [
+     2,
+     1,
+     2
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0,
+     1
+    ],
+    [
+     1,
+     0,
+     0
+    ],
+    [
+     2,
+     2,
+     0
+    ]
+   ]
+  },
+  "key": "a415728fe7fcf039",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y · x",
+   "(x ∘ (y · x)) · y = y",
+   "(x · x) · y = (y ∘ x) · x",
+   "(x · y) ∘ (y · x) = y ∘ y"
+  ],
+  "T": [
+   173,
+   2368,
+   8128,
+   18073
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "12fe3ea14b9d6551",
+  "source": "x12-f6",
+  "laws": [
+   "(x · y) · z = x · (z · y)",
+   "((x · x) ∘ y) · (y · x) = x",
+   "((x · y) ∘ x) ∘ (x · y) = x"
+  ],
+  "T": [
+   4878,
+   52718,
+   54372
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 4,
+   "F": [
+    [
+     0,
+     1,
+     3,
+     2
+    ],
+    [
+     1,
+     0,
+     2,
+     3
+    ],
+    [
+     3,
+     2,
+     1,
+     0
+    ],
+    [
+     2,
+     3,
+     0,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1,
+     1,
+     1
+    ],
+    [
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     2,
+     2,
+     2,
+     2
+    ],
+    [
+     3,
+     3,
+     3,
+     3
+    ]
+   ]
+  },
+  "key": "b2bb6498b9a595da",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y ∘ y",
+   "(x ∘ y) ∘ z = x ∘ (z ∘ y)",
+   "x · y = (y · x) ∘ (z · z)",
+   "x ∘ (x ∘ (y · (y · x))) = x"
+  ],
+  "T": [
+   226,
+   7923,
+   17941,
+   28358
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "92e4a13ce5786b58",
+  "source": "x12-f6",
+  "laws": [
+   "(x ∘ y) · x = y · (x · x)",
+   "(x ∘ x) ∘ (y · z) = z ∘ y",
+   "(x · (x ∘ y)) · z = z · y",
+   "(x ∘ (y · y)) · z = z · x"
+  ],
+  "T": [
+   5046,
+   18836,
+   19851,
+   20330
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "dcffb6d0e7aecd08",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · x) = x",
+   "(x · y) · y = x",
+   "x ∘ ((y · z) ∘ x) = z ∘ y",
+   "(x · y) ∘ (x ∘ y) = y ∘ y"
+  ],
+  "T": [
+   45,
+   113,
+   15679,
+   18452
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ]
+  },
+  "key": "86ee400f045f9be0",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y · (z ∘ z)",
+   "x ∘ ((y · y) ∘ y) = y ∘ x",
+   "(x · x) · (y ∘ z) = z · y"
+  ],
+  "T": [
+   3222,
+   15646,
+   16603
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  "key": "a2f2ead25e1a5135",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · (y ∘ z)) = y · z",
+   "(x ∘ y) ∘ (y ∘ (x · x)) = x",
+   "((x ∘ (y ∘ x)) ∘ y) ∘ z = z"
+  ],
+  "T": [
+   10104,
+   45068,
+   67988
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 15,
+  "key": "d3f7e4c95cdb1ed2",
+  "source": "x12-f6",
+  "laws": [
+   "x · y = y · x",
+   "x · (y ∘ (x ∘ x)) = x · y",
+   "x ∘ (y ∘ (x ∘ (y · y))) = y",
+   "(x ∘ (x ∘ y)) · (x · x) = y"
+  ],
+  "T": [
+   17,
+   10928,
+   28805,
+   49867
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 29,
+  "key": "ab4a1538d1ba4f46",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y ∘ y",
+   "x · (y · x) = y ∘ (x · x)",
+   "x · (((y · x) ∘ y) ∘ y) = y",
+   "(x · (x · y)) · (x · x) = y"
+  ],
+  "T": [
+   226,
+   3454,
+   40173,
+   48649
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 14,
+  "key": "a0258a76219538a2",
+  "source": "x12-f6",
+  "laws": [
+   "x · y = y · x",
+   "x · ((x · (y ∘ y)) · z) = z",
+   "(x ∘ y) ∘ (y · (x ∘ y)) = y"
+  ],
+  "T": [
+   17,
+   35877,
+   44869
+  ]
+ },
+ {
+  "split": false,
+  "witness": {
+   "n": 2,
+   "F": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "G": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ]
+  },
+  "key": "dd47f32bffd4f909",
+  "source": "x12-f6",
+  "laws": [
+   "(x · y) · z = x · (z · y)",
+   "(x ∘ y) ∘ y = x ∘ (x · x)",
+   "((x · x) ∘ y) · (y · x) = x"
+  ],
+  "T": [
+   4878,
+   6979,
+   52718
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 28,
+  "key": "00d63fd1ff3159e2",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y · y",
+   "x ∘ (((y ∘ z) ∘ z) ∘ y) = x",
+   "(x ∘ x) · ((x ∘ y) ∘ x) = y"
+  ],
+  "T": [
+   174,
+   42098,
+   46812
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 15,
+  "key": "fbdadc21b66e4d65",
+  "source": "x12-f6",
+  "laws": [
+   "x · y = y · x",
+   "x ∘ (x · (y ∘ (y · x))) = x",
+   "(x ∘ y) ∘ (x ∘ (x · x)) = y",
+   "(x ∘ (x ∘ y)) · (x ∘ x) = y"
+  ],
+  "T": [
+   17,
+   27952,
+   45032,
+   50070
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 8,
+  "key": "fb7e2e5bdd2382b7",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x · y) = y",
+   "(x · y) · x = (x · x) ∘ y",
+   "(x ∘ (y ∘ (x · y))) ∘ z = z"
+  ],
+  "T": [
+   48,
+   8359,
+   58041
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 8,
+  "key": "a7f03fb8db729197",
+  "source": "x12-f5",
+  "laws": [
+   "x · y = y · x",
+   "x · (x ∘ x) = x",
+   "x ∘ ((y ∘ x) ∘ x) = x ∘ y",
+   "(x ∘ x) · (y · (x · x)) = y",
+   "((x · y) ∘ (x · x)) · x = y"
+  ],
+  "T": [
+   17,
+   60,
+   16003,
+   42965,
+   62490
+  ]
+ },
+ {
+  "split": null,
+  "why": "E did not derive a bridge law from one-operation consequences",
+  "one_op_consequences": 26,
+  "key": "294e15b6819bb528",
+  "source": "x12-f6",
+  "laws": [
+   "x · (x ∘ y) = y · x",
+   "x · (x · x) = x · (x ∘ x)",
+   "x · (x ∘ x) = y ∘ (y ∘ x)",
+   "(x · y) · z = y · (x · z)",
+   "x ∘ (((y ∘ x) ∘ x) ∘ x) = y"
+  ],
+  "T": [
+   277,
+   3189,
+   4121,
+   4888,
+   41987
+  ]
  }
 ]

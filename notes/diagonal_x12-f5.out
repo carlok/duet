@@ -1,0 +1,12 @@
+x12-f5: 560 results, 266 with positive score, 0 prove a one-variable emergent law
+    67  x · (x · x) = y · (x · y)  (2 variables)
+    50  x · y = y · x  (2 variables)
+    30  x ∘ y = y ∘ x  (2 variables)
+    22  x · (x · x) = y · (y · x)  (2 variables)
+    22  x · (x · x) = y ∘ (x ∘ y)  (2 variables)
+    20  (x ∘ x) ∘ y = y ∘ (x ∘ x)  (2 variables)
+    18  x · (x ∘ y) = x · (y ∘ x)  (2 variables)
+    17  x ∘ (y ∘ x) = y  (2 variables)
+    15  x · (y · x) = y  (2 variables)
+    10  x · (x · y) = y  (2 variables)
+proved emergent associativity 0 | commutativity 80

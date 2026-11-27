@@ -1,0 +1,55 @@
+== x12-f6: 20 candidates
+71fd2cc6 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · y = y · x & x ∘ (x · y) = y ∘ x & (x ∘ y) · z = y · (z · x)
+0080d09e works=False connected=- unknown=- classical=0 
+eb103bde works=True connected=- unknown=- classical=1 e.g. B2.join|max4 
+6419fbc5 works=True connected=- unknown=- classical=2 e.g. F4[1,1,0]|aff4[3,1,0] 
+b171c8f9 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y · x & x · (y ∘ y) = x ∘ y & (x ∘ x) · y = (x ∘ y) ∘ x
+a415728f works=True connected=- unknown=- classical=2 e.g. B2.join|F4[1,1,0] 
+d3f7e4c9 works=False connected=- unknown=split None classical=0 
+ab4a1538 works=False connected=- unknown=split None classical=0 
+12fe3ea1 works=False connected=- unknown=- classical=0 
+b2bb6498 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x · y) = y ∘ y & (x ∘ y) ∘ z = x ∘ (z ∘ y) & x · y = (y · x) ∘ (z · z) & x ∘ (x ∘ (y · (y · x))) = x
+92e4a13c works=True connected=- unknown=- classical=1 e.g. aff6[3,3,2]|aff6[3,3,0] 
+dcffb6d0 works=False connected=- unknown=- classical=0 
+86ee400f works=True connected=- unknown=- classical=2 e.g. aff6[3,3,1]|aff6[1,1,5] 
+a0258a76 works=False connected=- unknown=split None classical=0 
+a2f2ead2 works=False connected=- unknown=- classical=0 
+294e15b6 works=True connected=- unknown=split None classical=2 e.g. B2.join|F4[1,1,0] 
+00d63fd1 works=False connected=- unknown=split None classical=0 
+fb7e2e5b works=True connected=- unknown=split None classical=0 
+fbdadc21 works=False connected=- unknown=split None classical=0 
+dd47f32b works=False connected=- unknown=- classical=0 
+x12-f6: 3 of 20 disconnected (works, unconnected, no classical model)
+== x12-f5: 20 candidates
+e92a33ca works=True connected=- unknown=- classical=0 DISCONNECTED
+    (x ∘ x) · y = z · (y · z) & (x ∘ y) · x = x · (x ∘ y) & (x ∘ x) · (x ∘ y) = y · x & x ∘ (y ∘ (x ∘ (y · x))) = x
+4191a4ac works=True connected=- unknown=- classical=2 e.g. B2.join|F4[1,1,0] 
+f0208980 works=True connected=- unknown=- classical=0 DISCONNECTED
+    (x ∘ x) · y = z · (y · z) & (x ∘ x) · (x ∘ y) = y · x & x ∘ (y ∘ (x ∘ (y · x))) = x
+b1cf6dc0 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = y · y & (x ∘ y) ∘ x = y ∘ (z · z) & (x · y) ∘ (y · y) = y ∘ x & (x ∘ (x · y)) ∘ y = y ∘ y & ((x ∘ y) ∘ y) · x = x ∘ x
+f5efe6ec works=False connected=- unknown=- classical=1 e.g. aff6[3,3,2]|aff6[5,3,4] 
+9aaebd8d works=True connected=- unknown=- classical=4 e.g. aff6[3,3,0]|aff6[5,1,4] 
+9c86c03e works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = y · y & (x ∘ y) ∘ x = y ∘ (z · z) & (x · y) ∘ (y · y) = y ∘ x & ((x ∘ y) ∘ y) · x = x ∘ x
+2e0eb111 works=True connected=- unknown=- classical=2 e.g. aff6[3,3,0]|aff6[3,1,0] 
+83e82b8f works=True connected=- unknown=- classical=0 DISCONNECTED
+    (x ∘ x) · y = z · (y · z) & x · x = x ∘ (y · (y · x)) & (x ∘ x) · (x ∘ y) = y · x & x · x = (y ∘ (z ∘ z)) ∘ y
+24f9f18b works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · x = y · y & (x ∘ x) · y = z · (y · z) & (x ∘ x) · (x ∘ y) = y · x & x ∘ (y ∘ (x ∘ (y · x))) = x
+883b071d works=False connected=- unknown=- classical=1 e.g. aff6[1,5,0]|aff6[3,3,4] 
+2ce8344a works=False connected=- unknown=- classical=1 e.g. aff6[1,5,0]|aff6[3,3,4] 
+a7f03fb8 works=False connected=- unknown=split None classical=0 
+decef51d works=True connected=- unknown=split None classical=0 
+d94efc4a works=True connected=- unknown=- classical=1 e.g. aff6[3,3,2]|aff6[3,3,0] 
+bf9598e2 works=False connected=- unknown=split None classical=2 e.g. F4[1,1,0]|aff4[3,1,0] 
+e4c8b4e1 works=False connected=- unknown=split None classical=0 
+a4e004d7 works=False connected=- unknown=split None classical=0 
+1ab10df1 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = x & x · (y ∘ (y ∘ x)) = x ∘ x & x ∘ (y · (x · x)) = x ∘ y & ((x ∘ x) · y) · z = z · y & x · (x ∘ (y ∘ (x · y))) = x & (x · y) · ((x ∘ y) ∘ x) = x
+9f28c816 works=True connected=- unknown=- classical=0 DISCONNECTED
+    x · (x ∘ x) = x & x ∘ ((x · (y ∘ y)) · x) = x & (x ∘ y) ∘ ((x · y) · y) = y & ((x ∘ y) · (x ∘ x)) ∘ x = y
+x12-f5: 8 of 20 disconnected (works, unconnected, no classical model)

@@ -1,0 +1,27 @@
+T [51, 120, 40568, 55026] laws ['x · (y · x) = y', '(x ∘ x) · x = x', 'x ∘ (((y · x) · x) · y) = x', '((x ∘ y) ∘ y) ∘ (y ∘ x) = y'] cfg V8
+corpus 23866
+Timeout (0:02:00)!
+Thread 0x0000ffff8b3c24c0 (most recent call first):
+  File "/usr/local/lib/python3.13/selectors.py", line 398 in select
+  File "/usr/local/lib/python3.13/subprocess.py", line 2155 in _communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 1223 in communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 557 in run
+  File "/app/soup/provers.py", line 48 in prove_e
+  File "/app/soup/split.py", line 93 in prove_split
+  File "/app/soup/verify.py", line 93 in screens
+  File "/app/soup/verify.py", line 180 in stage_a
+  File "<stdin>", line 33 in <module>
+stage a finished in 139.4 s
+Timeout (0:02:00)!
+Thread 0x0000ffff8b3c24c0 (most recent call first):
+  File "/usr/local/lib/python3.13/selectors.py", line 398 in select
+  File "/usr/local/lib/python3.13/subprocess.py", line 2155 in _communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 1223 in communicate
+  File "/usr/local/lib/python3.13/subprocess.py", line 557 in run
+  File "/app/soup/provers.py", line 48 in prove_e
+  File "/app/soup/verify.py", line 240 in _e
+  File "/app/soup/verify.py", line 296 in stage_b
+  File "<stdin>", line 36 in <module>
+stage b finished at 337.8 s
+result: {"status": "ok", "score": 0.0, "secs_a": 139.4, "secs_b": 198.4, "model_counts": {"2": 0, "3": 0, "4": 1, "5": 0}, "independence_unconfirmed": [], "claims": [{"law": "x \u00b7 y = y \u00b7 x", "idx": 17, "order": 2, "status": "unknown", "e_status": "unknown", "e_processed": null, "linear": {"status": "none", "secs": 0.8, "qmax": 32, "affine_qmax": 9}, "fmb": {"status": "unknown", "secs": 60.0, "start": 7}, "effort": 30000056, "difficulty_z3": 4.504, "difficulty": 0.1, "no_e_proof": true}, {"law": "x \u00b7 (x \u00b7 x) = y \u00b7 (y \u00b7 x)", "idx": 3084, "order": 4, "status": "unknown", "e_status": "unknown", "e_processed": null, "linear": {"status": "none", "secs": 0.8, "qmax": 32, "affine_qmax": 9}, "fmb": {"status": "unknown", "secs": 60.0, "start": 7}, "effort": 30000060, "difficulty_z3": 4.504, "difficulty": 0.1, "no_e_proof": true}]}
+exit 0

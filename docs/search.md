@@ -89,5 +89,11 @@ that filter would confine a run to the quasigroup-like corner. It was not used.
     64–76. With its rescore throttled, a 15-minute live test against `fusion5` agrees: the 80 theories the verifiers
     would reach first span 53 families, the largest at 5%, against 13 with one at 61%. The price is 14% slower searchers
     and cheap scores 41% lower at the head of the queue. Whether the verified scores follow is for a preregistered run.
+12. **Diversity against a control arm (X12).** `fusion6` and `fusion5` ran side by side for 8 hours. At equal sample
+    size fusion6's verified theories span twice as many families, and 70 of its families are new to every earlier run,
+    against 4. The scores held up: 55.6% of its theories have a positive score, against 47.5%. Its top 20 candidates
+    did not improve, though: fewer of them are disconnected (3 against 8). The rescore grew with the archive to 38% of
+    searcher time. The run also exposed a verifier bug: z3 proofs had no time limit, and some ran for hours (verifier V8
+    fixes it).
 
 Details, numbers and commands: [`REPORT.md`](../REPORT.md). Next: [the ranking](ranking.md).

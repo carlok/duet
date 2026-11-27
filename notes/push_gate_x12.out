@@ -1,0 +1,14 @@
+x12f5a: 1730 ticks, 28804 s; pushes 2,020, held 4,015; 99% of pushes by 1181 s (4.1% of the block); pending at the end 1079, bar at the end 0.8958 x gate, k 0.0191
+   at    573 s: pushes so far  1,900, held      0, pending 1500, bar 0.0, k 0.0051
+   at   1437 s: pushes so far  2,003, held    754, pending 1447, bar 0.265, k 0.0063
+   at   2887 s: pushes so far  2,006, held  1,378, pending 1337, bar 0.508, k 0.0092
+   at   7208 s: pushes so far  2,009, held  2,286, pending 1211, bar 0.7538, k 0.0126
+   at  14395 s: pushes so far  2,013, held  3,210, pending 1070, bar 0.8958, k 0.0191
+   at  28804 s: pushes so far  2,020, held  4,015, pending 1079, bar 0.8958, k 0.0191
+x12f6a: 1661 ticks, 28847 s; pushes 18,847, held 91,757; 99% of pushes by 1516 s (5.3% of the block); pending at the end 839, bar at the end 1.112 x gate, k 0.0303
+   at    569 s: pushes so far  8,483, held      0, pending 1505, bar 0.0, k 0.0288
+   at   1448 s: pushes so far 18,163, held      0, pending 1506, bar 0.0, k 0.0283
+   at   2886 s: pushes so far 18,832, held 12,148, pending 1499, bar 0.3057, k 0.0269
+   at   7212 s: pushes so far 18,846, held 33,107, pending 1392, bar 0.7109, k 0.0293
+   at  14428 s: pushes so far 18,846, held 61,012, pending 1164, bar 0.9352, k 0.0287
+   at  28847 s: pushes so far 18,847, held 91,757, pending 839, bar 1.112, k 0.0303

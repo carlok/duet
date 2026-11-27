@@ -1,0 +1,36 @@
+x12-f5 (fusion5): results 560, this run 560 {'x12f5a': 560}; status {'no small non-degenerate model': 184, 'ok': 347, 'split': 29}
+x12-f6 (fusion6): results 734, this run 734 {'x12f6a': 734}; status {'no small non-degenerate model': 54, 'ok': 632, 'split': 48}
+F1 x12-f5: 560 theories, {'no synergy': 265, 'structured': 266, 'disguise': 29}; structured 266, 64 families; largest [('·: TSQ, const-sq, sq-right-id, sq-left-id, flex | ∘: comm, const-sq, sq-right-id, sq-left-id, flex', 18), ('·: - | ∘: idem', 15), ('·: comm, flex | ∘: idem', 12)]
+F1 x12-f6: 734 theories, {'no synergy': 278, 'structured': 408, 'disguise': 48}; structured 408, 164 families; largest [('·: - | ∘: comm, flex', 11), ('·: TSQ, const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, sq-right-id, sq-left-id, left-inv', 9), ('·: - | ∘: -', 9)]
+Y1: structured theories fusion5 266, fusion6 408; at m = 266: expected families fusion5 64.0, fusion6 132.2, ratio 2.06 -> holds (>= 1.5)
+    raw distinct: fusion5 64, fusion6 164
+Y2: largest share fusion5 6.8%, fusion6 2.7% -> holds (fusion6 <= half of fusion5)
+Y3: positive fusion5 266/560 (47.5%), fusion6 408/734 (55.6%); ratio 1.17; Fisher two-sided p = 0.0042 -> holds (>= 0.8)
+    x12-f5: candidates 20, disconnected (8, 20), level 7 6 as N1 entries (+3 through a dedupe class)
+    x12-f6: candidates 20, disconnected (3, 20), level 7 4 as N1 entries (+0 through a dedupe class)
+Y4: disconnected fusion6 (3, 20), fusion5 (8, 20); level 7 fusion6 4, fusion5 6 -> fails (both at least as many)
+Y5: new families fusion5 4, fusion6 70 -> holds (fusion6 more)
+    new in both arms: 1
+    new in x12-f5: ·: TSQ, const-sq, sq-right-id, sq-left-id, flex | ∘: idem: 5
+    new in x12-f5: ·: comm, assoc, idem, flex | ∘: const-sq, sq-right-id, sq-left-id, left-inv: 1
+    new in x12-f5: ·: const-sq, sq-right-id, sq-left-id, left-inv | ∘: left-inv: 1
+    new in x12-f5: ·: const-sq, sq-right-id, sq-left-id, left-inv | ∘: idem, left-inv: 1
+    new in x12-f6: ·: comm, flex | ∘: sq-left-id, left-inv, flex: 6
+    new in x12-f6: ·: sq-left-id, left-inv | ∘: sq-left-id, left-inv: 5
+    new in x12-f6: ·: TSQ, const-sq, sq-right-id, sq-left-id, flex | ∘: const-sq, flex: 4
+    new in x12-f6: ·: TSQ, assoc, const-sq, sq-right-id, sq-left-id, flex | ∘: idem, left-inv: 3
+    new in x12-f6: ·: comm, assoc, idem, flex | ∘: const-sq, sq-left-id, right-inv: 3
+    new in x12-f6: ·: idem, left-inv | ∘: idem, left-inv: 3
+    new in x12-f6: ·: assoc, sq-left-id, left-inv, flex | ∘: sq-left-id, left-inv: 3
+    new in x12-f6: ·: comm, assoc, flex | ∘: flex: 3
+    x12-f5: evaluations {'x12f5a': 17069838}, searcher-hours 15.99, 1.07M per searcher-hour; rescores 396 in 2032 s, Mace4 58 s, together 3.63%; cell wins 145,541, pushed 2,020, held 4,015, parameter skips 229
+    x12-f6: evaluations {'x12f6a': 10472848}, searcher-hours 16.02, 0.65M per searcher-hour; rescores 94 in 21843 s, Mace4 1024 s, together 39.66%; cell wins 1,860,987, pushed 18,847, held 91,757, parameter skips 934
+Y6: fusion6 0.65M per searcher-hour, rescores + Mace4 39.66% -> fails (>= 0.5M and <= 15%)
+    x12-f5 x12f5a: x12f5a: 1730 ticks, 28804 s; pushes 2,020, held 4,015; 99% of pushes by 1181 s (4.1% of the block)
+    x12-f6 x12f6a: x12f6a: 1661 ticks, 28847 s; pushes 18,847, held 91,757; 99% of pushes by 1516 s (5.3% of the block)
+Y7: 99% of pushes by 4.1% (fusion5) and 5.3% (fusion6) of block 1 -> holds (both within 10%)
+    x12-f5 x12f5a: 1730 ticks, elapsed 28804 s, stopped by budget; min MemAvailable 3496 MB at 2026-11-27 03:21:52
+    x12-f6 x12f6a: 1661 ticks, elapsed 28847 s, stopped by budget; min MemAvailable 3595 MB at 2026-11-26 20:00:05
+Y8: verified fusion5 560, fusion6 734 -> holds (no memory stop, >= 300 each)
+other x12-f5: no claims 216; mean stages a + b 20 s; open or unknown claims 30; screened {'split': 29}; queue at the end pending 1079, stage c 24, dropped 381; top [('e92a33ca', 1.82), ('4191a4ac', 1.692), ('f0208980', 1.577)]
+other x12-f6: no claims 107; mean stages a + b 53 s; open or unknown claims 126; screened {'split': 48}; queue at the end pending 839, stage c 75, dropped 17274; top [('71fd2cc6', 2.924), ('0080d09e', 2.667), ('eb103bde', 2.351)]
