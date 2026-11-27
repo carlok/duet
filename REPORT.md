@@ -16,9 +16,13 @@ before; the five open candidates: `notes/gdim_open.py` (output `notes/gdim_open.
   X12 (1 and 3).
 - **Candidates:** of the 318, only `71fd2cc6` is a proved subvariety. Five passed the model filter and were left open:
   `8a73db2b` and `b8f7ebec` (X7, N1 ranks 40 and 42, level 7), `f1f50575` (X4, rank 78, level 7), `92e4a13c` (X12-f6,
-  rank 97) and `d94efc4a` (X12-f5, not in N1). E with 120 s and 2M clauses per law is running
-  (`notes/gdim_open.py`). First result: `f1f50575` stays open under both relabellings tried so far. Associativity of
-  both operations is proved, and the two bridge axioms are unknown.
+  rank 97) and `d94efc4a` (X12-f5, not in N1). E again, with 120 s and 2M processed clauses per law
+  (`notes/gdim_open.py`): all 40 pairs (5 candidates, 2 entries, 4 relabellings each) stay open, and none is refuted.
+  - `f1f50575` has both operations commutative as axioms, and E proves both associative.
+  - In the other four, E proves both operations commutative and nothing more.
+  - The two bridge axioms of the g-dimonoid are unknown in every pair. So is associativity, except in `f1f50575`.
+  - The 160 unknown laws took 120 s each, about 5.3 h.
+  - The five stay "open" at this budget, not "not a subvariety".
 - **Level 8:** none of the nine is related.
 - **Downstream:**
   - N1 now records `71fd2cc6` as known: 95 known, 170 enter (171 before).
