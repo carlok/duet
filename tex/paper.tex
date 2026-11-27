@@ -33,8 +33,8 @@ prover proof, and every non-implication a finite model, a checked convergent rew
 $\mathbb{Z}$. The theories have 2 to 6 laws of order at most~4, proposed by a quality-diversity search scored on
 12{,}509 finite structures. The same pipeline rediscovers lattice bases, absorption pairs, a fragment of Heyting
 algebras, commutative $g$-dimonoids and Steiner loops in disguise. The search continues: the verified theories fall into 241 families, and the
-last five runs added 10, 18, 3, 16 and 72 new ones. In a run with a control arm, pressure toward rare families doubled
-the families found at equal sample size without lowering the scores. None of the nine is claimed new.
+last five runs added 10, 18, 3, 16 and 72 new ones. Against a control arm, pressure toward rare families doubled the
+families found without lowering the scores. None of the nine is claimed new.
 \end{abstract}
 
 \section{Question}
@@ -205,14 +205,11 @@ only after the Latin-square literature had yielded nothing. A later arm found St
 loop translated by a constant, $x\cop y=(x\op y)\op(z\cop z)$. Each disguise became a screen in the verifier. One
 close look found known structure: a candidate equivalent to a commutative idempotent $\op$ with $x\cop(x\op y)=x\op y$
 and $(x\cop y)\op y=y$, of which every Heyting algebra is a model with $\op=\wedge$ and $x\cop y=(y\to x)\to y$ (Lean);
-on chains this $\cop$ is the strict-order connective of G\"odel logic~\cite{bcz2000}. Another found a recent line
-of work. X12's best theory, $\{x\op y=y\op x,\ x\cop(x\op y)=y\cop x,\ (x\cop y)\op z=y\op(z\op x)\}$, is equivalent
-to the commutative $g$-dimonoids~\cite{movsisyan2014,zhuchok2015,gavrylkiv2026}, Loday's dimonoids without their
-middle axiom, together with $x\cop(x\cop y)=x\cop y$ (E, both ways). Its models are exactly a commutative semigroup
-with $xxyz=xyz$ and a free choice of one element in each class of products with equal translations, $x\cop y$ being
-the chosen one for $x\op y$. We found no source for that description. With $g$-dimonoids added to the catalogue post
-hoc, 96 verified theories are subvarieties of them, none of the nine. A ledger records every identification with its
-route (\texttt{notes/rediscovery.md}).
+on chains this $\cop$ is the strict-order connective of G\"odel logic~\cite{bcz2000}. X12's best theory is the
+commutative $g$-dimonoids~\cite{movsisyan2014,zhuchok2015,gavrylkiv2026} with $x\cop(x\cop y)=x\cop y$ (E, both
+ways); its models are a commutative semigroup with $xxyz=xyz$ plus a free choice in each class of products with equal
+translations, a description we found no source for. A ledger records every identification
+(\texttt{notes/rediscovery.md}).
 
 \subsection{The diagonal attractor and the fusion arms}
 In the runs up to X3, 97\% of the theories with a positive score (3{,}478 of 3{,}596) owed their synergy to a
@@ -225,18 +222,15 @@ Skipping those (X5) led to the Steiner-loop disguise, and screening that (X6) le
 model (X5: 0). X7 also skips every theory the corpus relates to a known structure or an earlier candidate; 12 of its
 top 20 carry every automatic mark. In X10 the search fell back into the Steiner corner: half of its 578 verified
 theories were parameter disguises of one shape, $x\cop y=x\op((z\op z)\op(y\op(z\cop z)))$, all screened out, and 15
-of its top 20 have models over $\mathbb{F}_4$ or $\mathbb{Z}/6$. X11 moved that screen into the search, as a corpus
-test confirmed by Mace4: none of its 640 verified theories is such a disguise, only 5 of its top 20 have a classical
-model, and two of them lead the novelty ranking. The Steiner shape itself remains, without a disguise. All of X11's
-verified theories were pushed in its first 14 minutes: once verified scores rise, a gate stops the pushes, and the
-verifiers, not the search, set the pace. X12 ran the first control arm since T4: beside X11's arm, an arm that makes
-the family of a theory one of its cell's coordinates and lowers the queue priority of common families. At equal sample
-size its verified theories span twice as many families (131 against 63), and 69 of its families are new to all earlier
-runs (4 in the control arm). Its share of positive scores is higher (55.6\% against 47.5\%, Fisher $p=0.004$), but its
-top 20 candidates carry the automatic marks less often (3 disconnected against 8), and its rescoring took 38\% of
-search time. Every run from X4 on was preregistered with its deviations recorded; X6 to X9 and the first block of X10
-were stopped early by their memory rule, and in X12 Z3 proofs without a time limit held verifiers for hours, two of
-them in the control arm for most of the run.
+of its top 20 have models over $\mathbb{F}_4$ or $\mathbb{Z}/6$. X11 moved that screen into the search: none of its
+640 verified theories is such a disguise, and only 5 of its top 20 have a classical model, though the Steiner shape
+remains. All of them were pushed in its first 14 minutes: once verified scores rise, a gate stops the pushes, and
+the verifiers set the pace. X12 ran X11's arm as a control beside one that makes a theory's family a cell
+coordinate and lowers the priority of common families. At equal sample size the latter's verified theories span twice
+as many families (131 against 63; 69 new against 4) and score positive more often (55.6\% against 47.5\%, Fisher
+$p=0.004$), but its top 20 carry the automatic marks less often (3 disconnected against 8), and rescoring took 38\% of
+search time. Every run from X4 on was preregistered; X6 to X9 and x10a were stopped by their memory rule, and in X12
+Z3 proofs with no time limit held verifiers for hours.
 
 \subsection{Families}
 A preregistered post hoc statistic, F1, puts each verified theory in one family, by the first rule that matches: a
@@ -247,10 +241,9 @@ each operation has (commutative, associative, idempotent, constant squares, and 
 X7, 11\% of X10, 48\% of X11 and 47.5\% and 55.6\% of X12's two arms. There are 241 structured families, and X7 to
 X12 added 24, 10, 18, 3, 16 and 72. Chao1 gives 305, but the search skips
 what it has seen, so this is a descriptive index, not an estimate~\cite{stads2018}. The direction of the search
-mattered more than its volume: the prior arm made 51 of the first 63.7 million cheap evaluations and found 6 families,
-the fusion arms X4 to X7 made 12.5 million and found 116, X8 made 51.5 million and found 10, X10 made 28.3 million
-and found 3, X11 made 30.6 million and found 16, and X12 made 17.1 million in the control arm and found 4, and 10.5
-million with family pressure and found 68.
+mattered more than its volume: the prior arm made 51 million cheap evaluations and found 6 families, the fusion arms
+X4 to X7 12.5 million and 116, X8 51.5 million and 10, and in X12 the control arm 17.1 million and 4, the
+family-pressure arm 10.5 million and 68.
 
 \section{Limitations}
 \begin{itemize}
@@ -271,9 +264,8 @@ million with family pressure and found 68.
 \end{itemize}
 
 \section*{Status, reproducibility, and how this work was made}
-The long prover runs (stage c) remain the weak stage: since T4 they have settled about 10 of 151 claims, and in X10 and
-X11 they ran two at a time beside the search for 8 hours each; X12 ran without them. Of the top candidates of X11
-and X12, only X12's best has been studied by hand, and it is known. All runs use a container with
+The long prover runs (stage c) remain the weak stage: since T4 they have settled about 10 of 151 claims. Of the top
+candidates of X11 and X12, only X12's best has been studied by hand, and it is known. All runs use a container with
 pinned versions (Z3 5.4.1, E 3.2.5, Vampire 5.1.0, Prover9/Mace4 LADR-2026-8A, Twee 2.7.1, built from source). Code,
 data, preregistrations and every number with the command behind it are at \url{https://github.com/carlok/duet};
 \texttt{intro/} introduces the subject from scratch. An AI coding assistant (Claude Code, by Anthropic) designed,
