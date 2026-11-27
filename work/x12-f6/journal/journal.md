@@ -1,0 +1,470 @@
+# soup journal
+
+Append-only. One section per run; times are UTC (container clock).
+
+## 2026-11-26 19:28:08 · run x12f6a started
+
+- budget 28800 s · 2 searchers (seeds 1801–1802, arm fusion6) · 2 verifiers (v0 prefers stage c, none started in the last 28800 s) · z3 5.4.1 · 11 cores
+- before: 0 verified theories, 19531 found structures, queue 0 pending / 0 stage c
+- 19:28:23 · drain: no new stage-c task from now on (0 running)
+- 19:29:23 · `1732a45d` stage b · score **0.483** (cheap 5.679) · - · fusion6 · models 2/3/4/5 = 1/8/8/1 · v0 in 13s
+  - laws: x · (y · y) = y · x & x ∘ ((y ∘ z) · z) = x
+  - claims: x ∘ (x · (y ∘ x)) = x proved (E steps 11); x ∘ (x · (x · (y ∘ x))) = x proved (E steps 13)
+- 19:29:26 · **new #1**: `1732a45d` score 0.483: x · (y · y) = y · x & x ∘ ((y ∘ z) · z) = x
+- 19:29:29 · `cd75fbeb` stage b · score **0.181** (cheap 7.400) · - · fusion6 · models 2/3/4/5 = 0/0/2/1 · v1 in 1s
+  - laws: x · y = y · x & x · (x · y) = y ∘ y & ((x ∘ (y ∘ x)) ∘ x) ∘ y = y
+  - claims: x · (y · x) = y ∘ y proved (E steps 9); x · (x · x) = y · (x · y) proved (E steps 10)
+- 19:29:36 · `6efa3c89` stage b · score **0.306** (cheap 5.225) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v1 in 5s
+  - laws: x · (x · y) = y & x · (x · y) = y · (z ∘ z) & ((x ∘ x) · y) ∘ x = x ∘ y & (x · x) · ((y · x) · x) = y
+  - claims: x · y = y · x proved (E steps 17); x · (x · x) = y · (x · y) proved (E steps 17)
+  - redundant (proved from the others): x · (x · y) = y
+- 19:29:49 · `2669263b` stage b · score **0.558** (cheap 5.467) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v0 in 20s
+  - laws: x · (y · y) = y · x & (x · x) ∘ y = y ∘ x & (x ∘ y) ∘ (y · (x ∘ x)) = x & ((x · (y ∘ y)) ∘ z) ∘ z = x
+  - claims: x ∘ (x ∘ y) = y proved (E steps 19); x · x = y ∘ (y ∘ x) proved (E steps 21); x · (x · x) = y ∘ (x ∘ y) proved (E steps 21)
+  - redundant (proved from the others): (x ∘ y) ∘ (y · (x ∘ x)) = x
+- 19:29:59 · **new #1**: `2669263b` score 0.558: x · (y · y) = y · x & (x · x) ∘ y = y ∘ x & (x ∘ y) ∘ (y · (x ∘ x)) = x & ((x · (y ∘ y)) ∘ z) ∘ z = x
+- 19:32:58 · `eb3c693b` stage b · score **0.364** (cheap 10.934) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v1 in 8s
+  - laws: x · ((y · (y · x)) ∘ x) = x & (x · y) · (y ∘ (x · x)) = x & (x ∘ (y ∘ (x ∘ x))) ∘ x = y & (x ∘ (y ∘ (z ∘ z))) ∘ y = x
+  - claims: x ∘ y = y ∘ x proved (E steps 15); x · (x · x) = y ∘ (y ∘ x) proved (E steps 29)
+- 19:33:08 · `f43aae0d` stage b · score **0.231** (cheap 10.900) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v1 in 9s
+  - laws: x · (x · y) = y & ((x ∘ y) · x) ∘ (x ∘ y) = x & (x ∘ (x · (x ∘ y))) ∘ y = x & (x · ((y ∘ y) · z)) · z = x
+  - claims: x · y = y · x proved (E steps 20); x · (x · x) = y · (x · y) proved (E steps 21)
+- 19:33:15 · `6a6e79de` stage b · score **0.861** (cheap 13.198) · - · fusion6 · models 2/3/4/5 = 0/1/8/1 · v1 in 6s
+  - laws: x · (x · y) = y & (x ∘ y) ∘ y = x ∘ x & x · ((y ∘ x) ∘ y) = x & (x ∘ (y · y)) · y = y
+  - claims: (x · x) · y = y proved (E steps 15); x · x = y ∘ (x ∘ y) false (size 4); x · x = (y ∘ x) ∘ y proved (E steps 14); x ∘ (y · y) = y ∘ (x · x) false (size 5); (x · x) · y = y · (y · y) proved (E steps 16)
+- 19:33:24 · **new #1**: `6a6e79de` score 0.861: x · (x · y) = y & (x ∘ y) ∘ y = x ∘ x & x · ((y ∘ x) ∘ y) = x & (x ∘ (y · y)) · y = y
+- 19:33:24 · `ac752fac` stage b · score **0.468** (cheap 9.852) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v1 in 8s
+  - laws: x · (x · y) = y & ((x ∘ x) · y) ∘ x = x ∘ y & ((x ∘ (y ∘ y)) · z) · z = x
+  - claims: x · y = y · x proved (E steps 13); x · (x · x) = y · (x · y) proved (E steps 13)
+- 19:33:43 · status: 18 verified this run (8 positive), queue 1512 pending / 2 claimed / 0 stage c (1514 competitive at >= 0.000, 3639 dropped), 10 unremarkable results not listed, corpus 19634 found structures, 201,283 surrogate evaluations, PSS total 2121 MB
+- 19:37:00 · `5a5dfb67` stage b · score **0.000** (cheap 9.125) · - · fusion6 · models 2/3/4/5 = 0/1/0/1 · v0 in 430s
+  - laws: x · ((x · y) ∘ y) = x & (x · y) ∘ (z ∘ (x · z)) = y
+  - claims: x ∘ y = y ∘ x unknown; x · x = y ∘ (x · y) unknown; x · (x · x) = y · (y · x) unknown
+- 19:37:09 · `88964cc8` stage b · score **0.757** (cheap 10.808) · - · fusion6 · models 2/3/4/5 = 0/0/3/0 · v0 in 8s
+  - laws: x · (y ∘ (y ∘ x)) = x ∘ x & (x ∘ y) ∘ ((z · z) · y) = x & ((x ∘ y) ∘ y) · (x · z) = z
+  - claims: x ∘ y = y ∘ x proved (E steps 33); x · (x · x) = y ∘ (x ∘ y) proved (E steps 34)
+- 19:37:27 · `42f1fc95` stage b · score **0.967** (cheap 11.538) · - · fusion6 · models 2/3/4/5 = 0/2/5/1 · v0 in 9s
+  - laws: (x ∘ y) · x = y · (x · x) & (x ∘ x) ∘ (y · z) = z ∘ y & (x · (x ∘ y)) · z = z · y
+  - claims: x ∘ y = y ∘ x proved (E steps 22); x · (x · x) = y · (x · y) proved (E steps 35)
+- 19:37:35 · **new #1**: `42f1fc95` score 0.967: (x ∘ y) · x = y · (x · x) & (x ∘ x) ∘ (y · z) = z ∘ y & (x · (x ∘ y)) · z = z · y
+- 19:38:03 · `0a839dbe` stage b · score **0.405** (cheap 10.934) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v0 in 35s
+  - laws: x · ((y · (y · x)) ∘ x) = x & (x · y) · (y ∘ (x · x)) = x & (x ∘ y) ∘ (x · (x ∘ x)) = y & (x ∘ (y ∘ (z ∘ z))) ∘ y = x
+  - claims: x ∘ y = y ∘ x proved (E steps 12); x · (x · x) = y ∘ (y ∘ x) proved (E steps 40)
+- 19:38:43 · `5b0b8f56` stage b · score **0.324** (cheap 8.969) · - · fusion6 · models 2/3/4/5 = 0/4/8/1 · v0 in 9s
+  - laws: x · (y ∘ y) = y · x & (x ∘ y) ∘ z = y ∘ (z · x)
+  - claims: x · (x · y) = x · (x ∘ y) proved (E steps 20)
+- 19:39:20 · status: 25 verified this run (12 positive), queue 1510 pending / 2 claimed / 1 stage c (1514 competitive at >= 0.000, 8370 dropped), 12 unremarkable results not listed, corpus 19682 found structures, 436,166 surrogate evaluations, PSS total 2871 MB
+- 19:44:57 · status: 30 verified this run (13 positive), queue 1513 pending / 2 claimed / 1 stage c (1518 competitive at >= 0.000, 12434 dropped), 17 unremarkable results not listed, corpus 19710 found structures, 665,370 surrogate evaluations, PSS total 2861 MB
+- 19:48:06 · `7e460c42` stage b · score **0.000** (cheap 15.221) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v0 in 337s
+  - laws: x · (y ∘ (y ∘ z)) = z · x & x · ((y · y) ∘ (z · z)) = x & x ∘ (((x · y) · x) ∘ x) = y
+  - claims: x ∘ y = y ∘ x unknown; x · (x · x) = y · (x · y) unknown
+- 19:48:14 · `f0999f76` stage b · score **0.827** (cheap 10.279) · - · fusion6 · models 2/3/4/5 = 0/2/5/1 · v0 in 6s
+  - laws: (x · y) · x = z · (z · y) & x · ((y ∘ z) · z) = y · x & (x · y) ∘ (z ∘ z) = y ∘ x
+  - claims: x ∘ y = y ∘ x proved (E steps 20); x · (x · x) = y · (y ∘ x) proved (E steps 28)
+- 19:48:24 · `d7af685a` stage b · score **1.036** (cheap 10.557) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v0 in 10s
+  - laws: x · y = y · x & x ∘ (y ∘ ((x ∘ y) ∘ z)) = z & ((x · x) ∘ y) · (y · x) = x
+  - claims: x · (x · y) = y proved (E steps 58); x · (x · x) = y · (x · y) proved (E steps 57)
+- 19:48:32 · `8fbc9b0b` stage b · score **0.642** (cheap 8.408) · - · fusion6 · models 2/3/4/5 = 0/0/5/0 · v0 in 8s
+  - laws: x · (x · y) = y & x ∘ (y ∘ (z · y)) = x ∘ z & (x · x) · (y ∘ (z · z)) = y & ((x ∘ y) ∘ z) ∘ (z ∘ y) = x
+  - claims: x ∘ (y ∘ y) = x proved (E steps 20); x · (x · y) = y ∘ (x · x) proved (E steps 25)
+- 19:48:41 · **new #1**: `d7af685a` score 1.036: x · y = y · x & x ∘ (y ∘ ((x ∘ y) ∘ z)) = z & ((x · x) ∘ y) · (y · x) = x
+- 19:48:43 · `6dd47c46` stage b · score **0.904** (cheap 14.847) · - · fusion6 · models 2/3/4/5 = 0/2/5/1 · v0 in 10s
+  - laws: x · (y ∘ (z · x)) = y · z & (x · y) ∘ (z ∘ z) = y ∘ x
+  - claims: x ∘ y = y ∘ x proved (E steps 21); x · (x · x) = y · (x ∘ y) proved (E steps 32)
+- 19:49:34 · `e407db78` stage b · score **0.564** (cheap 9.057) · - · fusion6 · models 2/3/4/5 = 0/1/8/1 · v0 in 5s
+  - laws: x · (y · y) = x & ((x · x) ∘ y) · (x · y) = x & (((x · x) ∘ y) ∘ x) ∘ y = x
+  - claims: x ∘ (y · y) = x proved (E steps 14); x · (x · x) = x ∘ (y · y) proved (E steps 15)
+- 19:50:44 · status: 38 verified this run (19 positive), queue 1500 pending / 1 claimed / 2 stage c (1499 competitive at >= 0.000, 15861 dropped), 19 unremarkable results not listed, corpus 19769 found structures, 894,419 surrogate evaluations, PSS total 2873 MB
+- 19:52:46 · `5aece246` stage b · score **0.702** (cheap 7.000) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v0 in 3s
+  - laws: x · y = y · x & x · (y · y) = x & (x · (x · y)) ∘ x = x ∘ y & ((x · x) ∘ y) · (y · x) = x
+  - claims: x ∘ y = y ∘ x proved (E steps 19); x · (x · x) = y · (x · y) proved (E steps 18)
+- 19:56:39 · status: 42 verified this run (21 positive), queue 1500 pending / 2 claimed / 2 stage c (96 competitive at >= 0.181, 17170 dropped), 22 unremarkable results not listed, corpus 19797 found structures, 1,128,681 surrogate evaluations, PSS total 2862 MB
+- 20:00:17 · `dd47f32b` stage b · score **1.112** (cheap 12.750) · - · fusion6 · models 2/3/4/5 = 0/0/3/0 · v0 in 16s
+  - laws: (x · y) · z = x · (z · y) & (x ∘ y) ∘ y = x ∘ (x · x) & ((x · x) ∘ y) · (y · x) = x
+  - claims: x · (y · y) = x proved (E steps 49); x · (x · x) = x · (y · y) proved (E steps 49)
+- 20:00:20 · **new #1**: `dd47f32b` score 1.112: (x · y) · z = x · (z · y) & (x ∘ y) ∘ y = x ∘ (x · x) & ((x · x) ∘ y) · (y · x) = x
+- 20:02:27 · status: 51 verified this run (27 positive), queue 1500 pending / 2 claimed / 2 stage c (2 competitive at >= 0.231, 17226 dropped), 30 unremarkable results not listed, corpus 19849 found structures, 1,341,002 surrogate evaluations, PSS total 2964 MB
+- 20:05:13 · `ed366a4f` stage b · score **0.000** (cheap 8.596) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v0 in 290s
+  - laws: x · (y · (x · (y ∘ y))) = y & (x · y) · (y ∘ (x · x)) = x & (x · (y · (x · y))) ∘ z = z
+  - claims: x · (x · y) = y unknown; x · (x · x) = y · (y · x) unknown
+- 20:05:59 · `12fe3ea1` stage b · score **1.380** (cheap 12.846) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v0 in 16s
+  - laws: (x · y) · z = x · (z · y) & ((x · x) ∘ y) · (y · x) = x & ((x · y) ∘ x) ∘ (x · y) = x
+  - claims: x · (y · y) = x proved (E steps 38); x · (x · x) = x · (y · y) proved (E steps 39)
+- 20:06:13 · **new #1**: `12fe3ea1` score 1.380: (x · y) · z = x · (z · y) & ((x · x) ∘ y) · (y · x) = x & ((x · y) ∘ x) ∘ (x · y) = x
+- 20:08:16 · status: 55 verified this run (29 positive), queue 1500 pending / 2 claimed / 3 stage c (0 competitive at >= 0.306, 17264 dropped), 32 unremarkable results not listed, corpus 19875 found structures, 1,601,553 surrogate evaluations, PSS total 2941 MB
+- 20:11:32 · `81883561` stage b · score **0.000** (cheap 6.875) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v0 in 328s
+  - laws: x · (y ∘ y) = x & (x · y) · (y ∘ (x · x)) = x & (x ∘ (y ∘ (x ∘ x))) ∘ x = y & (((x ∘ x) · y) ∘ x) · y = x
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 20:13:55 · status: 57 verified this run (29 positive), queue 1500 pending / 2 claimed / 4 stage c (0 competitive at >= 0.306, 17271 dropped), 33 unremarkable results not listed, corpus 19887 found structures, 1,804,958 surrogate evaluations, PSS total 2946 MB
+- 20:16:09 · `0e2f1424` stage b · score **0.000** (cheap 8.385) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v0 in 275s
+  - laws: x · (x · y) = y & x ∘ (x ∘ y) = y & (x · y) · x = (x · x) ∘ y & ((x ∘ x) ∘ (y · x)) · y = x
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) unknown
+- 20:18:39 · `501c1301` stage b · score **0.000** (cheap 6.279) · - · fusion6 · models 2/3/4/5 = 0/1/3/1 · v0 in 150s
+  - laws: x · ((y ∘ y) · y) = y · x & (x ∘ x) · (y ∘ x) = y · x & ((x ∘ y) ∘ x) ∘ (y · y) = y
+  - claims: x · (y · y) = y · (x ∘ y) unknown
+- 20:19:18 · `024358bf` stage b · score **0.723** (cheap 8.300) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v0 in 18s
+  - laws: x · (x · y) = y & x · x = y ∘ (y ∘ x) & ((x ∘ (y ∘ x)) ∘ z) · y = y
+  - claims: (x · x) · y = y proved (E steps 9); (x ∘ (x · x)) · y = y proved (E steps 11); (x · x) · y = y · (y · y) proved (E steps 12)
+- 20:19:44 · status: 64 verified this run (33 positive), queue 1494 pending / 2 claimed / 6 stage c (0 competitive at >= 0.336, 17274 dropped), 37 unremarkable results not listed, corpus 19983 found structures, 2,044,349 surrogate evaluations, PSS total 2972 MB
+- 20:24:40 · v1 recycled (memory); 0 claimed task(s) put back; starting a fresh verifier
+- 20:24:29 · `2f234ef4` stage b · score **0.000** (cheap 12.338) · - · fusion6 · models 2/3/4/5 = 1/0/1/0 · v1 in 3056s
+  - laws: x · (y · x) = y & x ∘ ((x ∘ y) · y) = x & (x ∘ y) ∘ z = y ∘ (x ∘ z)
+  - claims: x · y = y · x unknown; x · (x · y) = y ∘ y unknown; x · (x · x) = y · (y · x) unknown
+- 20:25:34 · status: 71 verified this run (37 positive), queue 1490 pending / 1 claimed / 7 stage c (0 competitive at >= 0.342, 17274 dropped), 43 unremarkable results not listed, corpus 20012 found structures, 2,183,056 surrogate evaluations, PSS total 2055 MB
+- 20:27:31 · `b9f1eb6d` stage b · score **0.861** (cheap 9.406) · - · fusion6 · models 2/3/4/5 = 0/1/8/1 · v2 in 33s
+  - laws: x · (x · y) = y & (x ∘ y) ∘ y = x ∘ x & x · ((y ∘ x) ∘ y) = x & (x ∘ (y · y)) · y = y & ((x ∘ (y ∘ z)) ∘ x) · z = z
+  - claims: (x · x) · y = y proved (E steps 15); x · x = (y ∘ x) ∘ y proved (E steps 14); (x · x) · y = y · (y · y) proved (E steps 16)
+- 20:28:43 · `c3b1400b` stage b · score **0.000** (cheap 17.173) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v0 in 354s
+  - laws: x · (y ∘ (y ∘ x)) = z ∘ z & ((x · y) · y) ∘ (y ∘ x) = y & (x · ((y ∘ x) · x)) · y = x
+  - claims: x ∘ y = y ∘ x unknown; x · (y · x) = x · (x ∘ y) unknown
+- 20:31:25 · status: 86 verified this run (46 positive), queue 1475 pending / 2 claimed / 8 stage c (0 competitive at >= 0.377, 17274 dropped), 56 unremarkable results not listed, corpus 20104 found structures, 2,358,750 surrogate evaluations, PSS total 2468 MB
+- 20:35:21 · `745e647b` stage b · score **0.000** (cheap 13.163) · - · fusion6 · models 2/3/4/5 = 0/1/4/1 · v0 in 340s
+  - laws: x · ((y ∘ x) ∘ y) = y ∘ y & x · (((y ∘ y) ∘ x) · y) = y & x · (((y · x) · y) ∘ x) = x
+  - claims: x · (x · y) = y unknown; x · (x · x) = y · (y · x) unknown
+- 20:35:39 · `855d59a3` stage b · score **0.976** (cheap 10.478) · - · fusion6 · models 2/3/4/5 = 0/1/1/1 · v0 in 7s
+  - laws: x · (x · y) = y · (z ∘ z) & x · (x · (y ∘ x)) = y · x & x ∘ ((y · x) · (x ∘ y)) = x & (x ∘ (x · (y ∘ y))) ∘ y = y
+  - claims: x · y = y · x proved (E steps 40); x · (x · x) = y · (x · y) proved (E steps 48)
+- 20:35:57 · `af0aada1` stage b · score **0.000** (cheap 13.192) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v2 in 393s
+  - laws: x · (x · x) = x & x ∘ (y · (y · z)) = z ∘ x & x ∘ ((y ∘ y) · (z ∘ z)) = x & x · (((x ∘ y) ∘ x) · x) = y
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) unknown
+  - redundant (proved from the others): x · (x · x) = x
+- 20:37:16 · status: 93 verified this run (50 positive), queue 1469 pending / 2 claimed / 10 stage c (0 competitive at >= 0.378, 17274 dropped), 60 unremarkable results not listed, corpus 20141 found structures, 2,548,784 surrogate evaluations, PSS total 2506 MB
+- 20:38:55 · `cd5d2021` stage b · score **0.000** (cheap 11.202) · - · fusion6 · models 2/3/4/5 = 0/1/8/1 · v0 in 144s
+  - laws: x · (y ∘ (x · y)) = x ∘ x & x ∘ (y · ((y · z) ∘ z)) = x & (((x ∘ x) · y) · x) · y = x
+  - claims: x · (x · x) = x · (y · y) unknown
+- 20:41:37 · `509eb4a5` stage b · score **0.000** (cheap 9.702) · - · fusion6 · models 2/3/4/5 = 0/0/0/1 · v2 in 334s
+  - laws: x · (y ∘ (z ∘ y)) = x · z & ((x · (y · x)) ∘ y) ∘ x = x & (((x · x) ∘ y) ∘ x) ∘ y = x
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 20:43:04 · status: 100 verified this run (52 positive), queue 1464 pending / 2 claimed / 12 stage c (0 competitive at >= 0.378, 17274 dropped), 65 unremarkable results not listed, corpus 20186 found structures, 2,686,885 surrogate evaluations, PSS total 2514 MB
+- 20:46:04 · `0080d09e` stage b · score **2.667** (cheap 10.327) · - · fusion6 · models 2/3/4/5 = 0/0/4/0 · v2 in 42s
+  - laws: x · ((y ∘ z) · z) = y · x & x ∘ (y ∘ ((x · y) · x)) = x & (x ∘ y) ∘ (y · (x ∘ x)) = x
+  - claims: x ∘ (y · y) = x proved (E steps 105); x · (x · x) = x · (y · y) proved (E steps 95)
+- 20:46:15 · **new #1**: `0080d09e` score 2.667: x · ((y ∘ z) · z) = y · x & x ∘ (y ∘ ((x · y) · x)) = x & (x ∘ y) ∘ (y · (x ∘ x)) = x
+- 20:48:57 · status: 115 verified this run (61 positive), queue 1450 pending / 2 claimed / 12 stage c (0 competitive at >= 0.468, 17274 dropped), 79 unremarkable results not listed, corpus 20288 found structures, 2,885,205 surrogate evaluations, PSS total 2663 MB
+- 20:54:46 · status: 125 verified this run (67 positive), queue 1442 pending / 2 claimed / 12 stage c (0 competitive at >= 0.483, 17274 dropped), 89 unremarkable results not listed, corpus 20340 found structures, 2,984,635 surrogate evaluations, PSS total 3276 MB
+- 20:55:19 · v0 recycled (memory); 0 claimed task(s) put back; starting a fresh verifier
+- 20:56:28 · `0ea0a4f2` stage b · score **1.093** (cheap 11.761) · - · fusion6 · models 2/3/4/5 = 0/1/7/1 · v2 in 12s
+  - laws: x · x = x ∘ x & (x ∘ y) · x = z · (z · y) & (x · y) ∘ (z ∘ z) = y ∘ x
+  - claims: x ∘ y = y ∘ x proved (E steps 26); x · (y · z) = z · (y · x) false (size 4); x · (x ∘ y) = x · (y ∘ x) proved (E steps 34)
+- 21:00:36 · status: 130 verified this run (70 positive), queue 1439 pending / 2 claimed / 12 stage c (0 competitive at >= 0.517, 17274 dropped), 93 unremarkable results not listed, corpus 20366 found structures, 3,186,222 surrogate evaluations, PSS total 2331 MB
+- 21:03:39 · `f64e1b73` stage b · score **0.000** (cheap 12.184) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v2 in 430s
+  - laws: x · (y ∘ (y ∘ x)) = x · x & x ∘ ((x ∘ x) · (y ∘ y)) = x & (x ∘ (y ∘ y)) · (x · z) = z & ((x · (x ∘ y)) · x) ∘ y = x
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) unknown
+- 21:03:47 · `1c24bc47` stage b · score **0.000** (cheap 11.856) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v3 in 311s
+  - laws: (x · y) · z = x · (z · y) & x ∘ (x ∘ (y · (x ∘ x))) = y & ((x · y) ∘ x) ∘ (z · y) = z
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 21:06:29 · status: 137 verified this run (74 positive), queue 1432 pending / 2 claimed / 14 stage c (0 competitive at >= 0.517, 17274 dropped), 98 unremarkable results not listed, corpus 20397 found structures, 3,291,293 surrogate evaluations, PSS total 2314 MB
+- 21:07:02 · `e03aeb04` stage b · score **0.000** (cheap 9.462) · - · fusion6 · models 2/3/4/5 = 0/0/7/0 · v2 in 178s
+  - laws: x · (y · (x · (y ∘ y))) = y & (x · y) · (y ∘ (x · x)) = x & ((x ∘ (y ∘ x)) ∘ y) ∘ z = z
+  - claims: (x · y) · y = y · (x · y) unknown
+- 21:09:23 · `f1b06917` stage b · score **0.873** (cheap 6.521) · - · fusion6 · models 2/3/4/5 = 0/2/8/1 · v2 in 17s
+  - laws: x · (y ∘ y) = y · x & x · ((y · x) · y) = y · x & ((x · x) ∘ y) · x = y ∘ x
+  - claims: x · (x ∘ y) = y ∘ x proved (E steps 25); x · (x ∘ y) = y ∘ (x · x) proved (E steps 26)
+- 21:11:06 · `e0f80e09` stage b · score **0.000** (cheap 14.798) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v3 in 402s
+  - laws: x · (x · y) = z ∘ (z ∘ y) & ((x ∘ y) ∘ y) · (y · x) = y & ((x · x) ∘ (y · y)) · z = z
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) unknown
+- 21:12:16 · status: 149 verified this run (84 positive), queue 1421 pending / 2 claimed / 16 stage c (0 competitive at >= 0.564, 17274 dropped), 107 unremarkable results not listed, corpus 20484 found structures, 3,431,785 surrogate evaluations, PSS total 2308 MB
+- 21:12:14 · `6713e4ca` stage b · score **0.000** (cheap 17.500) · - · fusion6 · models 2/3/4/5 = 0/0/1/1 · v2 in 133s
+  - laws: x · y = y · x & x ∘ (y · (z ∘ (y ∘ z))) = x & (x ∘ y) · (y ∘ (x · y)) = y
+  - claims: x · (y · y) = x ∘ (y · y) false (size 6); x · (y · (y · (y · y))) = x unknown
+- 21:16:45 · `a826d824` stage b · score **0.000** (cheap 9.096) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v3 in 331s
+  - laws: (x ∘ y) · (y ∘ x) = y · y & x · (y · (x · (y ∘ y))) = y & (x ∘ (y · x)) · (x ∘ y) = x
+  - claims: x ∘ (y · y) = x unknown; x · (y · x) = y · (x · x) unknown
+- 21:18:06 · status: 159 verified this run (90 positive), queue 1411 pending / 2 claimed / 18 stage c (0 competitive at >= 0.598, 17274 dropped), 115 unremarkable results not listed, corpus 20533 found structures, 3,575,005 surrogate evaluations, PSS total 2341 MB
+- 21:19:44 · `2e13fd15` stage b · score **0.000** (cheap 4.716) · - · fusion6 · models 2/3/4/5 = 0/0/7/1 · v2 in 156s
+  - laws: x · (x · y) = y & x ∘ (((y ∘ y) ∘ x) ∘ z) = z & (((x ∘ x) · y) · x) · y = x
+  - claims: (x · y) · x = x · (y · x) unknown
+- 21:19:47 · `1350c355` stage b · score **0.000** (cheap 4.725) · - · fusion6 · models 2/3/4/5 = 0/0/3/1 · v3 in 176s
+  - laws: x · x = x & x · (x ∘ (y · x)) = y · x & x ∘ (y ∘ (z · y)) = x ∘ z
+  - claims: x ∘ (y · (y ∘ x)) = x unknown; x ∘ (x · y) = x ∘ (y · x) false (size 8, Vampire FMB)
+- 21:20:18 · `59d125b0` stage b · score **1.088** (cheap 6.205) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v2 in 15s
+  - laws: x · (y · y) = x & x ∘ ((y · z) ∘ x) = z ∘ y & (x · (x · y)) · (x · x) = y
+  - claims: x ∘ y = y ∘ x proved (E steps 31); x · (x ∘ y) = x · (y ∘ x) proved (E steps 29)
+- 21:20:36 · `a2f2ead2` stage b · score **1.171** (cheap 6.558) · - · fusion6 · models 2/3/4/5 = 0/0/3/0 · v2 in 13s
+  - laws: x · (x · (y ∘ z)) = y · z & (x ∘ y) ∘ (y ∘ (x · x)) = x & ((x ∘ (y ∘ x)) ∘ y) ∘ z = z
+  - claims: x ∘ (x ∘ y) = y proved (E steps 58); x · (y · x) = y · (x · x) proved (E steps 41)
+- 21:22:27 · `71fd2cc6` stage b · score **2.924** (cheap 8.650) · - · fusion6 · models 2/3/4/5 = 0/2/8/1 · v2 in 17s
+  - laws: x · y = y · x & x ∘ (x · y) = y ∘ x & (x ∘ y) · z = y · (z · x)
+  - claims: x ∘ y = y ∘ x proved (E steps 73); x ∘ (x · y) = x ∘ y proved (E steps 32); x · (x · y) = x · (y · y) proved (E steps 30)
+- 21:22:28 · **new #1**: `71fd2cc6` score 2.924: x · y = y · x & x ∘ (x · y) = y ∘ x & (x ∘ y) · z = y · (z · x)
+- 21:23:58 · status: 175 verified this run (101 positive), queue 1395 pending / 2 claimed / 20 stage c (0 competitive at >= 0.711, 17274 dropped), 126 unremarkable results not listed, corpus 20640 found structures, 3,668,986 surrogate evaluations, PSS total 2376 MB
+- 21:28:57 · `73e8f618` stage b · score **0.000** (cheap 8.383) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v2 in 295s
+  - laws: x · (y ∘ y) = x & (x ∘ (x · y)) · y = z ∘ z & x ∘ (((x ∘ y) · y) · y) = y & (x · y) · (y ∘ (x · x)) = x
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 21:29:48 · status: 182 verified this run (104 positive), queue 1388 pending / 2 claimed / 21 stage c (0 competitive at >= 0.711, 17274 dropped), 132 unremarkable results not listed, corpus 20678 found structures, 3,867,832 surrogate evaluations, PSS total 2626 MB
+- 21:30:48 · `28762f4d` stage b · score **0.000** (cheap 14.800) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v3 in 296s
+  - laws: x · (x · y) = y · y & x ∘ ((x · y) ∘ y) = x & (x ∘ x) ∘ (y · y) = x
+  - claims: x ∘ (x · (x · y)) = x unknown; x ∘ (x · (x · y)) = x ∘ x unknown
+- 21:31:04 · `92e4a13c` stage b · score **1.308** (cheap 8.338) · - · fusion6 · models 2/3/4/5 = 0/2/5/1 · v2 in 109s
+  - laws: (x ∘ y) · x = y · (x · x) & (x ∘ x) ∘ (y · z) = z ∘ y & (x · (x ∘ y)) · z = z · y & (x ∘ (y · y)) · z = z · x
+  - claims: x ∘ y = y ∘ x proved (E steps 33); x · (x · x) = y · (x · y) proved (E steps 42)
+- 21:33:30 · v2 recycled (memory); 0 claimed task(s) put back; starting a fresh verifier
+- 21:35:31 · status: 195 verified this run (114 positive), queue 1375 pending / 2 claimed / 22 stage c (0 competitive at >= 0.723, 17274 dropped), 143 unremarkable results not listed, corpus 20729 found structures, 3,955,250 surrogate evaluations, PSS total 2178 MB
+- 21:39:00 · `8495cf7a` stage b · score **0.000** (cheap 14.318) · - · fusion6 · models 2/3/4/5 = 0/1/1/1 · v4 in 168s
+  - laws: x · (x ∘ x) = x & (x · (y · x)) ∘ z = z ∘ y & ((x · y) · (x ∘ y)) · y = y
+  - claims: x ∘ (x · y) = x ∘ (y · x) unknown
+- 21:40:01 · `2489a8d5` stage b · score **0.000** (cheap 6.106) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v3 in 453s
+  - laws: (x ∘ y) · y = y · (x · x) & x ∘ ((x ∘ y) ∘ y) = y ∘ x & ((x · x) · y) · y = y · x
+  - claims: x · y = y · x unknown; x · (x · y) = x · y unknown; x · (x · y) = x · (y · x) unknown
+- 21:41:19 · status: 208 verified this run (121 positive), queue 1362 pending / 2 claimed / 24 stage c (0 competitive at >= 0.728, 17274 dropped), 154 unremarkable results not listed, corpus 20785 found structures, 4,158,833 surrogate evaluations, PSS total 2956 MB
+- 21:47:02 · status: 213 verified this run (123 positive), queue 1357 pending / 2 claimed / 24 stage c (0 competitive at >= 0.728, 17274 dropped), 159 unremarkable results not listed, corpus 20818 found structures, 4,280,210 surrogate evaluations, PSS total 2752 MB
+- 21:47:11 · `b825d89e` stage b · score **0.000** (cheap 11.408) · - · fusion6 · models 2/3/4/5 = 0/1/2/1 · v3 in 278s
+  - laws: x · (x ∘ x) = x & (x ∘ (y ∘ x)) · y = x ∘ x & (x · (y ∘ (x ∘ x))) · y = x & (x ∘ (y · (x · y))) · x = x
+  - claims: (x · y) · y = x unknown; (x · y) · y = x · (x · x) unknown
+- 21:49:33 · v4 recycled (memory); 0 claimed task(s) put back; starting a fresh verifier
+- 21:51:30 · `b2bb6498` stage b · score **1.342** (cheap 4.477) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v3 in 6s
+  - laws: x · (x · y) = y ∘ y & (x ∘ y) ∘ z = x ∘ (z ∘ y) & x · y = (y · x) ∘ (z · z) & x ∘ (x ∘ (y · (y · x))) = x
+  - claims: x · (y · x) = y proved (E steps 22); x · (y · x) = y ∘ y proved (E steps 25); x · (x · x) = y · (x · y) proved (E steps 27)
+- 21:52:42 · status: 224 verified this run (132 positive), queue 1346 pending / 2 claimed / 25 stage c (0 competitive at >= 0.733, 17274 dropped), 168 unremarkable results not listed, corpus 20866 found structures, 4,460,879 surrogate evaluations, PSS total 2258 MB
+- 21:56:46 · `a616779a` stage b · score **0.000** (cheap 5.567) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v3 in 135s
+  - laws: x · (x · y) = y · (z ∘ z) & (x ∘ (y ∘ x)) · z = z · y & ((x · y) ∘ x) ∘ y = x ∘ x
+  - claims: x · (x · x) = y · (x · y) unknown
+- 21:57:07 · `1570ce23` stage b · score **0.000** (cheap 5.663) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v5 in 370s
+  - laws: x · (x · y) = y ∘ (y · y) & x · (((y · x) · x) · x) = y & x ∘ (((x ∘ x) ∘ y) ∘ x) = y
+  - claims: x · (y · x) = y unknown; x · (x · x) = y · (x · y) unknown
+- 21:58:22 · status: 231 verified this run (134 positive), queue 1339 pending / 2 claimed / 27 stage c (0 competitive at >= 0.733, 17274 dropped), 173 unremarkable results not listed, corpus 20909 found structures, 4,631,445 surrogate evaluations, PSS total 2336 MB
+- 22:01:14 · `dbce5445` stage b · score **0.000** (cheap 7.731) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v5 in 141s
+  - laws: x · (x · (y ∘ x)) = y · x & ((x ∘ x) · y) ∘ x = x ∘ y & ((x ∘ (y ∘ x)) ∘ x) ∘ x = y
+  - claims: (x · y) · y = y · (y · x) false (size 4); (x ∘ y) · x = x · (x · y) false (size 6); x · (x · (x ∘ y)) = y · x unknown
+- 22:04:07 · status: 252 verified this run (144 positive), queue 1318 pending / 2 claimed / 28 stage c (0 competitive at >= 0.807, 17274 dropped), 193 unremarkable results not listed, corpus 21032 found structures, 4,752,588 surrogate evaluations, PSS total 2386 MB
+- 22:05:38 · `625a43eb` stage b · score **0.000** (cheap 13.971) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v3 in 193s
+  - laws: x · ((x ∘ y) ∘ y) = z ∘ z & (x · (y · x)) · (x ∘ x) = y & (x · (x ∘ (x · y))) ∘ x = y
+  - claims: x ∘ y = y ∘ x unknown; x · (y · z) = y · (x · z) false (size 8, Vampire FMB)
+- 22:09:02 · `4e235751` stage b · score **0.000** (cheap 9.106) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v5 in 258s
+  - laws: x · (y · (x · y)) = x · x & (x ∘ x) ∘ ((y · x) · x) = y & (((x ∘ x) · y) · x) · y = x
+  - claims: x · (y · y) = x false (size 5); (x · y) · y = x unknown; (x · y) · y = x · (x · x) unknown
+- 22:09:22 · `b20fc216` stage b · score **0.166** (cheap 5.216) · - · fusion6 · models 2/3/4/5 = 0/1/8/1 · v3 in 138s
+  - laws: x · (y · y) = x & ((x · y) ∘ (y ∘ x)) · y = x & ((x ∘ x) · (x · y)) ∘ y = y
+  - claims: (x · y) · y = x false (size 5); x ∘ (y ∘ (x · y)) = x false (size 6); x ∘ ((y · y) ∘ x) = x proved (E steps 9); x ∘ ((y · y) ∘ x) = x ∘ x unknown
+- 22:09:49 · status: 264 verified this run (152 positive), queue 1306 pending / 2 claimed / 31 stage c (0 competitive at >= 0.827, 17274 dropped), 202 unremarkable results not listed, corpus 21118 found structures, 4,958,689 surrogate evaluations, PSS total 2375 MB
+- 22:14:06 · `d3f7e4c9` stage b · score **1.645** (cheap 5.042) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v5 in 9s
+  - laws: x · y = y · x & x · (y ∘ (x ∘ x)) = x · y & x ∘ (y ∘ (x ∘ (y · y))) = y & (x ∘ (x ∘ y)) · (x · x) = y
+  - claims: x ∘ y = y ∘ x proved (E steps 48); x · (x ∘ y) = x · (y ∘ x) proved (E steps 42)
+- 22:15:02 · `fe124d5f` stage b · score **1.089** (cheap 7.102) · - · fusion6 · models 2/3/4/5 = 0/1/8/1 · v5 in 6s
+  - laws: x · (y · x) = x · y & (x ∘ x) · y = y · x & x · (y ∘ (x · x)) = x ∘ y
+  - claims: x ∘ y = y ∘ x proved (E steps 24); x · (x · y) = x · y proved (E steps 12); x · (x · y) = x · (y · y) proved (E steps 19)
+- 22:15:35 · status: 289 verified this run (169 positive), queue 1281 pending / 2 claimed / 31 stage c (0 competitive at >= 0.861, 17274 dropped), 225 unremarkable results not listed, corpus 21262 found structures, 5,051,682 surrogate evaluations, PSS total 2404 MB
+- 22:15:33 · `2aca4391` stage b · score **0.000** (cheap 4.159) · - · fusion6 · models 2/3/4/5 = 1/7/8/1 · v3 in 370s
+  - laws: x · y = y · x & x · (y · y) = x & (x · y) ∘ x = x ∘ y & (x ∘ y) ∘ y = y ∘ x
+  - claims: x ∘ y = y ∘ x unknown; x ∘ (x · y) = x ∘ y unknown; x · (x ∘ y) = x · (y ∘ x) unknown
+- 22:20:04 · `6e043fb8` stage b · score **0.642** (cheap 6.838) · - · fusion6 · models 2/3/4/5 = 0/0/4/1 · v5 in 145s
+  - laws: x · (y · (x · (y ∘ y))) = y & x ∘ (x · ((x ∘ y) ∘ y)) = x & (x ∘ (y · (z · y))) ∘ z = x & ((x ∘ x) · (y ∘ x)) ∘ x = y
+  - claims: x ∘ (y · y) = x proved (E steps 35); x · (y · x) = y · (x · x) unknown
+- 22:21:17 · status: 297 verified this run (174 positive), queue 1273 pending / 2 claimed / 33 stage c (0 competitive at >= 0.861, 17274 dropped), 231 unremarkable results not listed, corpus 21297 found structures, 5,280,373 surrogate evaluations, PSS total 2428 MB
+- 22:21:41 · `f9b56e91` stage b · score **0.000** (cheap 4.952) · - · fusion6 · models 2/3/4/5 = 0/0/3/0 · v3 in 270s
+  - laws: x · (y ∘ (y ∘ x)) = z ∘ z & (x ∘ (x · (x ∘ y))) · y = x & (x · ((x · y) · y)) ∘ x = x
+  - claims: x · y = y · x false (size 6); x ∘ (x ∘ y) = y unknown; x · (x · x) = y ∘ (y ∘ x) unknown
+- 22:24:57 · `294e15b6` stage b · score **1.155** (cheap 4.850) · - · fusion6 · models 2/3/4/5 = 1/1/1/0 · v3 in 86s
+  - laws: x · (x ∘ y) = y · x & x · (x · x) = x · (x ∘ x) & x · (x ∘ x) = y ∘ (y ∘ x) & (x · y) · z = y · (x · z) & x ∘ (((y ∘ x) ∘ x) ∘ x) = y
+  - claims: x · y = y · x proved (E steps 34); x · (x · y) = y · x proved (E steps 36); x · (x · y) = x · (y · x) proved (E steps 34)
+- 22:26:46 · `380453ec` stage b · score **0.000** (cheap 9.471) · - · fusion6 · models 2/3/4/5 = 0/0/6/1 · v5 in 122s
+  - laws: (x · y) · y = x · (x · x) & x ∘ ((y ∘ y) · (y ∘ x)) = y & ((x · y) ∘ x) ∘ (x · y) = x
+  - claims: x ∘ (y · y) = y ∘ (x ∘ y) unknown
+- 22:27:03 · status: 326 verified this run (190 positive), queue 1244 pending / 2 claimed / 35 stage c (0 competitive at >= 0.873, 17274 dropped), 257 unremarkable results not listed, corpus 21414 found structures, 5,370,373 surrogate evaluations, PSS total 2395 MB
+- 22:30:12 · `89e47e16` stage b · score **0.000** (cheap 6.739) · - · fusion6 · models 2/3/4/5 = 0/0/8/1 · v5 in 137s
+  - laws: x · (x · y) = y & (x · y) ∘ (y ∘ (x · y)) = y & ((x ∘ y) · (y ∘ y)) ∘ x = y
+  - claims: x · (y · y) = y ∘ (x ∘ y) unknown
+- 22:30:19 · `b171c8f9` stage b · score **1.985** (cheap 8.239) · - · fusion6 · models 2/3/4/5 = 0/3/8/1 · v5 in 6s
+  - laws: x · (x · y) = y · x & x · (y ∘ y) = x ∘ y & (x ∘ x) · y = (x ∘ y) ∘ x
+  - claims: x · y = y · x false (size 5); x ∘ y = y ∘ x proved (E steps 29); x · (x ∘ y) = x ∘ y proved (E steps 35); x · (x ∘ y) = x · (y ∘ x) proved (E steps 34)
+- 22:31:59 · `7c6b83f1` stage b · score **0.000** (cheap 14.317) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v3 in 421s
+  - laws: x · (y ∘ ((y ∘ x) · y)) = y & x · (((y · z) · z) · y) = x & x · (((y ∘ x) ∘ x) ∘ y) = x
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) unknown
+- 22:32:43 · status: 339 verified this run (195 positive), queue 1231 pending / 2 claimed / 37 stage c (0 competitive at >= 0.877, 17274 dropped), 267 unremarkable results not listed, corpus 21537 found structures, 5,567,247 surrogate evaluations, PSS total 2334 MB
+- 22:33:08 · `dcffb6d0` stage b · score **1.268** (cheap 4.702) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v3 in 12s
+  - laws: x · (x · x) = x & (x · y) · y = x & x ∘ ((y · z) ∘ x) = z ∘ y & (x · y) ∘ (x ∘ y) = y ∘ y
+  - claims: x ∘ y = y ∘ x proved (E steps 36); x · (x ∘ y) = x · (y ∘ x) proved (E steps 34)
+- 22:33:40 · `e5ac0c5c` stage b · score **0.000** (cheap 9.500) · - · fusion6 · models 2/3/4/5 = 0/0/7/0 · v5 in 135s
+  - laws: x · (x · (x ∘ y)) = y · x & (x ∘ (x ∘ x)) · y = y · x & ((x · x) ∘ (y ∘ z)) ∘ y = z
+  - claims: x · (x · y) = x · (x ∘ y) unknown
+- 22:38:27 · status: 353 verified this run (203 positive), queue 1217 pending / 2 claimed / 38 stage c (0 competitive at >= 0.904, 17274 dropped), 279 unremarkable results not listed, corpus 21592 found structures, 5,677,368 surrogate evaluations, PSS total 2340 MB
+- 22:43:03 · `197ea885` stage b · score **0.000** (cheap 6.602) · - · fusion6 · models 2/3/4/5 = 0/1/0/1 · v5 in 426s
+  - laws: x · (y ∘ (x · y)) = x & x · ((x · y) ∘ y) = x & (x · y) ∘ (z ∘ (x · z)) = y
+  - claims: x ∘ y = y ∘ x unknown; x · x = y ∘ (x · y) unknown; x · (x · x) = y · (y · x) unknown
+  - redundant (proved from the others): x · (y ∘ (x · y)) = x
+- 22:43:26 · `1293cf33` stage b · score **0.000** (cheap 8.068) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v3 in 382s
+  - laws: x · y = y · x & x · (((y ∘ z) ∘ y) ∘ z) = x & (x ∘ y) ∘ (y · (x ∘ x)) = x
+  - claims: x ∘ y = y ∘ x unknown; x · (x ∘ y) = x · (y ∘ x) unknown
+- 22:44:12 · status: 368 verified this run (209 positive), queue 1202 pending / 2 claimed / 40 stage c (0 competitive at >= 0.904, 17274 dropped), 292 unremarkable results not listed, corpus 21686 found structures, 5,827,159 surrogate evaluations, PSS total 2457 MB
+- 22:46:17 · `ad85b3e8` stage b · score **0.000** (cheap 10.284) · - · fusion6 · models 2/3/4/5 = 0/1/2/1 · v3 in 131s
+  - laws: x · y = y · x & x ∘ (x ∘ (y · x)) = y ∘ x & (x · (y · (x ∘ y))) · z = z
+  - claims: x · (y · (x · y)) = x · x unknown
+- 22:47:20 · `0e491956` stage b · score **0.000** (cheap 3.667) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v5 in 182s
+  - laws: x · x = x & x · (y ∘ y) = x & (x · (y · (x · x))) · y = x & ((x ∘ (y ∘ x)) ∘ x) ∘ x = y
+  - claims: x ∘ y = y ∘ x false (size 9, linear model over Z/9); x · (y · x) = x · y false (size 6); x ∘ (y · y) = y ∘ x false (size 9, linear model over Z/9); x · (x ∘ y) = x · (y ∘ x) unknown
+- 22:49:56 · status: 379 verified this run (214 positive), queue 1191 pending / 2 claimed / 42 stage c (0 competitive at >= 0.935, 17274 dropped), 301 unremarkable results not listed, corpus 21741 found structures, 5,978,840 surrogate evaluations, PSS total 2655 MB
+- 22:55:13 · `de45505b` stage b · score **0.000** (cheap 3.603) · - · fusion6 · models 2/3/4/5 = 1/3/8/1 · v5 in 290s
+  - laws: x · (y ∘ (x ∘ x)) = x · y & x · y = (x · x) ∘ (x · y) & x ∘ (y ∘ (x ∘ (y · y))) = y & (x ∘ (x ∘ y)) · (x · x) = y
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 22:55:45 · status: 386 verified this run (220 positive), queue 1183 pending / 2 claimed / 43 stage c (0 competitive at >= 0.935, 17274 dropped), 307 unremarkable results not listed, corpus 21791 found structures, 6,073,140 surrogate evaluations, PSS total 2645 MB
+- 23:01:32 · status: 393 verified this run (226 positive), queue 1177 pending / 2 claimed / 43 stage c (0 competitive at >= 0.935, 17274 dropped), 314 unremarkable results not listed, corpus 21852 found structures, 6,250,050 surrogate evaluations, PSS total 3029 MB
+- 23:05:34 · v5 recycled (memory); 0 claimed task(s) put back; starting a fresh verifier
+- 23:05:27 · `2ebc5b76` stage b · score **0.000** (cheap 11.788) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v5 in 399s
+  - laws: (x · y) · z = x · (z · y) & (x · y) ∘ (y · x) = y ∘ y & ((x ∘ y) ∘ y) · (y ∘ x) = y
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 23:07:18 · status: 395 verified this run (227 positive), queue 1175 pending / 2 claimed / 44 stage c (0 competitive at >= 0.935, 17274 dropped), 315 unremarkable results not listed, corpus 21863 found structures, 6,319,823 surrogate evaluations, PSS total 2663 MB
+- 23:13:05 · status: 396 verified this run (228 positive), queue 1174 pending / 2 claimed / 44 stage c (0 competitive at >= 0.935, 17274 dropped), 316 unremarkable results not listed, corpus 21873 found structures, 6,524,234 surrogate evaluations, PSS total 2791 MB
+- 23:15:56 · `1dc693fc` stage b · score **0.000** (cheap 4.448) · - · fusion6 · models 2/3/4/5 = 0/2/3/0 · v6 in 510s
+  - laws: x · x = x & x ∘ (x ∘ y) = y ∘ x & x · ((y · y) · x) = y & ((x · x) · y) ∘ x = y ∘ x
+  - claims: x ∘ y = y ∘ x unknown; x ∘ (x · y) = x ∘ y unknown; x · (x ∘ y) = x · (y ∘ x) unknown
+- 23:18:51 · status: 398 verified this run (228 positive), queue 1172 pending / 2 claimed / 45 stage c (0 competitive at >= 0.935, 17274 dropped), 317 unremarkable results not listed, corpus 21878 found structures, 6,587,308 surrogate evaluations, PSS total 2862 MB
+- 23:24:37 · status: 402 verified this run (229 positive), queue 1168 pending / 2 claimed / 45 stage c (0 competitive at >= 0.935, 17274 dropped), 321 unremarkable results not listed, corpus 21890 found structures, 6,740,818 surrogate evaluations, PSS total 3087 MB
+- 23:25:45 · `5a591e79` stage b · score **0.000** (cheap 8.865) · - · fusion6 · models 2/3/4/5 = 0/0/3/1 · v6 in 275s
+  - laws: x · (y ∘ (x · x)) = y · x & x · (x · ((y · y) ∘ z)) = z & x · ((y ∘ (y · x)) ∘ y) = y
+  - claims: (x · x) · y = y unknown; x · (y · x) = y · (x · x) unknown
+- 23:28:36 · `2a252804` stage b · score **0.000** (cheap 5.000) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v6 in 157s
+  - laws: x · (y ∘ y) = x & x · ((y · y) ∘ (z · z)) = x & ((x · x) ∘ y) · (y · x) = x & (x ∘ ((x ∘ x) · y)) · y = x
+  - claims: (x · x) · y = x · (x · y) unknown
+- 23:30:19 · status: 407 verified this run (229 positive), queue 1163 pending / 2 claimed / 47 stage c (0 competitive at >= 0.935, 17274 dropped), 324 unremarkable results not listed, corpus 21915 found structures, 6,846,066 surrogate evaluations, PSS total 3076 MB
+- 23:36:04 · status: 409 verified this run (229 positive), queue 1161 pending / 2 claimed / 47 stage c (0 competitive at >= 0.935, 17274 dropped), 326 unremarkable results not listed, corpus 21928 found structures, 6,952,751 surrogate evaluations, PSS total 3391 MB
+- 23:38:45 · `8f2913c1` stage b · score **0.000** (cheap 11.663) · - · fusion6 · models 2/3/4/5 = 0/1/5/1 · v6 in 358s
+  - laws: (x ∘ y) · x = y · (x · x) & (x ∘ x) ∘ (y · z) = z ∘ y & ((x · x) ∘ y) · (y · x) = x
+  - claims: x · (x · y) = y unknown; x · (x · x) = y · (y · x) unknown
+- 23:41:53 · status: 414 verified this run (233 positive), queue 1156 pending / 2 claimed / 48 stage c (0 competitive at >= 0.935, 17274 dropped), 330 unremarkable results not listed, corpus 21948 found structures, 7,093,579 surrogate evaluations, PSS total 3106 MB
+- 23:42:01 · `d3ba3e84` stage b · score **0.228** (cheap 4.141) · - · fusion6 · models 2/3/4/5 = 0/1/0/1 · v6 in 175s
+  - laws: x · (y ∘ y) = x ∘ y & ((x ∘ y) ∘ z) ∘ (y ∘ x) = z
+  - claims: (x · y) · y = x unknown; x · (y ∘ y) = y ∘ x proved (E steps 15); x · (y ∘ y) = y · (x ∘ x) proved (E steps 15)
+- 23:44:07 · `6419fbc5` stage b · score **2.153** (cheap 6.148) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v6 in 8s
+  - laws: x · (y · y) = x & ((x · x) ∘ y) · (y · x) = x & (((x ∘ x) · y) · x) · y = x
+  - claims: (x · y) · y = x proved (E steps 56); x · (x · y) = x · (y · x) proved (E steps 59)
+- 23:44:14 · `a415728f` stage b · score **1.680** (cheap 3.475) · - · fusion6 · models 2/3/4/5 = 2/8/8/1 · v6 in 7s
+  - laws: x · (x · y) = y · x & (x ∘ (y · x)) · y = y & (x · x) · y = (y ∘ x) · x & (x · y) ∘ (y · x) = y ∘ y
+  - claims: x · y = y · x proved (E steps 23); x · (x · y) = x · y proved (E steps 24); x · (x · y) = x · (y · x) proved (E steps 23)
+- 23:47:42 · status: 427 verified this run (242 positive), queue 1143 pending / 2 claimed / 49 stage c (0 competitive at >= 0.967, 17274 dropped), 340 unremarkable results not listed, corpus 22043 found structures, 7,153,937 surrogate evaluations, PSS total 3333 MB
+- 23:51:02 · `105bb919` stage b · score **0.000** (cheap 6.015) · - · fusion6 · models 2/3/4/5 = 0/6/8/1 · v6 in 150s
+  - laws: x · (x · y) = y · (z ∘ z) & (x ∘ (y ∘ x)) · z = z · y & (x ∘ ((x · y) ∘ y)) ∘ y = y & (((x · x) · x) · x) ∘ x = x
+  - claims: x · (x · x) = y · (x · y) unknown
+- 23:53:31 · status: 440 verified this run (249 positive), queue 1130 pending / 2 claimed / 50 stage c (0 competitive at >= 0.967, 17274 dropped), 352 unremarkable results not listed, corpus 22136 found structures, 7,333,713 surrogate evaluations, PSS total 3665 MB
+- 23:55:13 · **v3 (verify) exited with code -6**; 1 claimed task(s) put back; restarting the role
+- 23:56:56 · `eb09b16c` stage b · score **0.000** (cheap 10.217) · - · fusion6 · models 2/3/4/5 = 0/1/1/1 · v6 in 161s
+  - laws: x · (y · y) = x & x · (y · (z ∘ y)) = x · z & x ∘ (y · ((x · y) · x)) = x & (x · (y · (y · x))) ∘ y = y
+  - claims: x ∘ y = y ∘ x false (size 5); x · (x · y) = x · (y · x) unknown
+- 23:59:16 · status: 457 verified this run (260 positive), queue 1113 pending / 2 claimed / 51 stage c (0 competitive at >= 0.976, 17274 dropped), 368 unremarkable results not listed, corpus 22214 found structures, 7,381,678 surrogate evaluations, PSS total 2614 MB
+- 00:05:03 · status: 466 verified this run (263 positive), queue 1104 pending / 2 claimed / 51 stage c (0 competitive at >= 0.976, 17274 dropped), 377 unremarkable results not listed, corpus 22274 found structures, 7,536,052 surrogate evaluations, PSS total 2617 MB
+- 00:10:49 · status: 473 verified this run (267 positive), queue 1097 pending / 2 claimed / 51 stage c (0 competitive at >= 0.976, 17274 dropped), 384 unremarkable results not listed, corpus 22300 found structures, 7,611,904 surrogate evaluations, PSS total 2651 MB
+- 00:11:29 · `907d7c50` stage b · score **0.000** (cheap 4.163) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v6 in 268s
+  - laws: x · (x · y) = y · (z ∘ z) & x ∘ ((y · x) · (x ∘ y)) = x & ((x ∘ (y ∘ x)) ∘ x) ∘ x = y
+  - claims: x ∘ y = y ∘ x unknown; x · (x ∘ y) = x · (y ∘ x) unknown
+- 00:16:37 · status: 479 verified this run (271 positive), queue 1091 pending / 2 claimed / 52 stage c (0 competitive at >= 0.976, 17274 dropped), 389 unremarkable results not listed, corpus 22348 found structures, 7,726,059 surrogate evaluations, PSS total 2677 MB
+- 00:22:23 · status: 492 verified this run (279 positive), queue 1078 pending / 2 claimed / 52 stage c (0 competitive at >= 0.976, 17274 dropped), 402 unremarkable results not listed, corpus 22431 found structures, 7,852,264 surrogate evaluations, PSS total 2771 MB
+- 00:26:04 · `9b0760f5` stage b · score **0.000** (cheap 7.331) · - · fusion6 · models 2/3/4/5 = 0/0/0/1 · v6 in 337s
+  - laws: x · (y ∘ (z ∘ y)) = x · z & (x ∘ (y ∘ y)) · x = x · x & ((x · (y · x)) ∘ y) ∘ x = x & (((x · x) ∘ y) ∘ x) ∘ y = x
+  - claims: x · (y · y) = x unknown; x · (x · x) = x · (y · y) unknown
+- 00:28:11 · status: 496 verified this run (280 positive), queue 1074 pending / 2 claimed / 53 stage c (0 competitive at >= 0.976, 17274 dropped), 405 unremarkable results not listed, corpus 22448 found structures, 7,917,392 surrogate evaluations, PSS total 2821 MB
+- 00:30:38 · `01c4c261` stage b · score **0.000** (cheap 3.067) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v6 in 247s
+  - laws: x · (x · (y ∘ y)) = z ∘ z & x · (((y · z) · z) · y) = x & (x · ((y ∘ y) ∘ y)) ∘ x = y
+  - claims: x ∘ y = y ∘ x unknown; x · (x ∘ y) = x · (y ∘ x) unknown
+- 00:33:59 · status: 503 verified this run (283 positive), queue 1067 pending / 2 claimed / 54 stage c (0 competitive at >= 1.036, 17274 dropped), 411 unremarkable results not listed, corpus 22495 found structures, 8,078,603 surrogate evaluations, PSS total 3144 MB
+- 00:38:35 · `071a80c8` stage b · score **0.000** (cheap 9.933) · - · fusion6 · models 2/3/4/5 = 0/0/6/0 · v6 in 271s
+  - laws: x · (y ∘ (z · (z · y))) = x & (x ∘ (x ∘ y)) · (x · x) = y & ((x · y) · y) ∘ (y ∘ x) = y
+  - claims: x ∘ y = y ∘ x unknown; x · (x · x) = y ∘ (x ∘ y) unknown
+- 00:39:47 · status: 508 verified this run (285 positive), queue 1062 pending / 2 claimed / 55 stage c (0 competitive at >= 1.036, 17274 dropped), 415 unremarkable results not listed, corpus 22514 found structures, 8,110,972 surrogate evaluations, PSS total 3098 MB
+- 00:41:07 · `42a61d46` stage b · score **0.000** (cheap 5.721) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v6 in 143s
+  - laws: x · (y · (y · x)) = z ∘ z & (x · y) · (z ∘ z) = y · x & (x · (x ∘ y)) · z = z · y
+  - claims: x · (x · x) = y · (x · y) unknown
+- 00:45:34 · status: 510 verified this run (285 positive), queue 1060 pending / 2 claimed / 56 stage c (0 competitive at >= 1.036, 17274 dropped), 416 unremarkable results not listed, corpus 22532 found structures, 8,271,161 surrogate evaluations, PSS total 3375 MB
+- 00:51:19 · status: 517 verified this run (287 positive), queue 1053 pending / 2 claimed / 56 stage c (0 competitive at >= 1.036, 17274 dropped), 423 unremarkable results not listed, corpus 22566 found structures, 8,300,746 surrogate evaluations, PSS total 3200 MB
+- 00:57:07 · status: 525 verified this run (292 positive), queue 1045 pending / 2 claimed / 56 stage c (0 competitive at >= 1.036, 17274 dropped), 431 unremarkable results not listed, corpus 22607 found structures, 8,412,468 surrogate evaluations, PSS total 3192 MB
+- 01:00:30 · `8d57bcad` stage b · score **0.000** (cheap 11.382) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v6 in 139s
+  - laws: (x · x) · (y ∘ x) = x ∘ y & x · ((x · y) ∘ (x ∘ y)) = x & x · ((x · (y · y)) · z) = z & (((x ∘ x) · y) ∘ y) ∘ x = x
+  - claims: x · (y · x) = y · (x · x) unknown
+- 01:02:54 · status: 537 verified this run (298 positive), queue 1033 pending / 2 claimed / 57 stage c (0 competitive at >= 1.036, 17274 dropped), 442 unremarkable results not listed, corpus 22692 found structures, 8,480,647 surrogate evaluations, PSS total 3120 MB
+- 01:06:36 · **v7 (verify) exited with code -6**; 1 claimed task(s) put back; restarting the role
+- 01:06:21 · `d9deabc9` stage b · score **0.000** (cheap 7.769) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v6 in 129s
+  - laws: (x ∘ y) · x = z · (z · y) & (x ∘ (x ∘ y)) · y = y ∘ y & x ∘ ((x ∘ (y · y)) ∘ z) = z
+  - claims: x · (y · x) = y · (x · x) unknown
+- 01:08:37 · status: 547 verified this run (303 positive), queue 1023 pending / 2 claimed / 58 stage c (0 competitive at >= 1.036, 17274 dropped), 451 unremarkable results not listed, corpus 22746 found structures, 8,551,108 surrogate evaluations, PSS total 2585 MB
+- 01:14:26 · status: 550 verified this run (305 positive), queue 1020 pending / 2 claimed / 58 stage c (0 competitive at >= 1.036, 17274 dropped), 454 unremarkable results not listed, corpus 22773 found structures, 8,693,090 surrogate evaluations, PSS total 2753 MB
+- 01:16:32 · `0f1a78ce` stage b · score **0.000** (cheap 13.442) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v8 in 432s
+  - laws: x · ((y ∘ y) · y) = y · x & (x ∘ ((y · y) ∘ z)) ∘ z = x & ((x ∘ (x ∘ y)) · x) · y = x
+  - claims: x · (x · y) = y unknown; x · (x · x) = y · (x · y) unknown
+- 01:20:10 · status: 551 verified this run (305 positive), queue 1019 pending / 2 claimed / 59 stage c (0 competitive at >= 1.036, 17274 dropped), 454 unremarkable results not listed, corpus 22777 found structures, 8,721,232 surrogate evaluations, PSS total 2760 MB
+- 01:21:14 · `e43adcba` stage b · score **0.000** (cheap 8.206) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v8 in 282s
+  - laws: x · (x · (y ∘ x)) = y · x & x ∘ ((y ∘ y) ∘ y) = x ∘ y & (x · x) · (y ∘ z) = z · y & ((x ∘ x) · y) ∘ (y ∘ x) = x
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) false (size 6); x · (x · y) = x · (y · x) unknown
+- 01:25:07 · `3bc3ff83` stage b · score **0.000** (cheap 7.667) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v8 in 140s
+  - laws: x · (y ∘ (x · y)) = z ∘ z & x · ((y ∘ z) · x) = z · y
+  - claims: (x · y) · x = x · (x · y) unknown
+- 01:25:59 · status: 569 verified this run (318 positive), queue 1001 pending / 2 claimed / 61 stage c (0 competitive at >= 1.088, 17274 dropped), 470 unremarkable results not listed, corpus 22926 found structures, 8,883,290 surrogate evaluations, PSS total 2814 MB
+- 01:31:48 · status: 584 verified this run (324 positive), queue 986 pending / 2 claimed / 61 stage c (0 competitive at >= 1.088, 17274 dropped), 485 unremarkable results not listed, corpus 23024 found structures, 8,927,783 surrogate evaluations, PSS total 2556 MB
+- 01:37:38 · status: 600 verified this run (336 positive), queue 970 pending / 2 claimed / 61 stage c (0 competitive at >= 1.088, 17274 dropped), 501 unremarkable results not listed, corpus 23140 found structures, 9,038,813 surrogate evaluations, PSS total 2957 MB
+- 01:38:37 · `ab4a1538` stage b · score **1.386** (cheap 5.266) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v8 in 3s
+  - laws: x · (x · y) = y ∘ y & x · (y · x) = y ∘ (x · x) & x · (((y · x) ∘ y) ∘ y) = y & (x · (x · y)) · (x · x) = y
+  - claims: x · y = y · x proved (E steps 27); x · (y ∘ y) = y · x proved (E steps 27); x · (x · y) = x · (y · x) proved (E steps 24)
+- 01:43:27 · status: 605 verified this run (338 positive), queue 965 pending / 2 claimed / 61 stage c (0 competitive at >= 1.089, 17274 dropped), 505 unremarkable results not listed, corpus 23165 found structures, 9,125,767 surrogate evaluations, PSS total 3229 MB
+- 01:44:41 · `329bde4c` stage b · score **0.000** (cheap 11.148) · - · fusion6 · models 2/3/4/5 = 0/0/2/1 · v8 in 332s
+  - laws: x · (x · y) = y ∘ y & (x · (x ∘ y)) ∘ y = y & (x ∘ (x · (x ∘ y))) · y = x
+  - claims: x · y = y · x unknown; x · (y · x) = y ∘ y unknown; x · (x · x) = y · (x · y) unknown
+- 01:49:16 · status: 607 verified this run (339 positive), queue 963 pending / 2 claimed / 62 stage c (0 competitive at >= 1.089, 17274 dropped), 506 unremarkable results not listed, corpus 23175 found structures, 9,192,521 surrogate evaluations, PSS total 3232 MB
+- 01:49:46 · `6e044f88` stage b · score **0.000** (cheap 5.250) · - · fusion6 · models 2/3/4/5 = 0/0/3/0 · v8 in 287s
+  - laws: x · ((y · (y · x)) ∘ x) = x & (x · y) ∘ ((z · y) ∘ z) = x & (x ∘ (y ∘ (x ∘ x))) ∘ x = y
+  - claims: x ∘ y = y ∘ x false (size 5); (x · y) · y = x unknown; x · (y · y) = y ∘ (x ∘ y) unknown
+- 01:54:57 · `eff24b83` stage b · score **0.000** (cheap 8.233) · - · fusion6 · models 2/3/4/5 = 0/0/5/0 · v8 in 130s
+  - laws: x · (x ∘ x) = x & x ∘ (x ∘ (x · y)) = y ∘ x & (x · (x · x)) ∘ y = y ∘ x & (x · x) · (y · (z · y)) = z
+  - claims: x ∘ (x · y) = x ∘ (y · x) unknown
+- 01:55:02 · status: 614 verified this run (344 positive), queue 956 pending / 2 claimed / 64 stage c (0 competitive at >= 1.089, 17274 dropped), 511 unremarkable results not listed, corpus 23221 found structures, 9,309,141 surrogate evaluations, PSS total 3293 MB
+- 01:57:21 · `6fdc77a4` stage b · score **0.000** (cheap 7.347) · - · fusion6 · models 2/3/4/5 = 0/0/4/1 · v8 in 143s
+  - laws: (x · y) · z = x · (z · y) & x ∘ ((y · x) · (x ∘ y)) = y
+  - claims: (x ∘ y) · y = y · (x ∘ y) unknown
+- 02:00:54 · status: 621 verified this run (347 positive), queue 949 pending / 2 claimed / 65 stage c (0 competitive at >= 1.089, 17274 dropped), 517 unremarkable results not listed, corpus 23249 found structures, 9,339,210 surrogate evaluations, PSS total 3240 MB
+- 02:05:27 · `fdfae36c` stage b · score **0.503** (cheap 8.625) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v8 in 132s
+  - laws: x · (y ∘ (y · z)) = x & x ∘ (x · (y · y)) = y ∘ y & (x ∘ (x ∘ (x ∘ y))) ∘ x = y
+  - claims: x · (y · y) = x proved (E steps 14); x · ((x · y) ∘ x) = x unknown; x · (x · x) = x · (y · y) proved (E steps 14)
+- 02:06:46 · status: 632 verified this run (352 positive), queue 938 pending / 2 claimed / 66 stage c (0 competitive at >= 1.093, 17274 dropped), 527 unremarkable results not listed, corpus 23327 found structures, 9,482,399 surrogate evaluations, PSS total 3218 MB
+- 02:12:36 · status: 641 verified this run (357 positive), queue 929 pending / 2 claimed / 66 stage c (0 competitive at >= 1.093, 17274 dropped), 536 unremarkable results not listed, corpus 23372 found structures, 9,503,044 surrogate evaluations, PSS total 3224 MB
+- 02:15:28 · **v6 (verify) exited with code -6**; 1 claimed task(s) put back; restarting the role
+- 02:15:32 · `44879f10` stage b · score **0.000** (cheap 9.952) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v8 in 283s
+  - laws: x · (x · (x ∘ x)) = x ∘ x & x · y = x ∘ ((x · y) · x) & (x · x) · (y ∘ z) = z ∘ y & (x · y) · ((y · x) ∘ x) = x & ((x ∘ (y · x)) · x) ∘ y = x
+  - claims: x ∘ (x ∘ y) = y unknown; x · (y · x) = x · (x ∘ y) false (size 10, Vampire FMB)
+  - redundant (proved from the others): x · (x · (x ∘ x)) = x ∘ x
+- 02:18:26 · status: 646 verified this run (361 positive), queue 924 pending / 2 claimed / 67 stage c (0 competitive at >= 1.093, 17274 dropped), 540 unremarkable results not listed, corpus 23412 found structures, 9,618,154 surrogate evaluations, PSS total 2826 MB
+- 02:24:17 · status: 657 verified this run (366 positive), queue 913 pending / 2 claimed / 67 stage c (0 competitive at >= 1.093, 17274 dropped), 551 unremarkable results not listed, corpus 23499 found structures, 9,694,340 surrogate evaluations, PSS total 2864 MB
+- 02:29:46 · `ed9f988a` stage b · score **0.000** (cheap 11.557) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v9 in 282s
+  - laws: x · y = y · x & x · (y ∘ x) = y ∘ (y · y) & ((x · x) ∘ y) · (y · x) = x
+  - claims: x · (y · x) = y unknown; x · (x · x) = y · (x · y) unknown
+- 02:30:05 · status: 663 verified this run (369 positive), queue 907 pending / 2 claimed / 68 stage c (0 competitive at >= 1.093, 17274 dropped), 556 unremarkable results not listed, corpus 23524 found structures, 9,758,672 surrogate evaluations, PSS total 2914 MB
+- 02:33:16 · `a4ae575c` stage b · score **0.000** (cheap 3.963) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v9 in 137s
+  - laws: x · (x · (x ∘ y)) = y · x & x · ((y · x) · y) = x · x & (x ∘ (x ∘ x)) · y = y · x & (x ∘ x) ∘ (y ∘ (z ∘ y)) = z
+  - claims: x · (x · y) = x · (x ∘ y) unknown
+- 02:34:42 · `eb103bde` stage b · score **2.351** (cheap 3.950) · - · fusion6 · models 2/3/4/5 = 0/8/8/1 · v9 in 6s
+  - laws: x · (x · y) = y · x & x · y = (y · x) ∘ y & (x · x) · y = (y · x) ∘ x & (x ∘ y) ∘ (y ∘ x) = y ∘ x
+  - claims: x · y = y · x proved (E steps 33); x · (x · y) = x · y proved (E steps 34); x · (x · y) = x · (y · x) proved (E steps 35)
+- 02:35:54 · status: 682 verified this run (382 positive), queue 889 pending / 2 claimed / 69 stage c (0 competitive at >= 1.112, 17274 dropped), 573 unremarkable results not listed, corpus 23626 found structures, 9,877,326 surrogate evaluations, PSS total 2847 MB
+- 02:41:45 · status: 697 verified this run (387 positive), queue 874 pending / 2 claimed / 69 stage c (0 competitive at >= 1.112, 17274 dropped), 588 unremarkable results not listed, corpus 23702 found structures, 9,899,898 surrogate evaluations, PSS total 2770 MB
+- 02:47:34 · status: 701 verified this run (388 positive), queue 870 pending / 2 claimed / 69 stage c (0 competitive at >= 1.112, 17274 dropped), 592 unremarkable results not listed, corpus 23722 found structures, 10,033,675 surrogate evaluations, PSS total 3083 MB
+- 02:47:38 · `24c64ef0` stage b · score **0.000** (cheap 10.606) · - · fusion6 · models 2/3/4/5 = 0/0/2/0 · v9 in 319s
+  - laws: x · (y · ((y · z) · z)) = x & (x · (y · (x ∘ y))) ∘ y = y & (x ∘ (y · (z ∘ z))) ∘ y = x
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) unknown
+- 02:50:07 · `517e1e27` stage b · score **0.396** (cheap 2.742) · - · fusion6 · models 2/3/4/5 = 1/0/8/0 · v9 in 148s
+  - laws: x · (y · y) = x & x ∘ (x · (y ∘ x)) = y ∘ x & x ∘ (y ∘ (x · y)) = y ∘ x & ((x · y) · z) · (z · y) = x
+  - claims: (x · y) · y = x proved (E steps 9); x ∘ (y · x) = x ∘ y unknown; x · (x · y) = x · (y · x) proved (E steps 13)
+- 02:53:26 · status: 704 verified this run (390 positive), queue 867 pending / 2 claimed / 71 stage c (0 competitive at >= 1.112, 17274 dropped), 593 unremarkable results not listed, corpus 23743 found structures, 10,056,611 surrogate evaluations, PSS total 3264 MB
+- 02:54:54 · `492b6463` stage b · score **0.000** (cheap 5.923) · - · fusion6 · models 2/3/4/5 = 0/0/8/0 · v9 in 278s
+  - laws: x · ((y ∘ (y ∘ x)) · z) = z & x ∘ (((x ∘ x) ∘ y) ∘ x) = y & (x ∘ ((x · y) · y)) · x = x
+  - claims: (x ∘ x) · y = y unknown; (x ∘ x) · y = y · (y · y) unknown
+- 02:59:14 · status: 714 verified this run (397 positive), queue 857 pending / 2 claimed / 72 stage c (0 competitive at >= 1.112, 17274 dropped), 602 unremarkable results not listed, corpus 23795 found structures, 10,164,262 surrogate evaluations, PSS total 3267 MB
+- 03:05:06 · status: 727 verified this run (405 positive), queue 844 pending / 2 claimed / 72 stage c (0 competitive at >= 1.112, 17274 dropped), 615 unremarkable results not listed, corpus 23839 found structures, 10,229,011 surrogate evaluations, PSS total 3345 MB
+- 03:09:11 · `3815380b` stage b · score **0.000** (cheap 4.743) · - · fusion6 · models 2/3/4/5 = 1/0/1/1 · v9 in 271s
+  - laws: x · (x ∘ x) = x & x · (x · y) = y · x & ((x ∘ x) · y) · y = y & ((x · y) ∘ x) · x = x · y & x ∘ (y ∘ ((z ∘ y) ∘ z)) = x
+  - claims: (x · y) · y = y · x unknown; (x · y) · y = x · (x · y) unknown
+  - redundant (proved from the others): x · (x ∘ x) = x
+- 03:10:55 · status: 732 verified this run (407 positive), queue 839 pending / 2 claimed / 73 stage c (0 competitive at >= 1.112, 17274 dropped), 619 unremarkable results not listed, corpus 23860 found structures, 10,285,749 surrogate evaluations, PSS total 3286 MB
+- 03:13:02 · `39148a0f` stage b · score **0.140** (cheap 10.530) · - · fusion6 · models 2/3/4/5 = 0/0/1/0 · v9 in 150s
+  - laws: x · (y · (x · y)) = y · y & x · ((y · y) ∘ (z · z)) = x & (x · ((y ∘ y) ∘ x)) · z = z & (x ∘ ((x · y) · y)) · x = x & (x ∘ ((x · y) ∘ x)) ∘ y = x
+  - claims: x · y = y · x unknown; x · (x · x) = y · (x · y) proved (E steps 33)
+- 03:16:45 · status: 733 verified this run (408 positive), queue 838 pending / 2 claimed / 74 stage c (0 competitive at >= 1.112, 17274 dropped), 619 unremarkable results not listed, corpus 23862 found structures, 10,375,648 surrogate evaluations, PSS total 3289 MB
+- 03:22:35 · status: 733 verified this run (408 positive), queue 838 pending / 2 claimed / 74 stage c (0 competitive at >= 1.112, 17274 dropped), 619 unremarkable results not listed, corpus 23862 found structures, 10,388,975 surrogate evaluations, PSS total 3826 MB
+- 03:24:00 · **v8 (verify) exited with code -6**; 1 claimed task(s) put back; restarting the role
+- 03:25:42 · `3f3df0b5` stage b · score **0.000** (cheap 8.156) · - · fusion6 · models 2/3/4/5 = 0/1/2/0 · v9 in 759s
+  - laws: x · (x · y) = y ∘ y & x ∘ (y · z) = x ∘ (z · y) & (x ∘ (x · (y · x))) ∘ x = y
+  - claims: x · y = y · x unknown; x · (y · x) = y ∘ y unknown; x · (x · x) = y · (x · y) unknown
+- 03:28:23 · status: 734 verified this run (408 positive), queue 837 pending / 2 claimed / 75 stage c (0 competitive at >= 1.112, 17274 dropped), 619 unremarkable results not listed, corpus 23866 found structures, 10,527,886 surrogate evaluations, PSS total 2890 MB
+- 03:28:23 · budget reached (28816 s): stopping workers
+
+### 2026-11-27 03:28:55 · run x12f6a ended
+
+- 734 theories verified (408 positive score, 0 through stage c), 126 claims still open
+- stage-c tasks cut by the stop and put back: 0
+- 10,527,886 surrogate evaluations; 4335 structures added to the corpus
+- queue left: 839 pending, 75 stage c (kept for the next run)
+- top score overall 2.924; see leaderboard.md
