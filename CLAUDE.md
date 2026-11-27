@@ -346,8 +346,12 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - **`1f430506` studied, not identified** (27 Nov; `notes/1f430506.md`; funnel level 8 is now 10). T = {(x·y)·(x∘z)
       = z∘x, ((x∘y)·(z·z))·x = x} forces (x·x)·y = y (ETP 31: squares are left identities), then ∘ commutative.
       Theorem: models = a magma + a commutative ∘ with x∘y ∈ W(x,y) (fixed by x·S, y·S; squares·(x∘y) fix x, y);
-      ·-reducts = ETP-31 magmas with a right zero; ·-laws = ETP 31's, ∘-laws = commutativity only. Sibling
-      `1238c063` (N1 rank 2) shares A and both emergent laws, a different variety; its close look is next.
+      ·-reducts = ETP-31 magmas with a right zero; ·-laws = ETP 31's, ∘-laws = commutativity only.
+    - **`1238c063` studied, not identified** (27 Nov; `notes/1238c063.md`; funnel level 8 is now 11). T2 = {A,
+      (x·((x∘y)·x))·y = y} (ETP 2533 with the operations identified): the same emergent laws, ·-reducts and one-op
+      laws as 1f430506; only the condition on x∘y differs. Both are proper subvarieties of V = {A, (x·x)·y = y}: all
+      three agree on 2–3 elements (12, 1,491 models), on 4 every V-model satisfies one of the two second laws, on 5 a
+      V-model fails both (Mace4, re-checked).
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.

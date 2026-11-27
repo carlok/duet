@@ -50,6 +50,23 @@ So it is not identified, and weak. With `3818b88f` it forms the first two-member
 
 Memo: [`notes/1f430506.md`](../notes/1f430506.md).
 
+## `1238c063` (X11, N1 rank 2): the sibling, with another condition on ∘
+
+- **The claim.** `(x · y) · (x ∘ z) = z ∘ x` and `(x · ((x ∘ y) · x)) · y = y`. The first law is `1f430506`'s. Together
+  they imply the same `(x · x) · y = y` and `x ∘ y = y ∘ x`, and neither law alone does. Hand proof: 1 step for
+  commutativity, 8 for the rest.
+- **The models (a theorem, checked against Mace4 for n ≤ 3).** Again a magma plus a commutative `∘` that picks each
+  `x ∘ y` from a set fixed by `·`. Only the second condition differs: `x · ((x ∘ y) · x)` must fix `y` from the left,
+  and the same with `x` and `y` swapped.
+- **The same shadows.** The `·`-parts, the laws of `·` alone and the laws of `∘` alone are exactly those of `1f430506`.
+- **One family of three.** Both theories are proper subvarieties of V = {`(x · y) · (x ∘ z) = z ∘ x`,
+  `(x · x) · y = y`}. On 2 and 3 elements all three have the same models (12 and 1,491). On 4 every model of V
+  satisfies one of the two second laws; on 5 one satisfies neither.
+- **Literature.** With the operations identified, the second law is ETP Equation 2533, which has no name. No source was
+  found for the theory. Not identified.
+
+Memo: [`notes/1238c063.md`](../notes/1238c063.md).
+
 ## `71fd2cc6` (X12, N1 rank 18, X12's top score): a commutative g-dimonoid, identified
 
 T = {x·y = y·x, x∘(x·y) = y∘x, (x∘y)·z = y·(z·x)}.

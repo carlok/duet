@@ -2,6 +2,37 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## `1238c063`, X11's second candidate: not identified (27 Nov 2026; post hoc)
+
+T2 = {A: (x·y)·(x∘z) = z∘x, C: (x·((x∘y)·x))·y = y}, N1 rank 2, the sibling of `1f430506` (T = {A, B}).
+- **Sources:** memo `notes/1238c063.md`; checks `notes/1238c063_checks.py` parts 1–7 (outputs `notes/1238c063_checks.out`
+  and `_2` to `_7`) and `notes/1238c063_order4.py` (`.out`). E 30–60 s per goal.
+- **Emergent:** the same as T's. x∘y = y∘x (E, 9 steps; by hand, one step) and (x·x)·y = y (E, 25 steps; by hand, 8).
+  - Neither law alone implies them. A alone has 2-element Mace4 models where they fail. For C alone, E saturates on
+    both goals; Mace4 finds models on 2 and 3 elements.
+- **The models (theorem).** A magma plus a commutative ∘ with x∘y ∈ W₂(x,y). W₂(x,y) is the set of w such that:
+  - p·w = w for every p in x·S ∪ y·S;
+  - (x·(w·x))·y = y and (y·(w·y))·x = x.
+
+  Labelled counts: 12 on 2 elements and 1,491 on 3, by the formula and by Mace4 alike (part 2), and 3,643,552 on 4 by
+  the formula (part 3). The verifier's census, capped at 8 per size, had 1, 8, 8 and 1.
+- **Reducts:** the same as T's. The ·-reducts are the magmas with (x·x)·y = y and a right zero (checked for n ≤ 3), so
+  the ·-laws are those of Equation 31. Of ∘ alone only commutativity holds (729 of 729 checked on 3 elements).
+  - 52 one-operation laws of order 4 (40 of ·, 12 of ∘) hold in every model found on 2–4 elements; E proves all of them.
+- **The common supervariety V = {A, (x·x)·y = y}.**
+  - T and T2 both imply V (E). V implies neither second law: there are 4-element models.
+  - Labelled counts: 12, 1,491 and 3,646,048 on 2, 3 and 4 elements. T has 3,641,632 on 4, T2 3,643,552, and both
+    together 3,639,136.
+  - So on 4 elements every model of V satisfies B or C. On 5 that fails: Mace4 found a model of V where both fail,
+    re-checked with `law_vector` (part 6).
+  - With x·y = x∘y, E proves x = y from V; with · associative, x·y = y. These collapses hold in both siblings.
+- **Literature:** a targeted agent found no source for A, C or the pair.
+  - With the operations identified, C is ETP Equation 2533 and A is Equation 3772. Both numbers come from
+    `soup.profile.etp_numbers`, and E proves that 3772 gives the constant law (part 7).
+  - By the agent's reading of the ETP files, 2533 has no name and no commentary.
+- **Downstream:** `soup.funnel` gives level 8 = 11 (10). N1, F1 and levels 0–7 are unchanged.
+- **Caveat:** "not identified" rests on web searches, and the method samples the most-studied corners.
+
 ## `1f430506`, X11's top candidate: not identified (27 Nov 2026; post hoc)
 
 T = {A: (x·y)·(x∘z) = z∘x, B: ((x∘y)·(z·z))·x = x}, N1 rank 1, unstudied until now.

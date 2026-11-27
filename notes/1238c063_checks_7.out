@@ -1,0 +1,2 @@
+(x · y) · (x · z) = z · x ETP [3772]
+  => x·y = z·w: proved Theorem

@@ -1,0 +1,29 @@
+  A alone, a model where x ∘ y = y ∘ x fails: size 2 [[[0, 0], [1, 1]], [[0, 1], [0, 1]]] (searched to None, 1 model)
+  A alone, a model where (x · x) · y = y fails: size 2 [[[1, 1], [1, 1]], [[1, 1], [1, 1]]] (searched to None, 1 model)
+  A alone, a model where (x ∘ (x · x)) · y = y fails: size 2 [[[0, 1], [1, 1]], [[1, 1], [1, 1]]] (searched to None, 1 model)
+  C alone, a model where x ∘ y = y ∘ x fails: size 2 [[[0, 1], [0, 0]], [[0, 0], [1, 0]]] (searched to None, 1 model)
+  C alone, a model where (x · x) · y = y fails: size 3 [[[1, 2, 0], [1, 0, 2], [0, 1, 2]], [[0, 0, 0], [0, 0, 0], [1, 1, 1]]] (searched to None, 1 model)
+  C alone, a model where (x ∘ (x · x)) · y = y fails: size 2 [[[1, 1], [0, 1]], [[0, 0], [0, 0]]] (searched to None, 1 model)
+  x ∘ y = y ∘ x                holds in every model on 2-3 elements
+  (x · x) · y = y              holds in every model on 2-3 elements
+  (x · x) · x = x              holds in every model on 2-3 elements
+  (x ∘ (x · y)) · z = z        holds in every model on 2-3 elements
+  (x ∘ (y · y)) · z = z        holds in every model on 2-3 elements
+  ((x · y) ∘ x) · z = z        holds in every model on 2-3 elements
+  (x ∘ (x · x)) · y = y        holds in every model on 2-3 elements
+  ((x ∘ y) · (z · z)) · x = x  holds in every model on 2-3 elements
+  x · x = y · y                fails on n=2: · [[0, 1], [0, 1]] ∘ [[0, 0], [0, 0]]
+  x · x = x                    fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  (x · y) · z = x · (y · z)    fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  x · y = y                    fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  x ∘ x = x                    fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  (x ∘ y) ∘ z = x ∘ (y ∘ z)    fails on n=2: · [[0, 1], [0, 1]] ∘ [[1, 0], [0, 0]]
+  (x · (x ∘ y)) · z = z        holds in every model on 2-3 elements
+  x · (y · y) = y · y          fails on n=3: · [[0, 1, 2], [0, 0, 0], [0, 1, 2]] ∘ [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+  x · (x · y) = y              fails on n=2: · [[0, 1], [0, 0]] ∘ [[0, 0], [0, 0]]
+  (x · (x · x)) · y = y        fails on n=3: · [[0, 1, 2], [0, 1, 2], [0, 2, 1]] ∘ [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+  (x · (x ∘ x)) · y = y        holds in every model on 2-3 elements
+  T2, a model where (x ∘ (x · y)) · z = z fails: size None None (searched to 4, failure)
+  T2, a model where ((x · y) ∘ x) · z = z fails: size None None (searched to 4, failure)
+  T2, a model where ((x ∘ y) · (z · z)) · x = x fails: size 4 [[[1, 1, 1, 3], [0, 1, 2, 3], [0, 0, 1, 3], [0, 1, 2, 3]], [[2, 3, 1, 3], [3, 3, 3, 3], [1, 3, 1, 3], [3, 3, 3, 3]]] (searched to None, 1 model)
+  x·y = y with a commutative ∘ on 3 elements: 729 of 729 are models of T2

@@ -1,0 +1,55 @@
+T2 = (x · y) · (x ∘ z) = z ∘ x & (x · ((x ∘ y) · x)) · y = y
+  T2 => x ∘ y = y ∘ x                proved (Theorem, 9 steps)
+  T2 => (x · x) · y = y              proved (Theorem, 25 steps)
+  T2 => (x · x) · x = x              proved (Theorem, 20 steps)
+  T2 => (x ∘ (x · y)) · z = z        proved (Theorem, 18 steps)
+  T2 => (x ∘ (y · y)) · z = z        proved (Theorem, 27 steps)
+  T2 => ((x · y) ∘ x) · z = z        proved (Theorem, 18 steps)
+  T2 => (x ∘ (x · x)) · y = y        proved (Theorem, 18 steps)
+  T2 => ((x ∘ y) · (z · z)) · x = x  unknown (ResourceOut, None steps)
+  T2 => x · x = y · y                unknown (ResourceOut, None steps)
+  T2 => x · x = x                    unknown (ResourceOut, None steps)
+  T2 => (x · y) · z = x · (y · z)    unknown (ResourceOut, None steps)
+  T2 => x · y = y                    unknown (ResourceOut, None steps)
+  T2 => x ∘ x = x                    unknown (ResourceOut, None steps)
+  T2 => (x ∘ y) ∘ z = x ∘ (y ∘ z)    unknown (ResourceOut, None steps)
+  T2 => (x · (x ∘ y)) · z = z        unknown (ResourceOut, None steps)
+  T2 => x · (y · y) = y · y          unknown (ResourceOut, None steps)
+  T2 => x · (x · y) = y              unknown (ResourceOut, None steps)
+  T2 => (x · (x · x)) · y = y        unknown (ResourceOut, None steps)
+  T2 => (x · (x ∘ x)) · y = y        unknown (ResourceOut, None steps)
+Synergy: each law alone
+  A => x ∘ y = y ∘ x            unknown (ResourceOut)
+  A => (x · x) · y = y          unknown (ResourceOut)
+  A => (x ∘ (x · x)) · y = y    unknown (ResourceOut)
+  C => x ∘ y = y ∘ x            countersatisfiable (CounterSatisfiable)
+  C => (x · x) · y = y          countersatisfiable (CounterSatisfiable)
+  C => (x ∘ (x · x)) · y = y    countersatisfiable (CounterSatisfiable)
+ETP number of (x · x) · y = y (operations identified): [31]
+ETP number of (x · ((x · y) · x)) · y = y (operations identified): [2533]
+V = (x · x) · y = y & (x · y) · (x ∘ z) = z ∘ x
+  T2 => V True | T => V True
+  V => C False | V => B False
+  V => x ∘ y = y ∘ x proved (Theorem, 9 steps)
+E's proof of (x·x)·y = y from T2:
+  cnf(c_0_5, plain, (f(f(X1,X2),g(X1,X3))=g(X3,X1)), inference(split_conjunct,[status(thm)],[c_0_3])).
+  cnf(c_0_6, plain, (f(f(X1,f(g(X1,X2),X1)),X2)=X2), inference(split_conjunct,[status(thm)],[c_0_4])).
+  cnf(c_0_7, plain, (f(g(X1,X2),g(f(X2,X3),X4))=g(X4,f(X2,X3))), inference(spm,[status(thm)],[c_0_5, c_0_5])).
+  cnf(c_0_8, plain, (g(X1,X2)=g(X2,X1)), inference(spm,[status(thm)],[c_0_6, c_0_5])).
+  cnf(c_0_9, plain, (f(f(g(f(X1,X2),X3),g(X3,f(X1,X2))),X1)=X1), inference(spm,[status(thm)],[c_0_6, c_0_7])).
+  cnf(c_0_10, plain, (f(g(X1,X2),g(X3,f(X2,X4)))=g(X3,f(X2,X4))), inference(spm,[status(thm)],[c_0_7, c_0_8])).
+  cnf(c_0_11, plain, (f(g(X1,f(X1,X2)),X1)=X1), inference(spm,[status(thm)],[c_0_9, c_0_10])).
+  cnf(c_0_12, plain, (f(f(X1,f(g(X2,X1),X1)),X2)=X2), inference(spm,[status(thm)],[c_0_6, c_0_8])).
+  cnf(c_0_13, plain, (f(g(X1,g(X2,f(X2,X3))),g(X2,X4))=g(X4,X2)), inference(spm,[status(thm)],[c_0_7, c_0_11])).
+  cnf(c_0_14, plain, (f(g(X1,X2),g(X3,f(X1,X4)))=g(X3,f(X1,X4))), inference(spm,[status(thm)],[c_0_10, c_0_8])).
+  cnf(c_0_15, plain, (f(g(X1,f(X1,X2)),X3)=X3), inference(rw,[status(thm)],[inference(rw,[status(thm)],[inference(spm,[status(thm)],[c_0_12, c_0_13]), c_0_8]), c_0_14])).
+  cnf(c_0_16, plain, (f(f(X1,X1),f(X1,X2))=f(X1,X2)), inference(spm,[status(thm)],[c_0_6, c_0_11])).
+  cnf(c_0_17, plain, (f(f(f(X1,X2),f(X1,X2)),X1)=X1), inference(spm,[status(thm)],[c_0_12, c_0_15])).
+  cnf(c_0_18, plain, (f(f(g(X1,f(X2,X3)),g(X1,f(X2,X3))),X2)=X2), inference(spm,[status(thm)],[c_0_6, c_0_10])).
+  cnf(c_0_19, plain, (f(g(X1,f(X2,X2)),g(X3,f(X2,X4)))=g(X3,f(X2,X4))), inference(spm,[status(thm)],[c_0_10, c_0_16])).
+  cnf(c_0_21, plain, (f(f(X1,X1),f(f(X1,X2),f(X1,X2)))=f(f(X1,X2),f(X1,X2))), inference(spm,[status(thm)],[c_0_17, c_0_17])).
+  cnf(c_0_22, plain, (f(g(X1,f(X2,X2)),X2)=X2), inference(spm,[status(thm)],[c_0_18, c_0_19])).
+  cnf(c_0_24, plain, (f(g(X1,f(X2,X2)),f(X2,X2))=f(X2,X2)), inference(rw,[status(thm)],[inference(spm,[status(thm)],[c_0_21, c_0_22]), c_0_19])).
+  cnf(c_0_25, negated_conjecture, (f(f(esk1_0,esk1_0),esk2_0)!=esk2_0), inference(split_conjunct,[status(thm)],[c_0_23])).
+  cnf(c_0_26, plain, (f(f(X1,X1),X2)=X2), inference(rw,[status(thm)],[inference(spm,[status(thm)],[c_0_12, c_0_24]), c_0_16])).
+  cnf(c_0_27, negated_conjecture, ($false), inference(cn,[status(thm)],[inference(rw,[status(thm)],[c_0_25, c_0_26])]), ['proof']).

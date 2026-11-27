@@ -1,0 +1,4 @@
+n=2 T2: formula 12 labelled models on 3 magmas with a value set everywhere; Mace4 12 labelled (6 classes, complete=True); magmas where "some ∘ exists" and "Q + right zero" disagree: 0
+n=2 V: formula 12 labelled models on 3 magmas with a value set everywhere; Mace4 12 labelled (6 classes, complete=True); magmas where "some ∘ exists" and "Q + right zero" disagree: 0
+n=3 T2: formula 1491 labelled models on 58 magmas with a value set everywhere; Mace4 1491 labelled (259 classes, complete=True); magmas where "some ∘ exists" and "Q + right zero" disagree: 0
+n=3 V: formula 1491 labelled models on 58 magmas with a value set everywhere; Mace4 1491 labelled (259 classes, complete=True); magmas where "some ∘ exists" and "Q + right zero" disagree: 0
