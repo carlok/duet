@@ -2,6 +2,33 @@
 
 Newest first. Every number has the command that produced it. Times in the journal are UTC.
 
+## g-dimonoids in the R1 catalogue (27 Nov 2026; post hoc, after `71fd2cc6`)
+
+Two post hoc catalogue entries, `g-dimonoid` and `commutative g-dimonoid` (`soup/catalogue.py`, `126c5f6`; with ⊣ = ·,
+⊢ = ∘ as in the dimonoid entry, and the 8 relabellings as for every entry). Then `soup.rediscover` over all 16 run
+directories (`--jobs 8`, 10 s per E job; log `work/check/rediscover_gdim.log`), and N1, F1 and the funnel again.
+Comparison: `notes/gdim_relations.py` (output `notes/gdim_relations.out`) against a copy of `rediscover.json` taken
+before; the five open candidates: `notes/gdim_open.py` (output `notes/gdim_open.out`).
+- **Sanity:** the 18,794 relations of the old entries are unchanged.
+- **Relations:** proved subvarieties, counted per run directory: 100 of `g-dimonoid` and 20 of `commutative
+  g-dimonoid`; 96 distinct theories in all. Another 42 relations are open ("subvariety?", E's 10 s ran out). No fragment
+  and no equivalence. Most are in t4-prior to x3 (8, 25, 26 and 24 per run), the rest in X4 (6), X7 (4), X11 (3) and
+  X12 (1 and 3).
+- **Candidates:** of the 318, only `71fd2cc6` is a proved subvariety. Five passed the model filter and were left open:
+  `8a73db2b` and `b8f7ebec` (X7, N1 ranks 40 and 42, level 7), `f1f50575` (X4, rank 78, level 7), `92e4a13c` (X12-f6,
+  rank 97) and `d94efc4a` (X12-f5, not in N1). E with 120 s and 2M clauses per law is running
+  (`notes/gdim_open.py`). First result: `f1f50575` stays open under both relabellings tried so far. Associativity of
+  both operations is proved, and the two bridge axioms are unknown.
+- **Level 8:** none of the nine is related.
+- **Downstream:**
+  - N1 now records `71fd2cc6` as known: 95 known, 170 enter (171 before).
+  - Funnel: level 6 is 170 and level 7 is 78 (79 before); level 8 stays at 9.
+  - F1: 23 theories move to "known" (2,011 → 2,034), 11 from structured, 9 from diagonal, 3 from argument-ignoring.
+    The other 73 of the 96 were already known or a disguise under F1's earlier rules. Structured families: 241 (243
+    before), Chao1 index 305 (309).
+- **X12's predictions** on the new labels (`notes/x12_predictions_after_gdim.out`): Y1's ratio is 2.08 (2.06), Y5 is 69
+  new families against 4 (70), and fusion6 has 3 candidates at level 7 (4). No verdict changes.
+
 ## `71fd2cc6`, X12's top theory: a commutative g-dimonoid (27 Nov 2026; post hoc close look; ledger row 13)
 
 T = {x·y = y·x, x∘(x·y) = y∘x, (x∘y)·z = y·(z·x)} (arm fusion6, N1 rank 18, score 2.924). Memo `notes/71fd2cc6.md`;

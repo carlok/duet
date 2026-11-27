@@ -338,8 +338,10 @@ Data in `work/` (not in git): matrix files, `corpus/`, `queue/`, `results/`, `jo
     - **`71fd2cc6` identified** (27 Nov; `notes/71fd2cc6.md`, ledger row 13): T ⟺ commutative g-dimonoids (Loday's
       dimonoid axioms without the middle one, both operations commutative; Movsisyan et al. 2014, Zhuchok and Zhuchok
       2015) plus x∘(x∘y) = x∘y (E both ways). Models: a commutative semigroup with x·x·y·z = x·y·z plus a free choice
-      of twins, x∘y = the chosen twin of x·y (a theorem; no source for it). Pitfall: R1's catalogue has dimonoids
-      but not g-dimonoids; adding them post hoc may identify more candidates.
+      of twins, x∘y = the chosen twin of x·y (a theorem; no source for it).
+    - **g-dimonoids in R1** (post hoc, `126c5f6`; REPORT "g-dimonoids in the R1 catalogue"): 96 verified theories
+      are proved subvarieties, mostly t4-prior to x3; of the candidates only 71fd2cc6, five more open at 10 s; no
+      level-8 theory. Now: funnel 6/7/8 = 170/78/9, 241 families, Chao1 305; X12's verdicts unchanged.
   - X7 (23 Nov, arm fusion4 = fusion2 + soup.known skips + seen-before skip + distinct bitmap; V6; memory rule stopped it
     at 2.65 h, applied by the supervisor): 737 verified, 511 scored, 0 fragments; param screen 2.2% (X6 24%); Q1, Q3,
     Q4 hold, Q2 fails (73.8% distinct); 12/20 disconnected, 19 varieties; de0c0cf3 at N1 rank 2, unstudied.

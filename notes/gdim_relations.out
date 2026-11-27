@@ -1,0 +1,28 @@
+old entries: relations before 18794, after 18794; lost 0, gained 0
+.: 354 theories, E jobs 0, unknown 0, skipped at the wall 0: -
+t4-prior: 1050 theories, E jobs 10, unknown 0, skipped at the wall 0: g-dimonoid subvariety 8
+t4-noprior: 441 theories, E jobs 0, unknown 0, skipped at the wall 0: -
+x1: 521 theories, E jobs 0, unknown 0, skipped at the wall 0: g-dimonoid subvariety 25; g-dimonoid subvariety? 2
+x2: 1015 theories, E jobs 14, unknown 0, skipped at the wall 0: commutative g-dimonoid subvariety 5; g-dimonoid subvariety 26
+x3: 970 theories, E jobs 26, unknown 0, skipped at the wall 0: commutative g-dimonoid subvariety 1; g-dimonoid subvariety 24
+x4: 636 theories, E jobs 24, unknown 0, skipped at the wall 0: commutative g-dimonoid subvariety 3; commutative g-dimonoid subvariety? 4; g-dimonoid subvariety 6; g-dimonoid subvariety? 4
+x5: 292 theories, E jobs 0, unknown 0, skipped at the wall 0: -
+x6: 1460 theories, E jobs 28, unknown 23, skipped at the wall 0: commutative g-dimonoid subvariety? 2; g-dimonoid subvariety? 2
+x7: 737 theories, E jobs 152, unknown 90, skipped at the wall 0: commutative g-dimonoid subvariety 4; commutative g-dimonoid subvariety? 9; g-dimonoid subvariety 4; g-dimonoid subvariety? 9
+x8: 444 theories, E jobs 0, unknown 0, skipped at the wall 0: -
+x9: 1320 theories, E jobs 0, unknown 0, skipped at the wall 0: -
+x10: 734 theories, E jobs 0, unknown 0, skipped at the wall 0: -
+x11: 640 theories, E jobs 36, unknown 0, skipped at the wall 0: commutative g-dimonoid subvariety 3; g-dimonoid subvariety 3
+x12-f5: 560 theories, E jobs 48, unknown 25, skipped at the wall 0: commutative g-dimonoid subvariety 1; commutative g-dimonoid subvariety? 1; g-dimonoid subvariety 1; g-dimonoid subvariety? 1
+x12-f6: 734 theories, E jobs 82, unknown 40, skipped at the wall 0: commutative g-dimonoid subvariety 3; commutative g-dimonoid subvariety? 4; g-dimonoid subvariety 3; g-dimonoid subvariety? 4
+all runs: {('g-dimonoid', 'subvariety'): 100, ('g-dimonoid', 'subvariety?'): 22, ('commutative g-dimonoid', 'subvariety'): 20, ('commutative g-dimonoid', 'subvariety?'): 20}
+verified theories with a firm relation to a new entry: 96
+
+candidates related (of 318):
+  f1f50575 x4         [('commutative g-dimonoid', 'subvariety?'), ('g-dimonoid', 'subvariety?')] N1 rank 78 level 7
+  b8f7ebec x7         [('commutative g-dimonoid', 'subvariety?'), ('g-dimonoid', 'subvariety?')] N1 rank 42 level 7
+  8a73db2b x7         [('commutative g-dimonoid', 'subvariety?'), ('g-dimonoid', 'subvariety?')] N1 rank 40 level 7
+  d94efc4a x12-f5     [('commutative g-dimonoid', 'subvariety?'), ('g-dimonoid', 'subvariety?')] N1 rank -
+  71fd2cc6 x12-f6     [('commutative g-dimonoid', 'subvariety'), ('g-dimonoid', 'subvariety')] N1 rank 18 level 7
+  92e4a13c x12-f6     [('commutative g-dimonoid', 'subvariety?'), ('g-dimonoid', 'subvariety?')] N1 rank 97
+level 8 related: none
