@@ -205,7 +205,7 @@ only after the Latin-square literature had yielded nothing. A later arm found St
 loop translated by a constant, $x\cop y=(x\op y)\op(z\cop z)$. Each disguise became a screen in the verifier. One
 close look found known structure: a candidate equivalent to a commutative idempotent $\op$ with $x\cop(x\op y)=x\op y$
 and $(x\cop y)\op y=y$, of which every Heyting algebra is a model with $\op=\wedge$ and $x\cop y=(y\to x)\to y$ (Lean);
-on chains this $\cop$ is the strict-order connective of G\"odel logic~\cite{bcz2000}. X12's best theory is the
+on chains this $\cop$ is the strict-order connective of G\"odel logic~\cite{bcz2000}. X12's best theory defines the
 commutative $g$-dimonoids~\cite{movsisyan2014,zhuchok2015,gavrylkiv2026} with $x\cop(x\cop y)=x\cop y$ (E, both
 ways); its models are a commutative semigroup with $xxyz=xyz$ plus a free choice in each class of products with equal
 translations, a description we found no source for. A ledger records every identification
@@ -224,13 +224,13 @@ top 20 carry every automatic mark. In X10 the search fell back into the Steiner 
 theories were parameter disguises of one shape, $x\cop y=x\op((z\op z)\op(y\op(z\cop z)))$, all screened out, and 15
 of its top 20 have models over $\mathbb{F}_4$ or $\mathbb{Z}/6$. X11 moved that screen into the search: none of its
 640 verified theories is such a disguise, and only 5 of its top 20 have a classical model, though the Steiner shape
-remains. All of them were pushed in its first 14 minutes: once verified scores rise, a gate stops the pushes, and
-the verifiers set the pace. X12 ran X11's arm as a control beside one that makes a theory's family a cell
+remains. All of X11's verified theories were pushed in its first 14 minutes: once verified scores rise, a gate stops
+the pushes, and the verifiers set the pace. X12 ran X11's arm as a control beside one that makes a theory's family a cell
 coordinate and lowers the priority of common families. At equal sample size the latter's verified theories span twice
 as many families (131 against 63; 69 new against 4) and score positive more often (55.6\% against 47.5\%, Fisher
 $p=0.004$), but its top 20 carry the automatic marks less often (3 disconnected against 8), and rescoring took 38\% of
-search time. Every run from X4 on was preregistered; X6 to X9 and x10a were stopped by their memory rule, and in X12
-Z3 proofs with no time limit held verifiers for hours.
+search time. Every run from X4 on was preregistered; X6 to X9 and the first block of X10 were stopped by their memory
+rule, and in X12 Z3 proofs with no time limit held verifiers for hours.
 
 \subsection{Families}
 A preregistered post hoc statistic, F1, puts each verified theory in one family, by the first rule that matches: a
@@ -269,9 +269,8 @@ candidates of X11 and X12, only X12's best has been studied by hand, and it is k
 pinned versions (Z3 5.4.1, E 3.2.5, Vampire 5.1.0, Prover9/Mace4 LADR-2026-8A, Twee 2.7.1, built from source). Code,
 data, preregistrations and every number with the command behind it are at \url{https://github.com/carlok/duet};
 \texttt{intro/} introduces the subject from scratch. An AI coding assistant (Claude Code, by Anthropic) designed,
-coded, ran and wrote most of the project, directed and reviewed by the author. No language model takes part in the
-search or its scoring. Outside it, an external model worked offline on the 32 survivor claims and web-only agents did
-literature lookups; every refutation was checked by our own code, and every key literature claim by prover proofs,
+coded, ran and wrote most of the project, directed and reviewed by the author. Outside the search, an external model
+worked offline on the 32 survivor claims and web-only agents did literature lookups; every refutation was checked by our own code, and every key literature claim by prover proofs,
 finite models or Lean.
 
 {\small\bibliographystyle{abbrv}\bibliography{refs}}
