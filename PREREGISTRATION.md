@@ -1556,3 +1556,10 @@ No random theory and no T4 theory had been profiled.
     - **Restarted** at 12:22:42 UTC on the remaining entries in the listed order, with `--wall 15549`, image
       d258211c735a. The class counts in the output now cover only the refined groups (`groups`, `groups_refined`,
       `classes_in_refined_groups`).
+16. **R2's HA entry run beside the ordered run (28 Nov 2026, 12:42:57 UTC; written 12:43 UTC).**
+    - At 12:42 UTC the ordered run was in R's proof stage: 268 survivors, 150 refuted on 7-8 elements, 118 left for
+      E and Vampire, up to about 2 h. CR, BR, DL and BA come before HA, so HA, which holds the positive control R2a,
+      would probably not start before the deadline (16:41:51 UTC).
+    - HA runs in its own container from 12:42:57 UTC with `--entries HA --jobs 1 --wall 14300 --out interp_r2_ha.json`,
+      the same image and code, so it ends by the same deadline. The ordered run skips nothing, and if it reaches HA it
+      runs it again; both results are reported. Only the order changes, not the test.
