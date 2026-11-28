@@ -2,6 +2,141 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## Review items B1, B3, C3, C4 (written 28 Nov 2026, 08:15 UTC, approved by the user, before anything is computed)
+
+Post hoc, from the external review of 279157e (REPORT, "N2"). Drafts: `notes/prereg_draft_BC.md`, which keeps the items
+not approved (B2, B4, B5, B6, C1, C2). Two corrections to the approved drafts were made before this commit:
+- C3's structure list is replaced. Four of its eight structures were wrong for the purpose:
+  - Brouwerian semilattices would be caught by R2's Heyting algebras, and Kleene lattices by R1's lattices;
+  - near-rings and bisemilattices have no bridge of order ≤ 4.
+- B3's rectangularity is the exact ratio, not a sample, and k(F) is counted by an explicit search.
+
+A mark from B3 that separates in calibration becomes a candidate key of a later ranking, N3, preregistered on its own.
+N1, N2, F1 and the funnel are not changed. Nothing runs beside a stream run, and at most 4 prover jobs run at once,
+with `podman stats` checked first.
+
+### R2: a library of structures beyond the law table, and `soup.interp` (review B1)
+
+**Question.** How many candidates are fragments of a classical structure under a term interpretation that the order-4
+law table cannot express?
+
+**Entries, fixed here.** Each entry is a TPTP axiom set in its own signature, with constants and unary operations
+allowed.
+- G: groups. AG: abelian groups.
+- R: rings with 1. CR: commutative rings. BR: Boolean rings.
+- DL: distributive lattices. BA: Boolean algebras. HA: Heyting algebras. Hp: hoops (·, →, 1).
+- Rk: racks. Qd: quandles (▷ and its inverse).
+- Qg: quasigroups (·, \, /).
+
+Axioms come from the TPTP library (ALG, GRP, LAT, RNG) where it has them, otherwise from Jipsen's Mathematical
+Structures pages. Each source is cited in `soup/interp.py`.
+
+**Term pairs.**
+- **Terms:** the binary terms in x, y of each entry's signature with at most 3 operation symbols (constants and unary
+  operations count), that depend on both x and y, up to equality in the entry (E, 10 s).
+- **Pairs:** (·, ∘) ranges over ordered pairs of distinct such terms.
+- **BA:** the 10 essentially binary Boolean functions, which give 90 ordered pairs.
+
+**Test.** "T is a fragment of (K; t1, t2)", in two stages.
+1. **Model filter:** Mace4 models of K on sizes 2–6, up to 200 per size, 120 s per size. t1 and t2 are evaluated to
+   tables, and every law of T must hold in every model (`law_vector`).
+2. **Proof:** E proves each law of T, translated through t1 and t2, from K's axioms. 60 s per law, then Vampire 60 s for
+   what E leaves.
+
+The result is "fragment" (all laws proved), "not" (a model of K fails a law) or "unknown".
+
+**Hypotheses.**
+- **R2a, positive control:** with no hint, `a9295908` comes out as a fragment of HA with · = ∧ and
+  x∘y = (y→x)→y.
+- **R2b, calibration:** none of T3's 120 random theories is a fragment of an R2 entry.
+- **R2c, descriptive:** the number of N2's level-6 and level-7 theories that are fragments, by entry.
+
+**Budget:** 8 h of wall time. Entries are run in the order listed.
+
+### Free (review B3)
+
+**Measures,** for ∘ given · and for · given ∘:
+- **Counting:** for a reduct F, the tables G with (F, G) ⊨ T are enumerated by a backtracking search over G's cells.
+  Every law instance is checked as soon as its cells are assigned. The count k(F) is capped at 100,000.
+- **Choice entropy:** H = mean over F of log k(F) / (n² log n).
+- **Rectangularity:** ρ = mean over F of k(F) / ∏ |S_xy|, where S_xy is the set of values cell xy takes in F's models.
+  ρ = 1 means the model set is a product over cells. For a capped F, ρ is estimated from 200 seeded draws from the
+  product (`split.holds`), and flagged.
+- **Reducts:**
+  - n = 3: every magma F with k(F) > 0 (exhaustive);
+  - n = 4: 200 distinct ·-tables, drawn with seed 0 from Mace4's models of T (up to 20,000).
+- **Certificate:** T proves s·(x∘y) = s·t(x,y), or (x∘y)·s = t(x,y)·s, for some ·-term t with at most 2 symbols.
+  Model filter, then E 30 s per t.
+- **Wall time:** 600 s per theory and direction. A theory past its limit is reported as incomplete.
+
+**Calibration set:** the catalogue's order-4 entries (`soup.catalogue`, 13 entries) and T3's 120 random theories.
+
+**Hypotheses.**
+- **F1:** the catalogue entries have a lower H, and a lower ρ, than T3's random theories. Mann–Whitney, two-sided,
+  p < 0.01, for each measure.
+- **F2:** on N2's level 7, H and ρ are higher than on T3's random theories.
+- **F3:** among N2's level-7 theories, those with non-degenerate models on 4 sizes have a higher H than the rest
+  (Mann–Whitney, descriptive).
+
+A measure that passes F1 becomes a candidate N3 key.
+
+### A false-novelty rate (review C3)
+
+**Test structures,** fixed here. Each is known, outside R1 and R2, and has bridge laws of order ≤ 4. Axioms come from
+the TPTP library or Jipsen's pages:
+- Moufang loops (·, \);
+- left Bol loops (·, \);
+- commutative Moufang loops (·, \);
+- groups with (xy, x⁻¹y⁻¹xy), whose commutator term is beyond R2's 3 symbols;
+- cycle sets with the inverse translation (·, ∗; Rump 2005);
+- Lie rings (+, [ , ]);
+- idempotent semirings (+, ·).
+
+**Fragments.** For each structure K:
+- the true laws are the laws of the table that hold in K's Mace4 models (sizes 2–6, 200 per size) and that E proves
+  from K's axioms (60 s);
+- the fragments are seeded random sets of 2–4 true laws, at least one of them a bridge, under a random relabelling;
+- a fragment is kept when it passes the search's own cheap test: an off-diagonal emergent law on the union corpus.
+  Draws stop at 10 kept fragments, or at 5,000 draws;
+- duplicates under `theory_key` are dropped.
+
+**Procedure.** In a fresh directory, `work/fn-test`:
+1. the kept fragments are pushed to the queue;
+2. verifier V8 runs stages a and b, with no searchers and no stage c, 2 verifiers;
+3. then the post-run pipeline and N2's gate and marks.
+
+Every fragment counts as a candidate: level 4's top-20 cut does not apply.
+
+**Reported:**
+- the share of kept fragments that reach level 7, the false-novelty rate, with a binomial 95% interval;
+- that share next to the 78;
+- the level at which each fragment stopped, and which check stopped it.
+
+**Budget:** 12 h in all. Fragment generation takes at most 2 h per structure, and the verifier run 6 h.
+
+### A first statement across families (review C4)
+
+**Single-cell hypothesis (SC), with ties.** ∘ occurs only in subterms u∘v with u and v free of ∘, and every law of T
+is one of two kinds:
+- **constraint:** its ∘-subterms are all the same pair (u, v), or the swapped pair (v, u) when T proves ∘ commutative;
+- **tie:** the law is exactly u∘v = u′∘v′.
+
+**Lemma.** Under SC, for every · on a finite set, the set of ∘ with (·, ∘) ⊨ T is a product over the classes of the
+tie relation on cells. The tie relation is the equivalence generated by the instances of the tie laws, given ·. Each
+class takes one value, from the intersection of its cells' allowed sets.
+- **Lean:** the lemma is proved beside `lean/Duet/Delta.lean`, for the law grammar of order ≤ 4, without `decide`,
+  with the axiom audit. Exploratory, with no deadline.
+- **Empirical side:** an SC theory without ties has ρ = 1 in B3.
+
+**Classification,** syntactic: the 170 of N1's level 6, and N2's level 6, get SC without ties, SC with ties, or
+neither, for ∘ given · and for · given ∘.
+
+**Hypothesis:**
+- `1f430506` and `1238c063` are SC without ties.
+- `3818b88f`, `de0c0cf3` and `71fd2cc6` are SC with ties.
+
+A failure is reported, and narrows the lemma's reach.
+
 ## N2: N1 with the gate's gaps closed (written 28 Nov 2026, 07:50 UTC, before anything below is computed)
 
 Post hoc, descriptive. It replaces nothing. N1, F1 and the funnel stay as they are, and the README keeps showing N1.
