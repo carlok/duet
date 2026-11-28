@@ -1,0 +1,96 @@
+entry  models  groups  survivors  refuted_7_8  proved_pairs  fragment theories (random / candidate)  secs
+G         15      56         48            0            48      4 (4 / 0), unknown pairs 0   596
+AG        12      15         28            0            28     16 (14 / 2), unknown pairs 0   20
+R          9      96        268          150            76     17 (15 / 2), unknown pairs 42   3844
+CR         9      96         80            0            65     17 (15 / 2), unknown pairs 15   1803
+BR         2       7        240            0           235    121 (59 / 62), unknown pairs 5   978
+DL       443       2         12            0            12      6 (6 / 0), unknown pairs 0   6
+BA         2       8        118            0           118     45 (35 / 10), unknown pairs 0   68
+HA        71      28        996            0            97     97 (46 / 51), unknown pairs 40   3462
+Hp       366      92       4744            0            50     50 (28 / 22), unknown pairs 27   2476
+Rk       468     200       1769            0             0      0 (0 / 0), unknown pairs 82   5525
+Qd     not run
+Qg     not run
+
+R2b: 79 of 120 random theories are a fragment of at least one entry (prediction: 0)
+candidates that are a fragment of at least one entry: 106 of 318
+R2a: a9295908 fragment of HA with · = me(x,y), ∘ = h(h(y,x),y), Hp with · = m(h(x,y),x), ∘ = h(h(y,x),y)
+R2c (descriptive): of N2's pre-stage 164, 69 are fragments; of N1's level 7 (78), 27; of the 11 at level 8, 7
+
+random fragments by entry type: only BR, BA or DL 23; HA or Hp, no group-like entry 41; a group-like entry (G, AG, R, CR) 15
+candidates fragments by entry type: only BR, BA or DL 53; HA or Hp, no group-like entry 51; a group-like entry (G, AG, R, CR) 2
+random: 60 of 120 have a non-degenerate 2-element model; 60 are fragments of BR, BA or DL; fragments without such a model 0; such a model but no BR/BA/DL fragment 0
+  random fragments with no non-degenerate 2-element model: 19 ({'HA or Hp only': 13, 'a group-like entry (G, AG, R, CR)': 6})
+candidates: 62 of 318 have a non-degenerate 2-element model; 62 are fragments of BR, BA or DL; fragments without such a model 0; such a model but no BR/BA/DL fragment 0
+  candidates fragments with no non-degenerate 2-element model: 44 ({'HA or Hp only': 42, 'a group-like entry (G, AG, R, CR)': 2})
+
+candidate fragments in the N2 pre-stage, with the entries and the first proved terms:
+  0440c364 L7: BR · = a(x,y), ∘ = a(m(x,y),x)
+  1238c063 L8: BR · = a(m(x,y),y), ∘ = m(x,y); BA · = j(c(x),y), ∘ = j(x,y); HA · = me(h(x,b),y), ∘ = me(x,y)
+  18acb214 L7: HA · = h(h(x,y),x), ∘ = j(h(x,y),x)
+  1b421500 L7: BR · = m(x,y), ∘ = a(m(x,y),y); BA · = j(x,y), ∘ = j(c(x),y)
+  1f430506 L8: BR · = a(m(x,y),y), ∘ = m(x,y); BA · = j(c(x),y), ∘ = j(x,y); HA · = me(h(x,b),y), ∘ = me(x,y)
+  2123ee93 L7: HA · = j(h(x,y),h(y,x)), ∘ = h(y,x)
+  2376df7b L7: HA · = h(y,x), ∘ = j(h(y,x),y)
+  3818b88f L8: BR · = a(x,y), ∘ = a(a(m(x,y),x),y)
+  3b20fedd L7: HA · = h(y,x), ∘ = j(h(x,y),x); Hp · = h(y,x), ∘ = h(h(h(x,y),x),x)
+  3b3b1176 L7: HA · = j(h(x,y),h(y,x)), ∘ = j(h(x,y),x)
+  68f2adfb L7: HA · = j(h(x,y),h(y,x)), ∘ = h(y,x)
+  88be8866 L7: HA · = j(h(x,y),h(y,x)), ∘ = h(y,x)
+  94d69dd2 L7: HA · = j(h(x,y),x), ∘ = j(h(x,y),h(y,x))
+  a35cf10e L7: HA · = j(h(x,y),x), ∘ = h(y,x); Hp · = h(h(h(x,y),x),x), ∘ = h(y,x)
+  b2bb6498 L7: BR · = a(a(o,x),y), ∘ = m(x,y)
+  b6c57260 L7: HA · = j(h(x,y),x), ∘ = h(y,x)
+  bc43fd42 L8: BR · = a(m(x,y),x), ∘ = a(m(x,y),y); BA · = j(c(y),x), ∘ = j(c(x),y); HA · = h(y,x), ∘ = h(x,y); Hp · = h(y,x), ∘ = h(x,y)
+  be0a88a8 L7: HA · = j(h(x,y),x), ∘ = h(y,x); Hp · = h(h(h(x,y),x),x), ∘ = h(y,x)
+  c73d174c L7: HA · = j(h(x,y),x), ∘ = j(h(x,y),h(y,x))
+  d0e963d9 L8: BR · = a(m(x,y),x), ∘ = a(m(x,y),y); BA · = j(c(y),x), ∘ = j(c(x),y); HA · = h(y,x), ∘ = h(x,y); Hp · = h(y,x), ∘ = h(x,y)
+  d14ced44 L8: BR · = a(m(x,y),x), ∘ = a(m(x,y),y); BA · = j(c(y),x), ∘ = j(c(x),y); HA · = h(y,x), ∘ = h(x,y)
+  de0c0cf3 L8: BR · = a(x,y), ∘ = a(a(m(x,y),x),y)
+  decef51d L7: BR · = a(x,y), ∘ = a(a(m(x,y),x),y)
+  edf5a9f8 L7: HA · = h(x,y), ∘ = h(h(y,x),y); Hp · = h(x,y), ∘ = h(h(y,x),y)
+  f5fcd26b L7: HA · = j(h(x,y),h(y,x)), ∘ = h(x,y)
+  fb7e2e5b L7: BR · = a(x,y), ∘ = a(m(x,y),y)
+  0075529f: HA · = h(x,y), ∘ = h(h(h(y,x),x),y)
+  06820718: BR · = a(x,y), ∘ = a(m(x,y),x)
+  0a0ff2fe: BR · = a(x,y), ∘ = a(a(o,x),y)
+  0a3b8e48: BR · = a(a(m(x,y),x),y), ∘ = a(m(x,y),y); BA · = j(x,y), ∘ = me(c(x),y); HA · = me(x,y), ∘ = h(x,y); Hp · = m(h(x,y),x), ∘ = h(x,y)
+  1e3386e2: BR · = a(x,y), ∘ = a(a(o,x),y)
+  1f92a593: HA · = h(h(y,x),y), ∘ = h(h(x,y),x)
+  290f9927: HA · = h(h(y,x),y), ∘ = me(x,y)
+  294e15b6: BR · = m(x,y), ∘ = a(a(o,x),y)
+  4191a4ac: BR · = m(x,y), ∘ = a(a(o,x),y)
+  42713831: HA · = h(h(x,y),x), ∘ = h(h(y,x),y); Hp · = h(h(x,y),x), ∘ = h(h(y,x),y)
+  43233caa: HA · = j(x,y), ∘ = h(h(y,x),y); Hp · = m(h(x,y),x), ∘ = m(h(x,y),y)
+  4331d064: HA · = h(h(x,y),x), ∘ = j(x,y); Hp · = h(h(x,y),x), ∘ = h(h(x,y),y)
+  45cbcc02: BR · = m(x,y), ∘ = a(a(o,x),y)
+  4714a8a9: BR · = a(x,y), ∘ = a(a(o,x),y)
+  5345b6c2: HA · = h(y,x), ∘ = h(h(h(x,y),x),x)
+  57009122: BR · = a(x,y), ∘ = a(m(x,y),x)
+  5dbb2aa8: BR · = a(m(x,y),x), ∘ = a(m(x,y),y); BA · = j(c(y),x), ∘ = j(c(x),y); HA · = h(y,x), ∘ = h(x,y); Hp · = h(y,x), ∘ = h(x,y)
+  628d9161: BR · = a(x,y), ∘ = a(a(o,x),y)
+  6419fbc5: BR · = a(x,y), ∘ = a(m(x,y),y)
+  6cf88feb: BR · = a(x,y), ∘ = a(m(x,y),y)
+  725830a5: AG · = i(m(x,y)), ∘ = m(x,y); R · = n(a(x,y)), ∘ = a(x,y); CR · = n(a(x,y)), ∘ = a(x,y)
+  7325007e: HA · = h(h(x,y),x), ∘ = h(h(y,x),y); Hp · = h(h(x,y),x), ∘ = h(h(y,x),y)
+  7333748d: HA · = h(h(x,y),x), ∘ = j(x,y); Hp · = h(h(x,y),x), ∘ = h(h(x,y),y)
+  743e49bd: HA · = me(x,y), ∘ = h(h(x,y),x); Hp · = m(h(x,y),x), ∘ = h(h(x,y),x)
+  7513cfd9: BR · = a(x,y), ∘ = a(a(o,x),y)
+  7612227e: BR · = a(x,y), ∘ = a(a(o,x),y)
+  7847487e: BR · = a(x,y), ∘ = a(a(o,x),y)
+  7be705c1: BR · = a(x,y), ∘ = a(a(o,x),y)
+  7ea04474: HA · = h(h(x,y),x), ∘ = j(x,y); Hp · = h(h(x,y),x), ∘ = h(h(x,y),y)
+  83b40efa: BR · = a(x,y), ∘ = a(m(x,y),y)
+  86165a1a: BR · = a(x,y), ∘ = a(a(o,x),y)
+  95a4a768: BR · = a(x,y), ∘ = a(a(o,x),y)
+  a415728f: BR · = m(x,y), ∘ = a(a(o,x),y); BA · = j(x,y), ∘ = me(c(y),x); HA · = me(x,y), ∘ = h(y,x)
+  b1e29acb: HA · = h(h(h(x,y),x),x), ∘ = j(h(x,y),x)
+  b81bf1aa: HA · = h(j(x,y),me(x,y)), ∘ = j(h(x,y),x)
+  c12f6e49: HA · = h(h(h(x,y),x),x), ∘ = h(h(h(y,x),y),y)
+  c1760e50: HA · = me(x,y), ∘ = h(h(y,x),y); Hp · = m(h(x,y),x), ∘ = h(h(y,x),y)
+  d3db21dd: BR · = a(x,y), ∘ = a(a(o,x),y)
+  de0ebbcb: BR · = a(a(m(x,y),x),y), ∘ = a(m(x,y),y); BA · = j(x,y), ∘ = me(c(x),y); HA · = me(x,y), ∘ = h(x,y); Hp · = m(h(x,y),x), ∘ = h(x,y)
+  df3bbac6: HA · = h(y,x), ∘ = j(h(y,x),y)
+  e430cc74: HA · = me(x,y), ∘ = h(h(y,x),y); Hp · = m(h(x,y),x), ∘ = h(h(y,x),y)
+  e61b0d68: BR · = a(x,y), ∘ = a(a(o,x),y)
+  fab766d9: HA · = me(x,y), ∘ = h(h(x,y),x)

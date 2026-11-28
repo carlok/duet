@@ -1527,7 +1527,8 @@ No random theory and no T4 theory had been profiled.
       against G's 268, so HA, where the positive control R2a lives, would not have been reached within the 8 h.
     - **Stopped** at 10:10:52 UTC after 5,776 s. G and AG were saved, and R's partial work was lost. R2b's outcome was
       already in the log at the stop: 18 random theories are fragments of G or AG. The stop was decided on the
-      filter's cost, not on that outcome.
+      filter's cost, not on that outcome. (Correction, 28 Nov after the run: 18 is the sum 4 + 14 of the two entries;
+      the union is 14. REPORT, "R2".)
     - **Change:** `interp.filter_pairs` tests, for each first term, all second terms at once, law by law, and evaluates
       only the target laws (`holds_batch`; `tests/test_interp.py` checks it against `law_vector` on random and
       structured tables). The test, the entries, the order and the proof stage are unchanged. Rerun on AG and G into
