@@ -176,13 +176,16 @@ def certificate(T, models):
     return out
 
 
-def theory(item):
+def theory(item, parts='all'):
+    """parts: 'all', 'counts' (no prover) or 'certificate' (E only), so the prover part can wait for free slots."""
     from .profile import all_models
     name, T = item
     out = {'name': name, 'T': T}
-    ms = all_models(T, 3, 20_000, 120)[0] + all_models(T, 2, 1000, 60)[0]
-    out['certificate'] = certificate(T, [(np.asarray(F, dtype=np.int64), np.asarray(G, dtype=np.int64))
-                                         for _, F, G in ms])
+    if parts in ('all', 'certificate'):
+        ms = all_models(T, 3, 20_000, 120)[0] + all_models(T, 2, 1000, 60)[0]
+        out['certificate'] = certificate(T, [(np.asarray(F, dtype=np.int64), np.asarray(G, dtype=np.int64))
+                                             for _, F, G in ms])
+    if parts == 'certificate': return out
     for d in ('circ_given_dot', 'dot_given_circ'):
         deadline = time.time() + WALL
         r3 = measure(T, d, 3, None, deadline)
@@ -212,19 +215,21 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--set', required=True, choices=['calib', 'n2'])
     ap.add_argument('--jobs', type=int, default=3)
+    ap.add_argument('--parts', default='all', choices=['all', 'counts', 'certificate'])
     a = ap.parse_args()
     items = calib_set() if a.set == 'calib' else n2_set()
     path = data('check', f'free_{a.set}.json')
     done = {r['name']: r for r in (json.load(open(path)) if path.exists() else [])}
-    todo = [it for it in items if it[0] not in done]
-    print(f'{len(items)} theories, {len(todo)} to do', flush=True)
+    need = {'all': ('certificate', 'circ_given_dot'), 'counts': ('circ_given_dot',), 'certificate': ('certificate',)}
+    todo = [it for it in items if not all(k in done.get(it[0], {}) for k in need[a.parts])]
+    print(f'{len(items)} theories, {len(todo)} to do ({a.parts})', flush=True)
     t0 = time.time()
     with ProcessPoolExecutor(a.jobs) as ex:
-        futs = {ex.submit(theory, it): it[0] for it in todo}
+        futs = {ex.submit(theory, it, a.parts): it[0] for it in todo}
         for i, f in enumerate(as_completed(futs), 1):
             try: r = f.result()
             except Exception as e: r = {'name': futs[f], 'error': f'{type(e).__name__}: {e}'}
-            done[r['name']] = r
+            done[r['name']] = dict(done.get(r['name'], {}), **r)
             json.dump(list(done.values()), open(path, 'w'), indent=1)
             print(f'  {i}/{len(todo)} {r["name"]} ({round(time.time() - t0)} s)', flush=True)
 
