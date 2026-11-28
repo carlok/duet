@@ -1520,3 +1520,18 @@ No random theory and no T4 theory had been profiled.
       in stages a and b and 1,800 s in stage c (`core.prove(..., secs)`, z3's own timeout; `tests/test_z3cap.py`). A
       capped proof ends "unknown", as one that reaches its rlimit does. V7 is unchanged.
     - X12's budget, 28,800 s per arm, was spent in this one block, so X12 is complete. Nothing is rerun.
+14. **R2 (review item B1) stopped and restarted with a faster model filter (28 Nov 2026, 10:10 UTC; written 10:17 UTC).**
+    - The first run started 08:34:36 UTC. G and AG finished (596 s and 20 s), and the rings entry R was still running
+      after 1.4 h. The filter called `law_vector` (all 71,369 laws, about 10 ms) once per ordered pair of term classes
+      and per model, so its cost grows with the square of the class count. R, BA and HA have 1,382 to 2,788 terms
+      against G's 268, so HA, where the positive control R2a lives, would not have been reached within the 8 h.
+    - **Stopped** at 10:10:52 UTC after 5,776 s. G and AG were saved, and R's partial work was lost. R2b's outcome was
+      already in the log at the stop: 18 random theories are fragments of G or AG. The stop was decided on the
+      filter's cost, not on that outcome.
+    - **Change:** `interp.filter_pairs` tests, for each first term, all second terms at once, law by law, and evaluates
+      only the target laws (`holds_batch`; `tests/test_interp.py` checks it against `law_vector` on random and
+      structured tables). The test, the entries, the order and the proof stage are unchanged. Rerun on AG and G into
+      `check/interp_r2_check.json`: the same classes and the same 28 and 48 survivors with the same results; G's filter
+      took 2 s.
+    - **Restarted** at 10:14:40 UTC on the remaining entries, in the listed order, with `--wall 23024` (8 h minus the
+      5,776 s used), image 76099b5ebaaf.

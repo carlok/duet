@@ -186,23 +186,78 @@ def classes(entry, Ms, jobs):
     return [t for t in reps + extra if binary(t)], len(T), len(extra)
 
 
+def _inst(tree, n, cache):
+    """Instances of a law on n elements: one index array per variable (cached per law and size)."""
+    key = (id(tree), n)
+    if key not in cache:
+        L, R = tree
+        def nv(t): return t[1] + 1 if t[0] == 'v' else max(nv(t[1]), nv(t[2]))
+        k = max(nv(L), nv(R))
+        cache[key] = [a.ravel() for a in np.meshgrid(*[np.arange(n)] * k, indexing='ij')]
+    return cache[key]
+
+
+def _evb(t, X, F, Gs, B):
+    """A tree over f (table F) and g (one table per batch row, Gs: B x n x n) on instances X: shape (N,) or (B, N)."""
+    if t[0] == 'v': return X[t[1]]
+    a, b = _evb(t[1], X, F, Gs, B), _evb(t[2], X, F, Gs, B)
+    if t[0] == 'f': return F[a, b]
+    return Gs[np.arange(B)[:, None], a, b]
+
+
+def holds_batch(tree, F, Gs, n, cache):
+    """For each row G of Gs: does the law hold in (F, G)? Same truth as law_vector(F, G, n)[law]."""
+    X = _inst(tree, n, cache)
+    step = max(1, 2_000_000 // len(X[0]))                   # rows per chunk: about 2M cells per intermediate array
+    out = []
+    for s in range(0, len(Gs), step):
+        g = Gs[s:s + step]; B = len(g)
+        eq = _evb(tree[0], X, F, g, B) == _evb(tree[1], X, F, g, B)
+        out.append(np.full(B, bool(eq.all())) if eq.ndim == 1 else eq.all(axis=1))
+    return np.concatenate(out) if out else np.zeros(0, dtype=bool)
+
+
+def filter_pairs(C, Ms, targets, deadline):
+    """Ordered pairs (t1, t2) of distinct classes with every law of a target true in every model: (target, t1, t2).
+    For each t1, all t2 are tested at once, law by law, and only the target laws are evaluated (the first version called
+    law_vector, all 71,369 laws, once per pair and model; same survivors, checked on G and AG)."""
+    from .data import TREES
+    tabs = [(n, np.stack([np.asarray(evalt(t, M, n), dtype=np.int64) for t in C])) for n, M in Ms]
+    cache, surv, done = {}, [], 0
+    for i1 in range(len(C)):
+        if time.time() > deadline: break
+        alive = {}
+        for i in range(len(targets)):
+            a = np.ones(len(C), dtype=bool); a[i1] = False
+            alive[i] = a
+        for n, TB in tabs:
+            F = TB[i1]
+            for i in list(alive):
+                a = alive[i]
+                for t in targets[i]['T']:
+                    idx = np.flatnonzero(a)
+                    if not len(idx): break
+                    a[idx] = holds_batch(TREES[t], F, TB[idx], n, cache)
+                if not a.any(): del alive[i]
+            if not alive: break
+        for i, a in alive.items():
+            surv += [(i, C[i1], C[j]) for j in np.flatnonzero(a)]
+        done += 1
+    return surv, done
+
+
 def run_entry(entry, targets, jobs, deadline):
-    from .core import law_vector
     from .data import TREES
     t0 = time.time()
     Ms = models(entry)
+    t_models = time.time() - t0
     C, n_terms, unproved = classes(entry, Ms, jobs)
-    pairs = [(a, b) for a, b in itertools.permutations(C, 2)]
-    surv = []
-    for t1, t2 in pairs:
-        if time.time() > deadline: break
-        alive = list(range(len(targets)))
-        for n, M in Ms:
-            F, G = evalt(t1, M, n), evalt(t2, M, n)
-            v = law_vector(F, G, n)
-            alive = [i for i in alive if all(v[t] for t in targets[i]['T'])]
-            if not alive: break
-        surv += [(i, t1, t2) for i in alive]
+    t_classes = time.time() - t0 - t_models
+    print(f'  {entry}: {len(Ms)} models ({round(t_models)} s), {len(C)} classes ({round(t_classes)} s)', flush=True)
+    pairs = len(C) * (len(C) - 1)
+    surv, t1_done = filter_pairs(C, Ms, targets, deadline)
+    t_filter = time.time() - t0 - t_models - t_classes
+    print(f'  {entry}: filter {t1_done}/{len(C)} first terms, {len(surv)} survivors ({round(t_filter)} s)', flush=True)
     res = []
     def job(s):
         i, t1, t2 = s
@@ -212,7 +267,9 @@ def run_entry(entry, targets, jobs, deadline):
     with ThreadPoolExecutor(jobs) as ex:
         res = list(ex.map(job, surv))
     return {'entry': entry, 'models': len(Ms), 'sizes': sorted({n for n, _ in Ms}), 'terms': n_terms,
-            'classes': len(C), 'unproved_equal': unproved, 'pairs': len(pairs), 'filter_survivors': len(surv),
+            'classes': len(C), 'unproved_equal': unproved, 'pairs': pairs, 'filter_survivors': len(surv),
+            'filter_first_terms_done': t1_done, 'filter_complete': t1_done == len(C),
+            'secs_models': round(t_models), 'secs_classes': round(t_classes), 'secs_filter': round(t_filter),
             'results': res, 'secs': round(time.time() - t0)}
 
 
@@ -229,10 +286,11 @@ def main():
     ap.add_argument('--entries', default=','.join(ORDER))
     ap.add_argument('--jobs', type=int, default=4)
     ap.add_argument('--wall', type=int, default=28_800)
+    ap.add_argument('--out', default='interp_r2.json', help='file name under check/')
     a = ap.parse_args()
     deadline = time.time() + a.wall
     tg = targets()
-    path = data('check', 'interp_r2.json')
+    path = data('check', a.out)
     out = json.load(open(path)) if path.exists() else {'entries': {}}
     for e in a.entries.split(','):
         if e in out['entries']: continue

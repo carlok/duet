@@ -19,6 +19,25 @@ def test_terms_and_translation():
     assert translate(law, ('j', 'x', 'y'), ('me', 'x', 'y')) == 'me(x,j(x,y)) = x'
 
 
+def test_holds_batch_agrees_with_law_vector():
+    from soup.interp import holds_batch
+    rng = np.random.default_rng(7)
+    laws = rng.choice(len(TREES), 400, replace=False)
+    true = 0
+    for n in (2, 3, 4):
+        X, Y = np.meshgrid(np.arange(n), np.arange(n), indexing='ij')
+        structured = [(X + Y) % n, (X - Y) % n, X, (2 * X + 2 * Y) % n]      # many laws hold here, not only fail
+        for F in [rng.integers(0, n, (n, n)), (X + Y) % n, X]:
+            Gs = np.stack([rng.integers(0, n, (n, n)) for _ in range(3)] + structured)
+            V = [law_vector(F, G, n) for G in Gs]
+            cache = {}
+            for t in laws:
+                got = holds_batch(TREES[t], F, Gs, n, cache)
+                assert list(got) == [bool(v[t]) for v in V], (n, t)
+                true += int(got.sum())
+    assert true > 100
+
+
 def test_a9295908_passes_the_filter_in_heyting_algebras():
     # a9295908 = {x·(x∘x) = x, (x∘y)·y = y, x·y = x∘(y·x)}; ledger: · = ∧, x∘y = (y→x)→y (notes/a9295908.md)
     T = sorted(law_index(s) for s in ['x·(x∘x)=x', '(x∘y)·y=y', 'x·y=x∘(y·x)'])
