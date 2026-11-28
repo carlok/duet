@@ -217,10 +217,39 @@ def holds_batch(tree, F, Gs, n, cache):
     return np.concatenate(out) if out else np.zeros(0, dtype=bool)
 
 
-def filter_pairs(C, Ms, targets, deadline):
+def groups(entry, Ms):
+    """classes()'s first step: the terms in x and y grouped by their tables on every model, smallest term first; only
+    groups that depend on both variables (a property of the tables, so the same for every member)."""
+    T = [t for t in terms(ENTRIES[entry]['sig']) if tvars(t) == {'x', 'y'}]
+    sig = {}
+    for t in T:
+        key = b''.join(evalt(t, M, n).astype(np.int8).tobytes() for n, M in Ms)
+        sig.setdefault(key, []).append(t)
+    def binary(t):
+        for n, M in Ms:
+            V = evalt(t, M, n)
+            if (V != V[:, :1]).any() and (V != V[:1, :]).any(): return True
+        return False
+    out = []
+    for grp in sig.values():
+        grp.sort(key=lambda t: (size(t), show(t)))
+        if binary(grp[0]): out.append(grp)
+    return out, len(T)
+
+
+def refine(entry, grp, jobs):
+    """classes()'s second step inside one group: a member joins the smallest term when E proves the equality (10 s),
+    otherwise it is a class of its own."""
+    with ThreadPoolExecutor(jobs) as ex:
+        ok = list(ex.map(lambda u: prove(entry, f'{show(grp[0])} = {show(u)}', 10), grp[1:]))
+    return [grp[0]] + [u for u, p in zip(grp[1:], ok) if not p]
+
+
+def filter_pairs(C, Ms, targets, deadline, diag=None):
     """Ordered pairs (t1, t2) of distinct classes with every law of a target true in every model: (target, t1, t2).
     For each t1, all t2 are tested at once, law by law, and only the target laws are evaluated (the first version called
-    law_vector, all 71,369 laws, once per pair and model; same survivors, checked on G and AG)."""
+    law_vector, all 71,369 laws, once per pair and model; same survivors, checked on G and AG). diag[k]: also test
+    (C[k], C[k]), for a group whose members may be several classes with the same tables."""
     from .data import TREES
     tabs = [(n, np.stack([np.asarray(evalt(t, M, n), dtype=np.int64) for t in C])) for n, M in Ms]
     cache, surv, done = {}, [], 0
@@ -228,7 +257,7 @@ def filter_pairs(C, Ms, targets, deadline):
         if time.time() > deadline: break
         alive = {}
         for i in range(len(targets)):
-            a = np.ones(len(C), dtype=bool); a[i1] = False
+            a = np.ones(len(C), dtype=bool); a[i1] = bool(diag[i1]) if diag is not None else False
             alive[i] = a
         for n, TB in tabs:
             F = TB[i1]
@@ -251,25 +280,52 @@ def run_entry(entry, targets, jobs, deadline):
     t0 = time.time()
     Ms = models(entry)
     t_models = time.time() - t0
-    C, n_terms, unproved = classes(entry, Ms, jobs)
-    t_classes = time.time() - t0 - t_models
-    print(f'  {entry}: {len(Ms)} models ({round(t_models)} s), {len(C)} classes ({round(t_classes)} s)', flush=True)
-    pairs = len(C) * (len(C) - 1)
-    surv, t1_done = filter_pairs(C, Ms, targets, deadline)
-    t_filter = time.time() - t0 - t_models - t_classes
-    print(f'  {entry}: filter {t1_done}/{len(C)} first terms, {len(surv)} survivors ({round(t_filter)} s)', flush=True)
-    res = []
+    # Second version (deviation 15): the filter runs on the model groups, and the E step of classes() runs only inside
+    # groups that occur in a surviving pair. Terms of one group have the same tables, so their filter outcome is the
+    # group's, and the survivors are the same as with classes() first.
+    G, n_terms = groups(entry, Ms)
+    reps = [g[0] for g in G]
+    gsurv, t1_done = filter_pairs(reps, Ms, targets, deadline, diag=[len(g) > 1 for g in G])
+    t_filter = time.time() - t0 - t_models
+    gi = {show(g[0]): k for k, g in enumerate(G)}
+    need = sorted({gi[show(a)] for _, a, _ in gsurv} | {gi[show(b)] for _, _, b in gsurv})
+    cls = {k: refine(entry, G[k], jobs) for k in need}
+    surv = [(i, c1, c2) for i, a, b in gsurv for c1 in cls[gi[show(a)]] for c2 in cls[gi[show(b)]] if c1 != c2]
+    t_classes = time.time() - t0 - t_models - t_filter
+    print(f'  {entry}: {len(Ms)} models ({round(t_models)} s), {len(G)} groups, filter {t1_done}/{len(G)} first terms '
+          f'({round(t_filter)} s), {len(need)} groups refined ({round(t_classes)} s), {len(surv)} survivors', flush=True)
+    # Survivors that fail in a model of K on 7-8 elements are not fragments (E and Vampire are sound), so they skip the
+    # proof stage; this changes no 'fragment' verdict, only how many end 'unknown'.
+    from .data import TREES
+    t2_ = time.time()
+    Xs = models(entry, sizes=range(7, 9)) if surv else []
+    cache = {}
+    def refuted(s):
+        i, t1, t2 = s
+        for n, M in Xs:
+            F = np.asarray(evalt(t1, M, n), dtype=np.int64)
+            Gt = np.asarray(evalt(t2, M, n), dtype=np.int64)[None]
+            for t in targets[i]['T']:
+                if not holds_batch(TREES[t], F, Gt, n, cache)[0]: return n
+        return None
+    ref = [refuted(s) for s in surv]
+    print(f'  {entry}: {len(Xs)} models on 7-8 elements, {sum(r is not None for r in ref)} survivors refuted '
+          f'({round(time.time() - t2_)} s)', flush=True)
     def job(s):
         i, t1, t2 = s
-        ok = all(prove(entry, translate(TREES[t], t1, t2), 60) for t in targets[i]['T'])
-        return {'key': targets[i]['key'], 'entry': entry, 't1': show(t1), 't2': show(t2),
-                'result': 'fragment' if ok else 'unknown'}
+        if time.time() > deadline: r = 'not run (wall)'
+        else: r = 'fragment' if all(prove(entry, translate(TREES[t], t1, t2), 60) for t in targets[i]['T']) else 'unknown'
+        return {'key': targets[i]['key'], 'entry': entry, 't1': show(t1), 't2': show(t2), 'result': r}
     with ThreadPoolExecutor(jobs) as ex:
-        res = list(ex.map(job, surv))
+        res = list(ex.map(job, [s for s, r in zip(surv, ref) if r is None]))
+    res += [{'key': targets[i]['key'], 'entry': entry, 't1': show(t1), 't2': show(t2), 'result': f'not (size {r})'}
+            for (i, t1, t2), r in zip(surv, ref) if r is not None]
     return {'entry': entry, 'models': len(Ms), 'sizes': sorted({n for n, _ in Ms}), 'terms': n_terms,
-            'classes': len(C), 'unproved_equal': unproved, 'pairs': pairs, 'filter_survivors': len(surv),
-            'filter_first_terms_done': t1_done, 'filter_complete': t1_done == len(C),
-            'secs_models': round(t_models), 'secs_classes': round(t_classes), 'secs_filter': round(t_filter),
+            'groups': len(G), 'groups_refined': len(need), 'classes_in_refined_groups': sum(len(c) for c in cls.values()),
+            'unproved_equal': sum(len(c) - 1 for c in cls.values()), 'filter_survivors': len(surv),
+            'filter_first_terms_done': t1_done, 'filter_complete': t1_done == len(G), 'models_7_8': len(Xs),
+            'refuted_7_8': sum(r is not None for r in ref),
+            'secs_models': round(t_models), 'secs_filter': round(t_filter), 'secs_classes': round(t_classes),
             'results': res, 'secs': round(time.time() - t0)}
 
 
@@ -299,9 +355,9 @@ def main():
         out['entries'][e] = r
         json.dump(out, open(path, 'w'), indent=1)
         fr = [x for x in r['results'] if x['result'] == 'fragment']
-        print(f"{e}: {r['models']} models on sizes {r['sizes']}, {r['classes']} term classes ({r['terms']} terms), "
-              f"{r['pairs']} pairs, {r['filter_survivors']} survive the filter, {len(fr)} fragments proved, "
-              f"{r['secs']} s", flush=True)
+        print(f"{e}: {r['models']} models on sizes {r['sizes']}, {r['groups']} term groups ({r['terms']} terms), "
+              f"{r['filter_survivors']} survive the filter, {r['refuted_7_8']} refuted on 7-8 elements, "
+              f"{len(fr)} fragments proved, {r['secs']} s", flush=True)
         for x in fr: print(f"   {x['key'][:12]}: · = {x['t1']}, ∘ = {x['t2']}", flush=True)
 
 

@@ -1535,3 +1535,24 @@ No random theory and no T4 theory had been profiled.
       took 2 s.
     - **Restarted** at 10:14:40 UTC on the remaining entries, in the listed order, with `--wall 23024` (8 h minus the
       5,776 s used), image 76099b5ebaaf.
+15. **R2 stopped a second time, and restarted with lazy term classes and a refutation step (28 Nov 2026, 12:19 UTC;
+    written 12:24 UTC).**
+    - After deviation 14 the rings entry R spent 4,473 s on term classes. Rings with 1 on at most 6 elements are all
+      commutative, and Mace4 gave 9 of them, so many distinct terms agree on every model. E then fails on each such
+      pair and uses its full 10 s. The filter took 69 s and kept 262 pairs. From 11:30 UTC the proof stage was running
+      E 60 s and then Vampire 60 s on each of them, which projects to about 4.4 h, so HA was again out of reach.
+    - **Stopped** at 12:19:15 UTC, after 7,475 s of the second run. R's results were not saved. Nothing of R's outcome
+      was read beyond the two counts above.
+    - **Changes,** neither of which changes a "fragment" verdict:
+      - The filter runs on the model groups. The E step of the term classes runs only inside groups that occur in a
+        surviving pair. Terms of one group have the same tables, so the survivors are the same as before. A group with
+        several members also gets its diagonal pair, which covers two classes in one group.
+      - Before the proof stage, each survivor is evaluated on K's Mace4 models of 7 and 8 elements (200 per size,
+        120 s per size). A survivor that fails there ends "not (size n)" and is not sent to the provers. E and Vampire
+        are sound, so no such survivor could have been proved, and only the "unknown" count changes. Proofs that would
+        start after the wall time end "not run (wall)".
+    - **Check:** AG and G rerun into `check/interp_r2_check.json` gave the same 28 and 48 survivors with the same
+      results, in 6 s and 9 s.
+    - **Restarted** at 12:22:42 UTC on the remaining entries in the listed order, with `--wall 15549`, image
+      d258211c735a. The class counts in the output now cover only the refined groups (`groups`, `groups_refined`,
+      `classes_in_refined_groups`).
