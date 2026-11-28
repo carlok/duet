@@ -1,0 +1,8 @@
+circ_given_dot {'SC': 30, 'SC+ties': 5, 'neither': 135}
+dot_given_circ {'neither': 155, 'SC': 9, 'SC+ties': 6}
+170 theories; SC in at least one direction: 49; in both: 1
+  3818b88f: ∘ given · neither, · given ∘ neither
+  de0c0cf3: ∘ given · SC+ties, · given ∘ neither
+  1f430506: ∘ given · SC, · given ∘ neither
+  1238c063: ∘ given · SC, · given ∘ neither
+  71fd2cc6: ∘ given · SC+ties, · given ∘ neither
