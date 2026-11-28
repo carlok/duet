@@ -1,0 +1,13 @@
+block x12f6a: 28847 s
+corpus files: 23866, written during the block: 4335
+mean share of the 71369 laws a new structure satisfies: 0.0216
+
+s1801: 47 full rescores, 10824 s; mean archive 18849, final 25838; 12.2 ms per elite
+  window   20 s: 607 windows with new structures; affected per window median 75.6%, max 99.1%; projected 132954 s = 460.9% of searcher time (full rescores: 37.5%)
+  window  120 s: 215 windows with new structures; affected per window median 93.1%, max 99.6%; projected 58065 s = 201.3% of searcher time (full rescores: 37.5%)
+  window  600 s: 49 windows with new structures; affected per window median 99.7%, max 99.9%; projected 15121 s = 52.4% of searcher time (full rescores: 37.5%)
+
+s1802: 47 full rescores, 11019 s; mean archive 18661, final 25287; 12.6 ms per elite
+  window   20 s: 607 windows with new structures; affected per window median 75.9%, max 98.8%; projected 134366 s = 465.8% of searcher time (full rescores: 38.2%)
+  window  120 s: 215 windows with new structures; affected per window median 93.4%, max 99.6%; projected 58357 s = 202.3% of searcher time (full rescores: 38.2%)
+  window  600 s: 49 windows with new structures; affected per window median 99.7%, max 99.9%; projected 15221 s = 52.8% of searcher time (full rescores: 38.2%)

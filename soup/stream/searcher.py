@@ -23,6 +23,11 @@ no duality operator, no duality bonus). Elites are only shared within an arm.
   relabellings) becomes a sixth descriptor, so each family has cells of its own and an attractor fills only its own.
   The push priority is divided by sqrt(1 + n), where n is the number of theories of the same family this searcher has
   pushed, so the verifiers' share moves toward rare families.
+'fusion7' (X13, 28 Nov 2026): 'fusion6' with a rolling rescore in place of the throttled full one. At each maintenance
+  pass (every 20 s) the elites scored on the smallest corpus are rescored first, until the pass has used ROLL_SHARE of
+  the time since the previous pass ended (Searcher._roll). fusion6's full rescores took 38% of searcher time in X12; an
+  exact incremental rescore was measured first and would still touch about 75% of the archive per 10 minutes
+  (notes/x13_replay.out).
 """
 import argparse
 import math
@@ -43,6 +48,14 @@ MAX_LAWS = 6
 BLOOM_BITS = 1 << 27        # X7: one-hash bitmap (16 MB) of evaluated law sets, for distinct level-0 counts
 LIB_REFRESH = 1800.0        # X7: seconds between rebuilds of the known library's corpus view
 RESCORE_EVERY = 600.0       # fusion6: at most one full rescore of its (much larger) archive in this many seconds
+ROLL_SHARE = 0.10           # fusion7: a rescore pass takes at most this share of the time since the previous pass
+FUSION_ARMS = ('fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6', 'fusion7')
+RIGID_ARMS = ('fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6', 'fusion7')    # skip IGNORE (X5)
+LIB_ARMS = ('fusion4', 'fusion5', 'fusion6', 'fusion7')                            # soup.known skips (X7)
+PSKIP_ARMS = ('fusion5', 'fusion6', 'fusion7')                                     # soup.paramskip (after X10)
+FAMILY_ARMS = ('fusion6', 'fusion7')                                               # family pressure
+ROLLING_ARMS = ('fusion7',)                                                        # rolling rescore (X13)
+ARMS = ('prior', 'noprior') + FUSION_ARMS
 W = {0: 0, 1: 1.0, 2: 0.5, 3: 0.1, 4: 0.0}
 W_FUSION = {0: 0, 1: 1.0, 2: 0.5, 3: 0.25, 4: 0.125}
 
@@ -75,19 +88,21 @@ class Searcher:
     def __init__(self, name, seed, arm, run):
         self.name, self.arm, self.run = name, arm, run
         self.prior = arm == 'prior'
-        self.fusion = arm in ('fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6')
-        self.rigid = arm in ('fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6')
-        self.family = arm == 'fusion6'
+        self.fusion = arm in FUSION_ARMS
+        self.rigid = arm in RIGID_ARMS
+        self.family = arm in FAMILY_ARMS
+        self.rolling = arm in ROLLING_ARMS
+        self.clock = time.time
         self.fam_pushed = {}        # fusion6: family label -> theories of it this searcher has pushed
         self.rng = random.Random(seed)
         self.C = Corpus(store=ensure('corpus'))
         self.lat_skipped = self.ign_skipped = 0
         self.known_skipped = self.cand_skipped = self.seen_skipped = self.par_skipped = 0
         self.lib = None; self.prior_seen = set(); self.bloom = None; self.pskip = None
-        if arm in ('fusion5', 'fusion6'):   # after X10: skip parameter disguises before they take a cell (soup.paramskip)
+        if arm in PSKIP_ARMS:   # after X10: skip parameter disguises before they take a cell (soup.paramskip)
             from ..paramskip import ParamSkip
             self.pskip = ParamSkip(self.C)
-        if arm in ('fusion4', 'fusion5', 'fusion6'):   # X7: skip what earlier runs already know (soup.known), count distinct evaluations
+        if arm in LIB_ARMS:     # X7: skip what earlier runs already know (soup.known), count distinct evaluations
             import json
             from ..known import Library
             self.lib = Library(self.C, data()); self.t_lib = time.time()
@@ -112,6 +127,7 @@ class Searcher:
         self.evals = self.pushed = self.wins = self.held = 0
         self.gate = {'k': 1.0, 'threshold': 0.0}   # from the supervisor (queue/gate.json)
         self.stale = False; self.t_rescore = 0.0; self.rescores = 0; self.rescore_secs = 0.0
+        self.rolled = 0; self.roll_lag = 0.0       # fusion7: elites rescored; age of the oldest still stale (s)
 
     # ---- cheap surrogate
     def imp1(self, t):
@@ -148,7 +164,8 @@ class Searcher:
         score = sum(w[ORDER[e]] for e in fg) / (1 + sum(ORDER[t] for t in T)) * ((1 + len(du)) if self.prior else 1)
         nb = int(sum(BRIDGE[t] for t in T))
         desc = (len(T), len(du), nb, min(4, int(math.log2(m)) // 2), int(min(ORDER[e] for e in fg)))
-        out = {'T': T, 'cheap': score, 'desc': desc, 'dualities': du, 'n_gain': int(len(fg))}
+        out = {'T': T, 'cheap': score, 'desc': desc, 'dualities': du, 'n_gain': int(len(fg)),
+               'n_scored': len(self.C), 't_scored': self.clock()}      # the corpus it was scored on (fusion7)
         if self.family:                           # fusion6: the family is a sixth descriptor
             from ..taxonomy import family_of
             out['family'] = family_of(imp); out['desc'] = desc + (out['family'],)
@@ -209,11 +226,42 @@ class Searcher:
         elites keep the cheap scores of the last rescore, which can only be too high (a new model refutes a claim),
         and new proposals are scored on the grown corpus."""
         now = time.time() if now is None else now
+        if getattr(self, 'rolling', False): return self._roll(now)
         if new: self.stale = True
         if not self.stale or (self.family and now - self.t_rescore < RESCORE_EVERY): return False
         t0 = time.time(); self.rescore()
         self.stale = False; self.t_rescore = now; self.rescores += 1; self.rescore_secs += time.time() - t0
         return True
+
+    def _roll(self, now):
+        """fusion7: rescore the stale elites (scored on a smaller corpus than the current one), those scored longest ago
+        first, until this pass has used ROLL_SHARE of the time since the previous pass ended. Each elite is handled as
+        rescore() handles it: taken out, rescored and inserted again without a push, kept as it was if it no longer
+        scores but has a positive verified score, dropped otherwise. In between, an elite keeps the cheap score of its
+        last rescore, which can only be too high (a new model refutes a claim); new proposals are scored on the current
+        corpus. Returns True if any elite was rescored."""
+        budget = ROLL_SHARE * max(0.0, now - self.t_rescore)
+        n = len(self.C)
+        stale = sorted((e for e in self.archive.values() if e.get('n_scored', -1) < n),
+                       key=lambda e: e.get('t_scored', 0.0))
+        t0 = self.clock(); done = 0; i = 0
+        for i, e in enumerate(stale):
+            if self.clock() - t0 >= budget: break
+            if self.archive.get(e['desc']) is not e: continue          # displaced earlier in this pass
+            self.archive.pop(e['desc'], None); self.where.pop(e['key'], None)
+            s = self.surrogate(e['T'])
+            if s is None:
+                if self.verified.get(e['key'], 0) > 0: s = dict(e, n_scored=n, t_scored=self.clock())   # kept
+                else: done += 1; continue
+            self.insert(s, push=False); done += 1
+        else:
+            i = len(stale)
+        left = [e for e in stale[i:] if self.archive.get(e['desc']) is e]
+        self.roll_lag = now - left[0].get('t_scored', 0.0) if left else 0.0
+        spent = self.clock() - t0
+        self.t_rescore = now + spent; self.rescore_secs += spent; self.rolled += done
+        if done: self.rescores += 1
+        return done > 0
 
     def ingest_results(self):
         for e in os.scandir(self.results_dir):
@@ -271,6 +319,7 @@ class Searcher:
                   known_skipped=self.known_skipped, cand_skipped=self.cand_skipped, seen_skipped=self.seen_skipped,
                   par_skipped=self.par_skipped, **self.pskip_stats(),
                   rescores=self.rescores, rescore_secs=round(self.rescore_secs, 1),
+                  **({'rolled': self.rolled, 'roll_lag_s': round(self.roll_lag, 1)} if self.rolling else {}),
                   distinct=self.distinct(),
                   verified_seen=len(self.verified), k=round(self.k(), 4), mem=memory(os.getpid()))
 
@@ -315,7 +364,7 @@ class Searcher:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', required=True); ap.add_argument('--seed', type=int, required=True)
-    ap.add_argument('--arm', default='prior', choices=['prior', 'noprior', 'fusion', 'fusion2', 'fusion3', 'fusion4', 'fusion5', 'fusion6'])
+    ap.add_argument('--arm', default='prior', choices=list(ARMS))
     ap.add_argument('--run', required=True); ap.add_argument('--budget', type=float, default=1e9)
     a = ap.parse_args()
     s = Searcher(a.name, a.seed, a.arm, a.run)
