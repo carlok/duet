@@ -1563,3 +1563,10 @@ No random theory and no T4 theory had been profiled.
     - HA runs in its own container from 12:42:57 UTC with `--entries HA --jobs 1 --wall 14300 --out interp_r2_ha.json`,
       the same image and code, so it ends by the same deadline. The ordered run skips nothing, and if it reaches HA it
       runs it again; both results are reported. Only the order changes, not the test.
+    - **Amended at 13:29:26 UTC.** HA kept 985 survivors after its filter, and its 400 models on 7-8 elements refuted
+      none of them. With one job and up to 120 s per unprovable pair, the proof stage would not have ended before the
+      deadline. The hypotheses count theories, not pairs, so the proof stage now works in rounds: one pair per theory
+      per round, smallest terms first. A theory stops at its first proved pair, and its other pairs end "not run
+      (theory already a fragment)". Rerun on AG and G: the same 16 and 4 fragment theories. HA was restarted with
+      `--jobs 2 --wall 11546` (same deadline, image d4dca7651f90); its first 46 minutes were discarded. The ordered run
+      keeps the earlier image and proves every pair.

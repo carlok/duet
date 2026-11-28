@@ -316,8 +316,26 @@ def run_entry(entry, targets, jobs, deadline):
         if time.time() > deadline: r = 'not run (wall)'
         else: r = 'fragment' if all(prove(entry, translate(TREES[t], t1, t2), 60) for t in targets[i]['T']) else 'unknown'
         return {'key': targets[i]['key'], 'entry': entry, 't1': show(t1), 't2': show(t2), 'result': r}
+    # Deviation 16 (amended): the hypotheses count theories, so the proofs go in rounds, one pair per theory per round,
+    # smallest terms first, and a theory stops at its first proved pair (its other pairs: 'not run (theory already a
+    # fragment)'). The first version proved every pair in list order.
+    by = {}
+    for s, r in zip(surv, ref):
+        if r is None: by.setdefault(s[0], []).append(s)
+    for i in by: by[i].sort(key=lambda s: (size(s[1]) + size(s[2]), show(s[1]), show(s[2])))
+    res, rnd = [], 0
     with ThreadPoolExecutor(jobs) as ex:
-        res = list(ex.map(job, [s for s, r in zip(surv, ref) if r is None]))
+        while by:
+            rnd += 1
+            batch = [by[i].pop(0) for i in list(by)]
+            got = list(ex.map(job, batch))
+            res += got
+            for s, g in zip(batch, got):
+                if g['result'] == 'fragment' or not by[s[0]]:
+                    res += [{'key': targets[i]['key'], 'entry': entry, 't1': show(t1), 't2': show(t2),
+                             'result': 'not run (theory already a fragment)'} for i, t1, t2 in by.pop(s[0])]
+            print(f'  {entry}: proof round {rnd}, {len(batch)} pairs, '
+                  f'{len({g["key"] for g in res if g["result"] == "fragment"})} theories proved so far', flush=True)
     res += [{'key': targets[i]['key'], 'entry': entry, 't1': show(t1), 't2': show(t2), 'result': f'not (size {r})'}
             for (i, t1, t2), r in zip(surv, ref) if r is not None]
     return {'entry': entry, 'models': len(Ms), 'sizes': sorted({n for n, _ in Ms}), 'terms': n_terms,
