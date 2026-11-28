@@ -1570,3 +1570,8 @@ No random theory and no T4 theory had been profiled.
       (theory already a fragment)". Rerun on AG and G: the same 16 and 4 fragment theories. HA was restarted with
       `--jobs 2 --wall 11546` (same deadline, image d4dca7651f90); its first 46 minutes were discarded. The ordered run
       keeps the earlier image and proves every pair.
+    - **Amended at 14:28:37 UTC.** HA's parallel run finished at 14:28 UTC. The ordered run had finished CR, BR, DL and
+      BA and was starting HA a second time with the earlier proof order, which would have used the rest of the budget
+      and left Hp, Rk, Qd and Qg unrun. It was stopped before any HA result, and Hp, Rk, Qd and Qg were started in its
+      place (`--entries Hp,Rk,Qd,Qg --jobs 2 --wall 7994`, image d4dca7651f90, same deadline). HA is reported from
+      the parallel run alone.
