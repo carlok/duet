@@ -2,6 +2,91 @@
 
 Each section is committed before its run starts. Changes after the start are listed under "Deviations".
 
+## N2: N1 with the gate's gaps closed (written 28 Nov 2026, 07:50 UTC, before anything below is computed)
+
+Post hoc, descriptive. It replaces nothing. N1, F1 and the funnel stay as they are, and the README keeps showing N1.
+An external review of commit 279157e (code and tracked files only) listed six faults in how N1 and the funnel count.
+We checked each against the code and `work/check/` before writing this entry (REPORT, "N2"). Five hold as stated. The
+sixth, dedupe's silent skip, is a real code path, but at 279157e it skips 0 of the 318 candidates. N2 is N1 with
+these faults corrected, computed on the same pool, the 318 candidates of `work/check/candidates.json` at 279157e.
+Nothing here feeds the search.
+
+**Corrections.**
+- **C1, parameter disguises.** The gate reads `check/hidden_param_candidates.json` (`soup.hidden --param`) as well as
+  `hidden_candidates.json`. A candidate marked `definitional` there is known. Checked: 4 N1-ranked candidates are
+  marked (`ebb197cc`, `811b3500`, `e51eb8f1`, `7e9c798d`; N1 ranks 115, 107, 106 and 90).
+- **C2, ledger identifications.** Full identifications from `notes/rediscovery.md`, fixed now:
+  - `a9295908` (row 11, a fragment of Heyting algebras);
+  - `71fd2cc6` (row 13, commutative g-dimonoids plus one law);
+  - `69dfbd8e` (row 7, as N1 already has it).
+
+  Each makes its whole N2 dedupe class known. Rows 6, 8 and 9 are partial and stay "related", as in N1. Row 12 is
+  covered by C1. Checked: `a9295908` is N1 rank 10 and in level 7.
+- **C3, a dedupe on the union corpus with three outcomes** (`soup.dedupe --union --out dedupe2`).
+  - **Corpus:** the corpus is the union of every run directory in `soup.funnel.DIRS`.
+  - **Pairs:** every unordered pair of candidates gets one of three outcomes over the 8 relabellings:
+    - *equivalent*: E proves both directions for some relabelling. 20 s per direction, as N1.
+    - *separated*: for every relabelling, a corpus structure satisfies one theory and fails a law of the other.
+    - *unknown*: otherwise. Before a pair is called unknown, it gets a second pass on every relabelling that passed the
+      model filter: E with 120 s per direction, then Vampire (`prove_vampire`, discount) with 120 s.
+  - **Reporting:** the number of candidates with no model in the union corpus is printed, and they are reported as
+    never compared. Level 5 is reported as a range:
+    - upper bound: classes from the equivalent pairs only, as in N1;
+    - lower bound: the classes when the unknown pairs are merged too.
+
+  N2's "one per dedupe class" uses the equivalent pairs.
+- **C4, undecided checks decided** (`soup.decide`, a new post hoc module). For every candidate that passes C1–C3's
+  identification gate and carries a flag in N1:
+  - **`split None` or `split not run`:**
+    - **Finite certificate:** `soup.split.screen` on sizes 2–5, up to 3,000 Mace4 models per size and 300 s per size.
+    - **Proof:** `prove_split` with the union corpus, 120 s per E call.
+    - **Wall time:** 3,600 s per theory.
+    - **Outcomes:** true, false or none.
+  - **`R1 kind?` relations:**
+    - every law the relation still lacks gets E for 300 s;
+    - for every law E does not prove, Mace4 looks for a separating model on sizes 2–8 (600 s), then Vampire FMB
+      (`-sa fmb`, 300 s), then `soup.linear` over its rings.
+    - Outcomes: decided known (every law proved), decided not (a separating model, re-checked on its tables), or
+      undecided.
+
+  A decided known goes to the gate as known, and a decided not drops the flag. An undecided candidate stays in and
+  is marked "undecided". Levels 6 and 7 are reported as decided plus undecided.
+- **C5, a second prover.** Every claim E proved for a candidate that passes the gate is proved again: first
+  `prove_vampire` (discount, 120 s), then `prove_twee` (120 s) for those Vampire does not prove.
+  - In N2's "works" gate and its off-diagonal key, a claim counts as proved only when a second prover confirms it.
+  - The unconfirmed claims are listed. None is called false unless a finite model refutes it.
+  - Checked: 132 of the 477 claims that N1-ranked theories proved had no second prover (z3 was skipped after an E
+    proof, V7 and later), in 54 theories.
+
+**Order.** N1's six keys, unchanged, computed on the corrected inputs.
+
+**Levels reported beside N1's,** for N1 and N2 side by side in REPORT: level 5 (N2 as a range), level 6 and level 7
+(N2 as decided + undecided). Level 7 is N1's definition: an off-diagonal proved emergent law, no classical model, and
+nothing related. Each item's changes are listed.
+
+**Expectations (descriptive, not tests).**
+- Level 6 loses at least the 4 parameter disguises and `a9295908`.
+- Level 7 loses at least `a9295908`.
+- How much more C3–C5 move is the open part.
+
+**Code, tests and budget.**
+- **Code:**
+  - `soup/novelty2.py` writes `check/novelty2_ranking.json` and `notes/candidates_table_n2.md`. It reuses N1's
+    helpers, and `soup/novelty.py` is not changed.
+  - `soup/dedupe.py` gets `--union --out`; its default (N1) behaviour stays.
+  - `soup/decide.py` and `soup/reprove.py` (C4 and C5).
+- **Tests** (`tests/test_n2.py`): the three dedupe outcomes on toy theories, the level-5 range, the C1 and C2 gate
+  additions, and an unconfirmed claim that does not count as proved.
+- **Budget:**
+  - Nothing runs beside a stream run; none is running.
+  - At most 4 parallel prover jobs, with `podman stats` checked first.
+  - Prover wall times as above; C4's wall time per theory caps the total.
+
+**Caveats.**
+- N2 is post hoc. Its corrections were chosen after seeing N1's output and a review of it.
+- Its budgets are larger than N1's, so "decided" partly reflects more time, not a better method.
+- The pool is still the top 20 per run by verified score (review item C1, a separate preregistration).
+
 ## X12: arm fusion6 against fusion5, run side by side (written 26 Nov 2026, 18:52 UTC, before X12 starts)
 
 Confirmatory for the family pressure, exploratory for the rest. Arm `fusion6` adds pressure toward rare families (REPORT,
